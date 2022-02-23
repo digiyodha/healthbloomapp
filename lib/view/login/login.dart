@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
+import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/login/forgot_password.dart';
 import 'package:health_bloom/view/login/phone_login.dart';
-import 'package:health_bloom/view/profile/edit_prodile.dart';
 import 'package:health_bloom/view/signup/signup.dart';
 
 class Login extends StatelessWidget {
@@ -25,7 +25,7 @@ class Login extends StatelessWidget {
           onTap: () => FocusScope.of(context).unfocus(),
           child: SafeArea(
               child: Container(
-            width: 310,
+            width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.all(18.0),
             height: MediaQuery.of(context).size.height,
             child: Column(
@@ -53,15 +53,16 @@ class Login extends StatelessWidget {
                   elevation: 3,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Form(
+                  child: SingleChildScrollView(
+                    child: Container(
+                      width: double.infinity,
+                      height: 280,
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       child: Column(
                         children: [
                           Container(
@@ -133,7 +134,7 @@ class Login extends StatelessWidget {
                               )
                             ],
                           ),
-                          const SizedBox(height: 25.0),
+                          Expanded(child: SizedBox()),
                           MaterialButton(
                             minWidth: 180,
                             height: 40,
@@ -145,7 +146,7 @@ class Login extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => EditProfile()));
+                                      builder: (context) => HomePage()));
                             },
                             child: TextBuilder(
                               text: 'SIGN IN',
@@ -160,7 +161,7 @@ class Login extends StatelessWidget {
                     ),
                   ),
                 ),
-                Expanded(child: SizedBox()),
+                const SizedBox(height: 50.0),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Row(

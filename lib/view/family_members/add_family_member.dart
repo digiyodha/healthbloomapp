@@ -1,9 +1,6 @@
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/utils/colors.dart';
-import 'package:hexagon/hexagon.dart';
 import '../../components/custom_contained_button.dart';
-import '../../utils/drawer/custom_drawer.dart';
 import '../../utils/text_field/custom_text_field.dart';
 
 class AddFamilyMembers extends StatefulWidget {
@@ -25,7 +22,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
           },
         ),
@@ -53,39 +50,48 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
             left: 0,
             top: 180,
             child: Container(
-              padding: EdgeInsets.only(top: 100,left: 24,right: 24),
+              padding: EdgeInsets.only(top: 100, left: 24, right: 24),
               decoration: BoxDecoration(
-                color: kWhite,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30),
-                  topLeft: Radius.circular(30)
-                )
-              ),
+                  color: kWhite,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(30),
+                      topLeft: Radius.circular(30))),
               child: Column(
                 children: [
                   CustomTextField(
                     maxLines: 1,
                     controller: _name,
-                    label: "Name", textInputType: TextInputType.name, onChanged: (){}, onTap: (){},
+                    label: "Name",
+                    textInputType: TextInputType.name,
+                    onChanged: () {},
+                    onTap: () {},
                   ),
-                  SizedBox(height: 16,),
+                  SizedBox(
+                    height: 16,
+                  ),
                   CustomTextField(
                     maxLines: 1,
                     controller: _relation,
-                    label: "Relationship", textInputType: TextInputType.name, onChanged: (){}, onTap: (){},
+                    label: "Relationship",
+                    textInputType: TextInputType.name,
+                    onChanged: () {},
+                    onTap: () {},
                   ),
-                  SizedBox(height: 24,),
+                  SizedBox(
+                    height: 24,
+                  ),
                   Row(
                     children: [
-                      Text("Current Age",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: kGrey7
-                      ),),
+                      Text(
+                        "Current Age",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: kGrey7),
+                      ),
                       Spacer(),
                       InkWell(
-                        onTap: (){
+                        onTap: () {
                           setState(() {
                             _age--;
                           });
@@ -93,16 +99,25 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                         child: CircleAvatar(
                           radius: 12,
                           backgroundColor: kMainColor,
-                          child: Icon(Icons.remove,color: kWhite,size: 16,),
+                          child: Icon(
+                            Icons.remove,
+                            color: kWhite,
+                            size: 16,
+                          ),
                         ),
                       ),
-                      Padding(padding: EdgeInsets.symmetric(horizontal: 12)
-                      ,child: Text(_age.toString(),style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,color: kGrey7
-                        ),),),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(
+                          _age.toString(),
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: kGrey7),
+                        ),
+                      ),
                       InkWell(
-                        onTap: (){
+                        onTap: () {
                           setState(() {
                             _age++;
                           });
@@ -110,7 +125,11 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                         child: CircleAvatar(
                           radius: 12,
                           backgroundColor: kMainColor,
-                          child: Icon(Icons.add,color: kWhite,size: 16,),
+                          child: Icon(
+                            Icons.add,
+                            color: kWhite,
+                            size: 16,
+                          ),
                         ),
                       ),
                     ],
@@ -121,12 +140,12 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                     textSize: 16,
                     disabledColor: kGreyLite,
                     text: "Submit",
-                    onPressed: () {
-
-                    },
+                    onPressed: () {},
                     width: double.infinity,
                   ),
-                  SizedBox(height: 16,),
+                  SizedBox(
+                    height: 16,
+                  ),
                 ],
               ),
             ),
@@ -147,17 +166,17 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                         height: 100,
                         width: 100,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: kWhite,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 10
-                            )
-                          ]
-                        ),
+                            borderRadius: BorderRadius.circular(16),
+                            color: kWhite,
+                            boxShadow: [
+                              BoxShadow(color: Colors.black26, blurRadius: 10)
+                            ]),
                         child: Center(
-                          child: Icon(Icons.person,color: kGrey4,size: 60,),
+                          child: Icon(
+                            Icons.person,
+                            color: kGrey4,
+                            size: 60,
+                          ),
                         ),
                       ),
                       Positioned(
@@ -166,7 +185,11 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                         child: CircleAvatar(
                           radius: 14,
                           backgroundColor: kMainColor,
-                          child: Icon(Icons.edit,color: kWhite,size: 16,),
+                          child: Icon(
+                            Icons.edit,
+                            color: kWhite,
+                            size: 16,
+                          ),
                         ),
                       )
                     ],

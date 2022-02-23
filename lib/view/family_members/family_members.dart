@@ -1,7 +1,5 @@
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/utils/colors.dart';
-import 'package:hexagon/hexagon.dart';
 
 import '../../utils/drawer/custom_drawer.dart';
 import 'add_family_member.dart';
@@ -37,8 +35,10 @@ class _FamilyMembersState extends State<FamilyMembers> {
             child: Container(
               height: 300,
               width: double.infinity,
-              child: Image.asset("assets/images/family.png",
-              fit: BoxFit.cover,),
+              child: Image.asset(
+                "assets/images/family.png",
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Positioned(
@@ -65,29 +65,30 @@ class _FamilyMembersState extends State<FamilyMembers> {
               //     Icon(Icons.more_horiz,color: kGreyText,size: 28,)
               //   ],
               // ),
-              SizedBox(height: 100,),
+              SizedBox(
+                height: 100,
+              ),
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.only(bottom: 0,left: 18,right: 18,top: 20),
+                  margin:
+                      EdgeInsets.only(bottom: 0, left: 18, right: 18, top: 20),
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: kMainColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16)
-                    )
-                  ),
+                      color: kMainColor,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16))),
                   child: GridView(
                     padding: EdgeInsets.all(0),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 0.75,
                         crossAxisSpacing: 16,
-                        mainAxisSpacing: 16
-                    ),
+                        mainAxisSpacing: 16),
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 14,vertical: 16),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 14, vertical: 16),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           color: Color(0xff8B80F8),
@@ -99,27 +100,41 @@ class _FamilyMembersState extends State<FamilyMembers> {
                               radius: 40,
                               backgroundColor: kWhite,
                               child: Center(
-                                child: Icon(Icons.person,color: kGrey4,size: 40,),
+                                child: Icon(
+                                  Icons.person,
+                                  color: kGrey4,
+                                  size: 40,
+                                ),
                               ),
                             ),
                             Spacer(),
-                            Text("John Doe",style: TextStyle(
-                                fontSize: 22,
-                                color: kWhite,
-                                fontWeight: FontWeight.w600
-                            ),maxLines: 2,textAlign: TextAlign.center,),
-                            SizedBox(height: 6,),
-                            Text("Brother",style: TextStyle(
-                                fontSize: 14,
-                                color: kWhite.withOpacity(0.6),
-                                fontWeight: FontWeight.w400
-                            ),maxLines: 1,),
+                            Text(
+                              "John Doe",
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  color: kWhite,
+                                  fontWeight: FontWeight.w600),
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Text(
+                              "Brother",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: kWhite.withOpacity(0.6),
+                                  fontWeight: FontWeight.w400),
+                              maxLines: 1,
+                            ),
                             Spacer(),
                           ],
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 14,vertical: 16),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 14, vertical: 16),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           color: Color(0xff8B80F8),
@@ -131,27 +146,41 @@ class _FamilyMembersState extends State<FamilyMembers> {
                               radius: 40,
                               backgroundColor: kWhite,
                               child: Center(
-                                child: Icon(Icons.person,color: kGrey4,size: 40,),
+                                child: Icon(
+                                  Icons.person,
+                                  color: kGrey4,
+                                  size: 40,
+                                ),
                               ),
                             ),
                             Spacer(),
-                            Text("Jane Doe",style: TextStyle(
-                                fontSize: 22,
-                                color: kWhite,
-                                fontWeight: FontWeight.w600
-                            ),maxLines: 2,textAlign: TextAlign.center,),
-                            SizedBox(height: 6,),
-                            Text("Sister",style: TextStyle(
-                                fontSize: 14,
-                                color: kWhite.withOpacity(0.6),
-                                fontWeight: FontWeight.w400
-                            ),maxLines: 1,),
+                            Text(
+                              "Jane Doe",
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  color: kWhite,
+                                  fontWeight: FontWeight.w600),
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Text(
+                              "Sister",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: kWhite.withOpacity(0.6),
+                                  fontWeight: FontWeight.w400),
+                              maxLines: 1,
+                            ),
                             Spacer(),
                           ],
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 14,vertical: 16),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 14, vertical: 16),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           color: Color(0xff8B80F8),
@@ -163,27 +192,41 @@ class _FamilyMembersState extends State<FamilyMembers> {
                               radius: 40,
                               backgroundColor: kWhite,
                               child: Center(
-                                child: Icon(Icons.person,color: kGrey4,size: 40,),
+                                child: Icon(
+                                  Icons.person,
+                                  color: kGrey4,
+                                  size: 40,
+                                ),
                               ),
                             ),
                             Spacer(),
-                            Text("Aunt Doe",style: TextStyle(
-                                fontSize: 22,
-                                color: kWhite,
-                                fontWeight: FontWeight.w600
-                            ),maxLines: 2,textAlign: TextAlign.center,),
-                            SizedBox(height: 6,),
-                            Text("Aunt",style: TextStyle(
-                                fontSize: 14,
-                                color: kWhite.withOpacity(0.6),
-                                fontWeight: FontWeight.w400
-                            ),maxLines: 1,),
+                            Text(
+                              "Aunt Doe",
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  color: kWhite,
+                                  fontWeight: FontWeight.w600),
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Text(
+                              "Aunt",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: kWhite.withOpacity(0.6),
+                                  fontWeight: FontWeight.w400),
+                              maxLines: 1,
+                            ),
                             Spacer(),
                           ],
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 14,vertical: 16),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 14, vertical: 16),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           color: Color(0xff8B80F8),
@@ -195,21 +238,34 @@ class _FamilyMembersState extends State<FamilyMembers> {
                               radius: 40,
                               backgroundColor: kWhite,
                               child: Center(
-                                child: Icon(Icons.person,color: kGrey4,size: 40,),
+                                child: Icon(
+                                  Icons.person,
+                                  color: kGrey4,
+                                  size: 40,
+                                ),
                               ),
                             ),
                             Spacer(),
-                            Text("Uncle Doe",style: TextStyle(
-                                fontSize: 22,
-                                color: kWhite,
-                                fontWeight: FontWeight.w600
-                            ),maxLines: 2,textAlign: TextAlign.center,),
-                            SizedBox(height: 6,),
-                            Text("Uncle",style: TextStyle(
-                                fontSize: 14,
-                                color: kWhite.withOpacity(0.6),
-                                fontWeight: FontWeight.w400
-                            ),maxLines: 1,),
+                            Text(
+                              "Uncle Doe",
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  color: kWhite,
+                                  fontWeight: FontWeight.w600),
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Text(
+                              "Uncle",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: kWhite.withOpacity(0.6),
+                                  fontWeight: FontWeight.w400),
+                              maxLines: 1,
+                            ),
                             Spacer(),
                           ],
                         ),
@@ -226,13 +282,17 @@ class _FamilyMembersState extends State<FamilyMembers> {
         padding: const EdgeInsets.only(right: 16),
         child: FloatingActionButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context){
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
               return AddFamilyMembers();
             }));
           },
           backgroundColor: Color(0xffFF9B91),
           child: Center(
-            child: Icon(Icons.add,color: kWhite,size: 24,),
+            child: Icon(
+              Icons.add,
+              color: kWhite,
+              size: 24,
+            ),
           ),
         ),
       ),

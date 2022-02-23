@@ -1,7 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/controller/walkthrough_controller.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/view/login/login.dart';
@@ -42,105 +40,107 @@ class _WalkthroughState extends State<Walkthrough> {
                   currentIndex = i;
                   setState(() {});
                 },
-                children: List.generate(walks.walkthrough.length, (index) => Container(
-                  child: Column(
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            walks.walkthrough[index].title ?? "",
-                            style: TextStyle(
-                                fontSize: 24,
-                                color: kMainColor,
-                                fontWeight: FontWeight.w600),
-                            textAlign: TextAlign.center,
+                children: List.generate(
+                    walks.walkthrough.length,
+                    (index) => Container(
+                          child: Column(
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    walks.walkthrough[index].title ?? "",
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        color: kMainColor,
+                                        fontWeight: FontWeight.w600),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 14,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 40),
+                                    child: Text(
+                                      walks.walkthrough[index].description ??
+                                          "",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: kGreyText,
+                                          fontWeight: FontWeight.w400),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 40),
+                                  child: Image.asset(
+                                      walks.walkthrough[index].image ?? ""),
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(
-                            height: 14,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 40),
-                            child: Text(
-                              walks.walkthrough[index].description ?? "",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: kGreyText,
-                                  fontWeight: FontWeight.w400),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 40),
-                          child: Image.asset(walks.walkthrough[index].image ?? ""),
-                        ),
-                      ),
-                    ],
-                  ),
-                )),
+                        )),
               ),
             ),
-            Padding(padding: EdgeInsets.only(bottom: 30),
-            child: Container(
-              height: 25,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 25,
-                    child: Center(
-                      child: AnimatedContainer(
-                        height: currentIndex == 0 ? 18 : 13,
-                        width: currentIndex == 0 ? 18 : 13,
-                        duration: Duration(
-                          milliseconds: 200
-                        ),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: currentIndex == 0 ? kMainColor : kGreyLite
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 25,
-                    child: Center(
-                      child: AnimatedContainer(
-                        height: currentIndex == 1 ? 18 : 13,
-                        width: currentIndex == 1 ? 18 : 13,
-                        duration: Duration(
-                            milliseconds: 200
-                        ),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: currentIndex == 1 ? kMainColor : kGreyLite
+            Padding(
+              padding: EdgeInsets.only(bottom: 30),
+              child: Container(
+                height: 25,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 25,
+                      child: Center(
+                        child: AnimatedContainer(
+                          height: currentIndex == 0 ? 18 : 13,
+                          width: currentIndex == 0 ? 18 : 13,
+                          duration: Duration(milliseconds: 200),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color:
+                                  currentIndex == 0 ? kMainColor : kGreyLite),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    width: 25,
-                    child: Center(
-                      child: AnimatedContainer(
-                        height: currentIndex == 2 ? 18 : 13,
-                        width: currentIndex == 2 ? 18 : 13,
-                        duration: Duration(
-                            milliseconds: 200
-                        ),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: currentIndex == 2 ? kMainColor : kGreyLite
+                    Container(
+                      width: 25,
+                      child: Center(
+                        child: AnimatedContainer(
+                          height: currentIndex == 1 ? 18 : 13,
+                          width: currentIndex == 1 ? 18 : 13,
+                          duration: Duration(milliseconds: 200),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color:
+                                  currentIndex == 1 ? kMainColor : kGreyLite),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Container(
+                      width: 25,
+                      child: Center(
+                        child: AnimatedContainer(
+                          height: currentIndex == 2 ? 18 : 13,
+                          width: currentIndex == 2 ? 18 : 13,
+                          duration: Duration(milliseconds: 200),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color:
+                                  currentIndex == 2 ? kMainColor : kGreyLite),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 65),
               child: CustomContainedButton(
@@ -149,7 +149,7 @@ class _WalkthroughState extends State<Walkthrough> {
                 disabledColor: kGreyLite,
                 text: "Get Started",
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return SignUp();
                   }));
                 },
@@ -168,9 +168,11 @@ class _WalkthroughState extends State<Walkthrough> {
                       fontWeight: FontWeight.w500),
                   children: [
                     TextSpan(
-                      recognizer: TapGestureRecognizer()..onTap = () => Navigator.push(context, MaterialPageRoute(builder: (context){
-                        return Login();
-                      })),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return Login();
+                            })),
                       text: " Sign in",
                       style: TextStyle(
                           fontSize: 14,

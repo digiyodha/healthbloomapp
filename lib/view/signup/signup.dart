@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/view/login/login.dart';
 import 'package:health_bloom/view/login/phone_login.dart';
-import 'package:health_bloom/view/profile/edit_prodile.dart';
 
 class SignUp extends StatelessWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -150,14 +149,7 @@ class SignUp extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(25),
                                 ),
                                 color: Color(0xff9378E2),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditProfile(),
-                                    ),
-                                  );
-                                },
+                                onPressed: () {},
                                 child: TextBuilder(
                                   text: 'SIGN UP',
                                   wordSpacing: 2,

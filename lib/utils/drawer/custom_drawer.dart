@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:health_bloom/view/profile/edit_prodile.dart';
 import '../../view/family_members/family_members.dart';
 import '../colors.dart';
 import 'drawer_container_widget.dart';
-
 
 class CustomDrawer extends StatefulWidget {
   final int selected;
@@ -13,10 +13,8 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-
   @override
   Widget build(BuildContext context) {
-
     return Drawer(
       elevation: 4,
       child: Container(
@@ -35,15 +33,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         radius: 36,
                         backgroundColor: kWhite,
                         child: Center(
-                          child: Icon(Icons.person,color: kGrey4,size: 40,),
+                          child: Icon(
+                            Icons.person,
+                            color: kGrey4,
+                            size: 40,
+                          ),
                         ),
                       ),
-                      SizedBox(width: 14,),
+                      SizedBox(
+                        width: 14,
+                      ),
                       Expanded(
-                        child: Text("Jane Doe",style: TextStyle(
-                          fontSize: 20,
-                          color: kWhite
-                        ),),
+                        child: Text(
+                          "Jane Doe",
+                          style: TextStyle(fontSize: 20, color: kWhite),
+                        ),
                       )
                     ],
                   ),
@@ -53,7 +57,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 DrawerContainerWidget(
                   text: "Profile",
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditProfile(),
+                      ),
+                    );
+                  },
                   selected: widget.selected == 1,
                   icon: Icons.person,
                 ),
@@ -72,7 +83,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 DrawerContainerWidget(
                   text: "Family Members",
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
                       return FamilyMembers();
                     }));
                   },
