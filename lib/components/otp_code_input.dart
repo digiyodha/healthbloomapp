@@ -4,14 +4,13 @@ import 'package:flutter/services.dart';
 class OTPCodeInput extends StatefulWidget {
   final bool? first;
   final bool? last;
-  final bool? hideIndicator;
+
   final TextEditingController? controller;
   const OTPCodeInput({
     Key? key,
     this.first,
     this.last,
     this.controller,
-    this.hideIndicator = false,
   }) : super(key: key);
 
   @override
@@ -24,7 +23,7 @@ class _OTPCodeInputState extends State<OTPCodeInput> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        widget.hideIndicator!
+        widget.controller!.text.isEmpty
             ? Container(
                 height: 15,
                 width: 15,
@@ -36,10 +35,10 @@ class _OTPCodeInputState extends State<OTPCodeInput> {
             : Container(),
         Container(
           alignment: Alignment.center,
-          height: 70,
-          width: 67,
+          height: 60,
+          width: 57,
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.red),
+            // border: Border.all(color: Colors.red),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Center(
@@ -53,9 +52,11 @@ class _OTPCodeInputState extends State<OTPCodeInput> {
               style: TextStyle(
                 fontSize: 34,
                 fontWeight: FontWeight.w700,
-                color: Colors.black,
+                color: Color(0xff606060),
               ),
               onChanged: (value) {
+                setState(() {});
+                widget.controller!.text = value;
                 if (value.length == 1 && widget.last == false) {
                   FocusScope.of(context).nextFocus();
                 }

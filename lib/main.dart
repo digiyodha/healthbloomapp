@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
-import 'package:health_bloom/view/walkthrough/walkthrough.dart';
+import 'package:health_bloom/view/login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences? sp;
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Walkthrough(),
+      home: Login(),
     );
   }
 }

@@ -17,16 +17,17 @@ class _PhoneLoginOtpState extends State<PhoneLoginOtp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SafeArea(
           child: SingleChildScrollView(
-            // padding: const EdgeInsets.all(15.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
@@ -39,114 +40,104 @@ class _PhoneLoginOtpState extends State<PhoneLoginOtp> {
                         size: 35,
                       ),
                     ),
-                    TextBuilder(
-                      text: 'Verification Code',
-                      color: Colors.black,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w400,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: TextBuilder(
+                        text: 'Verification Code',
+                        color: Color(0xff494949),
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     Container(height: 30, width: 30)
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 15),
-                  child: Form(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 35),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 10.0),
-                          TextBuilder(
-                            text: 'Verify your Number',
-                            color: Colors.black,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w500,
+                Form(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 35),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 10.0),
+                        TextBuilder(
+                          text: 'Verify your Number',
+                          color: Color(0xff494949),
+                          fontSize: 23,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        const SizedBox(height: 15.0),
+                        TextBuilder(
+                          text: "we'll text you on 0878787878",
+                          color: Color(0xff695F61),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        const SizedBox(height: 50.0),
+                        TextBuilder(
+                          text: "Enter OTP",
+                          color: Color(0xff695F61),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        const SizedBox(height: 20.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            OTPCodeInput(
+                                controller: otp1, first: true, last: false),
+                            OTPCodeInput(
+                                controller: otp2, first: false, last: false),
+                            OTPCodeInput(
+                                controller: otp3, first: false, last: false),
+                            OTPCodeInput(
+                                controller: otp4, first: false, last: true),
+                          ],
+                        ),
+                        const SizedBox(height: 20.0),
+                        Divider(
+                          height: 1,
+                          thickness: 1,
+                        ),
+                        const SizedBox(height: 15.0),
+                        TextBuilder(
+                          text: "Resend OTP ?",
+                          color: Color(0xff7561B3),
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        const SizedBox(height: 50.0),
+                        MaterialButton(
+                          minWidth: 250,
+                          height: 45,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          const SizedBox(height: 15.0),
-                          TextBuilder(
-                            text: "we'll text you on 0878787878",
-                            color: Colors.black87,
-                            fontSize: 12,
-                          ),
-                          const SizedBox(height: 50.0),
-                          TextBuilder(
-                            text: "Enter OTP",
-                            color: Colors.black45,
-                            fontSize: 15,
+                          color: Color(0xff855FF7),
+                          onPressed: () {},
+                          child: TextBuilder(
+                            text: 'SUBMIT OTP',
                             fontWeight: FontWeight.w600,
+                            color: Colors.white,
                           ),
-                          const SizedBox(height: 20.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              OTPCodeInput(
-                                  hideIndicator:
-                                      otp1.text.isEmpty ? true : false,
-                                  controller: otp1,
-                                  first: true,
-                                  last: false),
-                              OTPCodeInput(
-                                  hideIndicator:
-                                      otp2.text.isEmpty ? true : false,
-                                  controller: otp2,
-                                  first: false,
-                                  last: false),
-                              OTPCodeInput(
-                                  hideIndicator:
-                                      otp3.text.isEmpty ? true : false,
-                                  controller: otp3,
-                                  first: false,
-                                  last: false),
-                              OTPCodeInput(
-                                  hideIndicator:
-                                      otp4.text.isEmpty ? true : false,
-                                  controller: otp4,
-                                  first: false,
-                                  last: true),
-                            ],
-                          ),
-                          const SizedBox(height: 20.0),
-                          TextBuilder(
-                            text: "Resend OTP ?",
-                            color: Color(0xff9479E6),
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                          ),
-                          Divider(),
-                          const SizedBox(height: 50.0),
-                          MaterialButton(
-                            minWidth: 250,
-                            height: 45,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            color: Color(0xff9479E6),
-                            onPressed: () {},
-                            child: TextBuilder(
-                              text: 'SUBMIT OTP',
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 20.0),
+                const SizedBox(height: 40.0),
                 Center(
                   child: TextBuilder(
                     text:
                         'We will send to you a verification code to \nyour phone number',
                     textAlign: TextAlign.center,
+                    color: Color(0xff695F61),
                   ),
                 ),
-                const SizedBox(height: 10.0),
+                const SizedBox(height: 20.0),
                 Center(
                   child: InkWell(
                     onTap: () {},
                     child: CircleAvatar(
-                      backgroundColor: Color(0xff9479E6),
+                      backgroundColor: Color(0xff9577E2),
                       radius: 15,
                       child: Icon(
                         Icons.chevron_right,
