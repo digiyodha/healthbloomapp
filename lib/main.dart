@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/view/login/login.dart';
