@@ -39,7 +39,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
 
   Future<String> uploadImage(XFile image) async {
     Reference db =
-        FirebaseStorage.instance.ref('profilePicture/${getImagePath(image)}');
+        FirebaseStorage.instance.ref('memberProfile/${getImagePath(image)}');
     setState(() {
       _profileLoading = true;
     });
@@ -272,11 +272,14 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                             children: [
                               _uploadAvatarUrl != null &&
                                       _uploadAvatarUrl.isNotEmpty
-                                  ? Image.network(
-                                      _uploadAvatarUrl,
-                                      height: 100,
-                                      width: 100,
-                                      fit: BoxFit.cover,
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: Image.network(
+                                        _uploadAvatarUrl,
+                                        height: 100,
+                                        width: 100,
+                                        fit: BoxFit.cover,
+                                      ),
                                     )
                                   : Container(
                                       height: 100,

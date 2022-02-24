@@ -19,7 +19,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   bool _loading = false;
-  final _registerForm = GlobalKey<FormState>();
+
   TextEditingController _name = TextEditingController();
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
@@ -61,7 +61,7 @@ class _SignUpState extends State<SignUp> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           TextBuilder(
                             text: "Here's Your \nFirst step \nwith us",
@@ -69,11 +69,11 @@ class _SignUpState extends State<SignUp> {
                             fontSize: 30,
                             fontWeight: FontWeight.w800,
                           ),
-                          Image.asset(
-                            'assets/icons/first-aid-box.png',
-                            height: 100,
-                            width: 100,
-                          )
+                          // Image.asset(
+                          //   'assets/icons/first-aid-box.png',
+                          //   height: 100,
+                          //   width: 100,
+                          // )
                         ],
                       ),
                       const SizedBox(height: 50.0),
@@ -91,172 +91,155 @@ class _SignUpState extends State<SignUp> {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Form(
-                              key: _registerForm,
-                              child: Column(
-                                children: [
-                                  const SizedBox(height: 15.0),
-                                  Container(
-                                    height: 48,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 15.0),
+                                Container(
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: TextFormField(
+                                    controller: _name,
+                                    style: TextStyle(
+                                      color: Color(0xff4F17BD),
                                     ),
-                                    child: TextFormField(
-                                      controller: _name,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return "* Required";
-                                        } else
-                                          return null;
-                                      },
-                                      style: TextStyle(
-                                        color: Color(0xff4F17BD),
+                                    decoration: InputDecoration(
+                                      label: TextBuilder(text: 'Name'),
+                                      labelStyle: TextStyle(
+                                        fontWeight: FontWeight.w500,
                                       ),
-                                      decoration: InputDecoration(
-                                        label: TextBuilder(text: 'Name'),
-                                        labelStyle: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        suffixIcon: Icon(Icons.person),
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.grey,
-                                          ),
+                                      suffixIcon: Icon(Icons.person),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.grey,
                                         ),
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 20.0),
-                                  Container(
-                                    height: 48,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
+                                ),
+                                const SizedBox(height: 20.0),
+                                Container(
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: TextFormField(
+                                    controller: _email,
+                                    style: TextStyle(
+                                      color: Color(0xff4F17BD),
                                     ),
-                                    child: TextFormField(
-                                      controller: _email,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return "* Required";
-                                        } else
-                                          return null;
-                                      },
-                                      style: TextStyle(
-                                        color: Color(0xff4F17BD),
+                                    decoration: InputDecoration(
+                                      label: TextBuilder(text: 'Email'),
+                                      labelStyle: TextStyle(
+                                        fontWeight: FontWeight.w500,
                                       ),
-                                      decoration: InputDecoration(
-                                        label: TextBuilder(text: 'Email'),
-                                        labelStyle: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        suffixIcon: Icon(Icons.email),
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.grey,
-                                          ),
+                                      suffixIcon: Icon(Icons.email),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.grey,
                                         ),
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 20.0),
-                                  Container(
-                                    height: 48,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
+                                ),
+                                const SizedBox(height: 20.0),
+                                Container(
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: TextFormField(
+                                    controller: _password,
+                                    style: TextStyle(
+                                      color: Color(0xff4F17BD),
                                     ),
-                                    child: TextFormField(
-                                      controller: _password,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return "* Required";
-                                        } else
-                                          return null;
-                                      },
-                                      style: TextStyle(
-                                        color: Color(0xff4F17BD),
+                                    decoration: InputDecoration(
+                                      label: TextBuilder(text: 'Password'),
+                                      suffixIcon: Icon(Icons.lock),
+                                      labelStyle: TextStyle(
+                                        fontWeight: FontWeight.w500,
                                       ),
-                                      decoration: InputDecoration(
-                                        label: TextBuilder(text: 'Password'),
-                                        suffixIcon: Icon(Icons.lock),
-                                        labelStyle: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.grey.withOpacity(0.2),
-                                          ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.grey.withOpacity(0.2),
                                         ),
                                       ),
                                     ),
                                   ),
-                                  Expanded(child: SizedBox()),
-                                  MaterialButton(
-                                    minWidth: 180,
-                                    height: 40,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                    color: Color(0xff9378E2),
-                                    onPressed: () async {
-                                      if (_registerForm.currentState
-                                          .validate()) {
+                                ),
+                                Expanded(child: SizedBox()),
+                                MaterialButton(
+                                  minWidth: 180,
+                                  height: 40,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  color: Color(0xff9378E2),
+                                  onPressed: () async {
+                                    setState(() {
+                                      _loading = true;
+                                    });
+
+                                    if (_email.text.isNotEmpty &&
+                                        _password.text.isNotEmpty &&
+                                        _name.text.isNotEmpty) {
+                                      RegisterUserRequest _request =
+                                          RegisterUserRequest(
+                                              name: _name.text,
+                                              emailId: _email.text,
+                                              password: _password.text);
+                                      RegisterUserResponse _response =
+                                          await registerUser(_request);
+                                      print(
+                                          'Register Request ${_request.toJson()}');
+                                      print(
+                                          'Register Response ${_response.toJson()}');
+                                      if (_response.success == true) {
+                                        // ScaffoldMessenger.of(context)
+                                        //     .showSnackBar(SnackBar(
+                                        //   content: Text('User created.'),
+                                        // ));
+
                                         setState(() {
-                                          _loading = true;
+                                          _loading = false;
                                         });
 
-                                        if (_email.text.isNotEmpty &&
-                                            _password.text.isNotEmpty &&
-                                            _name.text.isNotEmpty) {
-                                          RegisterUserRequest _request =
-                                              RegisterUserRequest(
-                                                  name: _name.text,
-                                                  emailId: _email.text,
-                                                  password: _password.text);
-                                          RegisterUserResponse _response =
-                                              await registerUser(_request);
-                                          print(
-                                              'Register Request ${_request.toJson()}');
-                                          print(
-                                              'Register Response ${_response.toJson()}');
-                                          if (_response.success == true) {
-                                            // ScaffoldMessenger.of(context)
-                                            //     .showSnackBar(SnackBar(
-                                            //   content: Text('User created.'),
-                                            // ));
-
-                                            setState(() {
-                                              _loading = false;
-                                            });
-
-                                            Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditProfile()),
-                                              (Route<dynamic> route) => false,
-                                            );
-                                          } else {
-                                            setState(() {
-                                              _loading = false;
-                                            });
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                              content:
-                                                  Text('Enter all details'),
-                                            ));
-                                          }
-                                        }
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditProfile()),
+                                          (Route<dynamic> route) => false,
+                                        );
+                                      } else {
+                                        setState(() {
+                                          _loading = false;
+                                        });
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text('Enter details'),
+                                        ));
                                       }
-                                    },
-                                    child: TextBuilder(
-                                      text: 'SIGN UP',
-                                      wordSpacing: 2,
-                                      latterSpacing: 1.3,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                ],
-                              ),
+                                    } else {
+                                      setState(() {
+                                        _loading = false;
+                                      });
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text('Enter details'),
+                                      ));
+                                    }
+                                  },
+                                  child: TextBuilder(
+                                    text: 'SIGN UP',
+                                    wordSpacing: 2,
+                                    latterSpacing: 1.3,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
@@ -275,7 +258,7 @@ class _SignUpState extends State<SignUp> {
                             ),
                             const SizedBox(width: 10.0),
                             TextBuilder(
-                              text: 'Or Signup With',
+                              text: 'Or Sign up With',
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                             ),
@@ -337,7 +320,7 @@ class _SignUpState extends State<SignUp> {
                             style: TextStyle(),
                             children: <TextSpan>[
                               TextSpan(
-                                text: 'Signin',
+                                text: 'Sign in',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),

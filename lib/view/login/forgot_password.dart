@@ -6,7 +6,6 @@ class ForgotPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -35,15 +34,6 @@ class ForgotPassword extends StatelessWidget {
                             Icons.chevron_left,
                             color: Colors.white,
                             size: 35,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: TextBuilder(
-                            text: 'Forgot Password',
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         Container(height: 30, width: 30)
@@ -114,6 +104,13 @@ class ForgotPassword extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          const SizedBox(height: 20.0),
+                          TextBuilder(
+                            text: 'Forgot Password',
+                            color: Color(0xff855FF7),
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500,
+                          ),
                           const SizedBox(height: 80.0),
                           Container(
                             height: 48,
@@ -157,20 +154,6 @@ class ForgotPassword extends StatelessWidget {
                               text: 'SUBMIT',
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 100.0),
-                          Center(
-                            child: InkWell(
-                              onTap: () {},
-                              child: CircleAvatar(
-                                backgroundColor: Color(0xff9378E2),
-                                radius: 15,
-                                child: Icon(
-                                  Icons.chevron_right,
-                                  color: Colors.white,
-                                ),
-                              ),
                             ),
                           ),
                         ],
