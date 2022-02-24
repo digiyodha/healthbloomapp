@@ -1,15 +1,58 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
+import 'package:health_bloom/main.dart';
+import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/login/forgot_password.dart';
 import 'package:health_bloom/view/login/phone_login.dart';
 import 'package:health_bloom/view/profile/edit_prodile.dart';
 import 'package:health_bloom/view/signup/signup.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-class Login extends StatelessWidget {
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  // Optional clientId
+  // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
+  scopes: <String>[
+    'email',
+//    'https://www.googleapis.com/auth/contacts.readonly',
+  ],
+);
+
+class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  GoogleSignInAccount? _currentUser;
+
+  Future<void> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> _handleSignOut() => _googleSignIn.disconnect();
+
+  @override
+  void initState() {
+    super.initState();
+    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
+      setState(() {
+        _currentUser = account;
+      });
+    });
+    _googleSignIn.signInSilently();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final GoogleSignInAccount? user = _currentUser;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -194,13 +237,26 @@ class Login extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 20,
-                      child: Image.asset(
-                        'assets/icons/google.png',
-                        height: 25,
-                        width: 25,
+                    InkWell(
+                      onTap: () async {
+                        await _handleSignIn();
+                        sp?.setString("id", _currentUser?.id ?? "");
+                        sp?.setString("email", _currentUser?.email ?? "");
+                        print(_currentUser?.email);
+                        print(_currentUser?.id);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                              return HomePage();
+                            }));
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 20,
+                        child: Image.asset(
+                          'assets/icons/google.png',
+                          height: 25,
+                          width: 25,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 30.0),

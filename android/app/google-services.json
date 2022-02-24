@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "339433668449",
+    "project_id": "health-bloom-ef2f8",
+    "storage_bucket": "health-bloom-ef2f8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339433668449:android:3432856184c05b1911cf20",
+        "android_client_info": {
+          "package_name": "com.example.health_bloom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339433668449-ivhd2famhicnfnnfjelnpmcelrtjgobb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.health_bloom",
+            "certificate_hash": "a8b9e9fa05e79b719dd089a389fa71010ec7dbf9"
+          }
+        },
+        {
+          "client_id": "339433668449-spbg4jegj6p0da02n3av2vpd24cpvu2v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxkpMHuUvxGtJGDe1PhX2DDjUvFfklV4E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339433668449-spbg4jegj6p0da02n3av2vpd24cpvu2v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
