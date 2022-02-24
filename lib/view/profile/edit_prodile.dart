@@ -5,7 +5,7 @@ import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
 
 class EditProfile extends StatelessWidget {
-  const EditProfile({Key? key}) : super(key: key);
+  const EditProfile({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

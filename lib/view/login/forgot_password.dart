@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 
 class ForgotPassword extends StatelessWidget {
-  const ForgotPassword({Key? key}) : super(key: key);
+  const ForgotPassword({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +25,7 @@ class ForgotPassword extends StatelessWidget {
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
                           onPressed: () {
@@ -37,6 +37,16 @@ class ForgotPassword extends StatelessWidget {
                             size: 35,
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: TextBuilder(
+                            text: 'Forgot Password',
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Container(height: 30, width: 30)
                       ],
                     ),
                     Positioned(

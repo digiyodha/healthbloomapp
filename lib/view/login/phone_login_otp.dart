@@ -3,7 +3,7 @@ import 'package:health_bloom/components/otp_code_input.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 
 class PhoneLoginOtp extends StatefulWidget {
-  const PhoneLoginOtp({Key? key}) : super(key: key);
+  const PhoneLoginOtp({Key key}) : super(key: key);
 
   @override
   State<PhoneLoginOtp> createState() => _PhoneLoginOtpState();

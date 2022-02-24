@@ -4,23 +4,23 @@ import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/walkthrough/walkthrough.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({Key key}) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late String? id;
+  String id;
 
-  getData(){
-    id = sp?.getString("id");
-    if(id == null){
-      Navigator.push(context, MaterialPageRoute(builder: (context){
+  getData() {
+    id = sp.getString("id");
+    if (id == null) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
         return Walkthrough();
       }));
-    }else{
-      Navigator.push(context, MaterialPageRoute(builder: (context){
+    } else {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
         return HomePage();
       }));
     }
@@ -39,9 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset("assets/icons/logo.png")
-          ],
+          children: [Image.asset("assets/icons/logo.png")],
         ),
       ),
     );

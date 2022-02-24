@@ -8,13 +8,14 @@ class DrawerContainerWidget extends StatelessWidget {
   final bool selected;
   final IconData icon;
 
-  const DrawerContainerWidget({ required this.text, required this.onTap, required this.selected,required this.icon});
+  const DrawerContainerWidget(
+      {this.text, this.onTap, this.selected, this.icon});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: Colors.white38,
-      onTap: (){
+      onTap: () {
         onTap();
       },
       overlayColor:
@@ -30,9 +31,10 @@ class DrawerContainerWidget extends StatelessWidget {
         padding: EdgeInsets.only(left: 20, top: 14, bottom: 14),
         child: Row(
           children: [
-            Icon(icon,
-                color: selected ? kMainColor : kWhite),
-            SizedBox(width: 12,),
+            Icon(icon, color: selected ? kMainColor : kWhite),
+            SizedBox(
+              width: 12,
+            ),
             Text(
               text,
               style: TextStyle(

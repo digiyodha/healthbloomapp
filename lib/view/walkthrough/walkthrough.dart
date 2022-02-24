@@ -8,7 +8,7 @@ import '../../components/custom_contained_button.dart';
 import '../signup/signup.dart';
 
 class Walkthrough extends StatefulWidget {
-  const Walkthrough({Key? key}) : super(key: key);
+  const Walkthrough({Key key}) : super(key: key);
 
   @override
   State<Walkthrough> createState() => _WalkthroughState();

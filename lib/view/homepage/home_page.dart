@@ -7,7 +7,7 @@ import '../../utils/drawer/custom_drawer.dart';
 import '../family_members/family_members.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         return false;
       },
       child: Scaffold(
@@ -186,7 +186,8 @@ class _HomePageState extends State<HomePage> {
                       mainAxisSpacing: 16),
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 14, vertical: 16),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         color: Color(0xff8B80F8),
@@ -197,7 +198,9 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             "MEDICINE",
                             style: TextStyle(
-                                fontSize: 12, color: kWhite, letterSpacing: 1.5),
+                                fontSize: 12,
+                                color: kWhite,
+                                letterSpacing: 1.5),
                           ),
                           Spacer(),
                           Align(
@@ -231,7 +234,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 14, vertical: 16),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         color: Color(0xffAF8EFF),
@@ -242,7 +246,9 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             "MEDICINE",
                             style: TextStyle(
-                                fontSize: 12, color: kWhite, letterSpacing: 1.5),
+                                fontSize: 12,
+                                color: kWhite,
+                                letterSpacing: 1.5),
                           ),
                           Spacer(),
                           Align(
@@ -276,7 +282,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 14, vertical: 16),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         color: Color(0xffFFA38E),
@@ -287,7 +294,9 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             "MEDICINE",
                             style: TextStyle(
-                                fontSize: 12, color: kWhite, letterSpacing: 1.5),
+                                fontSize: 12,
+                                color: kWhite,
+                                letterSpacing: 1.5),
                           ),
                           Spacer(),
                           Align(
@@ -321,7 +330,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 14, vertical: 16),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         color: Color(0xff8B80F8),
@@ -332,7 +342,9 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             "WATER",
                             style: TextStyle(
-                                fontSize: 12, color: kWhite, letterSpacing: 1.5),
+                                fontSize: 12,
+                                color: kWhite,
+                                letterSpacing: 1.5),
                           ),
                           Spacer(),
                           Align(
@@ -340,7 +352,8 @@ class _HomePageState extends State<HomePage> {
                             child: Container(
                               height: 100,
                               width: 100,
-                              child: Image.asset("assets/images/water_glass.png"),
+                              child:
+                                  Image.asset("assets/images/water_glass.png"),
                             ),
                           ),
                           Spacer(),

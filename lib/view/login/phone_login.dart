@@ -3,7 +3,7 @@ import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/view/login/phone_login_otp.dart';
 
 class PhoneLogin extends StatelessWidget {
-  const PhoneLogin({Key? key}) : super(key: key);
+  const PhoneLogin({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

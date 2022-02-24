@@ -19,14 +19,14 @@ GoogleSignIn _googleSignIn = GoogleSignIn(
 );
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({Key key}) : super(key: key);
 
   @override
   State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  GoogleSignInAccount? _currentUser;
+  GoogleSignInAccount _currentUser;
 
   Future<void> _handleSignIn() async {
     try {
@@ -41,7 +41,7 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
+    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
       setState(() {
         _currentUser = account;
       });
@@ -51,7 +51,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    final GoogleSignInAccount? user = _currentUser;
+    final GoogleSignInAccount user = _currentUser;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -246,8 +246,8 @@ class _LoginState extends State<Login> {
                         print(_currentUser?.id);
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                              return HomePage();
-                            }));
+                          return HomePage();
+                        }));
                       },
                       child: CircleAvatar(
                         backgroundColor: Colors.white,
@@ -316,7 +316,7 @@ class _LoginState extends State<Login> {
 
 class TextFieldCustom extends StatelessWidget {
   const TextFieldCustom({
-    Key? key,
+    Key key,
   }) : super(key: key);
 
   @override

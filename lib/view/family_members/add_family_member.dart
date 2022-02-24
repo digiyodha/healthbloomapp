@@ -4,7 +4,7 @@ import '../../components/custom_contained_button.dart';
 import '../../utils/text_field/custom_text_field.dart';
 
 class AddFamilyMembers extends StatefulWidget {
-  const AddFamilyMembers({Key? key}) : super(key: key);
+  const AddFamilyMembers({Key key}) : super(key: key);
 
   @override
   State<AddFamilyMembers> createState() => _AddFamilyMembersState();

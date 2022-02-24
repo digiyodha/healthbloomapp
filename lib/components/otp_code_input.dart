@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class OTPCodeInput extends StatefulWidget {
-  final bool? first;
-  final bool? last;
+  final bool first;
+  final bool last;
 
-  final TextEditingController? controller;
+  final TextEditingController controller;
   const OTPCodeInput({
-    Key? key,
+    Key key,
     this.first,
     this.last,
     this.controller,
@@ -23,7 +23,7 @@ class _OTPCodeInputState extends State<OTPCodeInput> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        widget.controller!.text.isEmpty
+        widget.controller.text.isEmpty
             ? Container(
                 height: 15,
                 width: 15,
@@ -56,7 +56,7 @@ class _OTPCodeInputState extends State<OTPCodeInput> {
               ),
               onChanged: (value) {
                 setState(() {});
-                widget.controller!.text = value;
+                widget.controller.text = value;
                 if (value.length == 1 && widget.last == false) {
                   FocusScope.of(context).nextFocus();
                 }

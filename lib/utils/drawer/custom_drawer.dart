@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:health_bloom/view/profile/edit_prodile.dart';
 import '../../view/family_members/family_members.dart';
 import '../colors.dart';
 import 'drawer_container_widget.dart';
 
 class CustomDrawer extends StatefulWidget {
   final int selected;
-  CustomDrawer({required this.selected});
+  CustomDrawer({this.selected});
 
   @override
   _CustomDrawerState createState() => _CustomDrawerState();

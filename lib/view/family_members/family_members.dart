@@ -5,7 +5,7 @@ import '../../utils/drawer/custom_drawer.dart';
 import 'add_family_member.dart';
 
 class FamilyMembers extends StatefulWidget {
-  const FamilyMembers({Key? key}) : super(key: key);
+  const FamilyMembers({Key key}) : super(key: key);
 
   @override
   State<FamilyMembers> createState() => _FamilyMembersState();

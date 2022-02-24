@@ -5,7 +5,7 @@ import 'package:health_bloom/view/login/login.dart';
 import 'package:health_bloom/view/login/phone_login.dart';
 
 class SignUp extends StatelessWidget {
-  const SignUp({Key? key}) : super(key: key);
+  const SignUp({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
