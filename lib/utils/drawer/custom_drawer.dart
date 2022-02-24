@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:health_bloom/main.dart';
+import 'package:health_bloom/view/login/login.dart';
+import 'package:health_bloom/view/splash/splash_screen.dart';
 import '../../view/family_members/family_members.dart';
 import '../colors.dart';
 import 'drawer_container_widget.dart';
@@ -108,6 +111,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   selected: widget.selected == 7,
                   icon: Icons.settings,
                 ),
+                DrawerContainerWidget(
+                  text: "Logout",
+                  onTap: () async{
+                    await _handleSignOut();
+                    sp.clear();
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return SplashScreen();
+                    }));
+                  },
+                  selected: widget.selected == 8,
+                  icon: Icons.logout,
+                ),
                 SizedBox(
                   height: 34,
                 )
@@ -118,4 +133,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
       ),
     );
   }
+
+  Future<void> _handleSignOut() => googleSignIn.disconnect();
 }
