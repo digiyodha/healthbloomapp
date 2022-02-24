@@ -2,13 +2,16 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/main.dart';
+import 'package:health_bloom/model/request/login_user_resquest.dart';
+import 'package:health_bloom/model/response/login_uesr_response.dart';
+import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/login/forgot_password.dart';
 import 'package:health_bloom/view/login/phone_login.dart';
-import 'package:health_bloom/view/profile/edit_prodile.dart';
 import 'package:health_bloom/view/signup/signup.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 GoogleSignIn googleSignIn = GoogleSignIn(
   // Optional clientId
@@ -29,6 +32,14 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   GoogleSignInAccount _currentUser;
   bool _loading = false;
+  final _loginForm = GlobalKey<FormState>();
+  TextEditingController _email = TextEditingController();
+  TextEditingController _password = TextEditingController();
+  Future<LoginUserResponse> loginUser(LoginUserRequest request) async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    LoginUserResponse _response = await adminAPI.loginUserAPI(request);
+    return _response;
+  }
 
   Future<GoogleSignInAccount> _handleSignIn() async {
     try {
@@ -43,12 +54,21 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
+    _email.text = 'omprakash@gmail.com';
+    _password.text = '12345';
     googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
       setState(() {
         _currentUser = account;
       });
     });
     googleSignIn.signInSilently();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _email.dispose();
+    _password.dispose();
   }
 
   @override
@@ -110,100 +130,164 @@ class _LoginState extends State<Login> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: TextFormField(
-                                  style: TextStyle(
-                                    color: Color(0xff4F17BD),
+                          child: Form(
+                            key: _loginForm,
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: _email.text.isNotEmpty ? null : 48,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                  decoration: InputDecoration(
-                                    label: TextBuilder(text: 'Name'),
-                                    labelStyle: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      // color: Color(0xff675F5E),
-                                    ),
-                                    suffixIcon: Icon(Icons.person),
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 20.0),
-                              Container(
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: TextFormField(
-                                  style: TextStyle(
-                                    color: Color(0xff4F17BD),
-                                  ),
-                                  decoration: InputDecoration(
-                                    labelStyle: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      // color: Color(0xff675F5E),
-                                    ),
-                                    label: TextBuilder(text: 'Password'),
-                                    suffixIcon: Icon(Icons.lock),
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 8.0),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ForgotPassword()));
+                                  child: TextFormField(
+                                    controller: _email,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "* Required";
+                                      } else
+                                        return null;
                                     },
-                                    child: TextBuilder(
-                                      text: 'Forgot Password ?',
-                                      color: Color(0xff856DBE),
-                                      fontWeight: FontWeight.w500,
+                                    style: TextStyle(
+                                      color: Color(0xff4F17BD),
                                     ),
-                                  )
-                                ],
-                              ),
-                              Expanded(child: SizedBox()),
-                              MaterialButton(
-                                minWidth: 180,
-                                height: 40,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25),
+                                    decoration: InputDecoration(
+                                      label: TextBuilder(text: 'Email'),
+                                      labelStyle: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        // color: Color(0xff675F5E),
+                                      ),
+                                      suffixIcon: Icon(Icons.person),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                color: Color(0xff9378E2),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => EditProfile()));
-                                },
-                                child: TextBuilder(
-                                  text: 'SIGN IN',
-                                  wordSpacing: 2,
-                                  latterSpacing: 1.3,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
+                                const SizedBox(height: 20.0),
+                                Container(
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: TextFormField(
+                                    controller: _password,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "* Required";
+                                      } else
+                                        return null;
+                                    },
+                                    style: TextStyle(
+                                      color: Color(0xff4F17BD),
+                                    ),
+                                    decoration: InputDecoration(
+                                      labelStyle: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        // color: Color(0xff675F5E),
+                                      ),
+                                      label: TextBuilder(text: 'Password'),
+                                      suffixIcon: Icon(Icons.lock),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              )
-                            ],
+                                const SizedBox(height: 8.0),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ForgotPassword()));
+                                      },
+                                      child: TextBuilder(
+                                        text: 'Forgot Password ?',
+                                        color: Color(0xff856DBE),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Expanded(child: SizedBox()),
+                                MaterialButton(
+                                  minWidth: 180,
+                                  height: 40,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  color: Color(0xff9378E2),
+                                  onPressed: () async {
+                                    if (_loginForm.currentState.validate()) {
+                                      setState(() {
+                                        _loading = true;
+                                      });
+
+                                      if (_email.text.isNotEmpty &&
+                                          _password.text.isNotEmpty) {
+                                        LoginUserRequest _request =
+                                            LoginUserRequest(
+                                                emailId: _email.text,
+                                                password: _password.text);
+                                        LoginUserResponse _response =
+                                            await loginUser(_request);
+                                        print(
+                                            'Login Request ${_request.toJson()}');
+                                        print(
+                                            'Login Response ${_response.toJson()}');
+                                        if (_response.success == true) {
+                                          sp.setString('xAuthToken',
+                                              _response.data.xAuthToken);
+                                          sp.setString(
+                                              'loginUserId', _response.data.id);
+
+                                          sp.setString('loginUserEmail',
+                                              _response.data.emailId);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text('Successful login.'),
+                                          ));
+                                          setState(() {
+                                            _loading = false;
+                                          });
+
+                                          Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    HomePage()),
+                                            (Route<dynamic> route) => false,
+                                          );
+                                        } else {
+                                          setState(() {
+                                            _loading = false;
+                                          });
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text('Enter all details'),
+                                          ));
+                                        }
+                                      }
+                                    }
+                                  },
+                                  child: TextBuilder(
+                                    text: 'SIGN IN',
+                                    wordSpacing: 2,
+                                    latterSpacing: 1.3,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -247,21 +331,26 @@ class _LoginState extends State<Login> {
                               _loading = true;
                             });
                             await _handleSignIn();
-                            Future.delayed(Duration(seconds: 1)).whenComplete(() {
-                              if(_currentUser != null){
+                            Future.delayed(Duration(seconds: 1))
+                                .whenComplete(() {
+                              if (_currentUser != null) {
                                 sp.setString("id", _currentUser?.id ?? "");
-                                sp.setString("email", _currentUser?.email ?? "");
+                                sp.setString(
+                                    "email", _currentUser?.email ?? "");
                                 print(_currentUser?.email);
                                 print(_currentUser?.id);
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
-                                      return HomePage();
-                                    }));
-                              }else{
+                                  return HomePage();
+                                }));
+                              } else {
                                 setState(() {
                                   _loading = false;
                                 });
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error occurred!"),));
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text("Error occurred!"),
+                                ));
                               }
                             });
                           },
@@ -326,8 +415,7 @@ class _LoginState extends State<Login> {
               )),
             ),
           ),
-          if(_loading)
-            LoadingWidget()
+          if (_loading) LoadingWidget()
         ],
       ),
     );

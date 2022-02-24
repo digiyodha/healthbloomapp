@@ -13,6 +13,7 @@ class CustomTextField extends StatefulWidget {
   final Function onTap;
   final int maxLength;
   final double labelSize;
+  final Function(String) validator;
   CustomTextField(
       {this.controller,
       this.label,
@@ -30,7 +31,8 @@ class CustomTextField extends StatefulWidget {
       this.enabled = true,
       this.maxLength = 1,
       this.minLines = 1,
-      this.labelSize = 16});
+      this.labelSize = 16,
+      this.validator});
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -57,6 +59,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       controller: widget.controller,
       maxLines: widget.maxLines,
       minLines: widget.minLines,
+      validator: widget.validator,
       onTap: () {
         widget.onTap();
       },
