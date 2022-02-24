@@ -58,12 +58,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 DrawerContainerWidget(
                   text: "Profile",
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditProfile(),
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => EditProfile(),
+                    //   ),
+                    // );
                   },
                   selected: widget.selected == 1,
                   icon: Icons.person,

@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
-import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/login/forgot_password.dart';
 import 'package:health_bloom/view/login/phone_login.dart';
+import 'package:health_bloom/view/profile/edit_prodile.dart';
 import 'package:health_bloom/view/signup/signup.dart';
 
 class Login extends StatelessWidget {
@@ -146,7 +146,7 @@ class Login extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => HomePage()));
+                                      builder: (context) => EditProfile()));
                             },
                             child: TextBuilder(
                               text: 'SIGN IN',

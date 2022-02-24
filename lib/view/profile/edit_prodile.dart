@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:health_bloom/components/textbuilder.dart';
+import 'package:health_bloom/view/homepage/home_page.dart';
 
 class EditProfile extends StatelessWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -215,11 +216,10 @@ class EditProfile extends StatelessWidget {
                               ),
                               color: Color(0xff855FF7),
                               onPressed: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             EditProfileOtp()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => HomePage()));
                               },
                               child: TextBuilder(
                                 text: 'SUBMIT',
