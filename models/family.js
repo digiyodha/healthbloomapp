@@ -3,7 +3,7 @@ var Schema       = mongoose.Schema;
 const jwt = require("jsonwebtoken");
 var bcrypt     = require('bcrypt');
 
-var FamilySchenma = new Schema({
+var FamilySchema = new Schema({
     name: String,
     relationship: String,
     age: Number,
@@ -14,7 +14,7 @@ var FamilySchenma = new Schema({
     }
 }, {strict: false});
 
-family = mongoose.model("Family", FamilySchenma);
+family = mongoose.model("Family", FamilySchema);
 
 module.exports = {
   Family: family,

@@ -52,7 +52,8 @@ exports.editBill = asyncHandler(async (req, res, next) => {
 exports.searchBill = asyncHandler(async (req, res, next) => {
     var {name} = req.body;
     const bill = await Bill.find().where({name: {
-        $regex: name
+        $regex: name,
+        $options: 'i'
         }});
     res.status(200).json({ success: true, data: bill });
 });

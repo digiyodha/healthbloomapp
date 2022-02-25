@@ -1,12 +1,14 @@
 var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
-var BillSchema = new Schema({
-    name: String,
-    amount: Number,
-    date: Date,
-    description: String,
-    bill_image: [{
+
+var PrescriptionSchema = new Schema({
+    doctor_name: String,
+    clinic_name: String,
+    consultation_date: Date,
+    user_ailment: String,
+    doctor_advice: String,
+    prescription_image: [{
         type: String
     }],
     patient: {
@@ -19,10 +21,9 @@ var BillSchema = new Schema({
     }
 }, {strict: false});
 
-bill = mongoose.model("Bill", BillSchema);
+prescription = mongoose.model("Prescription", PrescriptionSchema);
 
-BillSchema.index({'$**': 'text'});
 
 module.exports = {
-    Bill: bill,
+    Prescription: prescription,
 }

@@ -47,6 +47,10 @@ app.get('/', (req, res) => res.send('OK'));
 app.use("/v1/users", require("./routers/userRouter"));
 app.use("/v1/family", require("./routers/familyRouter"));
 app.use("/v1/bill", require("./routers/billRouter"));
+app.use("/v1/report", require("./routers/reportRouter"));
+app.use("/v1/prescription", require("./routers/prescriptionRouter"));
+
+
 
 
 // app.use("/api/v1/attempts", require("./routers/attemptRouter"));
