@@ -16,6 +16,8 @@ import 'package:health_bloom/services/api/endpoints.dart';
 import 'package:health_bloom/services/api/endpoints/auth_endpoint.dart';
 import 'package:health_bloom/services/api/results.dart';
 
+import '../../../model/request/request.dart';
+import '../../../model/response/response.dart';
 import '../network_client.dart';
 
 class NetworkManager {
@@ -147,6 +149,28 @@ class NetworkManager {
       print(response);
 
       return Success<GetAllMemberResponse>(response);
+    }
+    return result;
+  }
+
+  // Add prescription
+  Future<Result> addBill(AddBillRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.addBill;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      AddBillResponse response =
+      AddBillResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<AddBillResponse>(response);
     }
     return result;
   }

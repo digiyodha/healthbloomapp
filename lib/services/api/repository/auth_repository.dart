@@ -13,6 +13,9 @@ import 'package:health_bloom/model/response/register_user_response.dart';
 import 'package:health_bloom/services/api/networkmanager/auth_networkmanager.dart';
 import 'package:health_bloom/services/api/results.dart';
 
+import '../../../model/request/request.dart';
+import '../../../model/response/response.dart';
+
 class NetworkRepository with ChangeNotifier {
   final NetworkManager apiClient;
 
@@ -73,5 +76,12 @@ class NetworkRepository with ChangeNotifier {
     if (apiResult is Error) throw apiResult.error;
 
     return getAllMemberAPI();
+  }
+
+  /// Get all member
+  Future<AddBillResponse> addBillAPI(AddBillRequest request) async {
+    Result apiResult = await apiClient.addBill(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
   }
 }
