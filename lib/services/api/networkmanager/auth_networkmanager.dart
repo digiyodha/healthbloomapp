@@ -3,18 +3,19 @@ import 'dart:convert';
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/request/add_edit_user_profile_request.dart';
 import 'package:health_bloom/model/request/add_member_request.dart';
+import 'package:health_bloom/model/request/add_prescription_request.dart';
 import 'package:health_bloom/model/request/login_user_resquest.dart';
 import 'package:health_bloom/model/request/resgister_user_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
 import 'package:health_bloom/model/response/add_family_response.dart';
+import 'package:health_bloom/model/response/add_precsription_response.dart';
+import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/login_uesr_response.dart';
 import 'package:health_bloom/model/response/register_user_response.dart';
 import 'package:health_bloom/services/api/endpoints.dart';
 import 'package:health_bloom/services/api/endpoints/auth_endpoint.dart';
 import 'package:health_bloom/services/api/results.dart';
 
-import '../../../model/request/request.dart';
-import '../../../model/response/response.dart';
 import '../network_client.dart';
 
 class NetworkManager {
@@ -106,8 +107,9 @@ class NetworkManager {
     return result;
   }
 
-  Future<Result> addBill(AddBillRequest request) async {
-    AuthEndpoint endpoint = AuthEndpoints.addBill;
+  // Add prescription
+  Future<Result> addPrescription(AddPrescriptionRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.addPrescription;
     endpoint.addBody(request);
     String xAuthToken = sp.getString('xAuthToken');
     print("xAuthToken:  ${xAuthToken.toString()}");
@@ -117,12 +119,34 @@ class NetworkManager {
     );
 
     if (result is Success) {
-      AddBillResponse response =
-      AddBillResponse.fromJson(json.decode(result.data.toString()));
+      AddPrescriptionResponse response =
+          AddPrescriptionResponse.fromJson(json.decode(result.data.toString()));
 
       print(response);
 
-      return Success<AddBillResponse>(response);
+      return Success<AddPrescriptionResponse>(response);
+    }
+    return result;
+  }
+
+  // Add prescription
+  Future<Result> getAllMember() async {
+    AuthEndpoint endpoint = AuthEndpoints.getAllmember;
+    // endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      GetAllMemberResponse response =
+          GetAllMemberResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<GetAllMemberResponse>(response);
     }
     return result;
   }

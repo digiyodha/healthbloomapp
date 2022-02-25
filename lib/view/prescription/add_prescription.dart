@@ -1,7 +1,11 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:health_bloom/model/request/add_prescription_request.dart';
+import 'package:health_bloom/model/response/add_precsription_response.dart';
+import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
+import 'package:provider/provider.dart';
 import '../../components/custom_contained_button.dart';
 import '../../utils/text_field/custom_text_field.dart';
 import 'dart:io';
@@ -28,6 +32,13 @@ class _AddPrescriptionState extends State<AddPrescription> {
   UploadTask task;
   bool _loading = false;
   List<String> files = [];
+  Future<AddPrescriptionResponse> addPrescription(
+      AddPrescriptionRequest request) async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    AddPrescriptionResponse _response =
+        await adminAPI.addPrescriptionAPI(request);
+    return _response;
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -35,11 +46,12 @@ class _AddPrescriptionState extends State<AddPrescription> {
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate){
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
       });
-      _date.text = "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+      _date.text =
+          "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
     }
   }
 
@@ -51,7 +63,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
     if (_attachmentFile != null) {
       _file = File(_attachmentFile.files.single.path);
       final ref =
-      FirebaseStorage.instance.ref('files/${path.basename(_file.path)}');
+          FirebaseStorage.instance.ref('files/${path.basename(_file.path)}');
       task = ref.putFile(_file);
       final snapshot = await task.whenComplete(() {});
       final url = await snapshot.ref.getDownloadURL();
@@ -183,106 +195,132 @@ class _AddPrescriptionState extends State<AddPrescription> {
                     SizedBox(
                       height: 24,
                     ),
-                    if(files.isNotEmpty)
-                    Column(
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          child: Wrap(
-                            children: List.generate(files.length, (index) => Container(
-                              height: 100,
-                              width: 100,
-                              child: Stack(
-                                children: [
-                                  InkWell(
-                                    onTap: (){
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              content: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        'Image',
-                                                        style: TextStyle(
-                                                            fontSize: 20, fontWeight: FontWeight.w600),
-                                                      ),
-                                                      GestureDetector(
-                                                        child: Icon(Icons.close),
-                                                        onTap: () {
-                                                          Navigator.pop(context);
-                                                        },
-                                                      )
-                                                    ],
-                                                  ),
-                                                  SizedBox(height: 16,),
-                                                  Container(
-                                                    margin: EdgeInsets.all(1),
-                                                    height: 325,
-                                                    width: double.infinity,
-                                                    child: Image.network(
-                                                      files[index],
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                  // SizedBox(height: 16,),
-                                                  // CustomContainedButton(
-                                                  //   text: "Download",
-                                                  //   textSize: 20,
-                                                  //   weight: FontWeight.w600,
-                                                  //   height: 48,
-                                                  //   width: 328,
-                                                  //   disabledColor: kTeal4,
-                                                  //   onPressed: () async{
-                                                  //     if(kIsWeb){
-                                                  //       downloadImage(widget.url,widget.assetName);
-                                                  //     }else{
-                                                  //       _download(widget.assetName, widget.url);
-                                                  //     }
-                                                  //   },
-                                                  // )
-                                                ],
+                    if (files.isNotEmpty)
+                      Column(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            child: Wrap(
+                              children: List.generate(
+                                  files.length,
+                                  (index) => Container(
+                                        height: 100,
+                                        width: 100,
+                                        child: Stack(
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                        content: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Text(
+                                                                  'Image',
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          20,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600),
+                                                                ),
+                                                                GestureDetector(
+                                                                  child: Icon(
+                                                                      Icons
+                                                                          .close),
+                                                                  onTap: () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                )
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                              height: 16,
+                                                            ),
+                                                            Container(
+                                                              margin: EdgeInsets
+                                                                  .all(1),
+                                                              height: 325,
+                                                              width: double
+                                                                  .infinity,
+                                                              child:
+                                                                  Image.network(
+                                                                files[index],
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            ),
+                                                            // SizedBox(height: 16,),
+                                                            // CustomContainedButton(
+                                                            //   text: "Download",
+                                                            //   textSize: 20,
+                                                            //   weight: FontWeight.w600,
+                                                            //   height: 48,
+                                                            //   width: 328,
+                                                            //   disabledColor: kTeal4,
+                                                            //   onPressed: () async{
+                                                            //     if(kIsWeb){
+                                                            //       downloadImage(widget.url,widget.assetName);
+                                                            //     }else{
+                                                            //       _download(widget.assetName, widget.url);
+                                                            //     }
+                                                            //   },
+                                                            // )
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                    barrierDismissible: false);
+                                              },
+                                              child: Container(
+                                                height: 100,
+                                                width: 100,
+                                                child: Image.asset(
+                                                    "assets/icons/prescription.png"),
                                               ),
-                                            );
-                                          },
-                                          barrierDismissible: false);
-                                    },
-                                    child: Container(
-                                      height: 100,
-                                      width: 100,
-                                      child: Image.asset("assets/icons/prescription.png"),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 10,
-                                    right: 18,
-                                    child: InkWell(
-                                      onTap: (){
-                                        files.removeAt(index);
-                                        setState(() {});
-                                      },
-                                      child: CircleAvatar(
-                                        backgroundColor: Color(0xffFF9B91),
-                                        radius: 12,
-                                        child: Icon(Icons.close,color: kWhite,size: 16,),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )),
+                                            ),
+                                            Positioned(
+                                              top: 10,
+                                              right: 18,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  files.removeAt(index);
+                                                  setState(() {});
+                                                },
+                                                child: CircleAvatar(
+                                                  backgroundColor:
+                                                      Color(0xffFF9B91),
+                                                  radius: 12,
+                                                  child: Icon(
+                                                    Icons.close,
+                                                    color: kWhite,
+                                                    size: 16,
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      )),
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 24,
-                        ),
-                      ],
-                    ),
+                          SizedBox(
+                            height: 24,
+                          ),
+                        ],
+                      ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 24),
                       height: 75,
@@ -309,20 +347,13 @@ class _AddPrescriptionState extends State<AddPrescription> {
               ),
             ),
           ),
-          if(_loading)
-            LoadingWidget()
+          if (_loading) LoadingWidget()
         ],
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 5
-            )
-          ],
-          color: kWhite
-        ),
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
+            color: kWhite),
         padding: EdgeInsets.symmetric(horizontal: 24),
         height: 80,
         child: Align(
@@ -332,7 +363,54 @@ class _AddPrescriptionState extends State<AddPrescription> {
             textSize: 16,
             disabledColor: kGreyLite,
             text: "Submit",
-            onPressed: () {
+            onPressed: () async {
+              if (selectedDate != null &&
+                  _drAdvice.text.isNotEmpty & _patient.text.isNotEmpty &&
+                  _doctor.text.isNotEmpty &&
+                  _userAilment.text.isNotEmpty &&
+                  _hospital.text.isNotEmpty &&
+                  files.isNotEmpty) {
+                setState(() {
+                  _loading = true;
+                });
+                AddPrescriptionRequest _request = AddPrescriptionRequest(
+                  consultationDate: selectedDate,
+                  doctorAdvice: _drAdvice.text,
+                  clinicName: _hospital.text,
+                  patient: _patient.text,
+                  doctorName: _doctor.text,
+                  prescriptionImage: files,
+                  userAilment: _userAilment.text,
+                );
+                AddPrescriptionResponse _response =
+                    await addPrescription(_request);
+                print('Add Prescription Request ${_request.toJson()}');
+                print('Add Prescription Response ${_response.toJson()}');
+                if (_response.success == true) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Added'),
+                  ));
+                  setState(() {
+                    _loading = false;
+                  });
+
+                  Navigator.pop(context);
+                } else {
+                  setState(() {
+                    _loading = false;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Enter details'),
+                  ));
+                }
+              } else {
+                setState(() {
+                  _loading = false;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Enter all details'),
+                ));
+              }
             },
             width: double.infinity,
           ),
