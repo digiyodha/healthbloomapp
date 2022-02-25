@@ -114,7 +114,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 DrawerContainerWidget(
                   text: "Logout",
                   onTap: () async{
-                    await _handleSignOut();
+                    //await _handleSignOut();
                     sp.clear();
                     Navigator.push(context, MaterialPageRoute(builder: (context){
                       return SplashScreen();

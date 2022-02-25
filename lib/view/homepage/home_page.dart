@@ -1,10 +1,13 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/utils/colors.dart';
+import 'package:health_bloom/view/bill/add_bill.dart';
+import 'package:health_bloom/view/report/add_report.dart';
 import 'package:hexagon/hexagon.dart';
 
 import '../../utils/drawer/custom_drawer.dart';
 import '../family_members/family_members.dart';
+import '../prescription/add_prescription.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -13,8 +16,44 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   int _bottomNavIndex = 0;
+  bool _fabOpened = false;
+  Animation<double> _translateButton;
+  Animation<Color> _buttonColor;
+  Animation<Color> _iconColor;
+  AnimationController _animationController;
+  double _fabHeight = 56.0;
+  Curve _curve = Curves.ease;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _animationController =
+    AnimationController(vsync: this, duration: Duration(milliseconds: 300))
+      ..addListener(() {
+        if (mounted) {
+          setState(() {
+            // getLog(logId: widget.datum.id,canLoad: false);
+          });
+        }
+      });
+
+    _buttonColor = ColorTween(begin: kMainColor, end: Colors.white).animate(
+        CurvedAnimation(
+            parent: _animationController,
+            curve: Interval(0.00, 1.00, curve: Curves.linear)));
+
+    _iconColor = ColorTween(begin: kWhite, end: kGrey7).animate(CurvedAnimation(
+        parent: _animationController,
+        curve: Interval(0.00, 1.00, curve: Curves.linear)));
+
+    _translateButton = Tween<double>(begin: _fabHeight, end: -14).animate(
+        CurvedAnimation(
+            parent: _animationController,
+            curve: Interval(0.00, 0.75, curve: _curve)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -441,15 +480,35 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: kMainColor,
-          child: Center(
-            child: Icon(
-              Icons.add,
-              color: kWhite,
-              size: 24,
-            ),
+        floatingActionButton: CircleAvatar(
+          radius: _fabOpened ? 120 : 30,
+          backgroundColor: Colors.transparent,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (_fabOpened)
+              Column(
+                children: [
+                    Transform(
+                      transform: Matrix4.translationValues(
+                          0.0, _translateButton.value * 3.0, 0.0),
+                      child: addPrescription(),
+                    ),
+                    Transform(
+                      transform: Matrix4.translationValues(
+                          0.0, _translateButton.value * 2.0, 0.0),
+                      child: addReport(),
+                    ),
+                    Transform(
+                      transform: Matrix4.translationValues(
+                          0.0, _translateButton.value, 0.0),
+                      child: addBill(),
+                    ),
+                ],
+              ),
+              buttonFAB()
+            ],
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -474,5 +533,188 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Widget addReport() {
+    return Container(
+      margin: EdgeInsets.only(right: 24.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: kGrey2,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0.0, 2.0),
+                      blurRadius: 5)
+                ]),
+            child: Text(
+              'Report',
+              style: TextStyle(
+                  fontSize: 20,
+                  color: kGrey7,
+                  fontWeight: FontWeight.w600
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          FloatingActionButton(
+            heroTag: "suggestion",
+            backgroundColor: kMainColor,
+            onPressed: () {
+              animate();
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return AddReport();
+              }));
+            },
+            child: Center(
+              child: Container(
+                width: 22,
+                height: 22,
+                child: Icon(Icons.add),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget addBill() {
+    return Container(
+      margin: EdgeInsets.only(right: 24.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: kGrey2,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0.0, 2.0),
+                      blurRadius: 5)
+                ]),
+            child: Text(
+              'Bill',
+              style: TextStyle(
+                  fontSize: 20,
+                  color: kGrey7,
+                  fontWeight: FontWeight.w600
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          FloatingActionButton(
+            heroTag: "schedule",
+            backgroundColor: kMainColor,
+            onPressed: () {
+              animate();
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return AddBill();
+              }));
+            },
+            child: Center(
+              child: Container(
+                width: 25,
+                height: 25,
+                child: Icon(Icons.add),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buttonFAB() {
+    return FloatingActionButton(
+      heroTag: "FAB",
+      onPressed: () {
+        animate();
+      },
+      backgroundColor: kMainColor,
+      tooltip: 'Toggle',
+      child: _fabOpened
+          ? Icon(
+        Icons.close,
+        color: kWhite,
+      )
+          : Icon(
+        Icons.add,
+        color: kWhite,
+      ),
+    );
+  }
+
+  Widget addPrescription() {
+    return Container(
+      margin: EdgeInsets.only(right: 24.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: kGrey2,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0.0, 2.0),
+                      blurRadius: 5)
+                ]),
+            child: Text(
+              'Prescription',
+              style: TextStyle(
+                fontSize: 20,
+                  color: kGrey7,
+                fontWeight: FontWeight.w600
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          FloatingActionButton(
+            foregroundColor: Colors.white,
+            heroTag: "event",
+            backgroundColor: kMainColor,
+            onPressed: () {
+              animate();
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return AddPrescription();
+              }));
+            },
+            child: Center(
+              child: Container(
+                width: 22,
+                height: 22,
+                child: Icon(Icons.add),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  animate() {
+    if (!_fabOpened) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
+    _fabOpened = !_fabOpened;
   }
 }

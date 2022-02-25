@@ -25,12 +25,12 @@ class CustomTextField extends StatefulWidget {
       this.showTrailing = false,
       this.trailing,
       this.obscureText = false,
-      this.maxLines = 1,
+      this.maxLines,
       this.hintText = "",
       this.onTap,
       this.enabled = true,
-      this.maxLength = 1,
-      this.minLines = 1,
+      this.maxLength,
+      this.minLines,
       this.labelSize = 16,
       this.validator});
 
