@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:health_bloom/services/api/networking.dart';
 import 'package:health_bloom/services/api/networkmanager/auth_networkmanager.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
+import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,10 +38,12 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Health Bloom',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: kPrimaryColorMaterial,
         ),
         home: SplashScreen(),
       ),
     );
   }
 }
+
+

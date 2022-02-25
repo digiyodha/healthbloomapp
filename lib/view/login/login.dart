@@ -16,14 +16,14 @@ import 'package:health_bloom/view/signup/signup.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
-GoogleSignIn googleSignIn = GoogleSignIn(
-  // Optional clientId
-  // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
-  scopes: <String>[
-    'email',
-//    'https://www.googleapis.com/auth/contacts.readonly',
-  ],
-);
+// GoogleSignIn googleSignIn = GoogleSignIn(
+//   // Optional clientId
+//   // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
+//   scopes: <String>[
+//     'email',
+// //    'https://www.googleapis.com/auth/contacts.readonly',
+//   ],
+// );
 
 class Login extends StatefulWidget {
   const Login({Key key}) : super(key: key);
@@ -45,15 +45,22 @@ class _LoginState extends State<Login> {
     return _response;
   }
 
-  Future<GoogleSignInAccount> _handleSignIn() async {
-    try {
-      await googleSignIn.signIn();
-    } catch (error) {
-      print(error);
-    }
-  }
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
-  Future<void> _handleSignOut() => googleSignIn.disconnect();
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth = await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
 
   Future<UserCredential> signInWithFacebook() async {
     final LoginResult result = await FacebookAuth.instance.login();
@@ -63,21 +70,79 @@ class _LoginState extends State<Login> {
           FacebookAuthProvider.credential(result.accessToken.token);
       // Once signed in, return the UserCredential
       return await FirebaseAuth.instance.signInWithCredential(credential);
+    }else{
+      print("******************************************************");
+      print(result.message);
+      print(result.status);
+      print(result.accessToken);
     }
     return null;
   }
+
+  // Future<void> _checkIfIsLogged() async {
+  //   final accessToken = await FacebookAuth.instance.accessToken;
+  //   setState(() {
+  //     _checking = false;
+  //   });
+  //   if (accessToken != null) {
+  //     print("is Logged:::: ${prettyPrint(accessToken.toJson())}");
+  //     // now you can call to  FacebookAuth.instance.getUserData();
+  //     final userData = await FacebookAuth.instance.getUserData();
+  //     // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
+  //     _accessToken = accessToken;
+  //     setState(() {
+  //       _userData = userData;
+  //     });
+  //   }
+  // }
+  //
+  // void _printCredentials() {
+  //   print(
+  //     prettyPrint(_accessToken.toJson()),
+  //   );
+  // }
+  //
+  // Future<void> _login() async {
+  //   final LoginResult result = await FacebookAuth.instance.login(); // by default we request the email and the public profile
+  //
+  //   // loginBehavior is only supported for Android devices, for ios it will be ignored
+  //   // final result = await FacebookAuth.instance.login(
+  //   //   permissions: ['email', 'public_profile', 'user_birthday', 'user_friends', 'user_gender', 'user_link'],
+  //   //   loginBehavior: LoginBehavior
+  //   //       .DIALOG_ONLY, // (only android) show an authentication dialog instead of redirecting to facebook app
+  //   // );
+  //
+  //   if (result.status == LoginStatus.success) {
+  //     _accessToken = result.accessToken;
+  //     _printCredentials();
+  //     // get the user data
+  //     // by default we get the userId, email,name and picture
+  //     final userData = await FacebookAuth.instance.getUserData();
+  //     // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
+  //     _userData = userData;
+  //   } else {
+  //     print(result.status);
+  //     print(result.message);
+  //   }
+  //
+  //   setState(() {
+  //     _checking = false;
+  //   });
+  // }
+  //
+  //
+  // Future<void> _logOut() async {
+  //   await FacebookAuth.instance.logOut();
+  //   _accessToken = null;
+  //   _userData = null;
+  //   setState(() {});
+  // }
 
   @override
   void initState() {
     super.initState();
     // _email.text = 'omprakash@gmail.com';
     // _password.text = '12345';
-    googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
-      setState(() {
-        _currentUser = account;
-      });
-    });
-    googleSignIn.signInSilently();
   }
 
   @override
@@ -354,15 +419,17 @@ class _LoginState extends State<Login> {
                             setState(() {
                               _loading = true;
                             });
-                            await _handleSignIn();
+                            UserCredential cred = await signInWithGoogle();
+                            print(cred.user.email);
+                            print(cred.user.photoURL);
+                            print(cred.user.uid);
+                            print(cred.user.displayName);
                             Future.delayed(Duration(seconds: 1))
                                 .whenComplete(() {
-                              if (_currentUser != null) {
-                                sp.setString("id", _currentUser?.id ?? "");
+                              if (cred != null) {
+                                sp.setString("id", cred.user.uid ?? "");
                                 sp.setString(
-                                    "email", _currentUser?.email ?? "");
-                                print(_currentUser?.email);
-                                print(_currentUser?.id);
+                                    "email", cred.user.email ?? "");
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return HomePage();
@@ -392,7 +459,6 @@ class _LoginState extends State<Login> {
                         InkWell(
                           onTap: () async {
                             UserCredential cred = await signInWithFacebook();
-                            await Future.delayed(Duration(seconds: 3));
                             print(cred.user.email);
                             print(cred.user.photoURL);
                             print(cred.user.uid);

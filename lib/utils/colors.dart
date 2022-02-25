@@ -16,3 +16,19 @@ const kGrey4 = Color(0xffD8DDE6);
 const kGrey5 = Color(0xffAEB8CC);
 const kGrey6 = Color(0xff7A8AAC);
 const kGrey7 = Color(0xff3D4961);
+
+const MaterialColor kPrimaryColorMaterial = const MaterialColor(
+  0xff7165E3,
+  const <int, Color>{
+    50: kMainColor,
+    100: kMainColor,
+    200: kMainColor,
+    300: kMainColor,
+    400: kMainColor,
+    500: kMainColor,
+    600: kMainColor,
+    700: kMainColor,
+    800: kMainColor,
+    900: kMainColor,
+  },
+);

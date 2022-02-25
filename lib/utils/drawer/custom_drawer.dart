@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/view/login/login.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
@@ -119,7 +121,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 DrawerContainerWidget(
                   text: "Logout",
                   onTap: () async{
-                    //await _handleSignOut();
+                    await _signOut();
                     sp.clear();
                     Navigator.push(context, MaterialPageRoute(builder: (context){
                       return SplashScreen();
@@ -139,5 +141,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
-  Future<void> _handleSignOut() => googleSignIn.disconnect();
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut();
+  }
 }

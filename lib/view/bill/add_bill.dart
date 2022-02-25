@@ -1,8 +1,13 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
+import 'package:provider/provider.dart';
 import '../../components/custom_contained_button.dart';
+import '../../model/request/request.dart';
+import '../../services/api/repository/auth_repository.dart';
+import '../../utils/drop_down/custom_dropdown.dart';
 import '../../utils/text_field/custom_text_field.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
@@ -64,6 +69,12 @@ class _AddBillState extends State<AddBill> {
         _loading = false;
       });
     }
+  }
+
+  Future<AddBillResponse> addBill(AddBillRequest request) async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    AddBillResponse _response = await adminAPI.addBillAPI(request);
+    return _response;
   }
 
   @override
@@ -128,7 +139,7 @@ class _AddBillState extends State<AddBill> {
                       maxLines: 1,
                       controller: _amount,
                       label: "Amount",
-                      textInputType: TextInputType.name,
+                      textInputType: TextInputType.number,
                       onChanged: () {},
                       onTap: () {},
                     ),
@@ -159,6 +170,9 @@ class _AddBillState extends State<AddBill> {
                     ),
                     SizedBox(
                       height: 16,
+                    ),
+                    CustomDropDown(
+                      dropDownData: ["a","s"],
                     ),
                     CustomTextField(
                       maxLines: 1,
@@ -320,7 +334,29 @@ class _AddBillState extends State<AddBill> {
             textSize: 16,
             disabledColor: kGreyLite,
             text: "Submit",
-            onPressed: () {
+            onPressed: () async{
+              if(_billName.text.isNotEmpty && _amount.text.isNotEmpty && _date.text.isNotEmpty && _description.text.isNotEmpty && _familyMember.text.isNotEmpty){
+                setState(() {
+                  _loading = true;
+                });
+                AddBillResponse _response = await addBill(
+                  AddBillRequest(
+                    name: _billName.text,
+                    amount: double.parse(_amount.text),
+                    date: selectedDate,
+                    description: _description.text,
+                    patient: _familyMember.text,
+                    billImage: files
+                  )
+                );
+                if(_response.success){
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Added successfully!"),));
+                  await Future.delayed(Duration(seconds: 1));
+                  Navigator.pop(context);
+                }
+              }else{
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please fill all the details"),));
+              }
             },
             width: double.infinity,
           ),
