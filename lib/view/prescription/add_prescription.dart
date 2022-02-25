@@ -2,6 +2,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/model/request/add_prescription_request.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
+import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
@@ -23,9 +24,10 @@ class _AddPrescriptionState extends State<AddPrescription> {
   TextEditingController _doctor = TextEditingController();
   TextEditingController _hospital = TextEditingController();
   TextEditingController _date = TextEditingController();
-  TextEditingController _patient = TextEditingController();
+
   TextEditingController _userAilment = TextEditingController();
   TextEditingController _drAdvice = TextEditingController();
+  String selectedPatient;
   DateTime selectedDate = DateTime.now();
   FilePickerResult _attachmentFile;
   File _file;
@@ -40,6 +42,12 @@ class _AddPrescriptionState extends State<AddPrescription> {
     return _response;
   }
 
+  Future<GetAllMemberResponse> getAllmember() async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    GetAllMemberResponse _response = await adminAPI.getAllMemberAPI();
+    return _response;
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
@@ -51,7 +59,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
         selectedDate = picked;
       });
       _date.text =
-          "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+          "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
     }
   }
 
@@ -162,14 +170,66 @@ class _AddPrescriptionState extends State<AddPrescription> {
                     SizedBox(
                       height: 16,
                     ),
-                    CustomTextField(
-                      maxLines: 1,
-                      controller: _patient,
-                      label: "Patient Name",
-                      textInputType: TextInputType.name,
-                      onChanged: () {},
-                      onTap: () {},
+                    FutureBuilder<GetAllMemberResponse>(
+                      future: getAllmember(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Container(
+                            height: 57,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: kGrey4),
+                                borderRadius: BorderRadius.circular(4)),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                  hint: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15),
+                                    child: Text(
+                                      'Choose Patient',
+                                      style: TextStyle(
+                                          fontSize: 16, color: kGrey6),
+                                    ),
+                                  ),
+                                  isExpanded: true,
+                                  value: selectedPatient,
+                                  onChanged: (newValue) {
+                                    setState(() {});
+                                    selectedPatient = newValue;
+                                  },
+                                  items: snapshot.data.data.map(
+                                    (mem) {
+                                      return DropdownMenuItem<String>(
+                                        value: mem.id,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15),
+                                          child: Text(
+                                            mem.name,
+                                            style: TextStyle(
+                                                color: kBlack,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ).toList()),
+                            ),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text("${snapshot.error}");
+                        }
+                        return Center(child: CircularProgressIndicator());
+                      },
                     ),
+                    // CustomTextField(
+                    //   maxLines: 1,
+                    //   controller: _patient,
+                    //   label: "Patient Name",
+                    //   textInputType: TextInputType.name,
+                    //   onChanged: () {},
+                    //   onTap: () {},
+                    // ),
                     SizedBox(
                       height: 16,
                     ),
@@ -364,8 +424,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
             disabledColor: kGreyLite,
             text: "Submit",
             onPressed: () async {
-              if (selectedDate != null &&
-                  _drAdvice.text.isNotEmpty & _patient.text.isNotEmpty &&
+              if (_drAdvice.text.isNotEmpty &&
                   _doctor.text.isNotEmpty &&
                   _userAilment.text.isNotEmpty &&
                   _hospital.text.isNotEmpty &&
@@ -374,10 +433,10 @@ class _AddPrescriptionState extends State<AddPrescription> {
                   _loading = true;
                 });
                 AddPrescriptionRequest _request = AddPrescriptionRequest(
-                  consultationDate: selectedDate,
+                  consultationDate: _date.text,
                   doctorAdvice: _drAdvice.text,
                   clinicName: _hospital.text,
-                  patient: _patient.text,
+                  patient: selectedPatient,
                   doctorName: _doctor.text,
                   prescriptionImage: files,
                   userAilment: _userAilment.text,
