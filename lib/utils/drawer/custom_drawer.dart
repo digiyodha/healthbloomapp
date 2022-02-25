@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_bloom/main.dart';
-import 'package:health_bloom/view/login/login.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
 import '../../view/family_members/family_members.dart';
 import '../../view/water_intake/water_intake.dart';
@@ -76,7 +75,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 DrawerContainerWidget(
                   text: "Water Tracker",
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
                       return WaterIntake();
                     }));
                   },
@@ -120,10 +120,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 DrawerContainerWidget(
                   text: "Logout",
-                  onTap: () async{
+                  onTap: () async {
                     await _signOut();
                     sp.clear();
-                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
                       return SplashScreen();
                     }));
                   },

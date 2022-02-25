@@ -4,11 +4,15 @@ import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/request/add_edit_user_profile_request.dart';
 import 'package:health_bloom/model/request/add_member_request.dart';
 import 'package:health_bloom/model/request/add_prescription_request.dart';
+import 'package:health_bloom/model/request/add_report_request.dart';
+import 'package:health_bloom/model/request/delete_member_request.dart';
 import 'package:health_bloom/model/request/login_user_resquest.dart';
 import 'package:health_bloom/model/request/resgister_user_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
 import 'package:health_bloom/model/response/add_family_response.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
+import 'package:health_bloom/model/response/add_report_response.dart';
+import 'package:health_bloom/model/response/delete_member_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/login_uesr_response.dart';
 import 'package:health_bloom/model/response/register_user_response.dart';
@@ -131,7 +135,7 @@ class NetworkManager {
     return result;
   }
 
-  // Add prescription
+  // Get all member
   Future<Result> getAllMember() async {
     AuthEndpoint endpoint = AuthEndpoints.getAllmember;
     // endpoint.addBody(request);
@@ -153,7 +157,7 @@ class NetworkManager {
     return result;
   }
 
-  // Add prescription
+  // Add bill
   Future<Result> addBill(AddBillRequest request) async {
     AuthEndpoint endpoint = AuthEndpoints.addBill;
     endpoint.addBody(request);
@@ -166,11 +170,55 @@ class NetworkManager {
 
     if (result is Success) {
       AddBillResponse response =
-      AddBillResponse.fromJson(json.decode(result.data.toString()));
+          AddBillResponse.fromJson(json.decode(result.data.toString()));
 
       print(response);
 
       return Success<AddBillResponse>(response);
+    }
+    return result;
+  }
+
+  // Add report
+  Future<Result> addReport(AddReportRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.addReport;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      AddReportResponse response =
+          AddReportResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<AddReportResponse>(response);
+    }
+    return result;
+  }
+
+  // delete member
+  Future<Result> deletMember(DeleteMemberRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.deleteMember;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      DeleteMemberResponse response =
+          DeleteMemberResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<DeleteMemberResponse>(response);
     }
     return result;
   }

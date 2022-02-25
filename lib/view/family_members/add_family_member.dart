@@ -114,7 +114,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                     _loading = false;
                   });
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Enter all details'),
+                    content: Text('Please fill all the details'),
                   ));
                 }
               } else {
@@ -122,7 +122,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                   _loading = false;
                 });
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Enter all details'),
+                  content: Text('Please fill all the details'),
                 ));
               }
             },

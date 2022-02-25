@@ -26,7 +26,9 @@ class _WaterIntakeState extends State<WaterIntake> {
             Icons.arrow_back_ios,
             color: kBlack,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         elevation: 0,
         backgroundColor: kWhite,
@@ -38,45 +40,53 @@ class _WaterIntakeState extends State<WaterIntake> {
             child: Column(
               children: [
                 Spacer(),
-                Text("HYDRATION",
-                style: TextStyle(
-                  letterSpacing: 1.5,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: kMainColor
-                ),),
-                SizedBox(height: 10,),
-                Text("Today You took",
+                Text(
+                  "HYDRATION",
                   style: TextStyle(
-                      fontSize: 28,
+                      letterSpacing: 1.5,
+                      fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: kBlack
-                  ),),
+                      color: kMainColor),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Today You took",
+                  style: TextStyle(
+                      fontSize: 28, fontWeight: FontWeight.w600, color: kBlack),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("750 ml ",
+                    Text(
+                      "750 ml ",
                       style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.w600,
-                          color: kMainColor
-                      ),),
-                    Text("of water ",
+                          color: kMainColor),
+                    ),
+                    Text(
+                      "of water ",
                       style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.w600,
-                          color: kBlack
-                      ),),
-                    Image.asset("assets/images/water_drop.png",height: 26,)
+                          color: kBlack),
+                    ),
+                    Image.asset(
+                      "assets/images/water_drop.png",
+                      height: 26,
+                    )
                   ],
                 ),
-                SizedBox(height: 10,),
-                Text("Almost there! Keep hydrated",
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Almost there! Keep hydrated",
                   style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: kGrey6
-                  ),),
+                      fontSize: 13, fontWeight: FontWeight.w600, color: kGrey6),
+                ),
                 Spacer(),
                 Align(
                   alignment: Alignment.topLeft,
@@ -84,22 +94,21 @@ class _WaterIntakeState extends State<WaterIntake> {
                     height: 63,
                     width: 60,
                     margin: EdgeInsets.only(
-                        left: _percent > 0.05 ? (_size.width - 60) * _percent - 10 : 20
-                    ),
+                        left: _percent > 0.05
+                            ? (_size.width - 60) * _percent - 10
+                            : 20),
                     child: Stack(
                       children: [
                         Container(
                           height: 60,
                           width: 60,
                           decoration: BoxDecoration(
-                            color: kMainColor,
-                            shape: BoxShape.circle
-                          ),
+                              color: kMainColor, shape: BoxShape.circle),
                           child: Center(
-                            child: Text("750",style: TextStyle(
-                              fontSize: 16,
-                              color: kWhite
-                            ),),
+                            child: Text(
+                              "750",
+                              style: TextStyle(fontSize: 16, color: kWhite),
+                            ),
                           ),
                         ),
                         Positioned(
@@ -124,15 +133,16 @@ class _WaterIntakeState extends State<WaterIntake> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Container(
                   padding: EdgeInsets.all(4),
                   height: 55,
                   width: _size.width - 60,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40),
-                    color: Color(0xff5ED4E2)
-                  ),
+                      borderRadius: BorderRadius.circular(40),
+                      color: Color(0xff5ED4E2)),
                   child: Row(
                     children: [
                       Container(
@@ -140,21 +150,20 @@ class _WaterIntakeState extends State<WaterIntake> {
                         width: (_size.width - 60 - 8) * _percent,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40),
-                            color: Color(0xff7FE3F0)
-                        ),
+                            color: Color(0xff7FE3F0)),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            if(_percent > 0.2)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8),
-                              child: CircleAvatar(
-                                radius: 3,
-                                backgroundColor: kWhite.withOpacity(0.5),
+                            if (_percent > 0.2)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: CircleAvatar(
+                                  radius: 3,
+                                  backgroundColor: kWhite.withOpacity(0.5),
+                                ),
                               ),
-                            ),
-                            if(_percent > 0.4)
+                            if (_percent > 0.4)
                               Padding(
                                 padding: const EdgeInsets.only(top: 25),
                                 child: CircleAvatar(
@@ -162,7 +171,7 @@ class _WaterIntakeState extends State<WaterIntake> {
                                   backgroundColor: kWhite.withOpacity(0.5),
                                 ),
                               ),
-                            if(_percent > 0.6)
+                            if (_percent > 0.6)
                               Padding(
                                 padding: const EdgeInsets.only(top: 15),
                                 child: CircleAvatar(
@@ -176,32 +185,46 @@ class _WaterIntakeState extends State<WaterIntake> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 35),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Poor",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: _percent < 0.25 ? FontWeight.w600 : FontWeight.w400
-                      ),),
-                      Text("Good",
+                      Text(
+                        "Poor",
                         style: TextStyle(
                             fontSize: 12,
-                            fontWeight: _percent < 0.5 && _percent > 0.25 ? FontWeight.w600 : FontWeight.w400
-                        ),),
-                      Text("Almost",
+                            fontWeight: _percent < 0.25
+                                ? FontWeight.w600
+                                : FontWeight.w400),
+                      ),
+                      Text(
+                        "Good",
                         style: TextStyle(
                             fontSize: 12,
-                            fontWeight: _percent < 0.75 && _percent > 0.5 ? FontWeight.w600 : FontWeight.w400
-                        ),),
-                      Text("Perfect!",
+                            fontWeight: _percent < 0.5 && _percent > 0.25
+                                ? FontWeight.w600
+                                : FontWeight.w400),
+                      ),
+                      Text(
+                        "Almost",
                         style: TextStyle(
                             fontSize: 12,
-                            fontWeight: _percent < 0.9 && _percent > 0.75 ? FontWeight.w600 : FontWeight.w400
-                        ),),
+                            fontWeight: _percent < 0.75 && _percent > 0.5
+                                ? FontWeight.w600
+                                : FontWeight.w400),
+                      ),
+                      Text(
+                        "Perfect!",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: _percent < 0.9 && _percent > 0.75
+                                ? FontWeight.w600
+                                : FontWeight.w400),
+                      ),
                     ],
                   ),
                 ),
@@ -226,11 +249,11 @@ class _WaterIntakeState extends State<WaterIntake> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
-                        onTap: (){
-                          if(_glassCount > 0)
-                          setState(() {
-                            _glassCount--;
-                          });
+                        onTap: () {
+                          if (_glassCount > 0)
+                            setState(() {
+                              _glassCount--;
+                            });
                         },
                         child: AnimatedContainer(
                           margin: EdgeInsets.only(left: 20),
@@ -238,11 +261,16 @@ class _WaterIntakeState extends State<WaterIntake> {
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            color: _glassCount > 0 ? kMainColor : Color(0xffD5D8DF)
-                          ),
+                              borderRadius: BorderRadius.circular(14),
+                              color: _glassCount > 0
+                                  ? kMainColor
+                                  : Color(0xffD5D8DF)),
                           child: Center(
-                            child: Icon(Icons.remove,color: kWhite,size: 30,),
+                            child: Icon(
+                              Icons.remove,
+                              color: kWhite,
+                              size: 30,
+                            ),
                           ),
                         ),
                       ),
@@ -251,22 +279,25 @@ class _WaterIntakeState extends State<WaterIntake> {
                         height: 100,
                         width: 100,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(36),
-                            color: kWhite,
-                            // boxShadow: [
-                            //   BoxShadow(
-                            //       color: Colors.black12,
-                            //       blurRadius: 10,
-                            //     offset: Offset(0.0,5.0)
-                            //   )
-                            // ]
+                          borderRadius: BorderRadius.circular(36),
+                          color: kWhite,
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //       color: Colors.black12,
+                          //       blurRadius: 10,
+                          //     offset: Offset(0.0,5.0)
+                          //   )
+                          // ]
                         ),
                         child: Center(
-                          child: Image.asset("assets/images/water_glass_3.png",height: 70,),
+                          child: Image.asset(
+                            "assets/images/water_glass_3.png",
+                            height: 70,
+                          ),
                         ),
                       ),
                       InkWell(
-                        onTap: (){
+                        onTap: () {
                           setState(() {
                             _glassCount++;
                           });
@@ -277,11 +308,14 @@ class _WaterIntakeState extends State<WaterIntake> {
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            color: kMainColor
-                          ),
+                              borderRadius: BorderRadius.circular(14),
+                              color: kMainColor),
                           child: Center(
-                            child: Icon(Icons.add,color: kWhite,size: 26,),
+                            child: Icon(
+                              Icons.add,
+                              color: kWhite,
+                              size: 26,
+                            ),
                           ),
                         ),
                       ),
@@ -290,23 +324,20 @@ class _WaterIntakeState extends State<WaterIntake> {
                   Spacer(),
                   RichText(
                     text: TextSpan(
-                      text: "${_glassCount}x ",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: kBlack
-                      ),
-                      children: [
-                        TextSpan(
-                          text: "Glass 200 ml",
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400,
-                              color: kBlack
-                          ),
-                        )
-                      ]
-                    ),
+                        text: "${_glassCount}x ",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: kBlack),
+                        children: [
+                          TextSpan(
+                            text: "Glass 200 ml",
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                                color: kBlack),
+                          )
+                        ]),
                   ),
                   Spacer(),
                   CustomContainedButton(
@@ -319,8 +350,13 @@ class _WaterIntakeState extends State<WaterIntake> {
                     leading: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        FaIcon(FontAwesomeIcons.handHoldingWater,size: 16,),
-                        SizedBox(width: 14,)
+                        FaIcon(
+                          FontAwesomeIcons.handHoldingWater,
+                          size: 16,
+                        ),
+                        SizedBox(
+                          width: 14,
+                        )
                       ],
                     ),
                   )

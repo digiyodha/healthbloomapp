@@ -15,10 +15,10 @@ class AuthEndpoints {
   static get editMember => AuthEndpoint("/v1/family/", Method.put);
   static get getAllmember => AuthEndpoint("/v1/family", Method.get);
   static get getMember => AuthEndpoint("/v1/family/id/", Method.put);
-  static get deleteAllmember => AuthEndpoint("/v1/family/id/", Method.delete);
+  static get deleteMember => AuthEndpoint("/v1/family/id/", Method.delete);
+
   static get addPrescription => AuthEndpoint("/v1/prescription/", Method.post);
 
-
-
   static get addBill => AuthEndpoint("/v1/bill/", Method.post);
+  static get addReport => AuthEndpoint("/v1/report/", Method.post);
 }

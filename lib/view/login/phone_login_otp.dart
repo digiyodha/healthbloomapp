@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:health_bloom/components/otp_code_input.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class PhoneLoginOtp extends StatefulWidget {
   final TextEditingController controller;
-  const PhoneLoginOtp({Key key,this.controller}) : super(key: key);
+  const PhoneLoginOtp({Key key, this.controller}) : super(key: key);
 
   @override
   State<PhoneLoginOtp> createState() => _PhoneLoginOtpState();
@@ -82,7 +81,8 @@ class _PhoneLoginOtpState extends State<PhoneLoginOtp> {
                         ),
                         const SizedBox(height: 20.0),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 20),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 20),
                           child: PinCodeTextField(
                             length: 6,
                             obscureText: false,
@@ -110,7 +110,8 @@ class _PhoneLoginOtpState extends State<PhoneLoginOtp> {
                               //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
                               //but you can show anything you want here, like your pop up saying wrong paste format or etc
                               return true;
-                            }, appContext: context,
+                            },
+                            appContext: context,
                           ),
                         ),
                         // TextField(
@@ -155,10 +156,13 @@ class _PhoneLoginOtpState extends State<PhoneLoginOtp> {
                           ),
                           color: Color(0xff855FF7),
                           onPressed: () {
-                            if(widget.controller.text.length == 6){
+                            if (widget.controller.text.length == 6) {
                               Navigator.pop(context);
-                            }else{
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid OTP"),));
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text("Invalid OTP"),
+                              ));
                             }
                           },
                           child: TextBuilder(

@@ -50,7 +50,8 @@ class _LoginState extends State<Login> {
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth = await googleUser?.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser?.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
@@ -70,7 +71,7 @@ class _LoginState extends State<Login> {
           FacebookAuthProvider.credential(result.accessToken.token);
       // Once signed in, return the UserCredential
       return await FirebaseAuth.instance.signInWithCredential(credential);
-    }else{
+    } else {
       print("******************************************************");
       print(result.message);
       print(result.status);
@@ -355,7 +356,8 @@ class _LoginState extends State<Login> {
                                       });
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
-                                        content: Text('Enter details'),
+                                        content:
+                                            Text('Please fill all the details'),
                                       ));
                                     }
                                   } else {
@@ -364,7 +366,8 @@ class _LoginState extends State<Login> {
                                     });
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
-                                      content: Text('Enter all details'),
+                                      content:
+                                          Text('Please fill all the details'),
                                     ));
                                   }
                                 },
@@ -428,8 +431,7 @@ class _LoginState extends State<Login> {
                                 .whenComplete(() {
                               if (cred != null) {
                                 sp.setString("id", cred.user.uid ?? "");
-                                sp.setString(
-                                    "email", cred.user.email ?? "");
+                                sp.setString("email", cred.user.email ?? "");
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return HomePage();

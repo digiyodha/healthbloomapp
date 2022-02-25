@@ -225,7 +225,8 @@ class _SignUpState extends State<SignUp> {
                                         });
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
-                                          content: Text('Enter details'),
+                                          content: Text(
+                                              'Please fill all the details'),
                                         ));
                                       }
                                     } else {
@@ -234,7 +235,8 @@ class _SignUpState extends State<SignUp> {
                                       });
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
-                                        content: Text('Enter details'),
+                                        content:
+                                            Text('Please fill all the details'),
                                       ));
                                     }
                                   },

@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:health_bloom/model/request/add_edit_user_profile_request.dart';
 import 'package:health_bloom/model/request/add_member_request.dart';
 import 'package:health_bloom/model/request/add_prescription_request.dart';
+import 'package:health_bloom/model/request/add_report_request.dart';
+import 'package:health_bloom/model/request/delete_member_request.dart';
 import 'package:health_bloom/model/request/login_user_resquest.dart';
 import 'package:health_bloom/model/request/resgister_user_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
 import 'package:health_bloom/model/response/add_family_response.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
+import 'package:health_bloom/model/response/add_report_response.dart';
+import 'package:health_bloom/model/response/delete_member_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/login_uesr_response.dart';
 import 'package:health_bloom/model/response/register_user_response.dart';
@@ -78,10 +82,28 @@ class NetworkRepository with ChangeNotifier {
     return getAllMemberAPI();
   }
 
-  /// Get all member
+  /// Add bill
   Future<AddBillResponse> addBillAPI(AddBillRequest request) async {
     Result apiResult = await apiClient.addBill(request);
     if (apiResult is Success) return apiResult.data;
     if (apiResult is Error) throw apiResult.error;
+    return addBillAPI(request);
+  }
+
+  /// Get report
+  Future<AddReportResponse> addReportAPI(AddReportRequest request) async {
+    Result apiResult = await apiClient.addReport(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return addReportAPI(request);
+  }
+
+  /// Delete member
+  Future<DeleteMemberResponse> deleteMemberAPI(
+      DeleteMemberRequest request) async {
+    Result apiResult = await apiClient.deletMember(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return deleteMemberAPI(request);
   }
 }

@@ -17,7 +17,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   int _bottomNavIndex = 0;
   bool _fabOpened = false;
   Animation<double> _translateButton;
@@ -29,17 +30,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _animationController =
-    AnimationController(vsync: this, duration: Duration(milliseconds: 300))
-      ..addListener(() {
-        if (mounted) {
-          setState(() {
-            // getLog(logId: widget.datum.id,canLoad: false);
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300))
+          ..addListener(() {
+            if (mounted) {
+              setState(() {
+                // getLog(logId: widget.datum.id,canLoad: false);
+              });
+            }
           });
-        }
-      });
 
     _buttonColor = ColorTween(begin: kMainColor, end: Colors.white).animate(
         CurvedAnimation(
@@ -370,8 +370,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       ),
                     ),
                     InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
                           return WaterIntake();
                         }));
                       },
@@ -398,8 +399,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                               child: Container(
                                 height: 100,
                                 width: 100,
-                                child:
-                                    Image.asset("assets/images/water_glass.png"),
+                                child: Image.asset(
+                                    "assets/images/water_glass.png"),
                               ),
                             ),
                             Spacer(),
@@ -496,8 +497,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               if (_fabOpened)
-              Column(
-                children: [
+                Column(
+                  children: [
                     Transform(
                       transform: Matrix4.translationValues(
                           0.0, _translateButton.value * 3.0, 0.0),
@@ -513,8 +514,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           0.0, _translateButton.value, 0.0),
                       child: addBill(),
                     ),
-                ],
-              ),
+                  ],
+                ),
               buttonFAB()
             ],
           ),
@@ -563,10 +564,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             child: Text(
               'Report',
               style: TextStyle(
-                  fontSize: 20,
-                  color: kGrey7,
-                  fontWeight: FontWeight.w600
-              ),
+                  fontSize: 20, color: kGrey7, fontWeight: FontWeight.w600),
             ),
           ),
           SizedBox(
@@ -577,7 +575,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             backgroundColor: kMainColor,
             onPressed: () {
               animate();
-              Navigator.push(context, MaterialPageRoute(builder: (context){
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return AddReport();
               }));
             },
@@ -614,10 +612,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             child: Text(
               'Bill',
               style: TextStyle(
-                  fontSize: 20,
-                  color: kGrey7,
-                  fontWeight: FontWeight.w600
-              ),
+                  fontSize: 20, color: kGrey7, fontWeight: FontWeight.w600),
             ),
           ),
           SizedBox(
@@ -628,7 +623,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             backgroundColor: kMainColor,
             onPressed: () {
               animate();
-              Navigator.push(context, MaterialPageRoute(builder: (context){
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return AddBill();
               }));
             },
@@ -655,13 +650,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       tooltip: 'Toggle',
       child: _fabOpened
           ? Icon(
-        Icons.close,
-        color: kWhite,
-      )
+              Icons.close,
+              color: kWhite,
+            )
           : Icon(
-        Icons.add,
-        color: kWhite,
-      ),
+              Icons.add,
+              color: kWhite,
+            ),
     );
   }
 
@@ -685,10 +680,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             child: Text(
               'Prescription',
               style: TextStyle(
-                fontSize: 20,
-                  color: kGrey7,
-                fontWeight: FontWeight.w600
-              ),
+                  fontSize: 20, color: kGrey7, fontWeight: FontWeight.w600),
             ),
           ),
           SizedBox(
@@ -700,7 +692,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             backgroundColor: kMainColor,
             onPressed: () {
               animate();
-              Navigator.push(context, MaterialPageRoute(builder: (context){
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return AddPrescription();
               }));
             },
