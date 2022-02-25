@@ -19,7 +19,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   bool _loading = false;
-
+  bool showPassword = true;
   TextEditingController _name = TextEditingController();
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
@@ -151,12 +151,19 @@ class _SignUpState extends State<SignUp> {
                                   ),
                                   child: TextFormField(
                                     controller: _password,
+                                    obscureText: showPassword,
                                     style: TextStyle(
                                       color: Color(0xff4F17BD),
                                     ),
                                     decoration: InputDecoration(
                                       label: TextBuilder(text: 'Password'),
-                                      suffixIcon: Icon(Icons.lock),
+                                      suffixIcon: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              showPassword = !showPassword;
+                                            });
+                                          },
+                                          child: Icon(Icons.lock)),
                                       labelStyle: TextStyle(
                                         fontWeight: FontWeight.w500,
                                       ),

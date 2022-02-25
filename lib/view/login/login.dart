@@ -33,6 +33,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  bool showPassword = true;
   GoogleSignInAccount _currentUser;
   bool _loading = false;
 
@@ -56,15 +57,15 @@ class _LoginState extends State<Login> {
 
   Future<UserCredential> signInWithFacebook() async {
     final LoginResult result = await FacebookAuth.instance.login();
-    if(result.status == LoginStatus.success){
+    if (result.status == LoginStatus.success) {
       // Create a credential from the access token
-      final OAuthCredential credential = FacebookAuthProvider.credential(result.accessToken.token);
+      final OAuthCredential credential =
+          FacebookAuthProvider.credential(result.accessToken.token);
       // Once signed in, return the UserCredential
       return await FirebaseAuth.instance.signInWithCredential(credential);
     }
     return null;
   }
-
 
   @override
   void initState() {
@@ -193,6 +194,7 @@ class _LoginState extends State<Login> {
                                   //   } else
                                   //     return null;
                                   // },
+                                  obscureText: showPassword,
                                   style: TextStyle(
                                     color: Color(0xff4F17BD),
                                   ),
@@ -202,7 +204,13 @@ class _LoginState extends State<Login> {
                                       // color: Color(0xff675F5E),
                                     ),
                                     label: TextBuilder(text: 'Password'),
-                                    suffixIcon: Icon(Icons.lock),
+                                    suffixIcon: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            showPassword = !showPassword;
+                                          });
+                                        },
+                                        child: Icon(Icons.lock)),
                                     border: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Colors.grey,
@@ -258,8 +266,7 @@ class _LoginState extends State<Login> {
                                     if (_response.success == true) {
                                       sp.setString('xAuthToken',
                                           _response.data.xAuthToken);
-                                      sp.setString(
-                                          'loginUserId', _response.data.id);
+                                      sp.setString('id', _response.data.id);
 
                                       sp.setString('loginUserEmail',
                                           _response.data.emailId);
@@ -383,7 +390,7 @@ class _LoginState extends State<Login> {
                         ),
                         const SizedBox(width: 30.0),
                         InkWell(
-                          onTap: () async{
+                          onTap: () async {
                             UserCredential cred = await signInWithFacebook();
                             await Future.delayed(Duration(seconds: 3));
                             print(cred.user.email);
