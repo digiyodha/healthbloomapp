@@ -1,18 +1,18 @@
-class RegisterUserResponse {
-  RegisterUserResponse({
+class DeleteUserResponse {
+  DeleteUserResponse({
     this.success,
     this.data,
   });
 
   bool success;
-  RegisterUserResponseData data;
+  DeleteUserResponseData data;
 
-  factory RegisterUserResponse.fromJson(Map<String, dynamic> json) =>
-      RegisterUserResponse(
+  factory DeleteUserResponse.fromJson(Map<String, dynamic> json) =>
+      DeleteUserResponse(
         success: json["success"] == null ? null : json["success"],
         data: json["data"] == null
             ? null
-            : RegisterUserResponseData.fromJson(json["data"]),
+            : DeleteUserResponseData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -21,8 +21,8 @@ class RegisterUserResponse {
       };
 }
 
-class RegisterUserResponseData {
-  RegisterUserResponseData({
+class DeleteUserResponseData {
+  DeleteUserResponseData({
     this.gender,
     this.bloodGroup,
     this.emailId,
@@ -50,8 +50,8 @@ class RegisterUserResponseData {
   String state;
   String id;
 
-  factory RegisterUserResponseData.fromJson(Map<String, dynamic> json) =>
-      RegisterUserResponseData(
+  factory DeleteUserResponseData.fromJson(Map<String, dynamic> json) =>
+      DeleteUserResponseData(
         gender: json["gender"] == null ? null : json["gender"],
         bloodGroup: json["blood_group"] == null ? null : json["blood_group"],
         emailId: json["email_id"] == null ? null : json["email_id"],

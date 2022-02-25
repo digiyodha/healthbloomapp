@@ -1,5 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:health_bloom/model/response/get_all_member_response.dart';
+import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
+import 'package:provider/provider.dart';
 
 import '../../utils/drawer/custom_drawer.dart';
 import 'add_family_member.dart';
@@ -12,6 +17,12 @@ class FamilyMembers extends StatefulWidget {
 }
 
 class _FamilyMembersState extends State<FamilyMembers> {
+  Future<GetAllMemberResponse> getAllmember() async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    GetAllMemberResponse _response = await adminAPI.getAllMemberAPI();
+    return _response;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,199 +89,84 @@ class _FamilyMembersState extends State<FamilyMembers> {
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(16),
                           topRight: Radius.circular(16))),
-                  child: GridView(
-                    padding: EdgeInsets.all(0),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.75,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16),
-                    children: [
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Color(0xff8B80F8),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundColor: kWhite,
-                              child: Center(
-                                child: Icon(
-                                  Icons.person,
-                                  color: kGrey4,
-                                  size: 40,
+                  child: FutureBuilder<GetAllMemberResponse>(
+                    future: getAllmember(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return GridView.builder(
+                          padding: EdgeInsets.all(0),
+                          itemCount: snapshot.data.data.length,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.75,
+                                  crossAxisSpacing: 16,
+                                  mainAxisSpacing: 16),
+                          itemBuilder: (BuildContext context, int i) {
+                            final member = snapshot.data.data[i];
+                            return InkWell(
+                              onTap: () {},
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 14, vertical: 16),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Color(0xff8B80F8),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    member.avatar.isNotEmpty
+                                        ? CircleAvatar(
+                                            radius: 40,
+                                            backgroundImage:
+                                                NetworkImage(member.avatar),
+                                          )
+                                        : CircleAvatar(
+                                            radius: 40,
+                                            backgroundColor: kWhite,
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.person,
+                                                color: kGrey4,
+                                                size: 40,
+                                              ),
+                                            ),
+                                          ),
+                                    Spacer(),
+                                    Text(
+                                      member.name.toString() ?? '',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          color: kWhite,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: 6),
+                                    Text(
+                                      member.relationship.toString() ?? '',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: kWhite.withOpacity(0.6),
+                                          fontWeight: FontWeight.w400),
+                                      maxLines: 1,
+                                    ),
+                                    Spacer(),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Spacer(),
-                            Text(
-                              "John Doe",
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  color: kWhite,
-                                  fontWeight: FontWeight.w600),
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              "Brother",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: kWhite.withOpacity(0.6),
-                                  fontWeight: FontWeight.w400),
-                              maxLines: 1,
-                            ),
-                            Spacer(),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Color(0xff8B80F8),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundColor: kWhite,
-                              child: Center(
-                                child: Icon(
-                                  Icons.person,
-                                  color: kGrey4,
-                                  size: 40,
-                                ),
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              "Jane Doe",
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  color: kWhite,
-                                  fontWeight: FontWeight.w600),
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              "Sister",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: kWhite.withOpacity(0.6),
-                                  fontWeight: FontWeight.w400),
-                              maxLines: 1,
-                            ),
-                            Spacer(),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Color(0xff8B80F8),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundColor: kWhite,
-                              child: Center(
-                                child: Icon(
-                                  Icons.person,
-                                  color: kGrey4,
-                                  size: 40,
-                                ),
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              "Aunt Doe",
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  color: kWhite,
-                                  fontWeight: FontWeight.w600),
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              "Aunt",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: kWhite.withOpacity(0.6),
-                                  fontWeight: FontWeight.w400),
-                              maxLines: 1,
-                            ),
-                            Spacer(),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Color(0xff8B80F8),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundColor: kWhite,
-                              child: Center(
-                                child: Icon(
-                                  Icons.person,
-                                  color: kGrey4,
-                                  size: 40,
-                                ),
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              "Uncle Doe",
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  color: kWhite,
-                                  fontWeight: FontWeight.w600),
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              "Uncle",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: kWhite.withOpacity(0.6),
-                                  fontWeight: FontWeight.w400),
-                              maxLines: 1,
-                            ),
-                            Spacer(),
-                          ],
-                        ),
-                      ),
-                    ],
+                            );
+                          },
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text("${snapshot.error}");
+                      }
+                      return Center(child: CircularProgressIndicator());
+                    },
                   ),
                 ),
               )
@@ -284,7 +180,7 @@ class _FamilyMembersState extends State<FamilyMembers> {
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               return AddFamilyMembers();
-            }));
+            })).whenComplete(() => setState(() {}));
           },
           backgroundColor: Color(0xffFF9B91),
           child: Center(

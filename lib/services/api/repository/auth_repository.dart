@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/model/request/add_edit_user_profile_request.dart';
 import 'package:health_bloom/model/request/add_member_request.dart';
+import 'package:health_bloom/model/request/add_prescription_request.dart';
 import 'package:health_bloom/model/request/login_user_resquest.dart';
 import 'package:health_bloom/model/request/resgister_user_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
 import 'package:health_bloom/model/response/add_family_response.dart';
+import 'package:health_bloom/model/response/add_precsription_response.dart';
+import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/login_uesr_response.dart';
 import 'package:health_bloom/model/response/register_user_response.dart';
 import 'package:health_bloom/services/api/networkmanager/auth_networkmanager.dart';
@@ -51,5 +54,24 @@ class NetworkRepository with ChangeNotifier {
     if (apiResult is Error) throw apiResult.error;
 
     return addMemberAPI(request);
+  }
+
+  /// Add prescription
+  Future<AddPrescriptionResponse> addPrescriptionAPI(
+      AddPrescriptionRequest request) async {
+    Result apiResult = await apiClient.addPrescription(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+
+    return addPrescriptionAPI(request);
+  }
+
+  /// Get all member
+  Future<GetAllMemberResponse> getAllMemberAPI() async {
+    Result apiResult = await apiClient.getAllMember();
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+
+    return getAllMemberAPI();
   }
 }
