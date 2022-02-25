@@ -38,6 +38,13 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     if (name) {
         userDetailsObj.name = name;
     }
+
+    userDetailsObj.country_code = "";
+    userDetailsObj.phone_number = "";
+    userDetailsObj.google_address = "";
+    userDetailsObj.user_address = "";
+    userDetailsObj.city = "";
+    userDetailsObj.state = "";
     user = await User.create({ ...userDetailsObj });
   }
   else

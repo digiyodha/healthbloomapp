@@ -46,6 +46,8 @@ Sentry.init({
 app.get('/', (req, res) => res.send('OK'));
 app.use("/v1/users", require("./routers/userRouter"));
 app.use("/v1/family", require("./routers/familyRouter"));
+app.use("/v1/bill", require("./routers/billRouter"));
+
 
 // app.use("/api/v1/attempts", require("./routers/attemptRouter"));
 

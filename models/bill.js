@@ -21,6 +21,8 @@ var BillSchenma = new Schema({
 
 bill = mongoose.model("Bill", BillSchenma);
 
+BillSchenma.index({'$**': 'text'});
+
 module.exports = {
     Bill: bill,
 }
