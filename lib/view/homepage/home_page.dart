@@ -8,6 +8,7 @@ import 'package:hexagon/hexagon.dart';
 import '../../utils/drawer/custom_drawer.dart';
 import '../family_members/family_members.dart';
 import '../prescription/add_prescription.dart';
+import '../water_intake/water_intake.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -368,54 +369,61 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         ],
                       ),
                     ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Color(0xff8B80F8),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "WATER",
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: kWhite,
-                                letterSpacing: 1.5),
-                          ),
-                          Spacer(),
-                          Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              height: 100,
-                              width: 100,
-                              child:
-                                  Image.asset("assets/images/water_glass.png"),
+                    InkWell(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return WaterIntake();
+                        }));
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Color(0xff8B80F8),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "WATER",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: kWhite,
+                                  letterSpacing: 1.5),
                             ),
-                          ),
-                          Spacer(),
-                          Text(
-                            "750 ml",
-                            style: TextStyle(
-                                fontSize: 22,
-                                color: kWhite,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: 6,
-                          ),
-                          Text(
-                            "Last updates 3m ago",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: kWhite.withOpacity(0.6),
-                                fontWeight: FontWeight.w400),
-                          ),
-                          Spacer(),
-                        ],
+                            Spacer(),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                height: 100,
+                                width: 100,
+                                child:
+                                    Image.asset("assets/images/water_glass.png"),
+                              ),
+                            ),
+                            Spacer(),
+                            Text(
+                              "750 ml",
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  color: kWhite,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Text(
+                              "Last updates 3m ago",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: kWhite.withOpacity(0.6),
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            Spacer(),
+                          ],
+                        ),
                       ),
                     ),
                     InkWell(

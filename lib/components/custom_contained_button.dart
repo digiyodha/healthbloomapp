@@ -8,6 +8,7 @@ class CustomContainedButton extends StatelessWidget {
   final double textSize;
   final FontWeight weight;
   final Color disabledColor, color;
+  final Widget leading;
 
   const CustomContainedButton(
       {this.text,
@@ -17,7 +18,8 @@ class CustomContainedButton extends StatelessWidget {
       this.textSize = 14,
       this.weight = FontWeight.w500,
       this.color = kMainColor,
-      this.disabledColor});
+      this.disabledColor,
+      this.leading});
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +59,16 @@ class CustomContainedButton extends StatelessWidget {
         onPressed: () {
           onPressed();
         },
-        child: Text(
-          text,
-          style: TextStyle(fontWeight: weight, fontSize: textSize),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if(leading != null)
+              leading,
+            Text(
+              text,
+              style: TextStyle(fontWeight: weight, fontSize: textSize),
+            ),
+          ],
         ),
       ),
     );

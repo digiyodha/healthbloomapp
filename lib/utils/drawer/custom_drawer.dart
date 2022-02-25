@@ -3,6 +3,7 @@ import 'package:health_bloom/main.dart';
 import 'package:health_bloom/view/login/login.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
 import '../../view/family_members/family_members.dart';
+import '../../view/water_intake/water_intake.dart';
 import '../colors.dart';
 import 'drawer_container_widget.dart';
 
@@ -72,7 +73,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 DrawerContainerWidget(
                   text: "Water Tracker",
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return WaterIntake();
+                    }));
+                  },
                   selected: widget.selected == 2,
                   icon: Icons.track_changes,
                 ),

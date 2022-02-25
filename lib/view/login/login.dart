@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/request/login_user_resquest.dart';
@@ -50,6 +53,18 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> _handleSignOut() => googleSignIn.disconnect();
+
+  Future<UserCredential> signInWithFacebook() async {
+    final LoginResult result = await FacebookAuth.instance.login();
+    if(result.status == LoginStatus.success){
+      // Create a credential from the access token
+      final OAuthCredential credential = FacebookAuthProvider.credential(result.accessToken.token);
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    }
+    return null;
+  }
+
 
   @override
   void initState() {
@@ -364,6 +379,22 @@ class _LoginState extends State<Login> {
                               height: 25,
                               width: 25,
                             ),
+                          ),
+                        ),
+                        const SizedBox(width: 30.0),
+                        InkWell(
+                          onTap: () async{
+                            UserCredential cred = await signInWithFacebook();
+                            await Future.delayed(Duration(seconds: 3));
+                            print(cred.user.email);
+                            print(cred.user.photoURL);
+                            print(cred.user.uid);
+                            print(cred.user.displayName);
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 20,
+                            child: FaIcon(FontAwesomeIcons.facebookF),
                           ),
                         ),
                         const SizedBox(width: 30.0),
