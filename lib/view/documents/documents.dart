@@ -25,8 +25,8 @@ class Documents extends StatefulWidget {
 class _DocumentsState extends State<Documents> {
   TextEditingController _fromDate = TextEditingController();
   TextEditingController _toDate = TextEditingController();
-  DateTime selectedStartDate = DateTime.now();
-  DateTime selectedEndDate = DateTime.now();
+  DateTime selectedStartDate;
+  DateTime selectedEndDate;
   int currentIndex = 0;
   bool _loading = false;
   GetAllDocumentsResponse _currentResponse;
@@ -34,7 +34,7 @@ class _DocumentsState extends State<Documents> {
   Future<void> _startDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: selectedStartDate,
+        initialDate: DateTime.now(),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedStartDate) {
@@ -50,7 +50,7 @@ class _DocumentsState extends State<Documents> {
   Future<void> _endDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: selectedEndDate,
+        initialDate: DateTime.now(),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedEndDate) {
@@ -70,7 +70,7 @@ class _DocumentsState extends State<Documents> {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     GetAllDocumentsResponse _response = await adminAPI.getDocumentsAPI(
         GetDocumentsRequest(
-            fromDate: selectedStartDate, toDate: selectedEndDate));
+            fromDate: selectedStartDate ?? null, toDate: selectedEndDate ?? null));
     setState(() {
       _currentResponse = _response;
       _loading = false;

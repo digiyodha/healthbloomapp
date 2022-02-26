@@ -117,7 +117,7 @@ class _AddReportState extends State<AddReport> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text("Add Report"),
+        title: Text(widget.report != null ? "Edit Report" : "Add Report"),
         centerTitle: true,
       ),
       backgroundColor: kWhite,

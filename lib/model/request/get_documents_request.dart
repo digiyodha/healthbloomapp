@@ -18,10 +18,10 @@ class GetDocumentsRequest {
 
   Map<String, dynamic> toJson() => {
         "from_date": fromDate == null
-            ? null
+            ? ""
             : "${fromDate.year.toString().padLeft(4, '0')}-${fromDate.month.toString().padLeft(2, '0')}-${fromDate.day.toString().padLeft(2, '0')}",
         "to_date": toDate == null
-            ? null
+            ? ""
             : "${toDate.year.toString().padLeft(4, '0')}-${toDate.month.toString().padLeft(2, '0')}-${toDate.day.toString().padLeft(2, '0')}",
       };
 }

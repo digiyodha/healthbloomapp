@@ -34,8 +34,8 @@ class _WalkthroughState extends State<Walkthrough> {
               ),
               Image.asset(
                 "assets/icons/logo.png",
-                height: 100,
-                width: 100,
+                height: 80,
+                width: 80,
               ),
               Expanded(
                 child: PageView(

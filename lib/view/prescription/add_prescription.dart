@@ -122,7 +122,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text("Add Prescription"),
+        title: Text(widget.prescription != null ? "Edit Prescription" : "Add Prescription"),
         centerTitle: true,
       ),
       backgroundColor: kWhite,

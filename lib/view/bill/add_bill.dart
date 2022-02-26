@@ -118,7 +118,7 @@ class _AddBillState extends State<AddBill> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text("Add Bill"),
+        title: Text(widget.bill != null ? "Edit Bill" : "Add Bill"),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
