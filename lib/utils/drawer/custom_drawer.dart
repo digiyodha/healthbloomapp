@@ -104,6 +104,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 DrawerContainerWidget(
                   text: "Water Tracker",
                   onTap: () {
+                    Navigator.pop(context);
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return WaterIntake();
@@ -115,6 +116,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 DrawerContainerWidget(
                   text: "Documents",
                   onTap: () {
+                    Navigator.pop(context);
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return Documents();
@@ -126,6 +128,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 DrawerContainerWidget(
                   text: "Family Members",
                   onTap: () {
+                    Navigator.pop(context);
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return FamilyMembers();

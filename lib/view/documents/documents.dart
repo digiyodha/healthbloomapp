@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../model/response/response.dart';
 import '../../services/api/repository/auth_repository.dart';
+import '../../utils/drawer/custom_drawer.dart';
 import '../../utils/text_field/custom_text_field.dart';
 import '../bill/add_bill.dart';
 
@@ -86,13 +87,13 @@ class _DocumentsState extends State<Documents> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: CustomDrawer(
+        selected: 3,
+      ),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        iconTheme: IconThemeData(
+            color: kWhite
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/main.dart';
 import '../../components/custom_contained_button.dart';
+import '../../utils/drawer/custom_drawer.dart';
 
 class WaterIntake extends StatefulWidget {
   const WaterIntake({Key key}) : super(key: key);
@@ -49,16 +50,13 @@ class _WaterIntakeState extends State<WaterIntake> {
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     return Scaffold(
+      drawer: CustomDrawer(
+        selected: 2,
+      ),
       backgroundColor: kWhite,
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: kBlack,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        iconTheme: IconThemeData(
+          color: kBlack
         ),
         elevation: 0,
         backgroundColor: kWhite,
