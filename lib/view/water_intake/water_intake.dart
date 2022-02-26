@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_bloom/utils/colors.dart';
-
+import 'package:health_bloom/main.dart';
 import '../../components/custom_contained_button.dart';
 
 class WaterIntake extends StatefulWidget {
@@ -13,7 +13,37 @@ class WaterIntake extends StatefulWidget {
 
 class _WaterIntakeState extends State<WaterIntake> {
   int _glassCount = 0;
-  double _percent = 0.7;
+  double _percent;
+  DateTime _today = DateTime.now();
+  int _waterInMl;
+  int _totalIntakeDaily = 1400;
+
+  getData() {
+    setState(() {
+      _waterInMl = null;
+    });
+    if (sp.getString("${_today.day}/${_today.month}/${_today.year}") != null) {
+      _waterInMl = int.parse(
+          sp.getString("${_today.day}/${_today.month}/${_today.year}"));
+      if(_waterInMl > _totalIntakeDaily)
+        _waterInMl = _totalIntakeDaily;
+    } else {
+      sp.setString("${_today.day}/${_today.month}/${_today.year}", "0");
+      _waterInMl = 0;
+    }
+    _percent = (_waterInMl/_totalIntakeDaily);
+    setState(() {});
+  }
+
+  addData(){
+    sp.setString("${_today.day}/${_today.month}/${_today.year}", _waterInMl.toString());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +90,7 @@ class _WaterIntakeState extends State<WaterIntake> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "750 ml ",
+                      "${sp.getString("${_today.day}/${_today.month}/${_today.year}") ?? ""} ml ",
                       style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.w600,
@@ -105,8 +135,7 @@ class _WaterIntakeState extends State<WaterIntake> {
                           decoration: BoxDecoration(
                               color: kMainColor, shape: BoxShape.circle),
                           child: Center(
-                            child: Text(
-                              "750",
+                            child: Text("${sp.getString("${_today.day}/${_today.month}/${_today.year}") ?? ""}",
                               style: TextStyle(fontSize: 16, color: kWhite),
                             ),
                           ),
@@ -145,7 +174,9 @@ class _WaterIntakeState extends State<WaterIntake> {
                       color: Color(0xff5ED4E2)),
                   child: Row(
                     children: [
-                      Container(
+                      AnimatedContainer(
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.easeIn,
                         height: double.infinity,
                         width: (_size.width - 60 - 8) * _percent,
                         decoration: BoxDecoration(
@@ -221,7 +252,7 @@ class _WaterIntakeState extends State<WaterIntake> {
                         "Perfect!",
                         style: TextStyle(
                             fontSize: 12,
-                            fontWeight: _percent < 0.9 && _percent > 0.75
+                            fontWeight: _percent > 0.75
                                 ? FontWeight.w600
                                 : FontWeight.w400),
                       ),
@@ -345,7 +376,18 @@ class _WaterIntakeState extends State<WaterIntake> {
                     textSize: 16,
                     disabledColor: kGreyLite,
                     text: "Add Drink",
-                    onPressed: () {},
+                    onPressed: () {
+                      if(_glassCount != 0){
+                        _waterInMl = int.parse(
+                            sp.getString("${_today.day}/${_today.month}/${_today.year}"));
+                        _waterInMl += 200 * _glassCount;
+                        _glassCount = 0;
+                        addData();
+                        getData();
+                      }else{
+                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please add the water quantity first!"),));
+                      }
+                    },
                     width: double.infinity,
                     leading: Row(
                       mainAxisSize: MainAxisSize.min,
