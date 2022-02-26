@@ -9,13 +9,15 @@ import 'package:health_bloom/utils/drop_down/custom_dropdown.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:provider/provider.dart';
 import '../../components/custom_contained_button.dart';
+import '../../model/response/response.dart';
 import '../../utils/text_field/custom_text_field.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
 
 class AddPrescription extends StatefulWidget {
-  const AddPrescription({Key key}) : super(key: key);
+  final GetAllDocumentsResponsePrescription prescription;
+  const AddPrescription({Key key,this.prescription}) : super(key: key);
 
   @override
   State<AddPrescription> createState() => _AddPrescriptionState();
@@ -93,6 +95,18 @@ class _AddPrescriptionState extends State<AddPrescription> {
   void initState() {
     super.initState();
     _futureMembers = getAllmember();
+    if(widget.prescription != null){
+      _doctor.text = widget.prescription.doctorName;
+      _hospital.text = widget.prescription.clinicName;
+      _date.text =
+      "${widget.prescription.consultationDate.day}/${widget.prescription.consultationDate.month}/${widget.prescription.consultationDate.year}";
+      _drAdvice.text = widget.prescription.doctorAdvice;
+      _patient.text = widget.prescription.patient.name;
+      _userAilment.text = widget.prescription.userAilment;
+      selectedPatient = widget.prescription.patient.id;
+      selectedDate = widget.prescription.consultationDate;
+      files = widget.prescription.prescriptionImage;
+    }
   }
 
   @override

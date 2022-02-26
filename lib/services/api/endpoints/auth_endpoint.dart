@@ -23,4 +23,9 @@ class AuthEndpoints {
   static get addReport => AuthEndpoint("/v1/report/", Method.post);
   static get getDocuments => AuthEndpoint("/v1/document/", Method.put);
   static get getUser => AuthEndpoint("/v1/users/", Method.get);
+
+  static get deletePrescription => AuthEndpoint("/v1/prescription/", Method.delete);
+  static get deleteReport => AuthEndpoint("/v1/report/", Method.delete);
+  static get deleteBill => AuthEndpoint("/v1/bill/", Method.delete);
+
 }

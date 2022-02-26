@@ -9,13 +9,15 @@ import 'package:health_bloom/utils/drop_down/custom_dropdown.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:provider/provider.dart';
 import '../../components/custom_contained_button.dart';
+import '../../model/response/response.dart';
 import '../../utils/text_field/custom_text_field.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
 
 class AddReport extends StatefulWidget {
-  const AddReport({Key key}) : super(key: key);
+  final GetAllDocumentsResponseBill report;
+  AddReport({Key key,this.report}) : super(key: key);
 
   @override
   State<AddReport> createState() => _AddReportState();
@@ -90,6 +92,16 @@ class _AddReportState extends State<AddReport> {
   void initState() {
     super.initState();
     _futureMembers = getAllmember();
+    if(widget.report != null){
+      _nameOfReport.text = widget.report.name;
+      _date.text =
+      "${widget.report.date.day}/${widget.report.date.month}/${widget.report.date.year}";
+      _description.text = widget.report.description;
+      _patient.text = widget.report.patient.name;
+      selectedPatient = widget.report.patient.id;
+      selectedDate = widget.report.date;
+      files = widget.report.reportImage;
+    }
   }
 
   @override

@@ -15,7 +15,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
 
 class AddBill extends StatefulWidget {
-  const AddBill({Key key}) : super(key: key);
+  final GetAllDocumentsResponseBill bill;
+  const AddBill({Key key,this.bill}) : super(key: key);
 
   @override
   State<AddBill> createState() => _AddBillState();
@@ -91,6 +92,17 @@ class _AddBillState extends State<AddBill> {
   void initState() {
     super.initState();
     _future = getAllmember();
+    if(widget.bill != null){
+      _billName.text = widget.bill.name;
+      _amount.text = widget.bill.amount.toString();
+      _date.text =
+      "${widget.bill.date.day}/${widget.bill.date.month}/${widget.bill.date.year}";
+      _description.text = widget.bill.description;
+      _familyMember.text = widget.bill.patient.name;
+      _memberId = widget.bill.patient.id;
+      selectedDate = widget.bill.date;
+      files = widget.bill.billImage;
+    }
   }
 
   @override

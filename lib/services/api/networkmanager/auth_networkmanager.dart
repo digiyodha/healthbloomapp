@@ -238,12 +238,12 @@ class NetworkManager {
     );
 
     if (result is Success) {
-      GetDocumentsResponse response =
-          GetDocumentsResponse.fromJson(json.decode(result.data.toString()));
+      GetAllDocumentsResponse response =
+      GetAllDocumentsResponse.fromJson(json.decode(result.data.toString()));
 
       print(response);
 
-      return Success<GetDocumentsResponse>(response);
+      return Success<GetAllDocumentsResponse>(response);
     }
     return result;
   }
@@ -266,6 +266,69 @@ class NetworkManager {
       print(response);
 
       return Success<GetUserResponse>(response);
+    }
+    return result;
+  }
+
+  Future<Result> deletePrescription(DeleteDocumentRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.deletePrescription;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      DeletePrescriptionResponse response =
+      DeletePrescriptionResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<DeletePrescriptionResponse>(response);
+    }
+    return result;
+  }
+
+  Future<Result> deleteReport(DeleteDocumentRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.deleteReport;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      DeleteReportResponse response =
+      DeleteReportResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<DeleteReportResponse>(response);
+    }
+    return result;
+  }
+
+  Future<Result> deleteBill(DeleteDocumentRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.deleteBill;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      DeleteBillResponse response =
+      DeleteBillResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<DeleteBillResponse>(response);
     }
     return result;
   }

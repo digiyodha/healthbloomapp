@@ -111,7 +111,7 @@ class NetworkRepository with ChangeNotifier {
   }
 
   /// Get docuemnets
-  Future<GetDocumentsResponse> getDocumentsAPI(
+  Future<GetAllDocumentsResponse> getDocumentsAPI(
       GetDocumentsRequest request) async {
     Result apiResult = await apiClient.getDocuments(request);
     if (apiResult is Success) return apiResult.data;
@@ -125,5 +125,26 @@ class NetworkRepository with ChangeNotifier {
     if (apiResult is Success) return apiResult.data;
     if (apiResult is Error) throw apiResult.error;
     return getUserAPI();
+  }
+
+  Future<DeletePrescriptionResponse> deletePrescriptionAPI(
+      DeleteDocumentRequest request) async {
+    Result apiResult = await apiClient.deletePrescription(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+  }
+
+  Future<DeleteReportResponse> deleteReportAPI(
+      DeleteDocumentRequest request) async {
+    Result apiResult = await apiClient.deleteReport(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+  }
+
+  Future<DeleteBillResponse> deleteBillAPI(
+      DeleteDocumentRequest request) async {
+    Result apiResult = await apiClient.deleteBill(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
   }
 }

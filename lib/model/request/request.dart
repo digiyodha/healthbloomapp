@@ -33,3 +33,19 @@ class AddBillRequest {
     "patient": patient == null ? null : patient,
   };
 }
+
+class DeleteDocumentRequest {
+  DeleteDocumentRequest({
+    this.id,
+  });
+
+  String id;
+
+  factory DeleteDocumentRequest.fromJson(Map<String, dynamic> json) => DeleteDocumentRequest(
+    id: json["_id"] == null ? null : json["_id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id == null ? null : id,
+  };
+}
