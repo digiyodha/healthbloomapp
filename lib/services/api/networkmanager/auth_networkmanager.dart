@@ -6,6 +6,7 @@ import 'package:health_bloom/model/request/add_member_request.dart';
 import 'package:health_bloom/model/request/add_prescription_request.dart';
 import 'package:health_bloom/model/request/add_report_request.dart';
 import 'package:health_bloom/model/request/delete_member_request.dart';
+import 'package:health_bloom/model/request/get_documents_request.dart';
 import 'package:health_bloom/model/request/login_user_resquest.dart';
 import 'package:health_bloom/model/request/resgister_user_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
@@ -14,6 +15,7 @@ import 'package:health_bloom/model/response/add_precsription_response.dart';
 import 'package:health_bloom/model/response/add_report_response.dart';
 import 'package:health_bloom/model/response/delete_member_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
+import 'package:health_bloom/model/response/get_docuemnets_respnse.dart';
 import 'package:health_bloom/model/response/login_uesr_response.dart';
 import 'package:health_bloom/model/response/register_user_response.dart';
 import 'package:health_bloom/services/api/endpoints.dart';
@@ -219,6 +221,28 @@ class NetworkManager {
       print(response);
 
       return Success<DeleteMemberResponse>(response);
+    }
+    return result;
+  }
+
+  // Get documents
+  Future<Result> gfetDocuments(GetDocumentsRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.getDocuments;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      GetDocumentsResponse response =
+          GetDocumentsResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<GetDocumentsResponse>(response);
     }
     return result;
   }

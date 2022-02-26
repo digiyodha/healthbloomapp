@@ -21,4 +21,5 @@ class AuthEndpoints {
 
   static get addBill => AuthEndpoint("/v1/bill/", Method.post);
   static get addReport => AuthEndpoint("/v1/report/", Method.post);
+  static get getDocuments => AuthEndpoint("/v1/document/", Method.put);
 }
