@@ -17,11 +17,14 @@ var BillSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'User'
     }
-}, {strict: false});
+}, {strict: false}, {
+    timestamps: true
+});
+
+BillSchema.index({'$**': 'text'});
 
 bill = mongoose.model("Bill", BillSchema);
 
-BillSchema.index({'$**': 'text'});
 
 module.exports = {
     Bill: bill,

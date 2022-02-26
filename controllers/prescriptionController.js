@@ -66,7 +66,9 @@ exports.searchPrescription = asyncHandler(async (req, res, next) => {
                 $options: 'i'
             }
         },
-    ]});
+    ],  
+        user_id: req.user.id
+    });
     res.status(200).json({ success: true, data: prescription });
 });
 
@@ -100,6 +102,19 @@ exports.deletePrescription = asyncHandler(async (req, res, next) => {
 exports.getPrescription = asyncHandler(async (req, res, next) => {
     var {_id} = req.body;
     const prescription = await Prescription.findOne({_id: _id});
+    if(!prescription)
+    {
+        return next(
+        new ErrorResponse(`Prescription id invalid`, 404)
+        );
+    }
+    res.status(200).json({ success: true, data: prescription });
+});
+
+//get Prescription by family member
+exports.getPrescriptionFamily = asyncHandler(async (req, res, next) => {
+    var {patient} = req.body;
+    const prescription = await Prescription.find({patient: patient}).sort([['consultation_date', -1]]);
     if(!prescription)
     {
         return next(

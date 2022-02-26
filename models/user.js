@@ -23,7 +23,9 @@ var UserSchema = new Schema({
       enum: ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'],
       default: 'O+'
     }
-}, {strict: false});
+}, {strict: false}, {
+  timestamps: true
+});
 
 
 

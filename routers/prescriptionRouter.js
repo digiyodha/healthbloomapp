@@ -8,12 +8,15 @@ const { addPrescription,
      editPrescription, 
      deletePrescription, 
      searchPrescription, 
-     getPrescription } = require("../controllers/prescriptionController");
+     getPrescription, 
+     getPrescriptionFamily} = require("../controllers/prescriptionController");
 
 
 router.route("/").post(protect, addPrescription).put(protect, editPrescription).delete(protect, deletePrescription);
 router.route("/search").put(protect, searchPrescription);
 router.route("/id").put(protect, getPrescription);
+router.route("/family").put(protect, getPrescriptionFamily);
+
 
 
 

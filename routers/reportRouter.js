@@ -9,7 +9,8 @@ const {
     editReport,
     getReport,
     deleteReport,
-    searchReport
+    searchReport,
+    getReportFamily
 } = require("../controllers/reportController");
 
 
@@ -17,6 +18,7 @@ router.route("/").post(protect, addReport).put(protect, editReport).delete(prote
 router.route("/search").put(protect, searchReport);
 // router.route("/filter").put(protect, filterBill);
 router.route("/id").put(protect, getReport);
+router.route("/family").put(protect, getReportFamily);
 
 
 

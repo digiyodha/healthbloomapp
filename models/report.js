@@ -16,7 +16,9 @@ var ReportSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'User'
     }
-}, {strict: false});
+}, {strict: false}, {
+    timestamps: true
+});
 
 report = mongoose.model("Report", ReportSchema);
 

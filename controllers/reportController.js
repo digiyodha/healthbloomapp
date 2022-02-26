@@ -52,7 +52,8 @@ exports.searchReport = asyncHandler(async (req, res, next) => {
     const report = await Report.find().where({name: {
         $regex: name,
         $options: 'i'
-        }});
+        },  
+        user_id: req.user.id});
     res.status(200).json({ success: true, data: report });
 });
 
@@ -86,6 +87,19 @@ exports.deleteReport = asyncHandler(async (req, res, next) => {
 exports.getReport = asyncHandler(async (req, res, next) => {
     var {_id} = req.body;
     const report = await Report.findOne({_id: _id});
+    if(!report)
+    {
+        return next(
+        new ErrorResponse(`Report id invalid`, 404)
+        );
+    }
+    res.status(200).json({ success: true, data: report });
+});
+
+//get report by family member
+exports.getReportFamily = asyncHandler(async (req, res, next) => {
+    var {patient} = req.body;
+    const report = await Report.find({patient: patient}).sort([['date', -1]]);
     if(!report)
     {
         return next(

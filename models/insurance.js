@@ -1,14 +1,9 @@
 var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
-
-var PrescriptionSchema = new Schema({
-    doctor_name: String,
-    clinic_name: String,
-    consultation_date: Date,
-    user_ailment: String,
-    doctor_advice: String,
-    prescription_image: [{
+var InsuranceSchema = new Schema({
+    organisation_name: String,
+    insurance_image: [{
         type: String
     }],
     patient: {
@@ -23,9 +18,10 @@ var PrescriptionSchema = new Schema({
     timestamps: true
 });
 
-prescription = mongoose.model("Prescription", PrescriptionSchema);
+
+insurance = mongoose.model("Insurance", InsuranceSchema);
 
 
 module.exports = {
-    Prescription: prescription,
+    Insurance: insurance,
 }

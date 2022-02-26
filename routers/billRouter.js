@@ -10,7 +10,8 @@ const {
     searchBill,
     // filterBill,
     deleteBill,
-    getBill
+    getBill,
+    getBillFamily
   
 } = require("../controllers/billController");
 
@@ -19,6 +20,7 @@ router.route("/").post(protect, addBill).put(protect, editBill).delete(protect, 
 router.route("/search").put(protect, searchBill);
 // router.route("/filter").put(protect, filterBill);
 router.route("/id").put(protect, getBill);
+router.route("/family").put(protect, getBillFamily);
 
 
 

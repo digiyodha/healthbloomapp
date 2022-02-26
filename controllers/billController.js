@@ -51,10 +51,23 @@ exports.editBill = asyncHandler(async (req, res, next) => {
 //search bill
 exports.searchBill = asyncHandler(async (req, res, next) => {
     var {name} = req.body;
-    const bill = await Bill.find().where({name: {
-        $regex: name,
-        $options: 'i'
-        }});
+    // const bill = await Bill.find({$text: {$search: name}});
+    const bill = await Bill.find({$or: [
+        {
+            name: {
+                $regex: name,
+                $options: 'i'
+            }
+        },
+        {
+            description: {
+                $regex: name,
+                $options: 'i'
+            }
+        },
+
+    ],  
+        user_id: req.user.id});
     res.status(200).json({ success: true, data: bill });
 });
 
@@ -88,6 +101,20 @@ exports.deleteBill = asyncHandler(async (req, res, next) => {
 exports.getBill = asyncHandler(async (req, res, next) => {
     var {_id} = req.body;
     const bill = await Bill.findOne({_id: _id});
+    if(!bill)
+    {
+        return next(
+        new ErrorResponse(`Bill id invalid`, 404)
+        );
+    }
+    res.status(200).json({ success: true, data: bill });
+});
+
+
+//get bill by family
+exports.getBillFamily = asyncHandler(async (req, res, next) => {
+    var {patient} = req.body;
+    const bill = await Bill.find({patient: patient}).sort([['date', -1]]);
     if(!bill)
     {
         return next(

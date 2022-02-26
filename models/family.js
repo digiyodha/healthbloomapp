@@ -12,7 +12,9 @@ var FamilySchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'User'
     }
-}, {strict: false});
+}, {strict: false}, {
+  timestamps: true
+});
 
 family = mongoose.model("Family", FamilySchema);
 
