@@ -49,33 +49,44 @@ class _LoginState extends State<Login> {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser?.authentication;
+    if(googleUser != null){
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+      await googleUser?.authentication;
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    }
+    return null;
   }
 
   Future<UserCredential> signInWithFacebook() async {
     final LoginResult result = await FacebookAuth.instance.login();
     if (result.status == LoginStatus.success) {
       // Create a credential from the access token
-      final OAuthCredential credential =
-          FacebookAuthProvider.credential(result.accessToken.token);
-      // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      try{
+        final OAuthCredential credential =
+        FacebookAuthProvider.credential(result.accessToken.token);
+        // Once signed in, return the UserCredential
+        return await FirebaseAuth.instance.signInWithCredential(credential);
+      }catch (e){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()),));
+      }
     } else {
       print("******************************************************");
       print(result.message);
       print(result.status);
       print(result.accessToken);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result.message),));
+      setState(() {
+        _loading = false;
+      });
     }
     return null;
   }
@@ -423,13 +434,16 @@ class _LoginState extends State<Login> {
                               _loading = true;
                             });
                             UserCredential cred = await signInWithGoogle();
-                            print(cred.user.email);
-                            print(cred.user.photoURL);
-                            print(cred.user.uid);
-                            print(cred.user.displayName);
                             Future.delayed(Duration(seconds: 1))
                                 .whenComplete(() {
+                              setState(() {
+                                _loading = false;
+                              });
                               if (cred != null) {
+                                print(cred.user.email);
+                                print(cred.user.photoURL);
+                                print(cred.user.uid);
+                                print(cred.user.displayName);
                                 sp.setString("id", cred.user.uid ?? "");
                                 sp.setString("email", cred.user.email ?? "");
                                 Navigator.push(context,
@@ -437,9 +451,6 @@ class _LoginState extends State<Login> {
                                   return HomePage();
                                 }));
                               } else {
-                                setState(() {
-                                  _loading = false;
-                                });
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                   content: Text("Error occurred!"),
@@ -460,11 +471,33 @@ class _LoginState extends State<Login> {
                         const SizedBox(width: 30.0),
                         InkWell(
                           onTap: () async {
+                            setState(() {
+                              _loading = true;
+                            });
                             UserCredential cred = await signInWithFacebook();
-                            print(cred.user.email);
-                            print(cred.user.photoURL);
-                            print(cred.user.uid);
-                            print(cred.user.displayName);
+                            Future.delayed(Duration(seconds: 1))
+                                .whenComplete(() {
+                              setState(() {
+                                _loading = false;
+                              });
+                              if (cred != null) {
+                                print(cred.user.email);
+                                print(cred.user.photoURL);
+                                print(cred.user.uid);
+                                print(cred.user.displayName);
+                                sp.setString("id", cred.user.uid ?? "");
+                                sp.setString("email", cred.user.email ?? "");
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return HomePage();
+                                    }));
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text("Error occurred!"),
+                                ));
+                              }
+                            });
                           },
                           child: CircleAvatar(
                             backgroundColor: Colors.white,
