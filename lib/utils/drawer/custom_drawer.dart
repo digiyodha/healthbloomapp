@@ -1,9 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/main.dart';
+import 'package:health_bloom/model/response/get_user_response.dart';
+import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/view/documents/documents.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
+import 'package:provider/provider.dart';
 import '../../view/family_members/family_members.dart';
 import '../../view/water_intake/water_intake.dart';
 import '../colors.dart';
@@ -18,6 +22,19 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+  Future _futureUser;
+  Future<GetUserResponse> getUser() async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    GetUserResponse _response = await adminAPI.getUserAPI();
+    return _response;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _futureUser = getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -30,32 +47,43 @@ class _CustomDrawerState extends State<CustomDrawer> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, top: 20),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 36,
-                        backgroundColor: kWhite,
-                        child: Center(
-                          child: Icon(
-                            Icons.person,
-                            color: kGrey4,
-                            size: 40,
-                          ),
+                FutureBuilder<GetUserResponse>(
+                  future: _futureUser,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 16, top: 20),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 36,
+                              backgroundColor: kWhite,
+                              backgroundImage: NetworkImage(snapshot
+                                      .data.data.avatar ??
+                                  'https://winfort.net/wp-content/themes/consultix-1/images/no-image-found-360x260.png'),
+                            ),
+                            SizedBox(
+                              width: 14,
+                            ),
+                            Expanded(
+                              child: Text(
+                                "${snapshot.data.data.name.toString()}",
+                                style: TextStyle(fontSize: 20, color: kWhite),
+                              ),
+                            )
+                          ],
                         ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
+                    return Center(
+                      child: TextBuilder(
+                        text: 'Loading',
+                        color: Colors.white,
                       ),
-                      SizedBox(
-                        width: 14,
-                      ),
-                      Expanded(
-                        child: Text(
-                          "Jane Doe",
-                          style: TextStyle(fontSize: 20, color: kWhite),
-                        ),
-                      )
-                    ],
-                  ),
+                    );
+                  },
                 ),
                 SizedBox(
                   height: 30,
