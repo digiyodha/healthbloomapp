@@ -34,6 +34,7 @@ class AddEditUserProfileResponseData {
     this.phoneNumber,
     this.state,
     this.userAddress,
+    this.avatar,
     this.id,
   });
 
@@ -48,6 +49,7 @@ class AddEditUserProfileResponseData {
   String phoneNumber;
   String state;
   String userAddress;
+  String avatar;
   String id;
 
   factory AddEditUserProfileResponseData.fromJson(Map<String, dynamic> json) =>
@@ -64,6 +66,7 @@ class AddEditUserProfileResponseData {
         phoneNumber: json["phone_number"] == null ? null : json["phone_number"],
         state: json["state"] == null ? null : json["state"],
         userAddress: json["user_address"] == null ? null : json["user_address"],
+        avatar: json["avatar"] == null ? null : json["avatar"],
         id: json["id"] == null ? null : json["id"],
       );
 
@@ -79,6 +82,7 @@ class AddEditUserProfileResponseData {
         "phone_number": phoneNumber == null ? null : phoneNumber,
         "state": state == null ? null : state,
         "user_address": userAddress == null ? null : userAddress,
+        "avatar": avatar == null ? null : avatar,
         "id": id == null ? null : id,
       };
 }

@@ -428,7 +428,8 @@ class _EditProfileState extends State<EditProfile> {
                                         _state.text.isNotEmpty &&
                                         _phone.text.isNotEmpty &&
                                         selectedBloodGroup != null &&
-                                        selectedGender != null) {
+                                        selectedGender != null &&
+                                        _uploadAvatarUrl.isNotEmpty) {
                                       AddEditUserProfileRequest _request =
                                           AddEditUserProfileRequest(
                                               userAddress: '',
@@ -437,6 +438,7 @@ class _EditProfileState extends State<EditProfile> {
                                               city: _city.text,
                                               countryCode: '+91',
                                               gender: selectedGender,
+                                              avatar: _uploadAvatarUrl,
                                               phoneNumber: _phone.text,
                                               state: _state.text);
                                       AddEditUserProfileResponse _response =
