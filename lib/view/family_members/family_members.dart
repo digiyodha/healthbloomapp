@@ -225,33 +225,21 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                                               setState(() {
                                                                 _loading = true;
                                                               });
-                                                              DeleteMemberRequest
-                                                                  _request =
-                                                                  DeleteMemberRequest(
-                                                                      familyMemberId:
-                                                                          member
-                                                                              .id);
-
+                                                              final adminAPI =
+                                                                  Provider.of<
+                                                                          NetworkRepository>(
+                                                                      context,
+                                                                      listen:
+                                                                          false);
                                                               DeleteMemberResponse
                                                                   _response =
-                                                                  await deleteMemeber(
-                                                                      _request);
+                                                                  await adminAPI.deleteMemberAPI(
+                                                                      DeleteMemberRequest(
+                                                                          familyMemberId:
+                                                                              member.id));
                                                               if (_response
-                                                                      .success ==
-                                                                  true) {
-                                                                setState(() {
-                                                                  _loading =
-                                                                      false;
-                                                                });
-                                                                Navigator.pop(
-                                                                    context);
-                                                                ScaffoldMessenger.of(
-                                                                        context)
-                                                                    .showSnackBar(
-                                                                        SnackBar(
-                                                                  content: Text(
-                                                                      "Deleted successfully!"),
-                                                                ));
+                                                                  .success) {
+                                                                getAllmember();
                                                               }
                                                             },
                                                             child: TextBuilder(

@@ -6,6 +6,10 @@ import 'package:health_bloom/model/request/add_member_request.dart';
 import 'package:health_bloom/model/request/add_prescription_request.dart';
 import 'package:health_bloom/model/request/add_report_request.dart';
 import 'package:health_bloom/model/request/delete_member_request.dart';
+import 'package:health_bloom/model/request/edit_bill_request.dart';
+import 'package:health_bloom/model/request/edit_member_request.dart';
+import 'package:health_bloom/model/request/edit_prescription_request.dart';
+import 'package:health_bloom/model/request/edit_report_request.dart';
 import 'package:health_bloom/model/request/get_documents_request.dart';
 import 'package:health_bloom/model/request/login_user_resquest.dart';
 import 'package:health_bloom/model/request/resgister_user_request.dart';
@@ -14,8 +18,11 @@ import 'package:health_bloom/model/response/add_family_response.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
 import 'package:health_bloom/model/response/add_report_response.dart';
 import 'package:health_bloom/model/response/delete_member_response.dart';
+import 'package:health_bloom/model/response/edit_bill_response.dart';
+import 'package:health_bloom/model/response/edit_member_response.dart';
+import 'package:health_bloom/model/response/edit_prescription_response.dart';
+import 'package:health_bloom/model/response/edit_report_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
-import 'package:health_bloom/model/response/get_docuemnets_respnse.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/model/response/login_uesr_response.dart';
 import 'package:health_bloom/model/response/register_user_response.dart';
@@ -239,7 +246,7 @@ class NetworkManager {
 
     if (result is Success) {
       GetAllDocumentsResponse response =
-      GetAllDocumentsResponse.fromJson(json.decode(result.data.toString()));
+          GetAllDocumentsResponse.fromJson(json.decode(result.data.toString()));
 
       print(response);
 
@@ -281,8 +288,8 @@ class NetworkManager {
     );
 
     if (result is Success) {
-      DeletePrescriptionResponse response =
-      DeletePrescriptionResponse.fromJson(json.decode(result.data.toString()));
+      DeletePrescriptionResponse response = DeletePrescriptionResponse.fromJson(
+          json.decode(result.data.toString()));
 
       print(response);
 
@@ -303,7 +310,7 @@ class NetworkManager {
 
     if (result is Success) {
       DeleteReportResponse response =
-      DeleteReportResponse.fromJson(json.decode(result.data.toString()));
+          DeleteReportResponse.fromJson(json.decode(result.data.toString()));
 
       print(response);
 
@@ -324,11 +331,99 @@ class NetworkManager {
 
     if (result is Success) {
       DeleteBillResponse response =
-      DeleteBillResponse.fromJson(json.decode(result.data.toString()));
+          DeleteBillResponse.fromJson(json.decode(result.data.toString()));
 
       print(response);
 
       return Success<DeleteBillResponse>(response);
+    }
+    return result;
+  }
+
+  //  Edit member
+  Future<Result> editMember(EditMemberRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.editMember;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      EditMemberResponse response =
+          EditMemberResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<EditMemberResponse>(response);
+    }
+    return result;
+  }
+
+  //  Edit bill
+  Future<Result> editBill(EditBillRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.editBill;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      EditBillResponse response =
+          EditBillResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<EditBillResponse>(response);
+    }
+    return result;
+  }
+
+  //  Edit Report
+  Future<Result> editReport(EditReportRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.editReport;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      EditReportResponse response =
+          EditReportResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<EditReportResponse>(response);
+    }
+    return result;
+  }
+
+  //  Edit Prescription
+  Future<Result> editPrescription(EditPriscriptionRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.editPrescription;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      EditPriscriptionResponse response = EditPriscriptionResponse.fromJson(
+          json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<EditPriscriptionResponse>(response);
     }
     return result;
   }

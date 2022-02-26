@@ -5,7 +5,6 @@ import 'package:health_bloom/model/request/get_documents_request.dart';
 import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
-import 'package:health_bloom/view/bill/edit_bill.dart';
 import 'package:health_bloom/view/prescription/add_prescription.dart';
 import 'package:health_bloom/view/report/add_report.dart';
 import 'package:provider/provider.dart';
@@ -70,7 +69,8 @@ class _DocumentsState extends State<Documents> {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     GetAllDocumentsResponse _response = await adminAPI.getDocumentsAPI(
         GetDocumentsRequest(
-            fromDate: selectedStartDate ?? null, toDate: selectedEndDate ?? null));
+            fromDate: selectedStartDate ?? null,
+            toDate: selectedEndDate ?? null));
     setState(() {
       _currentResponse = _response;
       _loading = false;
@@ -96,7 +96,7 @@ class _DocumentsState extends State<Documents> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text("Medical Bills"),
+        title: Text("Documents"),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -160,7 +160,7 @@ class _DocumentsState extends State<Documents> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 24.0),
                   Container(
                     color: Colors.white,
                     child: Row(
@@ -205,7 +205,8 @@ class _DocumentsState extends State<Documents> {
                     ),
                   ),
                   Expanded(
-                    child: _currentResponse != null ? getList() : LoadingWidget(),
+                    child:
+                        _currentResponse != null ? getList() : LoadingWidget(),
                   ),
                   SizedBox(height: 16),
                 ],
@@ -218,16 +219,18 @@ class _DocumentsState extends State<Documents> {
     );
   }
 
-  Widget getList(){
-    if(currentIndex == 0)
+  Widget getList() {
+    if (currentIndex == 0)
       return ListView.builder(
-        padding: EdgeInsets.only(top: 16,bottom: 20),
+        padding: EdgeInsets.only(top: 16, bottom: 20),
         itemCount: _currentResponse.data.bill.length,
         physics: ScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           return MedicalBillsCard(
             nameOfBill: _currentResponse.data.bill[index].name,
-            nameOfPatients: _currentResponse.data.bill[index].patient != null ? _currentResponse.data.bill[index].patient.name : "-",
+            nameOfPatients: _currentResponse.data.bill[index].patient != null
+                ? _currentResponse.data.bill[index].patient.name
+                : "-",
             dateOfBill: _currentResponse.data.bill[index].date,
             onTap: () {},
             edit: () {
@@ -238,83 +241,102 @@ class _DocumentsState extends State<Documents> {
                     bill: _currentResponse.data.bill[index],
                   ),
                 ),
-              );
+              ).whenComplete(() => setState(() {
+                    getDocuments();
+                  }));
             },
-            delete: () async{
+            delete: () async {
               setState(() {
                 _loading = true;
               });
-              final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-              DeleteBillResponse _response = await adminAPI.deleteBillAPI(DeleteDocumentRequest(id: _currentResponse.data.bill[index].id));
-              if(_response.success){
+              final adminAPI =
+                  Provider.of<NetworkRepository>(context, listen: false);
+              DeleteBillResponse _response = await adminAPI.deleteBillAPI(
+                  DeleteDocumentRequest(
+                      id: _currentResponse.data.bill[index].id));
+              if (_response.success) {
                 getDocuments();
               }
             },
           );
         },
       );
-    if(currentIndex == 1)
+    if (currentIndex == 1)
       return ListView.builder(
-        padding: EdgeInsets.only(top: 16,bottom: 20),
+        padding: EdgeInsets.only(top: 16, bottom: 20),
         itemCount: _currentResponse.data.report.length,
         physics: ScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           return MedicalBillsCard(
             nameOfBill: _currentResponse.data.report[index].name,
-            nameOfPatients: _currentResponse.data.report[index].patient != null ? _currentResponse.data.report[index].patient.name : "-",
+            nameOfPatients: _currentResponse.data.report[index].patient != null
+                ? _currentResponse.data.report[index].patient.name
+                : "-",
             dateOfBill: _currentResponse.data.report[index].date,
             onTap: () {},
             edit: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AddReport(
-                    report : _currentResponse.data.report[index]
-                  ),
+                  builder: (context) =>
+                      AddReport(report: _currentResponse.data.report[index]),
                 ),
-              );
+              ).whenComplete(() => setState(() {
+                    getDocuments();
+                  }));
             },
-            delete: () async{
+            delete: () async {
               setState(() {
                 _loading = true;
               });
-              final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-              DeleteReportResponse _response = await adminAPI.deleteReportAPI(DeleteDocumentRequest(id: _currentResponse.data.report[index].id));
-              if(_response.success){
+              final adminAPI =
+                  Provider.of<NetworkRepository>(context, listen: false);
+              DeleteReportResponse _response = await adminAPI.deleteReportAPI(
+                  DeleteDocumentRequest(
+                      id: _currentResponse.data.report[index].id));
+              if (_response.success) {
                 getDocuments();
               }
             },
           );
         },
       );
-    if(currentIndex == 2)
+    if (currentIndex == 2)
       return ListView.builder(
-        padding: EdgeInsets.only(top: 16,bottom: 20),
+        padding: EdgeInsets.only(top: 16, bottom: 20),
         itemCount: _currentResponse.data.prescription.length,
         physics: ScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           return MedicalBillsCard(
             nameOfBill: _currentResponse.data.prescription[index].doctorName,
-            nameOfPatients: _currentResponse.data.prescription[index].patient != null ? _currentResponse.data.prescription[index].patient.name : "-",
-            dateOfBill: _currentResponse.data.prescription[index].consultationDate,
+            nameOfPatients:
+                _currentResponse.data.prescription[index].patient != null
+                    ? _currentResponse.data.prescription[index].patient.name
+                    : "-",
+            dateOfBill:
+                _currentResponse.data.prescription[index].consultationDate,
             onTap: () {},
             edit: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddPrescription(
-                    prescription : _currentResponse.data.prescription[index]
-                  ),
+                      prescription: _currentResponse.data.prescription[index]),
                 ),
-              );
+              ).whenComplete(() => setState(() {
+                    getDocuments();
+                  }));
             },
-            delete: () async{
+            delete: () async {
               setState(() {
                 _loading = true;
               });
-              final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-              DeletePrescriptionResponse _response = await adminAPI.deletePrescriptionAPI(DeleteDocumentRequest(id: _currentResponse.data.prescription[index].id));
-              if(_response.success){
+              final adminAPI =
+                  Provider.of<NetworkRepository>(context, listen: false);
+              DeletePrescriptionResponse _response =
+                  await adminAPI.deletePrescriptionAPI(DeleteDocumentRequest(
+                      id: _currentResponse.data.prescription[index].id));
+              if (_response.success) {
                 getDocuments();
               }
             },

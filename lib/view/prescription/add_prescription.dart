@@ -1,7 +1,9 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/model/request/add_prescription_request.dart';
+import 'package:health_bloom/model/request/edit_prescription_request.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
+import 'package:health_bloom/model/response/edit_prescription_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
@@ -17,7 +19,7 @@ import 'package:path/path.dart' as path;
 
 class AddPrescription extends StatefulWidget {
   final GetAllDocumentsResponsePrescription prescription;
-  const AddPrescription({Key key,this.prescription}) : super(key: key);
+  const AddPrescription({Key key, this.prescription}) : super(key: key);
 
   @override
   State<AddPrescription> createState() => _AddPrescriptionState();
@@ -42,6 +44,14 @@ class _AddPrescriptionState extends State<AddPrescription> {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     AddPrescriptionResponse _response =
         await adminAPI.addPrescriptionAPI(request);
+    return _response;
+  }
+
+  Future<EditPriscriptionResponse> editPrescription(
+      EditPriscriptionRequest request) async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    EditPriscriptionResponse _response =
+        await adminAPI.editPrescriptionAPI(request);
     return _response;
   }
 
@@ -95,11 +105,11 @@ class _AddPrescriptionState extends State<AddPrescription> {
   void initState() {
     super.initState();
     _futureMembers = getAllmember();
-    if(widget.prescription != null){
+    if (widget.prescription != null) {
       _doctor.text = widget.prescription.doctorName;
       _hospital.text = widget.prescription.clinicName;
       _date.text =
-      "${widget.prescription.consultationDate.day}/${widget.prescription.consultationDate.month}/${widget.prescription.consultationDate.year}";
+          "${widget.prescription.consultationDate.day}/${widget.prescription.consultationDate.month}/${widget.prescription.consultationDate.year}";
       _drAdvice.text = widget.prescription.doctorAdvice;
       _patient.text = widget.prescription.patient.name;
       _userAilment.text = widget.prescription.userAilment;
@@ -122,7 +132,9 @@ class _AddPrescriptionState extends State<AddPrescription> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text(widget.prescription != null ? "Edit Prescription" : "Add Prescription"),
+        title: Text(widget.prescription != null
+            ? "Edit Prescription"
+            : "Add Prescription"),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -397,37 +409,47 @@ class _AddPrescriptionState extends State<AddPrescription> {
             disabledColor: kGreyLite,
             text: "Submit",
             onPressed: () async {
-              if (_drAdvice.text.isNotEmpty &&
-                  _doctor.text.isNotEmpty &&
-                  _userAilment.text.isNotEmpty &&
-                  _hospital.text.isNotEmpty &&
-                  files.isNotEmpty &&
-                  _patient.text.isNotEmpty) {
-                setState(() {
-                  _loading = true;
-                });
-                AddPrescriptionRequest _request = AddPrescriptionRequest(
-                  consultationDate: _date.text,
-                  doctorAdvice: _drAdvice.text,
-                  clinicName: _hospital.text,
-                  patient: selectedPatient,
-                  doctorName: _doctor.text,
-                  prescriptionImage: files,
-                  userAilment: _userAilment.text,
-                );
-                AddPrescriptionResponse _response =
-                    await addPrescription(_request);
-                print('Add Prescription Request ${_request.toJson()}');
-                print('Add Prescription Response ${_response.toJson()}');
-                if (_response.success == true) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Added successfully!'),
-                  ));
+              if (widget.prescription != null) {
+                if (_drAdvice.text.isNotEmpty &&
+                    _doctor.text.isNotEmpty &&
+                    _userAilment.text.isNotEmpty &&
+                    _hospital.text.isNotEmpty &&
+                    files.isNotEmpty &&
+                    _patient.text.isNotEmpty) {
                   setState(() {
-                    _loading = false;
+                    _loading = true;
                   });
+                  EditPriscriptionRequest _request = EditPriscriptionRequest(
+                    id: widget.prescription.id,
+                    consultationDate: selectedDate,
+                    doctorAdvice: _drAdvice.text,
+                    clinicName: _hospital.text,
+                    patient: selectedPatient,
+                    doctorName: _doctor.text,
+                    prescriptionImage: files,
+                    userAilment: _userAilment.text,
+                  );
+                  EditPriscriptionResponse _response =
+                      await editPrescription(_request);
+                  print('Edit Prescription Request ${_request.toJson()}');
+                  print('Edit Prescription Response ${_response.toJson()}');
+                  if (_response.success == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Updated successfully!'),
+                    ));
+                    setState(() {
+                      _loading = false;
+                    });
 
-                  Navigator.pop(context);
+                    Navigator.pop(context);
+                  } else {
+                    setState(() {
+                      _loading = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Please fill all the details'),
+                    ));
+                  }
                 } else {
                   setState(() {
                     _loading = false;
@@ -437,12 +459,53 @@ class _AddPrescriptionState extends State<AddPrescription> {
                   ));
                 }
               } else {
-                setState(() {
-                  _loading = false;
-                });
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Please fill all the details'),
-                ));
+                if (_drAdvice.text.isNotEmpty &&
+                    _doctor.text.isNotEmpty &&
+                    _userAilment.text.isNotEmpty &&
+                    _hospital.text.isNotEmpty &&
+                    files.isNotEmpty &&
+                    _patient.text.isNotEmpty) {
+                  setState(() {
+                    _loading = true;
+                  });
+                  AddPrescriptionRequest _request = AddPrescriptionRequest(
+                    consultationDate: _date.text,
+                    doctorAdvice: _drAdvice.text,
+                    clinicName: _hospital.text,
+                    patient: selectedPatient,
+                    doctorName: _doctor.text,
+                    prescriptionImage: files,
+                    userAilment: _userAilment.text,
+                  );
+                  AddPrescriptionResponse _response =
+                      await addPrescription(_request);
+                  print('Add Prescription Request ${_request.toJson()}');
+                  print('Add Prescription Response ${_response.toJson()}');
+                  if (_response.success == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Added successfully!'),
+                    ));
+                    setState(() {
+                      _loading = false;
+                    });
+
+                    Navigator.pop(context);
+                  } else {
+                    setState(() {
+                      _loading = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Please fill all the details'),
+                    ));
+                  }
+                } else {
+                  setState(() {
+                    _loading = false;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Please fill all the details'),
+                  ));
+                }
               }
             },
             width: double.infinity,

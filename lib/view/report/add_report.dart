@@ -1,7 +1,9 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/model/request/add_report_request.dart';
+import 'package:health_bloom/model/request/edit_report_request.dart';
 import 'package:health_bloom/model/response/add_report_response.dart';
+import 'package:health_bloom/model/response/edit_report_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
@@ -17,7 +19,7 @@ import 'package:path/path.dart' as path;
 
 class AddReport extends StatefulWidget {
   final GetAllDocumentsResponseBill report;
-  AddReport({Key key,this.report}) : super(key: key);
+  AddReport({Key key, this.report}) : super(key: key);
 
   @override
   State<AddReport> createState() => _AddReportState();
@@ -46,6 +48,12 @@ class _AddReportState extends State<AddReport> {
   Future<AddReportResponse> addReport(AddReportRequest request) async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     AddReportResponse _response = await adminAPI.addReportAPI(request);
+    return _response;
+  }
+
+  Future<EditReportResponse> editReport(EditReportRequest request) async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    EditReportResponse _response = await adminAPI.editReportAPI(request);
     return _response;
   }
 
@@ -92,10 +100,10 @@ class _AddReportState extends State<AddReport> {
   void initState() {
     super.initState();
     _futureMembers = getAllmember();
-    if(widget.report != null){
+    if (widget.report != null) {
       _nameOfReport.text = widget.report.name;
       _date.text =
-      "${widget.report.date.day}/${widget.report.date.month}/${widget.report.date.year}";
+          "${widget.report.date.day}/${widget.report.date.month}/${widget.report.date.year}";
       _description.text = widget.report.description;
       _patient.text = widget.report.patient.name;
       selectedPatient = widget.report.patient.id;
@@ -256,8 +264,8 @@ class _AddReportState extends State<AddReport> {
                                                                     ],
                                                                   ),
                                                                   SizedBox(
-                                                                    height: 16,
-                                                                  ),
+                                                                      height:
+                                                                          16),
                                                                   Container(
                                                                     margin: EdgeInsets
                                                                         .all(1),
@@ -377,35 +385,69 @@ class _AddReportState extends State<AddReport> {
             disabledColor: kGreyLite,
             text: "Submit",
             onPressed: () async {
-              if (_nameOfReport.text.isNotEmpty &&
-                  _date.text.isNotEmpty &&
-                  _description.text.isNotEmpty &&
-                  files.isNotEmpty &&
-                  _date.text.isNotEmpty) {
-                setState(() {
-                  _loading = true;
-                });
-                AddReportRequest _request = AddReportRequest(
-                    name: _nameOfReport.text,
-                    description: _description.text,
-                    patient: selectedPatient,
-                    reportImage: files,
-                    date: selectedDate);
-                print(_request.toJson().toString());
-                AddReportResponse _response = await addReport(_request);
-                print('Add Report Request ${_request.toJson()}');
-                print('Add Report Response ${_response.toJson()}');
-                if (_response.success) {
+              if (widget.report != null) {
+                if (_nameOfReport.text.isNotEmpty &&
+                    _date.text.isNotEmpty &&
+                    _description.text.isNotEmpty &&
+                    files.isNotEmpty &&
+                    _date.text.isNotEmpty) {
+                  setState(() {
+                    _loading = true;
+                  });
+                  EditReportRequest _request = EditReportRequest(
+                      id: widget.report.id,
+                      name: _nameOfReport.text,
+                      description: _description.text,
+                      patient: selectedPatient,
+                      reportImage: files,
+                      date: selectedDate);
+                  print(_request.toJson().toString());
+                  EditReportResponse _response = await editReport(_request);
+                  print('Edit Report Request ${_request.toJson()}');
+                  print('Edit Report Response ${_response.toJson()}');
+                  if (_response.success) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Updated successfully!"),
+                    ));
+                    await Future.delayed(Duration(seconds: 1));
+                    Navigator.pop(context);
+                  }
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("Added successfully!"),
+                    content: Text("Please fill all the details"),
                   ));
-                  await Future.delayed(Duration(seconds: 1));
-                  Navigator.pop(context);
                 }
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("Please fill all the details"),
-                ));
+                if (_nameOfReport.text.isNotEmpty &&
+                    _date.text.isNotEmpty &&
+                    _description.text.isNotEmpty &&
+                    files.isNotEmpty &&
+                    _date.text.isNotEmpty) {
+                  setState(() {
+                    _loading = true;
+                  });
+                  AddReportRequest _request = AddReportRequest(
+                      name: _nameOfReport.text,
+                      description: _description.text,
+                      patient: selectedPatient,
+                      reportImage: files,
+                      date: selectedDate);
+                  print(_request.toJson().toString());
+                  AddReportResponse _response = await addReport(_request);
+                  print('Add Report Request ${_request.toJson()}');
+                  print('Add Report Response ${_response.toJson()}');
+                  if (_response.success) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Added successfully!"),
+                    ));
+                    await Future.delayed(Duration(seconds: 1));
+                    Navigator.pop(context);
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Please fill all the details"),
+                  ));
+                }
               }
             },
             width: double.infinity,

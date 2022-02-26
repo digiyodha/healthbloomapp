@@ -1,5 +1,7 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:health_bloom/model/request/edit_bill_request.dart';
+import 'package:health_bloom/model/response/edit_bill_response.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
@@ -16,7 +18,7 @@ import 'package:path/path.dart' as path;
 
 class AddBill extends StatefulWidget {
   final GetAllDocumentsResponseBill bill;
-  const AddBill({Key key,this.bill}) : super(key: key);
+  const AddBill({Key key, this.bill}) : super(key: key);
 
   @override
   State<AddBill> createState() => _AddBillState();
@@ -82,6 +84,12 @@ class _AddBillState extends State<AddBill> {
     return _response;
   }
 
+  Future<EditBillResponse> editBill(EditBillRequest request) async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    EditBillResponse _response = await adminAPI.editBillAPI(request);
+    return _response;
+  }
+
   Future<GetAllMemberResponse> getAllmember() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     GetAllMemberResponse _response = await adminAPI.getAllMemberAPI();
@@ -92,11 +100,11 @@ class _AddBillState extends State<AddBill> {
   void initState() {
     super.initState();
     _future = getAllmember();
-    if(widget.bill != null){
-      _billName.text = widget.bill.name;
+    if (widget.bill != null) {
+      _billName.text = widget.bill.name.toString();
       _amount.text = widget.bill.amount.toString();
       _date.text =
-      "${widget.bill.date.day}/${widget.bill.date.month}/${widget.bill.date.year}";
+          "${widget.bill.date.day}/${widget.bill.date.month}/${widget.bill.date.year}";
       _description.text = widget.bill.description;
       _familyMember.text = widget.bill.patient.name;
       _memberId = widget.bill.patient.id;
@@ -391,34 +399,71 @@ class _AddBillState extends State<AddBill> {
             disabledColor: kGreyLite,
             text: "Submit",
             onPressed: () async {
-              if (_billName.text.isNotEmpty &&
-                  _amount.text.isNotEmpty &&
-                  _date.text.isNotEmpty &&
-                  _description.text.isNotEmpty &&
-                  _familyMember.text.isNotEmpty) {
-                setState(() {
-                  _loading = true;
-                });
-                AddBillRequest _request = AddBillRequest(
-                    name: _billName.text,
-                    amount: double.parse(_amount.text),
-                    date: selectedDate,
-                    description: _description.text,
-                    patient: _memberId,
-                    billImage: files);
-                print(_request.toJson().toString());
-                AddBillResponse _response = await addBill(_request);
-                if (_response.success) {
+              if (widget.bill != null) {
+                if (_billName.text.isNotEmpty &&
+                    _amount.text.isNotEmpty &&
+                    _date.text.isNotEmpty &&
+                    _description.text.isNotEmpty &&
+                    _familyMember.text.isNotEmpty) {
+                  setState(() {
+                    _loading = true;
+                  });
+
+                  EditBillRequest _request = EditBillRequest(
+                      id: widget.bill.id,
+                      name: _billName.text,
+                      amount: double.parse(_amount.text),
+                      date: selectedDate,
+                      description: _description.text,
+                      patient: _memberId,
+                      billImage: files);
+                  print('Edit Bill request ${_request.toJson()}');
+                  EditBillResponse _response = await editBill(_request);
+                  print('Edit Bill response ${_response.toJson()}');
+                  if (_response.success) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Updated successfully!"),
+                    ));
+                    await Future.delayed(Duration(seconds: 1));
+                    Navigator.pop(context);
+                  }
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("Added successfully!"),
+                    content: Text("Please fill all the details"),
                   ));
-                  await Future.delayed(Duration(seconds: 1));
-                  Navigator.pop(context);
                 }
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("Please fill all the details"),
-                ));
+                if (_billName.text.isNotEmpty &&
+                    _amount.text.isNotEmpty &&
+                    _date.text.isNotEmpty &&
+                    _description.text.isNotEmpty &&
+                    _familyMember.text.isNotEmpty) {
+                  setState(() {
+                    _loading = true;
+                  });
+
+                  AddBillRequest _request = AddBillRequest(
+                      name: _billName.text,
+                      amount: double.parse(_amount.text),
+                      date: selectedDate,
+                      description: _description.text,
+                      patient: _memberId,
+                      billImage: files);
+                  print('Add Bill request ${_request.toJson()}');
+                  AddBillResponse _response = await addBill(_request);
+                  print('Add Bill response ${_response.toJson()}');
+                  if (_response.success) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Added successfully!"),
+                    ));
+                    await Future.delayed(Duration(seconds: 1));
+                    Navigator.pop(context);
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Please fill all the details"),
+                  ));
+                }
               }
             },
             width: double.infinity,

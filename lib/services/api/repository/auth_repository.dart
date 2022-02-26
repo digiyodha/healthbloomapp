@@ -4,6 +4,10 @@ import 'package:health_bloom/model/request/add_member_request.dart';
 import 'package:health_bloom/model/request/add_prescription_request.dart';
 import 'package:health_bloom/model/request/add_report_request.dart';
 import 'package:health_bloom/model/request/delete_member_request.dart';
+import 'package:health_bloom/model/request/edit_bill_request.dart';
+import 'package:health_bloom/model/request/edit_member_request.dart';
+import 'package:health_bloom/model/request/edit_prescription_request.dart';
+import 'package:health_bloom/model/request/edit_report_request.dart';
 import 'package:health_bloom/model/request/get_documents_request.dart';
 import 'package:health_bloom/model/request/login_user_resquest.dart';
 import 'package:health_bloom/model/request/resgister_user_request.dart';
@@ -12,8 +16,11 @@ import 'package:health_bloom/model/response/add_family_response.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
 import 'package:health_bloom/model/response/add_report_response.dart';
 import 'package:health_bloom/model/response/delete_member_response.dart';
+import 'package:health_bloom/model/response/edit_bill_response.dart';
+import 'package:health_bloom/model/response/edit_member_response.dart';
+import 'package:health_bloom/model/response/edit_prescription_response.dart';
+import 'package:health_bloom/model/response/edit_report_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
-import 'package:health_bloom/model/response/get_docuemnets_respnse.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/model/response/login_uesr_response.dart';
 import 'package:health_bloom/model/response/register_user_response.dart';
@@ -132,6 +139,7 @@ class NetworkRepository with ChangeNotifier {
     Result apiResult = await apiClient.deletePrescription(request);
     if (apiResult is Success) return apiResult.data;
     if (apiResult is Error) throw apiResult.error;
+    return deletePrescriptionAPI(request);
   }
 
   Future<DeleteReportResponse> deleteReportAPI(
@@ -139,6 +147,7 @@ class NetworkRepository with ChangeNotifier {
     Result apiResult = await apiClient.deleteReport(request);
     if (apiResult is Success) return apiResult.data;
     if (apiResult is Error) throw apiResult.error;
+    return deleteReportAPI(request);
   }
 
   Future<DeleteBillResponse> deleteBillAPI(
@@ -146,5 +155,35 @@ class NetworkRepository with ChangeNotifier {
     Result apiResult = await apiClient.deleteBill(request);
     if (apiResult is Success) return apiResult.data;
     if (apiResult is Error) throw apiResult.error;
+    return deleteBillAPI(request);
+  }
+
+  Future<EditMemberResponse> editMemberAPI(EditMemberRequest request) async {
+    Result apiResult = await apiClient.editMember(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return editMemberAPI(request);
+  }
+
+  Future<EditBillResponse> editBillAPI(EditBillRequest request) async {
+    Result apiResult = await apiClient.editBill(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return editBillAPI(request);
+  }
+
+  Future<EditReportResponse> editReportAPI(EditReportRequest request) async {
+    Result apiResult = await apiClient.editReport(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return editReportAPI(request);
+  }
+
+  Future<EditPriscriptionResponse> editPrescriptionAPI(
+      EditPriscriptionRequest request) async {
+    Result apiResult = await apiClient.editPrescription(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return editPrescriptionAPI(request);
   }
 }

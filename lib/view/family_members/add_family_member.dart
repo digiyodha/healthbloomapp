@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/model/request/add_member_request.dart';
+import 'package:health_bloom/model/request/edit_member_request.dart';
 import 'package:health_bloom/model/response/add_family_response.dart';
+import 'package:health_bloom/model/response/edit_member_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
@@ -28,6 +30,12 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   Future<AddMemberResponse> addMember(AddMemberRequest request) async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     AddMemberResponse _response = await adminAPI.addMemberAPI(request);
+    return _response;
+  }
+
+  Future<EditMemberResponse> editMember(EditMemberRequest request) async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    EditMemberResponse _response = await adminAPI.editMemberAPI(request);
     return _response;
   }
 
