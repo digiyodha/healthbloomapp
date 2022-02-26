@@ -14,6 +14,7 @@ import 'package:health_bloom/model/response/add_report_response.dart';
 import 'package:health_bloom/model/response/delete_member_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/get_docuemnets_respnse.dart';
+import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/model/response/login_uesr_response.dart';
 import 'package:health_bloom/model/response/register_user_response.dart';
 import 'package:health_bloom/services/api/networkmanager/auth_networkmanager.dart';
@@ -112,9 +113,17 @@ class NetworkRepository with ChangeNotifier {
   /// Get docuemnets
   Future<GetDocumentsResponse> getDocumentsAPI(
       GetDocumentsRequest request) async {
-    Result apiResult = await apiClient.gfetDocuments(request);
+    Result apiResult = await apiClient.getDocuments(request);
     if (apiResult is Success) return apiResult.data;
     if (apiResult is Error) throw apiResult.error;
     return getDocumentsAPI(request);
+  }
+
+  /// Get docuemnets
+  Future<GetUserResponse> getUserAPI() async {
+    Result apiResult = await apiClient.getUser();
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return getUserAPI();
   }
 }

@@ -28,12 +28,13 @@ class GetUserResponseData {
     this.emailId,
     this.password,
     this.name,
-    this.countryCode,
-    this.phoneNumber,
-    this.googleAddress,
-    this.userAddress,
     this.city,
+    this.countryCode,
+    this.googleAddress,
+    this.phoneNumber,
     this.state,
+    this.userAddress,
+    this.avatar,
     this.id,
   });
 
@@ -42,12 +43,13 @@ class GetUserResponseData {
   String emailId;
   String password;
   String name;
-  String countryCode;
-  String phoneNumber;
-  String googleAddress;
-  String userAddress;
   String city;
+  String countryCode;
+  String googleAddress;
+  String phoneNumber;
   String state;
+  String userAddress;
+  String avatar;
   String id;
 
   factory GetUserResponseData.fromJson(Map<String, dynamic> json) =>
@@ -57,13 +59,14 @@ class GetUserResponseData {
         emailId: json["email_id"] == null ? null : json["email_id"],
         password: json["password"] == null ? null : json["password"],
         name: json["name"] == null ? null : json["name"],
+        city: json["city"] == null ? null : json["city"],
         countryCode: json["country_code"] == null ? null : json["country_code"],
-        phoneNumber: json["phone_number"] == null ? null : json["phone_number"],
         googleAddress:
             json["google_address"] == null ? null : json["google_address"],
-        userAddress: json["user_address"] == null ? null : json["user_address"],
-        city: json["city"] == null ? null : json["city"],
+        phoneNumber: json["phone_number"] == null ? null : json["phone_number"],
         state: json["state"] == null ? null : json["state"],
+        userAddress: json["user_address"] == null ? null : json["user_address"],
+        avatar: json["avatar"] == null ? null : json["avatar"],
         id: json["id"] == null ? null : json["id"],
       );
 
@@ -73,12 +76,13 @@ class GetUserResponseData {
         "email_id": emailId == null ? null : emailId,
         "password": password == null ? null : password,
         "name": name == null ? null : name,
-        "country_code": countryCode == null ? null : countryCode,
-        "phone_number": phoneNumber == null ? null : phoneNumber,
-        "google_address": googleAddress == null ? null : googleAddress,
-        "user_address": userAddress == null ? null : userAddress,
         "city": city == null ? null : city,
+        "country_code": countryCode == null ? null : countryCode,
+        "google_address": googleAddress == null ? null : googleAddress,
+        "phone_number": phoneNumber == null ? null : phoneNumber,
         "state": state == null ? null : state,
+        "user_address": userAddress == null ? null : userAddress,
+        "avatar": avatar == null ? null : avatar,
         "id": id == null ? null : id,
       };
 }

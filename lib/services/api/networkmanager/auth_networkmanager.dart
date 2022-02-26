@@ -16,6 +16,7 @@ import 'package:health_bloom/model/response/add_report_response.dart';
 import 'package:health_bloom/model/response/delete_member_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/get_docuemnets_respnse.dart';
+import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/model/response/login_uesr_response.dart';
 import 'package:health_bloom/model/response/register_user_response.dart';
 import 'package:health_bloom/services/api/endpoints.dart';
@@ -226,7 +227,7 @@ class NetworkManager {
   }
 
   // Get documents
-  Future<Result> gfetDocuments(GetDocumentsRequest request) async {
+  Future<Result> getDocuments(GetDocumentsRequest request) async {
     AuthEndpoint endpoint = AuthEndpoints.getDocuments;
     endpoint.addBody(request);
     String xAuthToken = sp.getString('xAuthToken');
@@ -243,6 +244,28 @@ class NetworkManager {
       print(response);
 
       return Success<GetDocumentsResponse>(response);
+    }
+    return result;
+  }
+
+  // Get documents
+  Future<Result> getUser() async {
+    AuthEndpoint endpoint = AuthEndpoints.getUser;
+    // endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      GetUserResponse response =
+          GetUserResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<GetUserResponse>(response);
     }
     return result;
   }

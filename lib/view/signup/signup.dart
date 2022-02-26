@@ -7,7 +7,7 @@ import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/login/login.dart';
 import 'package:health_bloom/view/login/phone_login.dart';
-import 'package:health_bloom/view/profile/edit_prodile.dart';
+import 'package:health_bloom/view/profile/edit_profile.dart';
 import 'package:provider/provider.dart';
 
 class SignUp extends StatefulWidget {
