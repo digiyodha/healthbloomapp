@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:health_bloom/components/textbuilder.dart';
+import 'package:health_bloom/components/custom_tab.dart';
+import 'package:health_bloom/components/medical_bills_card.dart';
 import 'package:health_bloom/model/request/get_documents_request.dart';
 import 'package:health_bloom/model/response/get_docuemnets_respnse.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
+import 'package:health_bloom/view/bill/edit_bill.dart';
 import 'package:provider/provider.dart';
-import '../../components/custom_contained_button.dart';
-import '../../model/response/get_all_member_response.dart';
+
 import '../../services/api/repository/auth_repository.dart';
-// ignore: unused_import
-import '../../utils/drop_down/custom_dropdown.dart';
+
 import '../../utils/text_field/custom_text_field.dart';
 
 class Documents extends StatefulWidget {
@@ -20,11 +20,11 @@ class Documents extends StatefulWidget {
 }
 
 class _DocumentsState extends State<Documents> {
-  TextEditingController _date = TextEditingController();
-
+  TextEditingController _fromDate = TextEditingController();
+  TextEditingController _toDate = TextEditingController();
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
-
+  int currentIndex = 0;
   bool _loading = false;
 
   Future<void> _startDate(BuildContext context) async {
@@ -37,7 +37,7 @@ class _DocumentsState extends State<Documents> {
       setState(() {
         selectedStartDate = picked;
       });
-      _date.text =
+      _fromDate.text =
           "${selectedStartDate.day}/${selectedStartDate.month}/${selectedStartDate.year}";
     }
   }
@@ -52,20 +52,16 @@ class _DocumentsState extends State<Documents> {
       setState(() {
         selectedEndDate = picked;
       });
-      _date.text =
+      _toDate.text =
           "${selectedEndDate.day}/${selectedEndDate.month}/${selectedEndDate.year}";
     }
   }
 
-  Future<GetDocumentsResponse> getDocuments(GetDocumentsRequest request) async {
+  Future<GetDocumentsResponse> getDocuments() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    GetDocumentsResponse _response = await adminAPI.getDocumentsAPI(request);
-    return _response;
-  }
-
-  Future<GetAllMemberResponse> getAllmember() async {
-    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    GetAllMemberResponse _response = await adminAPI.getAllMemberAPI();
+    GetDocumentsResponse _response = await adminAPI.getDocumentsAPI(
+        GetDocumentsRequest(
+            fromDate: selectedStartDate, toDate: selectedEndDate));
     return _response;
   }
 
@@ -121,73 +117,113 @@ class _DocumentsState extends State<Documents> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    CustomTextField(
-                      readOnly: true,
-                      maxLines: 1,
-                      controller: _date,
-                      label: "Date of Bill",
-                      textInputType: TextInputType.text,
-                      onChanged: () {},
-                      onTap: () {
-                        _startDate(context);
-                      },
-                    ),
-                    ListView.builder(
-                      itemCount: 5,
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          height: 100,
-                          width: double.infinity,
-                          child: Row(
-                            children: [
-                              Container(
-                                height: 100,
-                                decoration: BoxDecoration(),
-                                child: CircleAvatar(
-                                  radius: 40,
-                                  backgroundColor: kWhite,
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.person,
-                                      color: kGrey4,
-                                      size: 40,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Color(0xffA283F9),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextBuilder(
-                                      text: 'Name of Bill',
-                                      color: Colors.white,
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    const SizedBox(height: 10.0),
-                                    TextBuilder(
-                                      text: 'Patient Name',
-                                      color: Colors.white,
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    const SizedBox(height: 20.0),
-                                    Row(
-                                      children: [],
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomTextField(
+                            readOnly: true,
+                            maxLines: 1,
+                            controller: _fromDate,
+                            label: "Start Date",
+                            textInputType: TextInputType.text,
+                            onChanged: () {},
+                            onTap: () {
+                              _startDate(context);
+                            },
                           ),
-                        );
+                        ),
+                        const SizedBox(width: 20.0),
+                        Expanded(
+                          child: CustomTextField(
+                            readOnly: true,
+                            maxLines: 1,
+                            controller: _toDate,
+                            label: "End Date",
+                            textInputType: TextInputType.text,
+                            onChanged: () {},
+                            onTap: () {
+                              _endDate(context);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16.0),
+                    Container(
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: CustomTab(
+                              onTap: () {
+                                setState(() {
+                                  currentIndex = 0;
+                                });
+                              },
+                              icon: 'assets/icons/bill.png',
+                              title: 'Bills',
+                              isSelected: currentIndex == 0,
+                            ),
+                          ),
+                          Expanded(
+                            child: CustomTab(
+                              onTap: () {
+                                setState(() {
+                                  currentIndex = 1;
+                                });
+                              },
+                              icon: 'assets/icons/business-report.png',
+                              title: 'Reports',
+                              isSelected: currentIndex == 1,
+                            ),
+                          ),
+                          Expanded(
+                            child: CustomTab(
+                              onTap: () {
+                                setState(() {
+                                  currentIndex = 2;
+                                });
+                              },
+                              icon: 'assets/icons/medical-prescription.png',
+                              title: 'Prescriptions',
+                              isSelected: currentIndex == 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    FutureBuilder<GetDocumentsResponse>(
+                      future: getDocuments(),
+                      builder: (context, data) {
+                        if (data.hasData) {
+                          return ListView.builder(
+                            itemCount: data.data.data.bill.length,
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            itemBuilder: (BuildContext context, int index) {
+                              print('Bill count ' +
+                                  data.data.data.bill.length.toString());
+                              return MedicalBillsCard(
+                                nameOfBill: data.data.data.bill[index].name,
+                                nameOfPatients: 'Patient Name',
+                                dateOfBill: data.data.data.bill[index].date,
+                                onTap: () {},
+                                edit: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditBill(),
+                                    ),
+                                  );
+                                },
+                                delete: () {},
+                              );
+                            },
+                          );
+                        } else if (data.hasError) {
+                          return Text("${data.error}");
+                        }
+                        return Center(child: CircularProgressIndicator());
                       },
                     ),
                     SizedBox(height: 16),
@@ -198,54 +234,6 @@ class _DocumentsState extends State<Documents> {
           ),
           if (_loading) LoadingWidget()
         ],
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
-            color: kWhite),
-        padding: EdgeInsets.symmetric(horizontal: 24),
-        height: 80,
-        child: Align(
-          alignment: Alignment.center,
-          child: CustomContainedButton(
-            height: 58,
-            textSize: 16,
-            disabledColor: kGreyLite,
-            text: "Submit",
-            onPressed: () async {
-              // if (_billName.text.isNotEmpty &&
-              //     _amount.text.isNotEmpty &&
-              //     _date.text.isNotEmpty &&
-              //     _description.text.isNotEmpty &&
-              //     _familyMember.text.isNotEmpty) {
-              //   setState(() {
-              //     _loading = true;
-              //   });
-              //   DocumentsRequest _request = DocumentsRequest(
-              //       name: _billName.text,
-              //       amount: double.parse(_amount.text),
-              //       date: selectedDate,
-              //       description: _description.text,
-              //       patient: _memberId,
-              //       billImage: files);
-              //   print(_request.toJson().toString());
-              //   DocumentsResponse _response = await Documents(_request);
-              //   if (_response.success) {
-              //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              //       content: Text("Added successfully!"),
-              //     ));
-              //     await Future.delayed(Duration(seconds: 1));
-              //     Navigator.pop(context);
-              //   }
-              // } else {
-              //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              //     content: Text("Please fill all the details"),
-              //   ));
-              // }
-            },
-            width: double.infinity,
-          ),
-        ),
       ),
     );
   }

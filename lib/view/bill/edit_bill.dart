@@ -1,0 +1,435 @@
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:health_bloom/model/response/response.dart';
+import 'package:health_bloom/utils/colors.dart';
+import 'package:health_bloom/utils/loading.dart';
+import 'package:provider/provider.dart';
+import '../../components/custom_contained_button.dart';
+import '../../model/request/request.dart';
+import '../../model/response/get_all_member_response.dart';
+import '../../services/api/repository/auth_repository.dart';
+import '../../utils/drop_down/custom_dropdown.dart';
+import '../../utils/text_field/custom_text_field.dart';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:path/path.dart' as path;
+
+class EditBill extends StatefulWidget {
+  final String billName;
+  final String amount;
+  final DateTime billDate;
+  final String description;
+  final String patientId;
+  final List<String> files;
+
+  const EditBill(
+      {Key key,
+      this.billName,
+      this.amount,
+      this.billDate,
+      this.description,
+      this.patientId,
+      this.files})
+      : super(key: key);
+
+  @override
+  State<EditBill> createState() => _EditBillState();
+}
+
+class _EditBillState extends State<EditBill> {
+  TextEditingController _billName = TextEditingController();
+  TextEditingController _amount = TextEditingController();
+  TextEditingController _date = TextEditingController();
+  TextEditingController _description = TextEditingController();
+  TextEditingController _familyMember = TextEditingController();
+  DateTime selectedDate = DateTime.now();
+  FilePickerResult _attachmentFile;
+  File _file;
+  UploadTask task;
+  bool _loading = false;
+  List<String> files = [];
+  Future _future;
+  String _memberId;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+      _date.text =
+          "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+    }
+  }
+
+  Future getFile(BuildContext context) async {
+    setState(() {
+      _loading = true;
+    });
+    _attachmentFile = await FilePicker.platform.pickFiles(type: FileType.any);
+    if (_attachmentFile != null) {
+      _file = File(_attachmentFile.files.single.path);
+      final ref =
+          FirebaseStorage.instance.ref('files/${path.basename(_file.path)}');
+      task = ref.putFile(_file);
+      final snapshot = await task.whenComplete(() {});
+      final url = await snapshot.ref.getDownloadURL();
+      debugPrint(url);
+      files.add(url);
+      setState(() {
+        _loading = false;
+      });
+    } else {
+      setState(() {
+        _loading = false;
+      });
+    }
+  }
+
+  Future<AddBillResponse> addBill(AddBillRequest request) async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    AddBillResponse _response = await adminAPI.addBillAPI(request);
+    return _response;
+  }
+
+  Future<GetAllMemberResponse> getAllmember() async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    GetAllMemberResponse _response = await adminAPI.getAllMemberAPI();
+    return _response;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _future = getAllmember();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: Text("Edit Bill"),
+        centerTitle: true,
+      ),
+      backgroundColor: kWhite,
+      body: FutureBuilder<GetAllMemberResponse>(
+        future: _future,
+        builder: (context, data) {
+          if (data.hasData) {
+            return Stack(
+              children: [
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 300,
+                    width: double.infinity,
+                    child: Image.asset(
+                      "assets/images/medical_bill.jpg",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  top: 180,
+                  child: Container(
+                    padding: EdgeInsets.only(top: 40, left: 24, right: 24),
+                    decoration: BoxDecoration(
+                        color: kWhite,
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(30),
+                            topLeft: Radius.circular(30))),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          CustomTextField(
+                            maxLines: 1,
+                            controller: _billName =
+                                TextEditingController(text: widget.billName),
+                            label: "Name of Bill",
+                            textInputType: TextInputType.name,
+                            onChanged: () {},
+                            onTap: () {},
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          CustomTextField(
+                            maxLines: 1,
+                            controller: _amount =
+                                TextEditingController(text: widget.amount),
+                            label: "Amount",
+                            textInputType: TextInputType.number,
+                            onChanged: () {},
+                            onTap: () {},
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          CustomTextField(
+                            readOnly: true,
+                            maxLines: 1,
+                            controller: _date,
+                            label: "Date of Bill",
+                            textInputType: TextInputType.text,
+                            onChanged: () {},
+                            onTap: () {
+                              _selectDate(context);
+                            },
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          CustomTextField(
+                            maxLines: 3,
+                            controller: _description,
+                            label: "Description",
+                            textInputType: TextInputType.name,
+                            onChanged: () {},
+                            onTap: () {},
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          CustomDropDown(
+                            title: "Select Family Member",
+                            controller: _familyMember,
+                            dropDownData:
+                                data.data.data.map((e) => e.name).toList(),
+                            stateCallback: (int i) {
+                              _memberId = data.data.data[i].id;
+                            },
+                          ),
+                          SizedBox(
+                            height: 24,
+                          ),
+                          if (files.isNotEmpty)
+                            Column(
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  child: Wrap(
+                                    children: List.generate(
+                                        files.length,
+                                        (index) => Container(
+                                              height: 100,
+                                              width: 100,
+                                              child: Stack(
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return AlertDialog(
+                                                              content: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      Text(
+                                                                        'Image',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                20,
+                                                                            fontWeight:
+                                                                                FontWeight.w600),
+                                                                      ),
+                                                                      GestureDetector(
+                                                                        child: Icon(
+                                                                            Icons.close),
+                                                                        onTap:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 16,
+                                                                  ),
+                                                                  Container(
+                                                                    margin: EdgeInsets
+                                                                        .all(1),
+                                                                    height: 325,
+                                                                    width: double
+                                                                        .infinity,
+                                                                    child: Image
+                                                                        .network(
+                                                                      files[
+                                                                          index],
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
+                                                                  ),
+                                                                  // SizedBox(height: 16,),
+                                                                  // CustomContainedButton(
+                                                                  //   text: "Download",
+                                                                  //   textSize: 20,
+                                                                  //   weight: FontWeight.w600,
+                                                                  //   height: 48,
+                                                                  //   width: 328,
+                                                                  //   disabledColor: kTeal4,
+                                                                  //   onPressed: () async{
+                                                                  //     if(kIsWeb){
+                                                                  //       downloadImage(widget.url,widget.assetName);
+                                                                  //     }else{
+                                                                  //       _download(widget.assetName, widget.url);
+                                                                  //     }
+                                                                  //   },
+                                                                  // )
+                                                                ],
+                                                              ),
+                                                            );
+                                                          },
+                                                          barrierDismissible:
+                                                              false);
+                                                    },
+                                                    child: Container(
+                                                      height: 100,
+                                                      width: 100,
+                                                      child: Image.asset(
+                                                          "assets/icons/prescription.png"),
+                                                    ),
+                                                  ),
+                                                  Positioned(
+                                                    top: 10,
+                                                    right: 18,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        files.removeAt(index);
+                                                        setState(() {});
+                                                      },
+                                                      child: CircleAvatar(
+                                                        backgroundColor:
+                                                            Color(0xffFF9B91),
+                                                        radius: 12,
+                                                        child: Icon(
+                                                          Icons.close,
+                                                          color: kWhite,
+                                                          size: 16,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            )),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 24,
+                                ),
+                              ],
+                            ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 24),
+                            height: 75,
+                            child: Align(
+                              alignment: Alignment.topCenter,
+                              child: CustomContainedButton(
+                                color: Color(0xffFF9B91),
+                                height: 58,
+                                textSize: 16,
+                                disabledColor: kGreyLite,
+                                text: "Add Bill",
+                                onPressed: () {
+                                  getFile(context);
+                                },
+                                width: double.infinity,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                if (_loading) LoadingWidget()
+              ],
+            );
+          } else {
+            return LoadingWidget();
+          }
+        },
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
+            color: kWhite),
+        padding: EdgeInsets.symmetric(horizontal: 24),
+        height: 80,
+        child: Align(
+          alignment: Alignment.center,
+          child: CustomContainedButton(
+            height: 58,
+            textSize: 16,
+            disabledColor: kGreyLite,
+            text: "Submit",
+            onPressed: () async {
+              if (_billName.text.isNotEmpty &&
+                  _amount.text.isNotEmpty &&
+                  _date.text.isNotEmpty &&
+                  _description.text.isNotEmpty &&
+                  _familyMember.text.isNotEmpty) {
+                setState(() {
+                  _loading = true;
+                });
+                AddBillRequest _request = AddBillRequest(
+                    name: _billName.text,
+                    amount: double.parse(_amount.text),
+                    date: selectedDate,
+                    description: _description.text,
+                    patient: _memberId,
+                    billImage: files);
+                print(_request.toJson().toString());
+                AddBillResponse _response = await addBill(_request);
+                if (_response.success) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Added successfully!"),
+                  ));
+                  await Future.delayed(Duration(seconds: 1));
+                  Navigator.pop(context);
+                }
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("Please fill all the details"),
+                ));
+              }
+            },
+            width: double.infinity,
+          ),
+        ),
+      ),
+    );
+  }
+}
