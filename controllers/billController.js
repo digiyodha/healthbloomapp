@@ -52,7 +52,8 @@ exports.editBill = asyncHandler(async (req, res, next) => {
 exports.searchBill = asyncHandler(async (req, res, next) => {
     var {name} = req.body;
     // const bill = await Bill.find({$text: {$search: name}});
-    const bill = await Bill.find({$or: [
+    var bill_object = [];
+    const billObject = await Bill.find({$or: [
         {
             name: {
                 $regex: name,
@@ -68,21 +69,26 @@ exports.searchBill = asyncHandler(async (req, res, next) => {
 
     ],  
         user_id: req.user.id});
-    res.status(200).json({ success: true, data: bill });
+
+    var billPromise = await billObject.map(async function(bill){
+        var patientObject = await Family.findOne({_id: bill.patient});
+        var userObject = await User.findOne({_id: bill.user_id});
+
+        bill_object.push({
+            _id: bill._id,
+            name: bill.name,
+            amount: bill.amount,
+            date: bill.date,
+            description: bill.description,
+            bill_image: bill.bill_image,
+            patient: patientObject,
+            user: userObject
+        });
+    });
+    await Promise.all(billPromise);
+    res.status(200).json({ success: true, data: bill_object });
 });
 
-// //filter bill
-// exports.filterBill = asyncHandler(async (req, res, next) => {
-//     const {name} = req.body;
-//     const bill = await Bill.find({$text: {$search: name}});
-//     // if(!user)
-//     // {
-//     //     return next(
-//     //     new ErrorResponse(`User id invalid`, 404)
-//     //     );
-//     // }
-//     res.status(200).json({ success: true, data: bill });
-// });
 
 //delete bill
 exports.deleteBill = asyncHandler(async (req, res, next) => {
@@ -107,19 +113,45 @@ exports.getBill = asyncHandler(async (req, res, next) => {
         new ErrorResponse(`Bill id invalid`, 404)
         );
     }
-    res.status(200).json({ success: true, data: bill });
+    var patientObject = await Family.findOne({_id: bill.patient});
+    var userObject = await User.findOne({_id: bill.user_id});
+
+    var bill_object = {
+        _id: bill._id,
+        name: bill.name,
+        amount: bill.amount,
+        date: bill.date,
+        description: bill.description,
+        bill_image: bill.bill_image,
+        patient: patientObject,
+        user: userObject
+    };
+    
+    res.status(200).json({ success: true, data: bill_object });
 });
 
 
 //get bill by family
 exports.getBillFamily = asyncHandler(async (req, res, next) => {
     var {patient} = req.body;
-    const bill = await Bill.find({patient: patient}).sort([['date', -1]]);
-    if(!bill)
-    {
-        return next(
-        new ErrorResponse(`Bill id invalid`, 404)
-        );
-    }
-    res.status(200).json({ success: true, data: bill });
+    var bill_object = [];
+    const billObject = await Bill.find({patient: patient}).sort([['date', -1]]);
+
+    var billPromise = await billObject.map(async function(bill){
+        var patientObject = await Family.findOne({_id: bill.patient});
+        var userObject = await User.findOne({_id: bill.user_id});
+
+        bill_object.push({
+            _id: bill._id,
+            name: bill.name,
+            amount: bill.amount,
+            date: bill.date,
+            description: bill.description,
+            bill_image: bill.bill_image,
+            patient: patientObject,
+            user: userObject
+        });
+    });
+    await Promise.all(billPromise);
+    res.status(200).json({ success: true, data: bill_object });
 });

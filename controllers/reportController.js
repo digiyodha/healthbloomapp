@@ -49,26 +49,32 @@ exports.editReport = asyncHandler(async (req, res, next) => {
 //search Report
 exports.searchReport = asyncHandler(async (req, res, next) => {
     var {name} = req.body;
-    const report = await Report.find().where({name: {
+    const reportObject = await Report.find().where({name: {
         $regex: name,
         $options: 'i'
         },  
         user_id: req.user.id});
-    res.status(200).json({ success: true, data: report });
+    
+    var report_object = [];
+    var reportPromise = await reportObject.map(async function(report){
+        var patientObject = await Family.findOne({_id: report.patient});
+        var userObject = await User.findOne({_id: report.user_id});
+
+        report_object.push({
+            _id: report._id,
+            name: report.name,
+            date: report.date,
+            description: report.description,
+            report_image: report.report_image,
+            patient: patientObject,
+            user: userObject
+        });
+    });
+    await Promise.all(reportPromise);
+
+    res.status(200).json({ success: true, data: report_object });
 });
 
-// //filter bill
-// exports.filterBill = asyncHandler(async (req, res, next) => {
-//     const {name} = req.body;
-//     const bill = await Bill.find({$text: {$search: name}});
-//     // if(!user)
-//     // {
-//     //     return next(
-//     //     new ErrorResponse(`User id invalid`, 404)
-//     //     );
-//     // }
-//     res.status(200).json({ success: true, data: bill });
-// });
 
 //delete report
 exports.deleteReport = asyncHandler(async (req, res, next) => {
@@ -93,18 +99,43 @@ exports.getReport = asyncHandler(async (req, res, next) => {
         new ErrorResponse(`Report id invalid`, 404)
         );
     }
-    res.status(200).json({ success: true, data: report });
+
+    var patientObject = await Family.findOne({_id: report.patient});
+    var userObject = await User.findOne({_id: report.user_id});
+
+    var report_object = {
+        _id: report._id,
+        name: report.name,
+        date: report.date,
+        description: report.description,
+        report_image: report.report_image,
+        patient: patientObject,
+        user: userObject
+    };
+    
+    res.status(200).json({ success: true, data: report_object });
 });
 
 //get report by family member
 exports.getReportFamily = asyncHandler(async (req, res, next) => {
     var {patient} = req.body;
-    const report = await Report.find({patient: patient}).sort([['date', -1]]);
-    if(!report)
-    {
-        return next(
-        new ErrorResponse(`Report id invalid`, 404)
-        );
-    }
-    res.status(200).json({ success: true, data: report });
+    const reportObject = await Report.find({patient: patient}).sort([['date', -1]]);
+    
+    var report_object = [];
+    var reportPromise = await reportObject.map(async function(report){
+        var patientObject = await Family.findOne({_id: report.patient});
+        var userObject = await User.findOne({_id: report.user_id});
+
+        report_object.push({
+            _id: report._id,
+            name: report.name,
+            date: report.date,
+            description: report.description,
+            report_image: report.report_image,
+            patient: patientObject,
+            user: userObject
+        });
+    });
+    await Promise.all(reportPromise);
+    res.status(200).json({ success: true, data: report_object });
 });

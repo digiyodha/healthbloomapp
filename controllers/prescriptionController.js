@@ -53,7 +53,7 @@ exports.editPrescription = asyncHandler(async (req, res, next) => {
 //search Prescription
 exports.searchPrescription = asyncHandler(async (req, res, next) => {
     var {name} = req.body;
-    const prescription = await Prescription.find({$or: [
+    const prescriptionObject = await Prescription.find({$or: [
         {
             doctor_name: {
                 $regex: name,
@@ -69,21 +69,28 @@ exports.searchPrescription = asyncHandler(async (req, res, next) => {
     ],  
         user_id: req.user.id
     });
-    res.status(200).json({ success: true, data: prescription });
-});
 
-// //filter bill
-// exports.filterBill = asyncHandler(async (req, res, next) => {
-//     const {name} = req.body;
-//     const bill = await Bill.find({$text: {$search: name}});
-//     // if(!user)
-//     // {
-//     //     return next(
-//     //     new ErrorResponse(`User id invalid`, 404)
-//     //     );
-//     // }
-//     res.status(200).json({ success: true, data: bill });
-// });
+    var prescription_object = [];
+    var prescriptionPromise = await prescriptionObject.map(async function(prescription){
+        var patientObject = await Family.findOne({_id: prescription.patient});
+        var userObject = await User.findOne({_id: prescription.user_id});
+
+        prescription_object.push({
+            _id: prescription._id,
+            doctor_name: prescription.doctor_name,
+            clinic_name: prescription.clinic_name,
+            user_ailment: prescription.user_ailment,
+            consultation_date: prescription.consultation_date,
+            doctor_advice: prescription.doctor_advice,
+            prescription_image: prescription.prescription_image,
+            patient: patientObject,
+            user: userObject
+        });
+    });
+    await Promise.all(prescriptionPromise);
+
+    res.status(200).json({ success: true, data: prescription_object });
+});
 
 //delete prescription
 exports.deletePrescription = asyncHandler(async (req, res, next) => {
@@ -108,18 +115,48 @@ exports.getPrescription = asyncHandler(async (req, res, next) => {
         new ErrorResponse(`Prescription id invalid`, 404)
         );
     }
-    res.status(200).json({ success: true, data: prescription });
+
+    var patientObject = await Family.findOne({_id: prescription.patient});
+    var userObject = await User.findOne({_id: prescription.user_id});
+
+    var prescription_object = {
+        _id: prescription._id,
+        doctor_name: prescription.doctor_name,
+        clinic_name: prescription.clinic_name,
+        user_ailment: prescription.user_ailment,
+        consultation_date: prescription.consultation_date,
+        doctor_advice: prescription.doctor_advice,
+        prescription_image: prescription.prescription_image,
+        patient: patientObject,
+        user: userObject
+    };
+
+    res.status(200).json({ success: true, data: prescription_object });
 });
 
 //get Prescription by family member
 exports.getPrescriptionFamily = asyncHandler(async (req, res, next) => {
     var {patient} = req.body;
-    const prescription = await Prescription.find({patient: patient}).sort([['consultation_date', -1]]);
-    if(!prescription)
-    {
-        return next(
-        new ErrorResponse(`Prescription id invalid`, 404)
-        );
-    }
-    res.status(200).json({ success: true, data: prescription });
+    const prescriptionObject = await Prescription.find({patient: patient}).sort([['consultation_date', -1]]);
+
+
+    var prescription_object = [];
+    var prescriptionPromise = await prescriptionObject.map(async function(prescription){
+        var patientObject = await Family.findOne({_id: prescription.patient});
+        var userObject = await User.findOne({_id: prescription.user_id});
+
+        prescription_object.push({
+            _id: prescription._id,
+            doctor_name: prescription.doctor_name,
+            clinic_name: prescription.clinic_name,
+            user_ailment: prescription.user_ailment,
+            consultation_date: prescription.consultation_date,
+            doctor_advice: prescription.doctor_advice,
+            prescription_image: prescription.prescription_image,
+            patient: patientObject,
+            user: userObject
+        });
+    });
+    await Promise.all(prescriptionPromise);
+    res.status(200).json({ success: true, data: prescription_object });
 });

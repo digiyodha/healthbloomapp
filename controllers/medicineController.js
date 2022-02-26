@@ -63,7 +63,7 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
 exports.searchMedicine = asyncHandler(async (req, res, next) => {
     var {name} = req.body;
     // const bill = await Bill.find({$text: {$search: name}});
-    const medicine = await Medicine.find({$or: [
+    const medicineObject = await Medicine.find({$or: [
         {
             medicine_name: {
                 $regex: name,
@@ -72,7 +72,29 @@ exports.searchMedicine = asyncHandler(async (req, res, next) => {
         }
     ],  
         user_id: req.user.id});
-    res.status(200).json({ success: true, data: medicine });
+
+    var medicine_object = [];
+    var medicinePromise = await medicineObject.map(async function(medicine){
+        var patientObject = await Family.findOne({_id: medicine.patient});
+        var userObject = await User.findOne({_id: medicine.user_id});
+
+        medicine_object.push({
+            _id: medicine._id,
+            medicine_name: medicine.medicine_name,
+            amount: medicine.amount,
+            dosage: medicine.dosage,
+            doses: medicine.doses,
+            duration: medicine.duration,
+            time: medicine.time,
+            start_date: medicine.start_date,
+            reminder_time: medicine.reminder_time,
+            alarm_timer: medicine.alarm_timer,
+            patient: patientObject,
+            user: userObject
+        });
+    });
+    await Promise.all(medicinePromise);
+    res.status(200).json({ success: true, data: medicine_object });
 });
 
 
@@ -99,19 +121,51 @@ exports.getMedicine = asyncHandler(async (req, res, next) => {
         new ErrorResponse(`Medicine id invalid`, 404)
         );
     }
-    res.status(200).json({ success: true, data: medicine });
+    var patientObject = await Family.findOne({_id: medicine.patient});
+    var userObject = await User.findOne({_id: medicine.user_id});
+
+    var medicine_object = {
+        _id: medicine._id,
+        medicine_name: medicine.medicine_name,
+        amount: medicine.amount,
+        dosage: medicine.dosage,
+        doses: medicine.doses,
+        duration: medicine.duration,
+        time: medicine.time,
+        start_date: medicine.start_date,
+        reminder_time: medicine.reminder_time,
+        alarm_timer: medicine.alarm_timer,
+        patient: patientObject,
+        user: userObject
+    };
+    res.status(200).json({ success: true, data: medicine_object });
 });
 
 
 //get medicine by family
 exports.getMedicineFamily = asyncHandler(async (req, res, next) => {
     var {patient} = req.body;
-    const medicine = await Medicine.find({patient: patient});
-    if(!medicine)
-    {
-        return next(
-        new ErrorResponse(`Medicine id invalid`, 404)
-        );
-    }
-    res.status(200).json({ success: true, data: medicine });
+    const medicineObject = await Medicine.find({patient: patient});
+    var medicine_object = [];
+    var medicinePromise = await medicineObject.map(async function(medicine){
+        var patientObject = await Family.findOne({_id: medicine.patient});
+        var userObject = await User.findOne({_id: medicine.user_id});
+
+        medicine_object.push({
+            _id: medicine._id,
+            medicine_name: medicine.medicine_name,
+            amount: medicine.amount,
+            dosage: medicine.dosage,
+            doses: medicine.doses,
+            duration: medicine.duration,
+            time: medicine.time,
+            start_date: medicine.start_date,
+            reminder_time: medicine.reminder_time,
+            alarm_timer: medicine.alarm_timer,
+            patient: patientObject,
+            user: userObject
+        });
+    });
+    await Promise.all(medicinePromise);
+    res.status(200).json({ success: true, data: medicine_object });
 });

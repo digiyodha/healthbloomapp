@@ -46,7 +46,7 @@ exports.editInsurance = asyncHandler(async (req, res, next) => {
 //search insurance
 exports.searchInsurance = asyncHandler(async (req, res, next) => {
     var {name} = req.body;
-    const insurance = await Insurance.find({$or: [
+    const insuranceObject = await Insurance.find({$or: [
         {
             organisation_name: {
                 $regex: name,
@@ -55,7 +55,22 @@ exports.searchInsurance = asyncHandler(async (req, res, next) => {
         }
     ],  
         user_id: req.user.id});
-    res.status(200).json({ success: true, data: insurance });
+
+        var insurance_object = [];
+    var insurancePromise = await insuranceObject.map(async function(insurance){
+        var patientObject = await Family.findOne({_id: insurance.patient});
+        var userObject = await User.findOne({_id: insurance.user_id});
+
+        insurance_object.push({
+            _id: insurance._id,
+            organisation_name: insurance.organisation_name,
+            insurance_image: insurance.insurance_image,
+            patient: patientObject,
+            user: userObject
+        });
+    });
+    await Promise.all(insurancePromise);
+    res.status(200).json({ success: true, data: insurance_object });
 });
 
 
@@ -82,19 +97,37 @@ exports.getInsurance = asyncHandler(async (req, res, next) => {
         new ErrorResponse(`Insurance id invalid`, 404)
         );
     }
-    res.status(200).json({ success: true, data: insurance });
+    var patientObject = await Family.findOne({_id: insurance.patient});
+    var userObject = await User.findOne({_id: insurance.user_id});
+
+    var insurance_object = {
+        _id: insurance._id,
+        organisation_name: insurance.organisation_name,
+        insurance_image: insurance.insurance_image,
+        patient: patientObject,
+        user: userObject
+    };
+    res.status(200).json({ success: true, data: insurance_object });
 });
 
 
 //get insurance by family
 exports.getInsuranceFamily = asyncHandler(async (req, res, next) => {
     var {patient} = req.body;
-    const insurance = await Insurance.find({patient: patient});
-    if(!insurance)
-    {
-        return next(
-        new ErrorResponse(`Insurance id invalid`, 404)
-        );
-    }
-    res.status(200).json({ success: true, data: insurance});
+    const insuranceObject = await Insurance.find({patient: patient});
+    var insurance_object = [];
+    var insurancePromise = await insuranceObject.map(async function(insurance){
+        var patientObject = await Family.findOne({_id: insurance.patient});
+        var userObject = await User.findOne({_id: insurance.user_id});
+
+        insurance_object.push({
+            _id: insurance._id,
+            organisation_name: insurance.organisation_name,
+            insurance_image: insurance.insurance_image,
+            patient: patientObject,
+            user: userObject
+        });
+    });
+    await Promise.all(insurancePromise);
+    res.status(200).json({ success: true, data: insurance_object });
 });

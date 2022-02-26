@@ -4,6 +4,7 @@ const {User} = require("../models/user");
 const {Family} = require("../models/family");
 
 
+
 //add family
 exports.addFamilyMember = asyncHandler(async (req, res, next) => {
     var {name, relationship, age, avatar} = req.body;
