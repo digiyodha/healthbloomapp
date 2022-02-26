@@ -82,7 +82,8 @@ exports.searchBill = asyncHandler(async (req, res, next) => {
             description: bill.description,
             bill_image: bill.bill_image,
             patient: patientObject,
-            user: userObject
+            // user: userObject
+            user_id: bill.user_id
         });
     });
     await Promise.all(billPromise);
@@ -124,7 +125,8 @@ exports.getBill = asyncHandler(async (req, res, next) => {
         description: bill.description,
         bill_image: bill.bill_image,
         patient: patientObject,
-        user: userObject
+        // user: userObject
+        user_id: bill.user_id
     };
     
     res.status(200).json({ success: true, data: bill_object });
@@ -149,7 +151,8 @@ exports.getBillFamily = asyncHandler(async (req, res, next) => {
             description: bill.description,
             bill_image: bill.bill_image,
             patient: patientObject,
-            user: userObject
+            // user: userObject
+            user_id: bill.user_id
         });
     });
     await Promise.all(billPromise);

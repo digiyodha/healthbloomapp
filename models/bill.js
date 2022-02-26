@@ -21,7 +21,7 @@ var BillSchema = new Schema({
     timestamps: true
 });
 
-BillSchema.index({'$**': 'text'});
+BillSchema.index({'name': 'text', 'description': 'text'});
 
 bill = mongoose.model("Bill", BillSchema);
 

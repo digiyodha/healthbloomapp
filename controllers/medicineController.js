@@ -90,7 +90,9 @@ exports.searchMedicine = asyncHandler(async (req, res, next) => {
             reminder_time: medicine.reminder_time,
             alarm_timer: medicine.alarm_timer,
             patient: patientObject,
-            user: userObject
+            // user: userObject
+            user_id: medicine.user_id
+
         });
     });
     await Promise.all(medicinePromise);
@@ -136,7 +138,9 @@ exports.getMedicine = asyncHandler(async (req, res, next) => {
         reminder_time: medicine.reminder_time,
         alarm_timer: medicine.alarm_timer,
         patient: patientObject,
-        user: userObject
+        // user: userObject
+        user_id: medicine.user_id
+
     };
     res.status(200).json({ success: true, data: medicine_object });
 });
@@ -163,7 +167,9 @@ exports.getMedicineFamily = asyncHandler(async (req, res, next) => {
             reminder_time: medicine.reminder_time,
             alarm_timer: medicine.alarm_timer,
             patient: patientObject,
-            user: userObject
+            // user: userObject
+            user_id: medicine.user_id
+
         });
     });
     await Promise.all(medicinePromise);

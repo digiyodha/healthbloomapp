@@ -66,7 +66,8 @@ exports.searchInsurance = asyncHandler(async (req, res, next) => {
             organisation_name: insurance.organisation_name,
             insurance_image: insurance.insurance_image,
             patient: patientObject,
-            user: userObject
+            // user: userObject
+            user_id: insurance.user_id
         });
     });
     await Promise.all(insurancePromise);
@@ -105,7 +106,8 @@ exports.getInsurance = asyncHandler(async (req, res, next) => {
         organisation_name: insurance.organisation_name,
         insurance_image: insurance.insurance_image,
         patient: patientObject,
-        user: userObject
+        // user: userObject
+        user_id: insurance.user_id
     };
     res.status(200).json({ success: true, data: insurance_object });
 });
@@ -125,7 +127,8 @@ exports.getInsuranceFamily = asyncHandler(async (req, res, next) => {
             organisation_name: insurance.organisation_name,
             insurance_image: insurance.insurance_image,
             patient: patientObject,
-            user: userObject
+            // user: userObject
+            user_id: insurance.user_id
         });
     });
     await Promise.all(insurancePromise);

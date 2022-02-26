@@ -84,7 +84,9 @@ exports.searchPrescription = asyncHandler(async (req, res, next) => {
             doctor_advice: prescription.doctor_advice,
             prescription_image: prescription.prescription_image,
             patient: patientObject,
-            user: userObject
+            // user: userObject
+            user_id: prescription.user_id
+
         });
     });
     await Promise.all(prescriptionPromise);
@@ -128,7 +130,9 @@ exports.getPrescription = asyncHandler(async (req, res, next) => {
         doctor_advice: prescription.doctor_advice,
         prescription_image: prescription.prescription_image,
         patient: patientObject,
-        user: userObject
+        // user: userObject
+        user_id: prescription.user_id
+
     };
 
     res.status(200).json({ success: true, data: prescription_object });
@@ -154,7 +158,9 @@ exports.getPrescriptionFamily = asyncHandler(async (req, res, next) => {
             doctor_advice: prescription.doctor_advice,
             prescription_image: prescription.prescription_image,
             patient: patientObject,
-            user: userObject
+            // user: userObject
+            user_id: prescription.user_id
+
         });
     });
     await Promise.all(prescriptionPromise);

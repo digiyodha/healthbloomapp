@@ -102,7 +102,8 @@ exports.getDocument = asyncHandler(async (req, res, next) => {
             description: bill.description,
             bill_image: bill.bill_image,
             patient: patientObject,
-            user: userObject
+            // user: userObject
+            user_id: bill.user_id
         });
     });
     await Promise.all(billPromise);
@@ -120,7 +121,8 @@ exports.getDocument = asyncHandler(async (req, res, next) => {
             description: report.description,
             report_image: report.report_image,
             patient: patientObject,
-            user: userObject
+            // user: userObject
+            user_id: report.user_id
         });
     });
     await Promise.all(reportPromise);
@@ -139,7 +141,8 @@ exports.getDocument = asyncHandler(async (req, res, next) => {
             doctor_advice: prescription.doctor_advice,
             prescription_image: prescription.prescription_image,
             patient: patientObject,
-            user: userObject
+            // user: userObject
+            user_id: prescription.user_id
         });
     });
     await Promise.all(prescriptionPromise);

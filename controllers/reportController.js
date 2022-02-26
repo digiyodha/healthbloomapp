@@ -67,7 +67,9 @@ exports.searchReport = asyncHandler(async (req, res, next) => {
             description: report.description,
             report_image: report.report_image,
             patient: patientObject,
-            user: userObject
+            // user: userObject
+            user_id: report.user_id
+
         });
     });
     await Promise.all(reportPromise);
@@ -110,7 +112,9 @@ exports.getReport = asyncHandler(async (req, res, next) => {
         description: report.description,
         report_image: report.report_image,
         patient: patientObject,
-        user: userObject
+        // user: userObject
+        user_id: report.user_id
+
     };
     
     res.status(200).json({ success: true, data: report_object });
@@ -133,7 +137,9 @@ exports.getReportFamily = asyncHandler(async (req, res, next) => {
             description: report.description,
             report_image: report.report_image,
             patient: patientObject,
-            user: userObject
+            // user: userObject
+            user_id: report.user_id
+
         });
     });
     await Promise.all(reportPromise);

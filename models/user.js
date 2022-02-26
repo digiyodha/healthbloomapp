@@ -18,6 +18,7 @@ var UserSchema = new Schema({
     user_address: String,
     city: String,
     state: String,
+    avatar: String,
     blood_group: {
       type: String,
       enum: ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'],

@@ -45,6 +45,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     userDetailsObj.user_address = "";
     userDetailsObj.city = "";
     userDetailsObj.state = "";
+    userDetailsObj.avatar = "";
     user = await User.create({ ...userDetailsObj });
   }
   else
@@ -62,6 +63,16 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
   var {email_id, password} = req.body;
 
   var user = await User.findOne({
+    'email_id': email_id
+  });
+  if(!user)
+  {
+    return next(
+      new ErrorResponse(`User doesn't exist, please register!`, 404)
+    );
+  }
+
+  user = await User.findOne({
     'email_id': email_id,
     'password': password
   });
@@ -69,9 +80,10 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
   if(!user)
   {
     return next(
-      new ErrorResponse(`User doesn't exist, please register!`, 404)
+      new ErrorResponse(`Password incorrrect!`, 404)
     );
   }
+  
   var token = jwt.sign({ data: user._id }, dbConfig.JWT_SECRET, {
     expiresIn: '12h',
   });
@@ -87,10 +99,11 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 
 //add edit user details
 exports.addEditUserDetails = asyncHandler(async (req, res, next) => {
-    var {gender, country_code, phone_number, 
+    var {gender, country_code, phone_number, avatar, 
       google_address, user_address, city, state, blood_group} = req.body;
   const user = await User.findOneAndUpdate({ _id: req.user._id },  {
     gender: gender,
+    avatar: avatar,
     country_code: country_code,
     phone_number: phone_number,
     google_address: google_address,
