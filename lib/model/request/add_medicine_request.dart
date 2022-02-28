@@ -33,7 +33,7 @@ class AddMedicineRequest {
         duration: json["duration"] == null ? null : json["duration"],
         time: json["time"] == null
             ? null
-            : List<dynamic>.from(json["time"].map((x) => x)),
+            : List<DateTime>.from(json["time"].map((x) => DateTime.parse(x))),
         startDate: json["start_date"] == null
             ? null
             : DateTime.parse(json["start_date"]),
@@ -49,7 +49,9 @@ class AddMedicineRequest {
         "dosage": dosage == null ? null : dosage,
         "doses": doses == null ? null : doses,
         "duration": duration == null ? null : duration,
-        "time": time == null ? null : List<dynamic>.from(time.map((x) => x)),
+        "time": time == null
+            ? null
+            : List<dynamic>.from(time.map((x) => x.toIso8601String())),
         "start_date": startDate == null
             ? null
             : "${startDate.year.toString().padLeft(4, '0')}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}",

@@ -100,9 +100,7 @@ class _HomePageState extends State<HomePage>
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
-                                  height: 26,
-                                ),
+                                SizedBox(height: 26),
                                 Row(
                                   children: [
                                     Icon(
@@ -110,9 +108,7 @@ class _HomePageState extends State<HomePage>
                                       color: kMainColor,
                                       size: 15,
                                     ),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
+                                    SizedBox(width: 4),
                                     Text(
                                       "${DateFormat('EEEE, d MMM, yyyy').format(today)}" ??
                                           '',
@@ -124,9 +120,7 @@ class _HomePageState extends State<HomePage>
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 4,
-                                ),
+                                SizedBox(height: 4),
                                 Text(
                                   "Hi, ${snapshot.data.data.name.toString()}",
                                   style: TextStyle(

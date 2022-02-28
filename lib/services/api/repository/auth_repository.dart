@@ -10,8 +10,6 @@ import 'package:health_bloom/model/request/edit_member_request.dart';
 import 'package:health_bloom/model/request/edit_prescription_request.dart';
 import 'package:health_bloom/model/request/edit_report_request.dart';
 import 'package:health_bloom/model/request/get_documents_request.dart';
-import 'package:health_bloom/model/request/login_user_resquest.dart';
-import 'package:health_bloom/model/request/resgister_user_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
 import 'package:health_bloom/model/response/add_family_response.dart';
 import 'package:health_bloom/model/response/add_medicine_response.dart';
@@ -24,8 +22,6 @@ import 'package:health_bloom/model/response/edit_prescription_response.dart';
 import 'package:health_bloom/model/response/edit_report_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
-import 'package:health_bloom/model/response/login_uesr_response.dart';
-import 'package:health_bloom/model/response/register_user_response.dart';
 import 'package:health_bloom/services/api/networkmanager/auth_networkmanager.dart';
 import 'package:health_bloom/services/api/results.dart';
 
@@ -37,13 +33,12 @@ class NetworkRepository with ChangeNotifier {
 
   NetworkRepository({@required this.apiClient}) : assert(apiClient != null);
 
-
   /// Add edit profile
-  Future<RegisterLoginResponse> loginAPI(
-      RegisterLoginRequest request) async {
+  Future<RegisterLoginResponse> loginAPI(RegisterLoginRequest request) async {
     Result apiResult = await apiClient.login(request);
     if (apiResult is Success) return apiResult.data;
     if (apiResult is Error) throw apiResult.error;
+    return loginAPI(request);
   }
 
   /// Add edit profile

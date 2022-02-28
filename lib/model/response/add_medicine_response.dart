@@ -5,14 +5,12 @@ class AddMedicineResponse {
   });
 
   bool success;
-  AddMedicineResponseData data;
+  Data data;
 
   factory AddMedicineResponse.fromJson(Map<String, dynamic> json) =>
       AddMedicineResponse(
         success: json["success"] == null ? null : json["success"],
-        data: json["data"] == null
-            ? null
-            : AddMedicineResponseData.fromJson(json["data"]),
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -21,8 +19,8 @@ class AddMedicineResponse {
       };
 }
 
-class AddMedicineResponseData {
-  AddMedicineResponseData({
+class Data {
+  Data({
     this.time,
     this.reminderTime,
     this.alarmTimer,
@@ -37,7 +35,7 @@ class AddMedicineResponseData {
     this.id,
   });
 
-  List<dynamic> time;
+  List<DateTime> time;
   String reminderTime;
   bool alarmTimer;
   String medicineName;
@@ -50,11 +48,10 @@ class AddMedicineResponseData {
   String userId;
   String id;
 
-  factory AddMedicineResponseData.fromJson(Map<String, dynamic> json) =>
-      AddMedicineResponseData(
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
         time: json["time"] == null
             ? null
-            : List<dynamic>.from(json["time"].map((x) => x)),
+            : List<DateTime>.from(json["time"].map((x) => DateTime.parse(x))),
         reminderTime:
             json["reminder_time"] == null ? null : json["reminder_time"],
         alarmTimer: json["alarm_timer"] == null ? null : json["alarm_timer"],
@@ -73,7 +70,9 @@ class AddMedicineResponseData {
       );
 
   Map<String, dynamic> toJson() => {
-        "time": time == null ? null : List<dynamic>.from(time.map((x) => x)),
+        "time": time == null
+            ? null
+            : List<dynamic>.from(time.map((x) => x.toIso8601String())),
         "reminder_time": reminderTime == null ? null : reminderTime,
         "alarm_timer": alarmTimer == null ? null : alarmTimer,
         "medicine_name": medicineName == null ? null : medicineName,

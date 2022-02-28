@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
-import 'package:health_bloom/model/request/resgister_user_request.dart';
-import 'package:health_bloom/model/response/register_user_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/login/login.dart';
@@ -49,13 +47,15 @@ class _SignUpState extends State<SignUp> {
     });
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     RegisterLoginResponse _response = await adminAPI.loginAPI(request);
-    if(_response.success){
+    if (_response.success) {
       sp.setString('id', _response.data.id);
       sp.setString('email', _response.data.emailId);
       sp.setString('name', _response.data.name);
       sp.setString('xAuthToken', _response.data.xAuthToken);
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Occurred"),));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error Occurred"),
+      ));
     }
     setState(() {
       _loading = false;
@@ -224,7 +224,7 @@ class _SignUpState extends State<SignUp> {
                                     if (_name.text.isNotEmpty &&
                                         _email.text.isNotEmpty &&
                                         _password.text.isNotEmpty) {
-                                      if(_password.text.length > 7){
+                                      if (_password.text.length > 7) {
                                         try {
                                           await _auth
                                               .createUserWithEmailAndPassword(
@@ -236,19 +236,25 @@ class _SignUpState extends State<SignUp> {
                                           });
 
                                           await loginUser(RegisterLoginRequest(
-                                              name: _auth.currentUser.displayName ?? "",
-                                              emailId: _auth.currentUser.email ?? "",
+                                              name: _auth.currentUser
+                                                      .displayName ??
+                                                  "",
+                                              emailId:
+                                                  _auth.currentUser.email ?? "",
                                               uid: _auth.currentUser.uid,
-                                              avatar: _auth.currentUser.photoURL ?? "",
+                                              avatar:
+                                                  _auth.currentUser.photoURL ??
+                                                      "",
                                               phoneNumber: null,
-                                              countryCode: null
-                                          ));
+                                              countryCode: null));
                                           Navigator.pushAndRemoveUntil(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    EditProfile(id: sp.getString("id"),)),
-                                                (Route<dynamic> route) => false,
+                                                    EditProfile(
+                                                      id: sp.getString("id"),
+                                                    )),
+                                            (Route<dynamic> route) => false,
                                           );
                                         } on FirebaseAuthException catch (e) {
                                           if (e.code == 'weak-password') {
@@ -280,7 +286,7 @@ class _SignUpState extends State<SignUp> {
                                             content: Text(e.toString()),
                                           ));
                                         }
-                                      }else{
+                                      } else {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
                                           content: Text(

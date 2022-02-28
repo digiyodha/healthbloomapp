@@ -5,9 +5,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/main.dart';
-import 'package:health_bloom/model/request/login_user_resquest.dart';
 import 'package:health_bloom/model/request/request.dart';
-import 'package:health_bloom/model/response/login_uesr_response.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/loading.dart';
@@ -39,19 +37,20 @@ class _LoginState extends State<Login> {
     });
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     RegisterLoginResponse _response = await adminAPI.loginAPI(request);
-    if(_response.success){
+    if (_response.success) {
       sp.setString('id', _response.data.id);
       sp.setString('email', _response.data.emailId);
       sp.setString('name', _response.data.name);
       sp.setString('xAuthToken', _response.data.xAuthToken);
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(
-            builder: (context) => HomePage()),
-            (Route<dynamic> route) => false,
+        MaterialPageRoute(builder: (context) => HomePage()),
+        (Route<dynamic> route) => false,
       );
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Occurred"),));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error Occurred"),
+      ));
     }
     setState(() {
       _loading = false;
@@ -296,14 +295,15 @@ class _LoginState extends State<Login> {
                                       );
 
                                       await loginUser(RegisterLoginRequest(
-                                        name: _auth.currentUser.displayName ?? "",
-                                        emailId: _auth.currentUser.email ?? "",
-                                        uid: _auth.currentUser.uid,
-                                        avatar: _auth.currentUser.photoURL ?? "",
-                                        phoneNumber: null,
-                                        countryCode: null
-                                      ));
-
+                                          name: _auth.currentUser.displayName ??
+                                              "",
+                                          emailId:
+                                              _auth.currentUser.email ?? "",
+                                          uid: _auth.currentUser.uid,
+                                          avatar:
+                                              _auth.currentUser.photoURL ?? "",
+                                          phoneNumber: null,
+                                          countryCode: null));
                                     } on FirebaseAuthException catch (e) {
                                       if (e.code == 'user-not-found') {
                                         setState(() {
@@ -389,7 +389,7 @@ class _LoginState extends State<Login> {
                             });
                             UserCredential cred = await signInWithGoogle();
                             Future.delayed(Duration(seconds: 1))
-                                .whenComplete(() async{
+                                .whenComplete(() async {
                               setState(() {
                                 _loading = false;
                               });
@@ -400,8 +400,7 @@ class _LoginState extends State<Login> {
                                     uid: cred.user.uid,
                                     avatar: cred.user.photoURL ?? "",
                                     phoneNumber: null,
-                                    countryCode: null
-                                ));
+                                    countryCode: null));
                               } else {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
@@ -428,7 +427,7 @@ class _LoginState extends State<Login> {
                             });
                             UserCredential cred = await signInWithFacebook();
                             Future.delayed(Duration(seconds: 1))
-                                .whenComplete(() async{
+                                .whenComplete(() async {
                               setState(() {
                                 _loading = false;
                               });
@@ -439,8 +438,7 @@ class _LoginState extends State<Login> {
                                     uid: cred.user.uid,
                                     avatar: cred.user.photoURL ?? "",
                                     phoneNumber: null,
-                                    countryCode: null
-                                ));
+                                    countryCode: null));
                               } else {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(

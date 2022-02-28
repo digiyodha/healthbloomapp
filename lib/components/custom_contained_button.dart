@@ -9,7 +9,7 @@ class CustomContainedButton extends StatelessWidget {
   final FontWeight weight;
   final Color disabledColor, color;
   final Widget leading;
-
+  final double borderRadius;
   const CustomContainedButton(
       {this.text,
       this.onPressed,
@@ -19,7 +19,8 @@ class CustomContainedButton extends StatelessWidget {
       this.weight = FontWeight.w500,
       this.color = kMainColor,
       this.disabledColor,
-      this.leading});
+      this.leading,
+      this.borderRadius = 16});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class CustomContainedButton extends StatelessWidget {
             MaterialStateProperty.resolveWith<OutlinedBorder>(
                 (Set<MaterialState> states) {
           return RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16));
+              borderRadius: BorderRadius.circular(borderRadius));
         }), padding: MaterialStateProperty.resolveWith<EdgeInsets>(
             (Set<MaterialState> states) {
           return EdgeInsets.symmetric(horizontal: 14);
@@ -62,8 +63,7 @@ class CustomContainedButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if(leading != null)
-              leading,
+            if (leading != null) leading,
             Text(
               text,
               style: TextStyle(fontWeight: weight, fontSize: textSize),
