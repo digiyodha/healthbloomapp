@@ -340,8 +340,8 @@ class _LoginState extends State<Login> {
                                         email: _email.text,
                                         password: _password.text,
                                       );
-                                      // sp.setString('xAuthToken',
-                                      //     _response.data.xAuthToken);
+                                      sp.setString('xAuthToken',
+                                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiNjIxYzlhOWYwYzY3ZDgzNGZjYzk3YTBjIiwiaWF0IjoxNjQ2MDQxODkxLCJleHAiOjE2NDYwODUwOTF9.KPwVX4FQTEKK-IOragcSM0BoIJ1Tv1As8FXrOIRWRMw');
                                       sp.setString('id', _auth.currentUser.uid);
                                       sp.setString('loginUserEmail',
                                           _auth.currentUser.email);
