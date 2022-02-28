@@ -6,7 +6,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/request/login_user_resquest.dart';
+import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/model/response/login_uesr_response.dart';
+import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
@@ -15,15 +17,6 @@ import 'package:health_bloom/view/login/phone_login.dart';
 import 'package:health_bloom/view/signup/signup.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-
-// GoogleSignIn googleSignIn = GoogleSignIn(
-//   // Optional clientId
-//   // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
-//   scopes: <String>[
-//     'email',
-// //    'https://www.googleapis.com/auth/contacts.readonly',
-//   ],
-// );
 
 class Login extends StatefulWidget {
   const Login({Key key}) : super(key: key);
@@ -39,10 +32,30 @@ class _LoginState extends State<Login> {
 
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
-  Future<LoginUserResponse> loginUser(LoginUserRequest request) async {
+
+  Future loginUser(RegisterLoginRequest request) async {
+    setState(() {
+      _loading = true;
+    });
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    LoginUserResponse _response = await adminAPI.loginUserAPI(request);
-    return _response;
+    RegisterLoginResponse _response = await adminAPI.loginAPI(request);
+    if(_response.success){
+      sp.setString('id', _response.data.id);
+      sp.setString('email', _response.data.emailId);
+      sp.setString('name', _response.data.name);
+      sp.setString('xAuthToken', _response.data.xAuthToken);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomePage()),
+            (Route<dynamic> route) => false,
+      );
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Occurred"),));
+    }
+    setState(() {
+      _loading = false;
+    });
   }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -95,65 +108,6 @@ class _LoginState extends State<Login> {
     }
     return null;
   }
-
-  // Future<void> _checkIfIsLogged() async {
-  //   final accessToken = await FacebookAuth.instance.accessToken;
-  //   setState(() {
-  //     _checking = false;
-  //   });
-  //   if (accessToken != null) {
-  //     print("is Logged:::: ${prettyPrint(accessToken.toJson())}");
-  //     // now you can call to  FacebookAuth.instance.getUserData();
-  //     final userData = await FacebookAuth.instance.getUserData();
-  //     // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
-  //     _accessToken = accessToken;
-  //     setState(() {
-  //       _userData = userData;
-  //     });
-  //   }
-  // }
-  //
-  // void _printCredentials() {
-  //   print(
-  //     prettyPrint(_accessToken.toJson()),
-  //   );
-  // }
-  //
-  // Future<void> _login() async {
-  //   final LoginResult result = await FacebookAuth.instance.login(); // by default we request the email and the public profile
-  //
-  //   // loginBehavior is only supported for Android devices, for ios it will be ignored
-  //   // final result = await FacebookAuth.instance.login(
-  //   //   permissions: ['email', 'public_profile', 'user_birthday', 'user_friends', 'user_gender', 'user_link'],
-  //   //   loginBehavior: LoginBehavior
-  //   //       .DIALOG_ONLY, // (only android) show an authentication dialog instead of redirecting to facebook app
-  //   // );
-  //
-  //   if (result.status == LoginStatus.success) {
-  //     _accessToken = result.accessToken;
-  //     _printCredentials();
-  //     // get the user data
-  //     // by default we get the userId, email,name and picture
-  //     final userData = await FacebookAuth.instance.getUserData();
-  //     // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
-  //     _userData = userData;
-  //   } else {
-  //     print(result.status);
-  //     print(result.message);
-  //   }
-  //
-  //   setState(() {
-  //     _checking = false;
-  //   });
-  // }
-  //
-  //
-  // Future<void> _logOut() async {
-  //   await FacebookAuth.instance.logOut();
-  //   _accessToken = null;
-  //   _userData = null;
-  //   setState(() {});
-  // }
 
   @override
   void initState() {
@@ -340,17 +294,16 @@ class _LoginState extends State<Login> {
                                         email: _email.text,
                                         password: _password.text,
                                       );
-                                      sp.setString('xAuthToken',
-                                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiNjIxYzlhOWYwYzY3ZDgzNGZjYzk3YTBjIiwiaWF0IjoxNjQ2MDQxODkxLCJleHAiOjE2NDYwODUwOTF9.KPwVX4FQTEKK-IOragcSM0BoIJ1Tv1As8FXrOIRWRMw');
-                                      sp.setString('id', _auth.currentUser.uid);
-                                      sp.setString('loginUserEmail',
-                                          _auth.currentUser.email);
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => HomePage()),
-                                        (Route<dynamic> route) => false,
-                                      );
+
+                                      await loginUser(RegisterLoginRequest(
+                                        name: _auth.currentUser.displayName ?? "",
+                                        emailId: _auth.currentUser.email ?? "",
+                                        uid: _auth.currentUser.uid,
+                                        avatar: _auth.currentUser.photoURL ?? "",
+                                        phoneNumber: null,
+                                        countryCode: null
+                                      ));
+
                                     } on FirebaseAuthException catch (e) {
                                       if (e.code == 'user-not-found') {
                                         setState(() {
@@ -436,21 +389,19 @@ class _LoginState extends State<Login> {
                             });
                             UserCredential cred = await signInWithGoogle();
                             Future.delayed(Duration(seconds: 1))
-                                .whenComplete(() {
+                                .whenComplete(() async{
                               setState(() {
                                 _loading = false;
                               });
                               if (cred != null) {
-                                print(cred.user.email);
-                                print(cred.user.photoURL);
-                                print(cred.user.uid);
-                                print(cred.user.displayName);
-                                sp.setString("id", cred.user.uid ?? "");
-                                sp.setString("email", cred.user.email ?? "");
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return HomePage();
-                                }));
+                                await loginUser(RegisterLoginRequest(
+                                    name: cred.user.displayName ?? "",
+                                    emailId: cred.user.email ?? "",
+                                    uid: cred.user.uid,
+                                    avatar: cred.user.photoURL ?? "",
+                                    phoneNumber: null,
+                                    countryCode: null
+                                ));
                               } else {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
@@ -477,21 +428,19 @@ class _LoginState extends State<Login> {
                             });
                             UserCredential cred = await signInWithFacebook();
                             Future.delayed(Duration(seconds: 1))
-                                .whenComplete(() {
+                                .whenComplete(() async{
                               setState(() {
                                 _loading = false;
                               });
                               if (cred != null) {
-                                print(cred.user.email);
-                                print(cred.user.photoURL);
-                                print(cred.user.uid);
-                                print(cred.user.displayName);
-                                sp.setString("id", cred.user.uid ?? "");
-                                sp.setString("email", cred.user.email ?? "");
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return HomePage();
-                                }));
+                                await loginUser(RegisterLoginRequest(
+                                    name: cred.user.displayName ?? "",
+                                    emailId: cred.user.email ?? "",
+                                    uid: cred.user.uid,
+                                    avatar: cred.user.photoURL ?? "",
+                                    phoneNumber: null,
+                                    countryCode: null
+                                ));
                               } else {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(

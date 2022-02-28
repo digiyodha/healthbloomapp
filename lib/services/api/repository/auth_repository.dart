@@ -37,23 +37,13 @@ class NetworkRepository with ChangeNotifier {
 
   NetworkRepository({@required this.apiClient}) : assert(apiClient != null);
 
-  /// Login user
-  Future<LoginUserResponse> loginUserAPI(LoginUserRequest request) async {
-    Result apiResult = await apiClient.loginUser(request);
+
+  /// Add edit profile
+  Future<RegisterLoginResponse> loginAPI(
+      RegisterLoginRequest request) async {
+    Result apiResult = await apiClient.login(request);
     if (apiResult is Success) return apiResult.data;
     if (apiResult is Error) throw apiResult.error;
-
-    return loginUserAPI(request);
-  }
-
-  /// Register user
-  Future<RegisterUserResponse> registerUserAPI(
-      RegisterUserRequest request) async {
-    Result apiResult = await apiClient.registerUser(request);
-    if (apiResult is Success) return apiResult.data;
-    if (apiResult is Error) throw apiResult.error;
-
-    return registerUserAPI(request);
   }
 
   /// Add edit profile

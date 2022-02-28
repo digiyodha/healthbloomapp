@@ -49,3 +49,39 @@ class DeleteDocumentRequest {
     "_id": id == null ? null : id,
   };
 }
+
+class RegisterLoginRequest {
+  RegisterLoginRequest({
+    this.name,
+    this.emailId,
+    this.uid,
+    this.avatar,
+    this.phoneNumber,
+    this.countryCode,
+  });
+
+  String name;
+  String emailId;
+  String uid;
+  String avatar;
+  dynamic phoneNumber;
+  dynamic countryCode;
+
+  factory RegisterLoginRequest.fromJson(Map<String, dynamic> json) => RegisterLoginRequest(
+    name: json["name"] == null ? null : json["name"],
+    emailId: json["email_id"] == null ? null : json["email_id"],
+    uid: json["uid"] == null ? null : json["uid"],
+    avatar: json["avatar"] == null ? null : json["avatar"],
+    phoneNumber: json["phone_number"],
+    countryCode: json["country_code"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name == null ? null : name,
+    "email_id": emailId == null ? null : emailId,
+    "uid": uid == null ? null : uid,
+    "avatar": avatar == null ? null : avatar,
+    "phone_number": phoneNumber,
+    "country_code": countryCode,
+  };
+}

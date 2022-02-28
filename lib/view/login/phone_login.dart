@@ -1,9 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
+import 'package:health_bloom/model/request/request.dart';
+import 'package:health_bloom/model/response/response.dart';
+import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/login/phone_login_otp.dart';
+import 'package:provider/provider.dart';
 
 import '../../main.dart';
 
@@ -22,6 +26,31 @@ class _PhoneLoginState extends State<PhoneLogin> {
   TextEditingController otpCode = TextEditingController();
   bool isLoading = false;
   String verificationId;
+
+  Future loginUser(RegisterLoginRequest request) async {
+    setState(() {
+      isLoading = true;
+    });
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    RegisterLoginResponse _response = await adminAPI.loginAPI(request);
+    if(_response.success){
+      sp.setString('id', _response.data.id);
+      sp.setString('email', _response.data.emailId);
+      sp.setString('name', _response.data.name);
+      sp.setString('xAuthToken', _response.data.xAuthToken);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomePage()),
+            (Route<dynamic> route) => false,
+      );
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Occurred"),));
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   Future<void> phoneSignIn({String phoneNumber}) async {
     await _auth.verifyPhoneNumber(
@@ -80,15 +109,14 @@ class _PhoneLoginState extends State<PhoneLogin> {
 
       UserCredential user = await _auth.signInWithCredential(credential);
       if(user != null){
-        if(user.user != null){
-          print(user.user.uid);
-          print(user.user.phoneNumber);
-          sp.setString("id", user.user.uid);
-          sp.setString("email", user.user.phoneNumber);
-          Navigator.push(context, MaterialPageRoute(builder: (context){
-            return HomePage();
-          }));
-        }
+        await loginUser(RegisterLoginRequest(
+            name: user.user.displayName ?? "",
+            emailId: user.user.email ?? "",
+            uid: user.user.uid,
+            avatar: user.user.photoURL ?? "",
+            phoneNumber: null,
+            countryCode: null
+        ));
       }
       setState(() {
         isLoading = false;

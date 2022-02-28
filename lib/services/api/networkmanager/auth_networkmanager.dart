@@ -41,42 +41,21 @@ class NetworkManager {
 
   NetworkManager(this._client);
 
-  // Login User
-  Future<Result> loginUser(LoginUserRequest request) async {
-    AuthEndpoint endpoint = AuthEndpoints.loginUser;
+  // Add edit profile
+  Future<Result> login(RegisterLoginRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.login;
     endpoint.addBody(request);
-
     Result result = await _client.call(
       endpoint,
     );
 
     if (result is Success) {
-      LoginUserResponse response =
-          LoginUserResponse.fromJson(json.decode(result.data.toString()));
+      RegisterLoginResponse response = RegisterLoginResponse.fromJson(
+          json.decode(result.data.toString()));
 
       print(response);
 
-      return Success<LoginUserResponse>(response);
-    }
-    return result;
-  }
-
-  // Rregister user
-  Future<Result> registerUser(RegisterUserRequest request) async {
-    AuthEndpoint endpoint = AuthEndpoints.registerUser;
-    endpoint.addBody(request);
-
-    Result result = await _client.call(
-      endpoint,
-    );
-
-    if (result is Success) {
-      RegisterUserResponse response =
-          RegisterUserResponse.fromJson(json.decode(result.data.toString()));
-
-      print(response);
-
-      return Success<RegisterUserResponse>(response);
+      return Success<RegisterLoginResponse>(response);
     }
     return result;
   }

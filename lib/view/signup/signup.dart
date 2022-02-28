@@ -12,6 +12,10 @@ import 'package:health_bloom/view/profile/edit_profile.dart';
 
 import 'package:provider/provider.dart';
 
+import '../../main.dart';
+import '../../model/request/request.dart';
+import '../../model/response/response.dart';
+
 enum AuthMode { login, register, phone }
 
 extension on AuthMode {
@@ -36,13 +40,27 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _name = TextEditingController();
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
-  Future<RegisterUserResponse> registerUser(RegisterUserRequest request) async {
-    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    RegisterUserResponse _response = await adminAPI.registerUserAPI(request);
-    return _response;
-  }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future loginUser(RegisterLoginRequest request) async {
+    setState(() {
+      _loading = true;
+    });
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    RegisterLoginResponse _response = await adminAPI.loginAPI(request);
+    if(_response.success){
+      sp.setString('id', _response.data.id);
+      sp.setString('email', _response.data.emailId);
+      sp.setString('name', _response.data.name);
+      sp.setString('xAuthToken', _response.data.xAuthToken);
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Occurred"),));
+    }
+    setState(() {
+      _loading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -202,57 +220,71 @@ class _SignUpState extends State<SignUp> {
                                     print(_name.text.toString());
                                     print(_email.text.toString());
                                     print(_password.text.toString());
-                                    setState(() {
-                                      _loading = true;
-                                    });
 
                                     if (_name.text.isNotEmpty &&
                                         _email.text.isNotEmpty &&
                                         _password.text.isNotEmpty) {
-                                      try {
-                                        await _auth
-                                            .createUserWithEmailAndPassword(
-                                          email: _email.text,
-                                          password: _password.text,
-                                        );
-                                        setState(() {
-                                          _loading = true;
-                                        });
-                                        Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EditProfile()),
-                                          (Route<dynamic> route) => false,
-                                        );
-                                      } on FirebaseAuthException catch (e) {
-                                        if (e.code == 'weak-password') {
+                                      if(_password.text.length > 7){
+                                        try {
+                                          await _auth
+                                              .createUserWithEmailAndPassword(
+                                            email: _email.text,
+                                            password: _password.text,
+                                          );
                                           setState(() {
-                                            _loading = false;
+                                            _loading = true;
                                           });
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                            content: Text(
-                                                'The password provided is too weak.'),
+
+                                          await loginUser(RegisterLoginRequest(
+                                              name: _auth.currentUser.displayName ?? "",
+                                              emailId: _auth.currentUser.email ?? "",
+                                              uid: _auth.currentUser.uid,
+                                              avatar: _auth.currentUser.photoURL ?? "",
+                                              phoneNumber: null,
+                                              countryCode: null
                                           ));
-                                        } else if (e.code ==
-                                            'email-already-in-use') {
+                                          Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditProfile(id: sp.getString("id"),)),
+                                                (Route<dynamic> route) => false,
+                                          );
+                                        } on FirebaseAuthException catch (e) {
+                                          if (e.code == 'weak-password') {
+                                            setState(() {
+                                              _loading = false;
+                                            });
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'The password provided is too weak.'),
+                                            ));
+                                          } else if (e.code ==
+                                              'email-already-in-use') {
+                                            setState(() {
+                                              _loading = false;
+                                            });
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'The account already exists for that email.'),
+                                            ));
+                                          }
+                                        } catch (e) {
                                           setState(() {
                                             _loading = false;
                                           });
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
-                                            content: Text(
-                                                'The account already exists for that email.'),
+                                            content: Text(e.toString()),
                                           ));
                                         }
-                                      } catch (e) {
-                                        setState(() {
-                                          _loading = false;
-                                        });
+                                      }else{
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
-                                          content: Text(e.toString()),
+                                          content: Text(
+                                              'Password length should be greater than 7.'),
                                         ));
                                       }
                                     } else {

@@ -10,8 +10,7 @@ class AuthEndpoints {
   AuthEndpoints._();
 
   // Add
-  static get loginUser => AuthEndpoint("/v1/users/", Method.put);
-  static get registerUser => AuthEndpoint("/v1/users/", Method.post);
+  static get login => AuthEndpoint("/v1/users/", Method.put);
   static get addBill => AuthEndpoint("/v1/bill/", Method.post);
   static get addReport => AuthEndpoint("/v1/report/", Method.post);
   static get addEditUserDetails => AuthEndpoint("/v1/users/id/", Method.put);
