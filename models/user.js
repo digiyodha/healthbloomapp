@@ -6,7 +6,6 @@ var bcrypt     = require('bcrypt');
 var UserSchema = new Schema({
     name: String,
     email_id: String,
-    password: String,
     country_code: String,
     phone_number: String,
     gender: {
@@ -23,7 +22,9 @@ var UserSchema = new Schema({
       type: String,
       enum: ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'],
       default: 'O+'
-    }
+    },
+    uid: String
+
 }, {strict: false}, {
   timestamps: true
 });

@@ -18,34 +18,90 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 });
 
 
+// //register
+// exports.registerUser = asyncHandler(async (req, res, next) => {
+//   var {email_id, name, password} = req.body;
+
+//   var user = await User.findOne({
+//     'email_id': email_id,
+//     'password': password
+//   });
+//   if(!user)
+//   {
+//     const userDetailsObj = {};
+//     if (email_id) {
+//         userDetailsObj.email_id = email_id;
+//     }
+//     if (password) {
+//         userDetailsObj.password = password;
+//     }
+//     if (name) {
+//         userDetailsObj.name = name;
+//     }
+
+//     userDetailsObj.country_code = "";
+//     userDetailsObj.phone_number = "";
+//     userDetailsObj.google_address = "";
+//     userDetailsObj.user_address = "";
+//     userDetailsObj.city = "";
+//     userDetailsObj.state = "";
+//     userDetailsObj.avatar = "";
+//     user = await User.create({ ...userDetailsObj });
+//   }
+//   else
+//   {
+//     return next(
+//       new ErrorResponse(`User already exists, please login!`, 404)
+//     );
+//   }
+//   res.status(200).json({ success: true, data: user });
+// });
+
 //register
 exports.registerUser = asyncHandler(async (req, res, next) => {
-  var {email_id, name, password} = req.body;
+  var {email_id, uid, avatar, phone_number, country_code, name} = req.body;
 
   var user = await User.findOne({
-    'email_id': email_id,
-    'password': password
+    'uid': uid
   });
   if(!user)
   {
     const userDetailsObj = {};
     if (email_id) {
         userDetailsObj.email_id = email_id;
+    }else{
+      userDetailsObj.email_id = "";
     }
-    if (password) {
-        userDetailsObj.password = password;
+    if (uid) {
+        userDetailsObj.uid = uid;
+    }else{
+      userDetailsObj.uid = "";
+    }
+    if (avatar) {
+        userDetailsObj.avatar = avatar;
+    }else{ 
+      userDetailsObj.avatar = "";
+    }
+    if (country_code) {
+      userDetailsObj.country_code = country_code;
+    }else{
+      userDetailsObj.country_code = "";
+    }
+    if (phone_number) {
+      userDetailsObj.phone_number = phone_number;
+    }else{
+      userDetailsObj.phone_number = "";
     }
     if (name) {
-        userDetailsObj.name = name;
+      userDetailsObj.name = name;
+    }else{
+      userDetailsObj.name = "";
     }
 
-    userDetailsObj.country_code = "";
-    userDetailsObj.phone_number = "";
     userDetailsObj.google_address = "";
     userDetailsObj.user_address = "";
     userDetailsObj.city = "";
     userDetailsObj.state = "";
-    userDetailsObj.avatar = "";
     user = await User.create({ ...userDetailsObj });
   }
   else
@@ -58,29 +114,55 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 });
 
 
+// //login
+// exports.loginUser = asyncHandler(async (req, res, next) => {
+//   var {email_id, password} = req.body;
+
+//   var user = await User.findOne({
+//     'email_id': email_id
+//   });
+//   if(!user)
+//   {
+//     return next(
+//       new ErrorResponse(`User doesn't exist, please register!`, 404)
+//     );
+//   }
+
+//   user = await User.findOne({
+//     'email_id': email_id,
+//     'password': password
+//   });
+//   console.log(user);
+//   if(!user)
+//   {
+//     return next(
+//       new ErrorResponse(`Password incorrrect!`, 404)
+//     );
+//   }
+  
+//   var token = jwt.sign({ data: user._id }, dbConfig.JWT_SECRET, {
+//     expiresIn: '12h',
+//   });
+
+//   const userData = {
+//     email_id: user.email_id,
+//     _id: user._id,
+//     x_auth_token: token
+//   }
+//   res.status(200).json({ success: true, data: userData });
+// });
+
 //login
 exports.loginUser = asyncHandler(async (req, res, next) => {
-  var {email_id, password} = req.body;
+  var {uid} = req.body;
 
   var user = await User.findOne({
-    'email_id': email_id
+    'uid': uid
   });
   if(!user)
   {
     return next(
       new ErrorResponse(`User doesn't exist, please register!`, 404)
-    );
-  }
-
-  user = await User.findOne({
-    'email_id': email_id,
-    'password': password
-  });
-  console.log(user);
-  if(!user)
-  {
-    return next(
-      new ErrorResponse(`Password incorrrect!`, 404)
     );
   }
   
