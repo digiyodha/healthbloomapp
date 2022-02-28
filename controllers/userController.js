@@ -57,8 +57,8 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 //   res.status(200).json({ success: true, data: user });
 // });
 
-//register
-exports.registerUser = asyncHandler(async (req, res, next) => {
+//register login
+exports.registerLoginUser = asyncHandler(async (req, res, next) => {
   var {email_id, uid, avatar, phone_number, country_code, name} = req.body;
 
   var user = await User.findOne({
@@ -104,13 +104,27 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     userDetailsObj.state = "";
     user = await User.create({ ...userDetailsObj });
   }
-  else
-  {
-    return next(
-      new ErrorResponse(`User already exists, please login!`, 404)
-    );
+  var token = jwt.sign({ data: user._id }, dbConfig.JWT_SECRET, {
+    expiresIn: '12h',
+  });
+
+  const userData = {
+    _id: user._id,
+    name: user.name,
+    email_id: user.email_id,
+    uid: user.uid,
+    gender: user.gender,
+    avatar: user.avatar,
+    country_code: user.country_code,
+    phone_number: user.phone_number,
+    google_address: user.google_address,
+    user_address: user.user_address,
+    city: user.city,
+    state: user.state,
+    blood_group: user.blood_group,
+    x_auth_token: token
   }
-  res.status(200).json({ success: true, data: user });
+  res.status(200).json({ success: true, data: userData });
 });
 
 
@@ -152,31 +166,6 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 //   res.status(200).json({ success: true, data: userData });
 // });
 
-//login
-exports.loginUser = asyncHandler(async (req, res, next) => {
-  var {uid} = req.body;
-
-  var user = await User.findOne({
-    'uid': uid
-  });
-  if(!user)
-  {
-    return next(
-      new ErrorResponse(`User doesn't exist, please register!`, 404)
-    );
-  }
-  
-  var token = jwt.sign({ data: user._id }, dbConfig.JWT_SECRET, {
-    expiresIn: '12h',
-  });
-
-  const userData = {
-    email_id: user.email_id,
-    _id: user._id,
-    x_auth_token: token
-  }
-  res.status(200).json({ success: true, data: userData });
-});
 
 
 //add edit user details
