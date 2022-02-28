@@ -216,7 +216,9 @@ class _SignUpState extends State<SignUp> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  EditProfile()),
+                                                  EditProfile(
+                                                    id: _response.data.id,
+                                                  )),
                                           (Route<dynamic> route) => false,
                                         );
                                       } else {

@@ -14,7 +14,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({Key key}) : super(key: key);
+  final String id;
+  const EditProfile({Key key, this.id}) : super(key: key);
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -431,15 +432,17 @@ class _EditProfileState extends State<EditProfile> {
                                         selectedGender != null) {
                                       AddEditUserProfileRequest _request =
                                           AddEditUserProfileRequest(
-                                              userAddress: '',
-                                              googleAddress: '',
-                                              bloodGroup: selectedBloodGroup,
-                                              city: _city.text,
-                                              countryCode: '+91',
-                                              gender: selectedGender,
-                                              avatar: _uploadAvatarUrl ?? "",
-                                              phoneNumber: _phone.text,
-                                              state: _state.text);
+                                        userAddress: '',
+                                        googleAddress: '',
+                                        bloodGroup: selectedBloodGroup,
+                                        city: _city.text,
+                                        countryCode: '+91',
+                                        gender: selectedGender,
+                                        avatar: _uploadAvatarUrl ?? "",
+                                        phoneNumber: _phone.text,
+                                        state: _state.text,
+                                        id: widget.id,
+                                      );
                                       AddEditUserProfileResponse _response =
                                           await addEditProfile(_request);
                                       print(

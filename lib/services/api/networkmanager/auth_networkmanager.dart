@@ -83,9 +83,9 @@ class NetworkManager {
   Future<Result> addEditProfile(AddEditUserProfileRequest request) async {
     AuthEndpoint endpoint = AuthEndpoints.addEditUserDetails;
     endpoint.addBody(request);
-    String xAuthToken = sp.getString('xAuthToken');
-    print("xAuthToken:  ${xAuthToken.toString()}");
-    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    // String xAuthToken = sp.getString('xAuthToken');
+    // print("xAuthToken:  ${xAuthToken.toString()}");
+    // endpoint.addHeaders({"x-auth-token": xAuthToken});
     Result result = await _client.call(
       endpoint,
     );
