@@ -100,8 +100,8 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 //add edit user details
 exports.addEditUserDetails = asyncHandler(async (req, res, next) => {
     var {gender, country_code, phone_number, avatar, 
-      google_address, user_address, city, state, blood_group} = req.body;
-  const user = await User.findOneAndUpdate({ _id: req.user._id },  {
+      google_address, user_address, city, state, blood_group, _id} = req.body;
+  const user = await User.findOneAndUpdate({ _id: _id },  {
     gender: gender,
     avatar: avatar,
     country_code: country_code,
