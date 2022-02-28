@@ -15,7 +15,7 @@ const {
 
 
 router.route("/").get(protect, getUser).post(registerUser).put(loginUser).delete(protect, deleteUser);
-router.route("/id").put(protect, addEditUserDetails);
+router.route("/id").put(addEditUserDetails);
 
 
 
