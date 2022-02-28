@@ -17,6 +17,7 @@ class AuthEndpoints {
   static get addEditUserDetails => AuthEndpoint("/v1/users/id/", Method.put);
   static get addMember => AuthEndpoint("/v1/family/", Method.post);
   static get addPrescription => AuthEndpoint("/v1/prescription/", Method.post);
+  static get addMedicine => AuthEndpoint("/v1/medicine/", Method.post);
 
   // Edit
   static get editMember => AuthEndpoint("/v1/family/", Method.put);

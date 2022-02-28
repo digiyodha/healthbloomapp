@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/model/request/add_edit_user_profile_request.dart';
+import 'package:health_bloom/model/request/add_medicine_request.dart';
 import 'package:health_bloom/model/request/add_member_request.dart';
 import 'package:health_bloom/model/request/add_prescription_request.dart';
 import 'package:health_bloom/model/request/add_report_request.dart';
@@ -13,6 +14,7 @@ import 'package:health_bloom/model/request/login_user_resquest.dart';
 import 'package:health_bloom/model/request/resgister_user_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
 import 'package:health_bloom/model/response/add_family_response.dart';
+import 'package:health_bloom/model/response/add_medicine_response.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
 import 'package:health_bloom/model/response/add_report_response.dart';
 import 'package:health_bloom/model/response/delete_member_response.dart';
@@ -185,5 +187,12 @@ class NetworkRepository with ChangeNotifier {
     if (apiResult is Success) return apiResult.data;
     if (apiResult is Error) throw apiResult.error;
     return editPrescriptionAPI(request);
+  }
+
+  Future<AddMedicineResponse> addmedicineAPI(AddMedicineRequest request) async {
+    Result apiResult = await apiClient.addMedicine(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return addmedicineAPI(request);
   }
 }

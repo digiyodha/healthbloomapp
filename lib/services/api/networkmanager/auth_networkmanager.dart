@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/request/add_edit_user_profile_request.dart';
+import 'package:health_bloom/model/request/add_medicine_request.dart';
 import 'package:health_bloom/model/request/add_member_request.dart';
 import 'package:health_bloom/model/request/add_prescription_request.dart';
 import 'package:health_bloom/model/request/add_report_request.dart';
@@ -15,6 +16,7 @@ import 'package:health_bloom/model/request/login_user_resquest.dart';
 import 'package:health_bloom/model/request/resgister_user_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
 import 'package:health_bloom/model/response/add_family_response.dart';
+import 'package:health_bloom/model/response/add_medicine_response.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
 import 'package:health_bloom/model/response/add_report_response.dart';
 import 'package:health_bloom/model/response/delete_member_response.dart';
@@ -424,6 +426,28 @@ class NetworkManager {
       print(response);
 
       return Success<EditPriscriptionResponse>(response);
+    }
+    return result;
+  }
+
+  // Add medicine
+  Future<Result> addMedicine(AddMedicineRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.addMedicine;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      AddMedicineResponse response =
+          AddMedicineResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<AddMedicineResponse>(response);
     }
     return result;
   }

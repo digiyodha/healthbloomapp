@@ -5,6 +5,7 @@ import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/view/bill/add_bill.dart';
+import 'package:health_bloom/view/medicine/add_medicine.dart';
 import 'package:health_bloom/view/report/add_report.dart';
 import 'package:hexagon/hexagon.dart';
 import 'package:intl/intl.dart';
@@ -257,52 +258,60 @@ class _HomePageState extends State<HomePage>
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16),
                   children: [
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Color(0xff8B80F8),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "MEDICINE",
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: kWhite,
-                                letterSpacing: 1.5),
-                          ),
-                          Spacer(),
-                          Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              height: 100,
-                              width: 100,
-                              child: Image.asset("assets/images/drug1.png"),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddMedicine()));
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Color(0xff8B80F8),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "MEDICINE",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: kWhite,
+                                  letterSpacing: 1.5),
                             ),
-                          ),
-                          Spacer(),
-                          Text(
-                            "9:00 AM",
-                            style: TextStyle(
-                                fontSize: 22,
-                                color: kWhite,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: 6,
-                          ),
-                          Text(
-                            "Dosage - 10 mg",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: kWhite.withOpacity(0.6),
-                                fontWeight: FontWeight.w400),
-                          ),
-                          Spacer(),
-                        ],
+                            Spacer(),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                height: 100,
+                                width: 100,
+                                child: Image.asset("assets/images/drug1.png"),
+                              ),
+                            ),
+                            Spacer(),
+                            Text(
+                              "9:00 AM",
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  color: kWhite,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Text(
+                              "Dosage - 10 mg",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: kWhite.withOpacity(0.6),
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            Spacer(),
+                          ],
+                        ),
                       ),
                     ),
                     Container(

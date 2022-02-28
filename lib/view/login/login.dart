@@ -45,14 +45,15 @@ class _LoginState extends State<Login> {
     return _response;
   }
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
-    if(googleUser != null){
+    if (googleUser != null) {
       // Obtain the auth details from the request
       final GoogleSignInAuthentication googleAuth =
-      await googleUser?.authentication;
+          await googleUser?.authentication;
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
@@ -70,20 +71,24 @@ class _LoginState extends State<Login> {
     final LoginResult result = await FacebookAuth.instance.login();
     if (result.status == LoginStatus.success) {
       // Create a credential from the access token
-      try{
+      try {
         final OAuthCredential credential =
-        FacebookAuthProvider.credential(result.accessToken.token);
+            FacebookAuthProvider.credential(result.accessToken.token);
         // Once signed in, return the UserCredential
         return await FirebaseAuth.instance.signInWithCredential(credential);
-      }catch (e){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()),));
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e.toString()),
+        ));
       }
     } else {
       print("******************************************************");
       print(result.message);
       print(result.status);
       print(result.accessToken);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result.message),));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(result.message),
+      ));
       setState(() {
         _loading = false;
       });
@@ -325,51 +330,47 @@ class _LoginState extends State<Login> {
                                 ),
                                 color: Color(0xff9378E2),
                                 onPressed: () async {
-                                  setState(() {
-                                    _loading = true;
-                                  });
-
                                   if (_email.text.isNotEmpty &&
                                       _password.text.isNotEmpty) {
-                                    LoginUserRequest _request =
-                                        LoginUserRequest(
-                                            emailId: _email.text,
-                                            password: _password.text);
-                                    LoginUserResponse _response =
-                                        await loginUser(_request);
-                                    print('Login Request ${_request.toJson()}');
-                                    print(
-                                        'Login Response ${_response.toJson()}');
-                                    if (_response.success == true) {
-                                      sp.setString('xAuthToken',
-                                          _response.data.xAuthToken);
-                                      sp.setString('id', _response.data.id);
-
-                                      sp.setString('loginUserEmail',
-                                          _response.data.emailId);
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text('Successful login.'),
-                                      ));
+                                    try {
                                       setState(() {
-                                        _loading = false;
+                                        _loading = true;
                                       });
-
+                                      await _auth.signInWithEmailAndPassword(
+                                        email: _email.text,
+                                        password: _password.text,
+                                      );
+                                      // sp.setString('xAuthToken',
+                                      //     _response.data.xAuthToken);
+                                      sp.setString('id', _auth.currentUser.uid);
+                                      sp.setString('loginUserEmail',
+                                          _auth.currentUser.email);
                                       Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => HomePage()),
                                         (Route<dynamic> route) => false,
                                       );
-                                    } else {
-                                      setState(() {
-                                        _loading = false;
-                                      });
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content:
-                                            Text('Please fill all the details'),
-                                      ));
+                                    } on FirebaseAuthException catch (e) {
+                                      if (e.code == 'user-not-found') {
+                                        setState(() {
+                                          _loading = false;
+                                        });
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              'No user found for that email.'),
+                                        ));
+                                      } else if (e.code == 'wrong-password') {
+                                        setState(() {
+                                          _loading = false;
+                                        });
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              'Wrong password provided for that user.'),
+                                        ));
+                                      }
                                     }
                                   } else {
                                     setState(() {
@@ -489,8 +490,8 @@ class _LoginState extends State<Login> {
                                 sp.setString("email", cred.user.email ?? "");
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
-                                      return HomePage();
-                                    }));
+                                  return HomePage();
+                                }));
                               } else {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(

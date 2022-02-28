@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
@@ -8,7 +9,18 @@ import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/login/login.dart';
 import 'package:health_bloom/view/login/phone_login.dart';
 import 'package:health_bloom/view/profile/edit_profile.dart';
+
 import 'package:provider/provider.dart';
+
+enum AuthMode { login, register, phone }
+
+extension on AuthMode {
+  String get label => this == AuthMode.login
+      ? 'Sign in'
+      : this == AuthMode.phone
+          ? 'Sign in'
+          : 'Register';
+}
 
 class SignUp extends StatefulWidget {
   const SignUp({Key key}) : super(key: key);
@@ -20,6 +32,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   bool _loading = false;
   bool showPassword = true;
+  String error = '';
   TextEditingController _name = TextEditingController();
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
@@ -28,6 +41,8 @@ class _SignUpState extends State<SignUp> {
     RegisterUserResponse _response = await adminAPI.registerUserAPI(request);
     return _response;
   }
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -184,51 +199,60 @@ class _SignUpState extends State<SignUp> {
                                   ),
                                   color: Color(0xff9378E2),
                                   onPressed: () async {
+                                    print(_name.text.toString());
+                                    print(_email.text.toString());
+                                    print(_password.text.toString());
                                     setState(() {
                                       _loading = true;
                                     });
 
-                                    if (_email.text.isNotEmpty &&
-                                        _password.text.isNotEmpty &&
-                                        _name.text.isNotEmpty) {
-                                      RegisterUserRequest _request =
-                                          RegisterUserRequest(
-                                              name: _name.text,
-                                              emailId: _email.text,
-                                              password: _password.text);
-                                      RegisterUserResponse _response =
-                                          await registerUser(_request);
-                                      print(
-                                          'Register Request ${_request.toJson()}');
-                                      print(
-                                          'Register Response ${_response.toJson()}');
-                                      if (_response.success == true) {
-                                        // ScaffoldMessenger.of(context)
-                                        //     .showSnackBar(SnackBar(
-                                        //   content: Text('User created.'),
-                                        // ));
-
+                                    if (_name.text.isNotEmpty &&
+                                        _email.text.isNotEmpty &&
+                                        _password.text.isNotEmpty) {
+                                      try {
+                                        await _auth
+                                            .createUserWithEmailAndPassword(
+                                          email: _email.text,
+                                          password: _password.text,
+                                        );
                                         setState(() {
-                                          _loading = false;
+                                          _loading = true;
                                         });
-
                                         Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  EditProfile(
-                                                    id: _response.data.id,
-                                                  )),
+                                                  EditProfile()),
                                           (Route<dynamic> route) => false,
                                         );
-                                      } else {
+                                      } on FirebaseAuthException catch (e) {
+                                        if (e.code == 'weak-password') {
+                                          setState(() {
+                                            _loading = false;
+                                          });
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                'The password provided is too weak.'),
+                                          ));
+                                        } else if (e.code ==
+                                            'email-already-in-use') {
+                                          setState(() {
+                                            _loading = false;
+                                          });
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                'The account already exists for that email.'),
+                                          ));
+                                        }
+                                      } catch (e) {
                                         setState(() {
                                           _loading = false;
                                         });
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
-                                          content: Text(
-                                              'Please fill all the details'),
+                                          content: Text(e.toString()),
                                         ));
                                       }
                                     } else {
