@@ -4,6 +4,7 @@ import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
+// ignore: unused_import
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
@@ -34,19 +35,20 @@ class _PhoneLoginState extends State<PhoneLogin> {
     });
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     RegisterLoginResponse _response = await adminAPI.loginAPI(request);
-    if(_response.success){
+    if (_response.success) {
       sp.setString('id', _response.data.id);
       sp.setString('email', _response.data.emailId);
       sp.setString('name', _response.data.name);
       sp.setString('xAuthToken', _response.data.xAuthToken);
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(
-            builder: (context) => HomePage()),
-            (Route<dynamic> route) => false,
+        MaterialPageRoute(builder: (context) => HomePage()),
+        (Route<dynamic> route) => false,
       );
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Occurred"),));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error Occurred"),
+      ));
     }
     setState(() {
       isLoading = false;
@@ -69,11 +71,11 @@ class _PhoneLoginState extends State<PhoneLogin> {
       this.otpCode.text = authCredential.smsCode;
     });
     if (authCredential.smsCode != null) {
-      try{
+      try {
         UserCredential credential =
-        await user.linkWithCredential(authCredential);
-      }on FirebaseAuthException catch(e){
-        if(e.code == 'provider-already-linked'){
+            await user.linkWithCredential(authCredential);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'provider-already-linked') {
           await _auth.signInWithCredential(authCredential);
         }
       }
@@ -91,7 +93,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
     }
   }
 
-  _onCodeSent(String verificationId, int forceResendingToken) async{
+  _onCodeSent(String verificationId, int forceResendingToken) async {
     this.verificationId = verificationId;
     print(forceResendingToken);
     print("code sent");
@@ -99,26 +101,24 @@ class _PhoneLoginState extends State<PhoneLogin> {
     await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                PhoneLoginOtp(
+            builder: (context) => PhoneLoginOtp(
                   controller: otpCode,
                   phoneNumber: phoneNumber,
                 )));
 
-    if(otpCode.text.length == 6){
-
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: otpCode.text);
+    if (otpCode.text.length == 6) {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId, smsCode: otpCode.text);
 
       UserCredential user = await _auth.signInWithCredential(credential);
-      if(user != null){
+      if (user != null) {
         await loginUser(RegisterLoginRequest(
             name: user.user.displayName ?? "",
             emailId: user.user.email ?? "",
             uid: user.user.uid,
             avatar: user.user.photoURL ?? "",
             phoneNumber: null,
-            countryCode: null
-        ));
+            countryCode: null));
       }
       setState(() {
         isLoading = false;
@@ -286,16 +286,22 @@ class _PhoneLoginState extends State<PhoneLogin> {
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(0),
                                     prefixIcon: Padding(
-                                      padding: const EdgeInsets.only(left: 16,right: 6),
+                                      padding: const EdgeInsets.only(
+                                          left: 16, right: 6),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.only(bottom: 2),
-                                            child: Text("+91 ",style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.grey,
-                                            ),),
+                                            padding: const EdgeInsets.only(
+                                                bottom: 2),
+                                            child: Text(
+                                              "+91 ",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -324,7 +330,8 @@ class _PhoneLoginState extends State<PhoneLogin> {
                                     setState(() {
                                       isLoading = true;
                                     });
-                                    phoneSignIn(phoneNumber: "+91${phoneNumber.text}");
+                                    phoneSignIn(
+                                        phoneNumber: "+91${phoneNumber.text}");
                                   },
                                   child: TextBuilder(
                                     text: 'SEND OTP',
@@ -372,8 +379,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
                   ),
                 ),
               ),
-              if(isLoading)
-                LoadingWidget()
+              if (isLoading) LoadingWidget()
             ],
           ),
         ),

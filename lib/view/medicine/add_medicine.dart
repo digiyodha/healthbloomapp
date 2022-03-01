@@ -149,6 +149,7 @@ class _AddMedicineState extends State<AddMedicine> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          SizedBox(height: 5),
                           CustomTextField(
                             maxLines: 1,
                             controller: _medicineName,

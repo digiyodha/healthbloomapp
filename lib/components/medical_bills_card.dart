@@ -4,6 +4,7 @@ import 'package:health_bloom/components/textbuilder.dart';
 class MedicalBillsCard extends StatelessWidget {
   final String nameOfBill;
   final String nameOfPatients;
+  final String avatar;
   final DateTime dateOfBill;
   final Function edit;
   final Function delete;
@@ -16,6 +17,7 @@ class MedicalBillsCard extends StatelessWidget {
     this.edit,
     this.delete,
     this.onTap,
+    this.avatar,
   }) : super(key: key);
 
   @override

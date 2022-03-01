@@ -1,4 +1,3 @@
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/utils/colors.dart';
@@ -13,7 +12,6 @@ import '../../utils/drawer/custom_drawer.dart';
 import '../family_members/family_members.dart';
 import '../prescription/add_prescription.dart';
 import '../water_intake/water_intake.dart';
-import 'package:health_bloom/view/profile/profile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -32,7 +30,6 @@ class _HomePageState extends State<HomePage>
   double _fabHeight = 56.0;
   Curve _curve = Curves.ease;
   DateTime today = DateTime.now();
-
 
   @override
   void initState() {
@@ -464,7 +461,9 @@ class _HomePageState extends State<HomePage>
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: CustomBnb(current: 0,),
+        bottomNavigationBar: CustomBnb(
+          current: 0,
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_bloom/components/textbuilder.dart';
@@ -185,12 +186,15 @@ class _LoginState extends State<Login> {
                             children: [
                               const SizedBox(height: 10.0),
                               Container(
-                                height: _email.text.isNotEmpty ? null : 48,
+                                height: 48,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: TextFormField(
                                   controller: _email,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(40),
+                                  ],
                                   // validator: (value) {
                                   //   if (value == null || value.isEmpty) {
                                   //     return "* Required";
@@ -202,6 +206,7 @@ class _LoginState extends State<Login> {
                                   ),
                                   decoration: InputDecoration(
                                     label: TextBuilder(text: 'Email'),
+                                    contentPadding: EdgeInsets.all(10),
                                     labelStyle: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       // color: Color(0xff675F5E),
@@ -223,6 +228,9 @@ class _LoginState extends State<Login> {
                                 ),
                                 child: TextFormField(
                                   controller: _password,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(16),
+                                  ],
                                   // validator: (value) {
                                   //   if (value == null || value.isEmpty) {
                                   //     return "* Required";
@@ -239,6 +247,7 @@ class _LoginState extends State<Login> {
                                       // color: Color(0xff675F5E),
                                     ),
                                     label: TextBuilder(text: 'Password'),
+                                    contentPadding: EdgeInsets.all(10),
                                     suffixIcon: InkWell(
                                         onTap: () {
                                           setState(() {

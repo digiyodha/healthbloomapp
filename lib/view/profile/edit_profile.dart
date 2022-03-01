@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/add_edit_user_profile_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
+import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/login/login.dart';
@@ -39,6 +40,12 @@ class _EditProfileState extends State<EditProfile> {
     return _response;
   }
 
+  Future<GetUserResponse> getUsers() async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    GetUserResponse _response = await adminAPI.getUserAPI();
+    return _response;
+  }
+
   String _uploadAvatarUrl;
   bool _profileLoading = false;
   Future<XFile> singleImage() async {
@@ -63,6 +70,12 @@ class _EditProfileState extends State<EditProfile> {
 
   String getImagePath(XFile image) {
     return image.path.split('/').last;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.id != null) {}
   }
 
   @override

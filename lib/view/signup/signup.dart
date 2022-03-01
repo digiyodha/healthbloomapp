@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -42,7 +43,6 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
 
-
   Future loginUser(RegisterLoginRequest request) async {
     setState(() {
       _loading = true;
@@ -73,7 +73,7 @@ class _SignUpState extends State<SignUp> {
     if (googleUser != null) {
       // Obtain the auth details from the request
       final GoogleSignInAuthentication googleAuth =
-      await googleUser?.authentication;
+          await googleUser?.authentication;
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
@@ -93,7 +93,7 @@ class _SignUpState extends State<SignUp> {
       // Create a credential from the access token
       try {
         final OAuthCredential credential =
-        FacebookAuthProvider.credential(result.accessToken.token);
+            FacebookAuthProvider.credential(result.accessToken.token);
         // Once signed in, return the UserCredential
         return await FirebaseAuth.instance.signInWithCredential(credential);
       } catch (e) {
@@ -186,11 +186,15 @@ class _SignUpState extends State<SignUp> {
                                 ),
                                 child: TextFormField(
                                   controller: _name,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(30),
+                                  ],
                                   style: TextStyle(
                                     color: Color(0xff4F17BD),
                                   ),
                                   decoration: InputDecoration(
                                     label: TextBuilder(text: 'Name'),
+                                    contentPadding: EdgeInsets.all(10),
                                     labelStyle: TextStyle(
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -211,11 +215,15 @@ class _SignUpState extends State<SignUp> {
                                 ),
                                 child: TextFormField(
                                   controller: _email,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(40),
+                                  ],
                                   style: TextStyle(
                                     color: Color(0xff4F17BD),
                                   ),
                                   decoration: InputDecoration(
                                     label: TextBuilder(text: 'Email'),
+                                    contentPadding: EdgeInsets.all(10),
                                     labelStyle: TextStyle(
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -237,11 +245,15 @@ class _SignUpState extends State<SignUp> {
                                 child: TextFormField(
                                   controller: _password,
                                   obscureText: showPassword,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(16),
+                                  ],
                                   style: TextStyle(
                                     color: Color(0xff4F17BD),
                                   ),
                                   decoration: InputDecoration(
                                     label: TextBuilder(text: 'Password'),
+                                    contentPadding: EdgeInsets.all(10),
                                     suffixIcon: InkWell(
                                         onTap: () {
                                           setState(() {
@@ -288,12 +300,11 @@ class _SignUpState extends State<SignUp> {
                                         });
                                         print("_auth ${_auth.toString()}");
                                         await loginUser(RegisterLoginRequest(
-                                            name: _auth.currentUser
-                                                    .displayName ??
-                                                _name.text,
-                                            emailId:
-                                                _auth.currentUser.email ??
-                                                    _email.text,
+                                            name:
+                                                _auth.currentUser.displayName ??
+                                                    _name.text,
+                                            emailId: _auth.currentUser.email ??
+                                                _email.text,
                                             uid: _auth.currentUser.uid,
                                             avatar:
                                                 _auth.currentUser.photoURL ??
@@ -303,8 +314,7 @@ class _SignUpState extends State<SignUp> {
                                         Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EditProfile(
+                                              builder: (context) => EditProfile(
                                                     id: sp.getString("id"),
                                                   )),
                                           (Route<dynamic> route) => false,

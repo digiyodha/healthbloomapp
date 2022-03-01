@@ -92,9 +92,7 @@ class _DocumentsState extends State<Documents> {
       ),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        iconTheme: IconThemeData(
-            color: kWhite
-        ),
+        iconTheme: IconThemeData(color: kWhite),
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: Text("Documents"),
@@ -233,6 +231,7 @@ class _DocumentsState extends State<Documents> {
                 ? _currentResponse.data.bill[index].patient.name
                 : "-",
             dateOfBill: _currentResponse.data.bill[index].date,
+            // avatar: _currentResponse.data.report[index].patient.avatar,
             onTap: () {},
             edit: () {
               Navigator.push(
@@ -274,6 +273,7 @@ class _DocumentsState extends State<Documents> {
                 ? _currentResponse.data.report[index].patient.name
                 : "-",
             dateOfBill: _currentResponse.data.report[index].date,
+            // avatar: _currentResponse.data.report[index].patient.avatar,
             onTap: () {},
             edit: () {
               Navigator.push(
@@ -316,6 +316,7 @@ class _DocumentsState extends State<Documents> {
                     : "-",
             dateOfBill:
                 _currentResponse.data.prescription[index].consultationDate,
+            // avatar: _currentResponse.data.report[index].patient.avatar,
             onTap: () {},
             edit: () {
               Navigator.push(
