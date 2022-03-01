@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/loading.dart';
@@ -39,7 +42,6 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future loginUser(RegisterLoginRequest request) async {
     setState(() {
@@ -61,6 +63,57 @@ class _SignUpState extends State<SignUp> {
     setState(() {
       _loading = false;
     });
+  }
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+
+    if (googleUser != null) {
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+      await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    }
+    return null;
+  }
+
+  Future<UserCredential> signInWithFacebook() async {
+    final LoginResult result = await FacebookAuth.instance.login();
+    if (result.status == LoginStatus.success) {
+      // Create a credential from the access token
+      try {
+        final OAuthCredential credential =
+        FacebookAuthProvider.credential(result.accessToken.token);
+        // Once signed in, return the UserCredential
+        return await FirebaseAuth.instance.signInWithCredential(credential);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e.toString()),
+        ));
+      }
+    } else {
+      print("******************************************************");
+      print(result.message);
+      print(result.status);
+      print(result.accessToken);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(result.message),
+      ));
+      setState(() {
+        _loading = false;
+      });
+    }
+    return null;
   }
 
   @override
@@ -91,11 +144,11 @@ class _SignUpState extends State<SignUp> {
               child: Stack(
                 children: [
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           TextBuilder(
                             text: "Here's Your \nFirst step \nwith us",
@@ -103,199 +156,187 @@ class _SignUpState extends State<SignUp> {
                             fontSize: 30,
                             fontWeight: FontWeight.w800,
                           ),
-                          // Image.asset(
-                          //   'assets/icons/first-aid-box.png',
-                          //   height: 100,
-                          //   width: 100,
-                          // )
+                          Image.asset(
+                            'assets/icons/logo.png',
+                            height: 110,
+                          )
                         ],
                       ),
                       const SizedBox(height: 50.0),
-                      Expanded(
-                        child: Card(
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12)),
-                          child: Container(
-                            width: double.infinity,
-                            height: 400,
-                            padding: EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 15.0),
-                                Container(
-                                  height: 48,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
+                      Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Container(
+                          width: double.infinity,
+                          height: 330,
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 15.0),
+                              Container(
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: TextFormField(
+                                  controller: _name,
+                                  style: TextStyle(
+                                    color: Color(0xff4F17BD),
                                   ),
-                                  child: TextFormField(
-                                    controller: _name,
-                                    style: TextStyle(
-                                      color: Color(0xff4F17BD),
+                                  decoration: InputDecoration(
+                                    label: TextBuilder(text: 'Name'),
+                                    labelStyle: TextStyle(
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                    decoration: InputDecoration(
-                                      label: TextBuilder(text: 'Name'),
-                                      labelStyle: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      suffixIcon: Icon(Icons.person),
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.grey,
-                                        ),
+                                    suffixIcon: Icon(Icons.person),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.grey,
                                       ),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 20.0),
-                                Container(
-                                  height: 48,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
+                              ),
+                              const SizedBox(height: 20.0),
+                              Container(
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: TextFormField(
+                                  controller: _email,
+                                  style: TextStyle(
+                                    color: Color(0xff4F17BD),
                                   ),
-                                  child: TextFormField(
-                                    controller: _email,
-                                    style: TextStyle(
-                                      color: Color(0xff4F17BD),
+                                  decoration: InputDecoration(
+                                    label: TextBuilder(text: 'Email'),
+                                    labelStyle: TextStyle(
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                    decoration: InputDecoration(
-                                      label: TextBuilder(text: 'Email'),
-                                      labelStyle: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      suffixIcon: Icon(Icons.email),
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.grey,
-                                        ),
+                                    suffixIcon: Icon(Icons.email),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.grey,
                                       ),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 20.0),
-                                Container(
-                                  height: 48,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: TextFormField(
-                                    controller: _password,
-                                    obscureText: showPassword,
-                                    style: TextStyle(
-                                      color: Color(0xff4F17BD),
-                                    ),
-                                    decoration: InputDecoration(
-                                      label: TextBuilder(text: 'Password'),
-                                      suffixIcon: InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              showPassword = !showPassword;
-                                            });
-                                          },
-                                          child: Icon(Icons.lock)),
-                                      labelStyle: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.grey.withOpacity(0.2),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                              ),
+                              const SizedBox(height: 20.0),
+                              Container(
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                Expanded(child: SizedBox()),
-                                MaterialButton(
-                                  minWidth: 180,
-                                  height: 40,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25),
+                                child: TextFormField(
+                                  controller: _password,
+                                  obscureText: showPassword,
+                                  style: TextStyle(
+                                    color: Color(0xff4F17BD),
                                   ),
-                                  color: Color(0xff9378E2),
-                                  onPressed: () async {
-                                    print(_name.text.toString());
-                                    print(_email.text.toString());
-                                    print(_password.text.toString());
-
-                                    if (_name.text.isNotEmpty &&
-                                        _email.text.isNotEmpty &&
-                                        _password.text.isNotEmpty) {
-                                      if (_password.text.length > 7) {
-                                        try {
-                                          await _auth
-                                              .createUserWithEmailAndPassword(
-                                            email: _email.text,
-                                            password: _password.text,
-                                          );
+                                  decoration: InputDecoration(
+                                    label: TextBuilder(text: 'Password'),
+                                    suffixIcon: InkWell(
+                                        onTap: () {
                                           setState(() {
-                                            _loading = true;
+                                            showPassword = !showPassword;
                                           });
-                                          print("_auth ${_auth.toString()}");
-                                          await loginUser(RegisterLoginRequest(
-                                              name: _auth.currentUser
-                                                      .displayName ??
-                                                  _name.text,
-                                              emailId:
-                                                  _auth.currentUser.email ??
-                                                      _email.text,
-                                              uid: _auth.currentUser.uid,
-                                              avatar:
-                                                  _auth.currentUser.photoURL ??
-                                                      "",
-                                              phoneNumber: null,
-                                              countryCode: null));
-                                          Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    EditProfile(
-                                                      id: sp.getString("id"),
-                                                    )),
-                                            (Route<dynamic> route) => false,
-                                          );
-                                        } on FirebaseAuthException catch (e) {
-                                          if (e.code == 'weak-password') {
-                                            setState(() {
-                                              _loading = false;
-                                            });
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  'The password provided is too weak.'),
-                                            ));
-                                          } else if (e.code ==
-                                              'email-already-in-use') {
-                                            setState(() {
-                                              _loading = false;
-                                            });
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  'The account already exists for that email.'),
-                                            ));
-                                          }
-                                        } catch (e) {
+                                        },
+                                        child: Icon(Icons.lock)),
+                                    labelStyle: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.grey.withOpacity(0.2),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(child: SizedBox()),
+                              MaterialButton(
+                                minWidth: 180,
+                                height: 40,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                color: Color(0xff9378E2),
+                                onPressed: () async {
+                                  print(_name.text.toString());
+                                  print(_email.text.toString());
+                                  print(_password.text.toString());
+
+                                  if (_name.text.isNotEmpty &&
+                                      _email.text.isNotEmpty &&
+                                      _password.text.isNotEmpty) {
+                                    if (_password.text.length > 7) {
+                                      try {
+                                        await _auth
+                                            .createUserWithEmailAndPassword(
+                                          email: _email.text,
+                                          password: _password.text,
+                                        );
+                                        setState(() {
+                                          _loading = true;
+                                        });
+                                        print("_auth ${_auth.toString()}");
+                                        await loginUser(RegisterLoginRequest(
+                                            name: _auth.currentUser
+                                                    .displayName ??
+                                                _name.text,
+                                            emailId:
+                                                _auth.currentUser.email ??
+                                                    _email.text,
+                                            uid: _auth.currentUser.uid,
+                                            avatar:
+                                                _auth.currentUser.photoURL ??
+                                                    "",
+                                            phoneNumber: null,
+                                            countryCode: null));
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditProfile(
+                                                    id: sp.getString("id"),
+                                                  )),
+                                          (Route<dynamic> route) => false,
+                                        );
+                                      } on FirebaseAuthException catch (e) {
+                                        if (e.code == 'weak-password') {
                                           setState(() {
                                             _loading = false;
                                           });
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
-                                            content: Text(e.toString()),
+                                            content: Text(
+                                                'The password provided is too weak.'),
+                                          ));
+                                        } else if (e.code ==
+                                            'email-already-in-use') {
+                                          setState(() {
+                                            _loading = false;
+                                          });
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                'The account already exists for that email.'),
                                           ));
                                         }
-                                      } else {
+                                      } catch (e) {
                                         setState(() {
                                           _loading = false;
                                         });
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
-                                          content: Text(
-                                              'Password length should be greater than 7.'),
+                                          content: Text(e.toString()),
                                         ));
                                       }
                                     } else {
@@ -304,25 +345,35 @@ class _SignUpState extends State<SignUp> {
                                       });
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
-                                        content:
-                                            Text('Please fill all the details'),
+                                        content: Text(
+                                            'Password length should be greater than 7.'),
                                       ));
                                     }
-                                  },
-                                  child: TextBuilder(
-                                    text: 'SIGN UP',
-                                    wordSpacing: 2,
-                                    latterSpacing: 1.3,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              ],
-                            ),
+                                  } else {
+                                    setState(() {
+                                      _loading = false;
+                                    });
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content:
+                                          Text('Please fill all the details'),
+                                    ));
+                                  }
+                                },
+                                child: TextBuilder(
+                                  text: 'SIGN UP',
+                                  wordSpacing: 2,
+                                  fontSize: 16,
+                                  latterSpacing: 1.3,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ),
-                      const SizedBox(height: 25.0),
+                      const SizedBox(height: 70.0),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30),
                         child: Row(
@@ -356,7 +407,32 @@ class _SignUpState extends State<SignUp> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () async {
+                              setState(() {
+                                _loading = true;
+                              });
+                              UserCredential cred = await signInWithGoogle();
+                              Future.delayed(Duration(seconds: 1))
+                                  .whenComplete(() async {
+                                setState(() {
+                                  _loading = false;
+                                });
+                                if (cred != null) {
+                                  await loginUser(RegisterLoginRequest(
+                                      name: cred.user.displayName ?? "",
+                                      emailId: cred.user.email ?? "",
+                                      uid: cred.user.uid,
+                                      avatar: cred.user.photoURL ?? "",
+                                      phoneNumber: null,
+                                      countryCode: null));
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text("Error occurred!"),
+                                  ));
+                                }
+                              });
+                            },
                             child: CircleAvatar(
                               backgroundColor: Colors.white,
                               radius: 20,
@@ -365,6 +441,40 @@ class _SignUpState extends State<SignUp> {
                                 height: 25,
                                 width: 25,
                               ),
+                            ),
+                          ),
+                          const SizedBox(width: 30.0),
+                          InkWell(
+                            onTap: () async {
+                              setState(() {
+                                _loading = true;
+                              });
+                              UserCredential cred = await signInWithFacebook();
+                              Future.delayed(Duration(seconds: 1))
+                                  .whenComplete(() async {
+                                setState(() {
+                                  _loading = false;
+                                });
+                                if (cred != null) {
+                                  await loginUser(RegisterLoginRequest(
+                                      name: cred.user.displayName ?? "",
+                                      emailId: cred.user.email ?? "",
+                                      uid: cred.user.uid,
+                                      avatar: cred.user.photoURL ?? "",
+                                      phoneNumber: null,
+                                      countryCode: null));
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text("Error occurred!"),
+                                  ));
+                                }
+                              });
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 20,
+                              child: FaIcon(FontAwesomeIcons.facebookF),
                             ),
                           ),
                           const SizedBox(width: 30.0),

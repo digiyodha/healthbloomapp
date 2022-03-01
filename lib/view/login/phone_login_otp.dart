@@ -4,7 +4,8 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 class PhoneLoginOtp extends StatefulWidget {
   final TextEditingController controller;
-  const PhoneLoginOtp({Key key, this.controller}) : super(key: key);
+  final TextEditingController phoneNumber;
+  const PhoneLoginOtp({Key key, this.controller,this.phoneNumber}) : super(key: key);
 
   @override
   State<PhoneLoginOtp> createState() => _PhoneLoginOtpState();
@@ -67,7 +68,7 @@ class _PhoneLoginOtpState extends State<PhoneLoginOtp> {
                         ),
                         const SizedBox(height: 15.0),
                         TextBuilder(
-                          text: "we'll text you on 0878787878",
+                          text: "we'll text you on ${widget.phoneNumber.text}",
                           color: Color(0xff695F61),
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -84,6 +85,7 @@ class _PhoneLoginOtpState extends State<PhoneLoginOtp> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 24, vertical: 20),
                           child: PinCodeTextField(
+                            keyboardType: TextInputType.number,
                             length: 6,
                             obscureText: false,
                             animationType: AnimationType.fade,

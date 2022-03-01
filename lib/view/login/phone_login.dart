@@ -4,6 +4,7 @@ import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
+import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/login/phone_login_otp.dart';
@@ -101,6 +102,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
             builder: (context) =>
                 PhoneLoginOtp(
                   controller: otpCode,
+                  phoneNumber: phoneNumber,
                 )));
 
     if(otpCode.text.length == 6){
@@ -220,137 +222,151 @@ class _PhoneLoginState extends State<PhoneLogin> {
                         ],
                       ),
                       const SizedBox(height: 25.0),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: Card(
-                            clipBehavior: Clip.antiAlias,
-                            elevation: 6,
-                            shadowColor: Color(0xffC2B4DF),
-                            margin: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
+                      Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          elevation: 6,
+                          shadowColor: Color(0xffC2B4DF),
+                          margin: EdgeInsets.zero,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              // color: Colors.green,
+                              shape: BoxShape.rectangle,
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Container(
-                              width: double.infinity,
-                              height: double.infinity,
-                              padding: EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                // color: Colors.green,
-                                shape: BoxShape.rectangle,
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Column(
-                                children: [
-                                  const SizedBox(height: 15.0),
-                                  Container(
-                                    height: 48,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: TextFormField(
-                                      controller: countryCode,
-                                      style: TextStyle(
-                                        color: Color(0xff8D68F5),
-                                      ),
-                                      decoration: InputDecoration(
-                                        label: TextBuilder(text: 'INDIA (+91)'),
-                                        labelStyle: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        suffixIcon: InkWell(
-                                          onTap: () {},
-                                          child: RotatedBox(
-                                              quarterTurns: 1,
-                                              child: Icon(
-                                                Icons.chevron_right,
-                                                size: 30,
-                                              )),
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.grey,
+                            child: Column(
+                              children: [
+                                // const SizedBox(height: 15.0),
+                                // Container(
+                                //   height: 48,
+                                //   decoration: BoxDecoration(
+                                //     borderRadius: BorderRadius.circular(10),
+                                //   ),
+                                //   child: TextFormField(
+                                //     controller: countryCode,
+                                //     style: TextStyle(
+                                //       color: Color(0xff8D68F5),
+                                //     ),
+                                //     decoration: InputDecoration(
+                                //       label: TextBuilder(text: 'INDIA (+91)'),
+                                //       labelStyle: TextStyle(
+                                //         fontWeight: FontWeight.w500,
+                                //       ),
+                                //       suffixIcon: InkWell(
+                                //         onTap: () {},
+                                //         child: RotatedBox(
+                                //             quarterTurns: 1,
+                                //             child: Icon(
+                                //               Icons.chevron_right,
+                                //               size: 30,
+                                //             )),
+                                //       ),
+                                //       border: OutlineInputBorder(
+                                //         borderSide: BorderSide(
+                                //           color: Colors.grey,
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                                const SizedBox(height: 30.0),
+                                TextFormField(
+                                  controller: phoneNumber,
+                                  style: TextStyle(
+                                    color: Color(0xff8D68F5),
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(0),
+                                    prefixIcon: Padding(
+                                      padding: const EdgeInsets.only(left: 16,right: 6),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(bottom: 2),
+                                            child: Text("+91 ",style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.grey,
+                                            ),),
                                           ),
-                                        ),
+                                        ],
+                                      ),
+                                    ),
+                                    labelStyle: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    label: TextBuilder(text: 'Number'),
+                                    suffixIcon: Icon(Icons.phone),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.grey,
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 20.0),
-                                  Container(
-                                    height: 48,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: TextFormField(
-                                      controller: phoneNumber,
-                                      style: TextStyle(
-                                        color: Color(0xff8D68F5),
-                                      ),
-                                      decoration: InputDecoration(
-                                        labelStyle: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        label: TextBuilder(text: 'Number'),
-                                        suffixIcon: Icon(Icons.phone),
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                ),
+                                const SizedBox(height: 30.0),
+                                MaterialButton(
+                                  minWidth: 190,
+                                  height: 40,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                  const SizedBox(height: 25.0),
-                                  Expanded(child: SizedBox()),
-                                  MaterialButton(
-                                    minWidth: 190,
-                                    height: 40,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    color: Color(0xff9378E2),
-                                    onPressed: () {
-                                      setState(() {
-                                        isLoading = true;
-                                      });
-                                      phoneSignIn(phoneNumber: "${countryCode.text}${phoneNumber.text}");
-                                    },
-                                    child: TextBuilder(
-                                      text: 'SIGN IN',
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                ],
-                              ),
+                                  color: Color(0xff9378E2),
+                                  onPressed: () {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    phoneSignIn(phoneNumber: "+91${phoneNumber.text}");
+                                  },
+                                  child: TextBuilder(
+                                    text: 'SEND OTP',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
                       ),
                       const SizedBox(height: 20.0),
-                      Center(
-                        child: TextBuilder(
-                          text:
-                              'We will send to you a verification code to \nyour phone number',
-                          textAlign: TextAlign.center,
-                          color: Color(0xff695F61),
-                        ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      Center(
-                        child: InkWell(
-                          onTap: () {},
-                          child: CircleAvatar(
-                            backgroundColor: Color(0xff9577E2),
-                            radius: 15,
-                            child: Icon(
-                              Icons.chevron_right,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Center(
+                      //   child: TextBuilder(
+                      //     text:
+                      //         'We will send to you a verification code to \nyour phone number',
+                      //     textAlign: TextAlign.center,
+                      //     color: Color(0xff695F61),
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 20.0),
+                      // Center(
+                      //   child: InkWell(
+                      //     onTap: () {
+                      //       setState(() {
+                      //         isLoading = true;
+                      //       });
+                      //       phoneSignIn(phoneNumber: "+91${phoneNumber.text}");
+                      //     },
+                      //     child: CircleAvatar(
+                      //       backgroundColor: Color(0xff9577E2),
+                      //       radius: 20,
+                      //       child: Icon(
+                      //         Icons.chevron_right,
+                      //         color: Colors.white,
+                      //         size: 28,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       const SizedBox(height: 18.0),
                     ],
                   ),

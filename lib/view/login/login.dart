@@ -151,7 +151,7 @@ class _LoginState extends State<Login> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TextBuilder(
                           text: "Already \nhave an \nAccount ?",
@@ -159,11 +159,10 @@ class _LoginState extends State<Login> {
                           fontSize: 30,
                           fontWeight: FontWeight.w800,
                         ),
-                        // Image.asset(
-                        //   'assets/icons/first-aid-box.png',
-                        //   height: 100,
-                        //   width: 100,
-                        // )
+                        Image.asset(
+                          'assets/icons/logo.png',
+                          height: 110,
+                        )
                       ],
                     ),
                     const SizedBox(height: 50.0),
@@ -340,6 +339,7 @@ class _LoginState extends State<Login> {
                                 child: TextBuilder(
                                   text: 'SIGN IN',
                                   wordSpacing: 2,
+                                  fontSize: 16,
                                   latterSpacing: 1.3,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
