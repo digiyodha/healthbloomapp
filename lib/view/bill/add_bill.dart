@@ -164,6 +164,7 @@ class _AddBillState extends State<AddBill> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
+                          SizedBox(height: 5),
                           CustomTextField(
                             maxLines: 1,
                             controller: _billName,
@@ -172,9 +173,7 @@ class _AddBillState extends State<AddBill> {
                             onChanged: () {},
                             onTap: () {},
                           ),
-                          SizedBox(
-                            height: 16,
-                          ),
+                          SizedBox(height: 16),
                           CustomTextField(
                             maxLines: 1,
                             controller: _amount,

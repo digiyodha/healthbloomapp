@@ -8,19 +8,20 @@ import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/add_edit_user_profile_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
+import 'package:health_bloom/utils/drawer/custom_drawer.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/login/login.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class EditProfile extends StatefulWidget {
-  const EditProfile({Key key}) : super(key: key);
+class Profile extends StatefulWidget {
+  const Profile({Key key}) : super(key: key);
 
   @override
-  State<EditProfile> createState() => _EditProfileState();
+  State<Profile> createState() => _ProfileState();
 }
 
-class _EditProfileState extends State<EditProfile> {
+class _ProfileState extends State<Profile> {
   bool _loading = false;
 
   TextEditingController _phone = TextEditingController();
@@ -76,6 +77,9 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      drawer: CustomDrawer(
+        selected: 3,
+      ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SafeArea(

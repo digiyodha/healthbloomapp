@@ -97,9 +97,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                 _loading = true;
               });
 
-              if (_name.text.isNotEmpty &&
-                  _relation.text.isNotEmpty &&
-                  _uploadAvatarUrl != null) {
+              if (_name.text.isNotEmpty && _relation.text.isNotEmpty) {
                 AddMemberRequest _request = AddMemberRequest(
                     age: _age,
                     avatar: _uploadAvatarUrl,
