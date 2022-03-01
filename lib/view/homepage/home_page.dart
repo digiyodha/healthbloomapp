@@ -113,18 +113,34 @@ class _HomePageState extends State<HomePage>
                         ],
                       ),
                     ),
-                    Container(
-                      height: 46,
-                      width: 46,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        image: DecorationImage(
-                          image: NetworkImage(sp.getString('profileImage') ??
-                              'https://winfort.net/wp-content/themes/consultix-1/images/no-image-found-360x260.png'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    )
+                    sp.getString('profileImage').isNotEmpty &&
+                            sp.getString('profileImage') != null
+                        ? Container(
+                            height: 46,
+                            width: 46,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              image: DecorationImage(
+                                image:
+                                    NetworkImage(sp.getString('profileImage')),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
+                        : Container(
+                            height: 46,
+                            width: 46,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.person,
+                                color: kGrey4,
+                                size: 40,
+                              ),
+                            ),
+                          )
                   ],
                 ),
                 SizedBox(height: 24),

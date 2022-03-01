@@ -40,13 +40,26 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   padding: const EdgeInsets.only(left: 16, top: 20),
                   child: Row(
                     children: [
-                      CircleAvatar(
-                        radius: 36,
-                        backgroundColor: kWhite,
-                        backgroundImage: NetworkImage(sp
-                                .getString('profileImage') ??
-                            'https://winfort.net/wp-content/themes/consultix-1/images/no-image-found-360x260.png'),
-                      ),
+                      sp.getString('profileImage').isNotEmpty &&
+                              sp.getString('profileImage') != null
+                          ? CircleAvatar(
+                              radius: 36,
+                              backgroundColor: kWhite,
+                              backgroundImage: NetworkImage(
+                                sp.getString('profileImage'),
+                              ),
+                            )
+                          : CircleAvatar(
+                              radius: 36,
+                              backgroundColor: kWhite,
+                              child: Center(
+                                child: Icon(
+                                  Icons.person,
+                                  color: kGrey4,
+                                  size: 40,
+                                ),
+                              ),
+                            ),
                       SizedBox(
                         width: 14,
                       ),

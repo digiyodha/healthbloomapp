@@ -50,13 +50,21 @@ class _DocumentsState extends State<Documents> {
   Future<void> _endDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
+        initialDate: selectedStartDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
+
     if (picked != null && picked != selectedEndDate) {
       setState(() {
         selectedEndDate = picked;
       });
+      if (selectedEndDate.isBefore(selectedStartDate)) {
+        selectedEndDate = null;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('End date should be greater than start date'),
+        ));
+        // getDocuments();
+      }
       _toDate.text =
           "${selectedEndDate.day}/${selectedEndDate.month}/${selectedEndDate.year}";
       getDocuments();
@@ -219,6 +227,7 @@ class _DocumentsState extends State<Documents> {
   }
 
   Widget getList() {
+    print("Response ${_currentResponse.toJson()}");
     if (currentIndex == 0)
       return ListView.builder(
         padding: EdgeInsets.only(top: 16, bottom: 20),
@@ -231,7 +240,7 @@ class _DocumentsState extends State<Documents> {
                 ? _currentResponse.data.bill[index].patient.name
                 : "-",
             dateOfBill: _currentResponse.data.bill[index].date,
-            // avatar: _currentResponse.data.report[index].patient.avatar,
+            avatar: _currentResponse.data.bill[index].patient.avatar,
             onTap: () {},
             edit: () {
               Navigator.push(
@@ -273,7 +282,7 @@ class _DocumentsState extends State<Documents> {
                 ? _currentResponse.data.report[index].patient.name
                 : "-",
             dateOfBill: _currentResponse.data.report[index].date,
-            // avatar: _currentResponse.data.report[index].patient.avatar,
+            avatar: _currentResponse.data.report[index].patient.avatar,
             onTap: () {},
             edit: () {
               Navigator.push(
@@ -316,7 +325,7 @@ class _DocumentsState extends State<Documents> {
                     : "-",
             dateOfBill:
                 _currentResponse.data.prescription[index].consultationDate,
-            // avatar: _currentResponse.data.report[index].patient.avatar,
+            avatar: _currentResponse.data.prescription[index].patient.avatar,
             onTap: () {},
             edit: () {
               Navigator.push(

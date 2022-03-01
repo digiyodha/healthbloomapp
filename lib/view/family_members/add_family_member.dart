@@ -100,7 +100,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
               if (_name.text.isNotEmpty && _relation.text.isNotEmpty) {
                 AddMemberRequest _request = AddMemberRequest(
                     age: _age,
-                    avatar: _uploadAvatarUrl,
+                    avatar: _uploadAvatarUrl ?? '',
                     name: _name.text,
                     relationship: _relation.text);
                 AddMemberResponse _response = await addMember(_request);

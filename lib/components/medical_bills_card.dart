@@ -51,17 +51,23 @@ class MedicalBillsCard extends StatelessWidget {
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                  child: CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Color(0xffFABE18),
-                    child: Center(
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: 40,
-                      ),
-                    ),
-                  ),
+                  child: avatar.isNotEmpty && avatar != null
+                      ? CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Color(0xffFABE18),
+                          backgroundImage: NetworkImage(avatar),
+                        )
+                      : CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Color(0xffFABE18),
+                          child: Center(
+                            child: Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                          ),
+                        ),
                 ),
               ),
               Expanded(
