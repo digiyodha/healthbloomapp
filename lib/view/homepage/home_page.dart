@@ -8,10 +8,12 @@ import 'package:health_bloom/view/report/add_report.dart';
 import 'package:hexagon/hexagon.dart';
 import 'package:intl/intl.dart';
 
+import '../../utils/custom_bnb.dart';
 import '../../utils/drawer/custom_drawer.dart';
 import '../family_members/family_members.dart';
 import '../prescription/add_prescription.dart';
 import '../water_intake/water_intake.dart';
+import 'package:health_bloom/view/profile/profile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -22,7 +24,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  int _bottomNavIndex = 0;
   bool _fabOpened = false;
   Animation<double> _translateButton;
   Animation<Color> _buttonColor;
@@ -31,12 +32,8 @@ class _HomePageState extends State<HomePage>
   double _fabHeight = 56.0;
   Curve _curve = Curves.ease;
   DateTime today = DateTime.now();
-  // List<Widget> _pages = [
-  //   HomePage(),
-  //   HomePage(),
-  //   HomePage(),
-  //   HomePage(),
-  // ];
+
+
   @override
   void initState() {
     super.initState();
@@ -467,29 +464,7 @@ class _HomePageState extends State<HomePage>
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: AnimatedBottomNavigationBar(
-          elevation: 20,
-          height: 60,
-          icons: [
-            Icons.home,
-            Icons.mic_rounded,
-            Icons.list,
-            Icons.person,
-          ],
-          activeIndex: _bottomNavIndex,
-          gapLocation: GapLocation.center,
-          notchSmoothness: NotchSmoothness.defaultEdge,
-          leftCornerRadius: 32,
-          rightCornerRadius: 32,
-          onTap: (index) {
-            setState(() {
-              _bottomNavIndex = index;
-            });
-          },
-          activeColor: kBlack,
-          inactiveColor: kGreyLite,
-          //other params
-        ),
+        bottomNavigationBar: CustomBnb(current: 0,),
       ),
     );
   }

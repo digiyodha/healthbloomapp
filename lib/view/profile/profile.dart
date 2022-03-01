@@ -14,6 +14,8 @@ import 'package:health_bloom/view/login/login.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/custom_bnb.dart';
+
 class Profile extends StatefulWidget {
   const Profile({Key key}) : super(key: key);
 
@@ -548,6 +550,7 @@ class _ProfileState extends State<Profile> {
           ),
         ),
       ),
+      bottomNavigationBar: CustomBnb(current: 3,),
     );
   }
 }
