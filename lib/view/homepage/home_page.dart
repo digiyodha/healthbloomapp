@@ -31,7 +31,12 @@ class _HomePageState extends State<HomePage>
   double _fabHeight = 56.0;
   Curve _curve = Curves.ease;
   DateTime today = DateTime.now();
-
+  // List<Widget> _pages = [
+  //   HomePage(),
+  //   HomePage(),
+  //   HomePage(),
+  //   HomePage(),
+  // ];
   @override
   void initState() {
     super.initState();
@@ -77,9 +82,7 @@ class _HomePageState extends State<HomePage>
             padding: EdgeInsets.symmetric(horizontal: 18),
             child: Column(
               children: [
-                SizedBox(
-                  height: 18,
-                ),
+                SizedBox(height: 18),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -130,9 +133,7 @@ class _HomePageState extends State<HomePage>
                     )
                   ],
                 ),
-                SizedBox(
-                  height: 24,
-                ),
+                SizedBox(height: 24),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 14),
                   height: 150,
@@ -194,14 +195,103 @@ class _HomePageState extends State<HomePage>
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 24,
-                ),
+                SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       "Medicines",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddMedicine()));
+                      },
+                      child: Icon(
+                        Icons.add,
+                        color: kGreyText,
+                        size: 28,
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 14),
+                Container(
+                  height: 220,
+                  child: ListView.builder(
+                    itemCount: 3,
+                    shrinkWrap: true,
+                    physics: ScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: Container(
+                          height: 220,
+                          width: 170,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Color(0xffAF8EFF),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "MEDICINE",
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: kWhite,
+                                    letterSpacing: 1.5),
+                              ),
+                              Spacer(),
+                              Align(
+                                alignment: Alignment.center,
+                                child: Container(
+                                  height: 100,
+                                  width: 100,
+                                  child: Image.asset("assets/images/drug2.png"),
+                                ),
+                              ),
+                              Spacer(),
+                              Text(
+                                "9:30 AM",
+                                style: TextStyle(
+                                    fontSize: 22,
+                                    color: kWhite,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(
+                                height: 6,
+                              ),
+                              Text(
+                                "Dosage - 5 mg",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: kWhite.withOpacity(0.6),
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              Spacer(),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 14),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Water Intake & Family Member",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -214,9 +304,7 @@ class _HomePageState extends State<HomePage>
                     )
                   ],
                 ),
-                SizedBox(
-                  height: 14,
-                ),
+                SizedBox(height: 14),
                 GridView(
                   padding: EdgeInsets.only(bottom: 34),
                   physics: NeverScrollableScrollPhysics(),
@@ -227,158 +315,6 @@ class _HomePageState extends State<HomePage>
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16),
                   children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddMedicine()));
-                      },
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Color(0xff8B80F8),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "MEDICINE",
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: kWhite,
-                                  letterSpacing: 1.5),
-                            ),
-                            Spacer(),
-                            Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                height: 100,
-                                width: 100,
-                                child: Image.asset("assets/images/drug1.png"),
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              "9:00 AM",
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  color: kWhite,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              "Dosage - 10 mg",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: kWhite.withOpacity(0.6),
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            Spacer(),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Color(0xffAF8EFF),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "MEDICINE",
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: kWhite,
-                                letterSpacing: 1.5),
-                          ),
-                          Spacer(),
-                          Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              height: 100,
-                              width: 100,
-                              child: Image.asset("assets/images/drug2.png"),
-                            ),
-                          ),
-                          Spacer(),
-                          Text(
-                            "9:30 AM",
-                            style: TextStyle(
-                                fontSize: 22,
-                                color: kWhite,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: 6,
-                          ),
-                          Text(
-                            "Dosage - 5 mg",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: kWhite.withOpacity(0.6),
-                                fontWeight: FontWeight.w400),
-                          ),
-                          Spacer(),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Color(0xffFFA38E),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "MEDICINE",
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: kWhite,
-                                letterSpacing: 1.5),
-                          ),
-                          Spacer(),
-                          Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              height: 100,
-                              width: 100,
-                              child: Image.asset("assets/images/drug2.png"),
-                            ),
-                          ),
-                          Spacer(),
-                          Text(
-                            "11:00 AM",
-                            style: TextStyle(
-                                fontSize: 22,
-                                color: kWhite,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: 6,
-                          ),
-                          Text(
-                            "Dosage - 8 mg",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: kWhite.withOpacity(0.6),
-                                fontWeight: FontWeight.w400),
-                          ),
-                          Spacer(),
-                        ],
-                      ),
-                    ),
                     InkWell(
                       onTap: () {
                         Navigator.push(context,
@@ -545,7 +481,11 @@ class _HomePageState extends State<HomePage>
           notchSmoothness: NotchSmoothness.defaultEdge,
           leftCornerRadius: 32,
           rightCornerRadius: 32,
-          onTap: (index) => setState(() => _bottomNavIndex = index),
+          onTap: (index) {
+            setState(() {
+              _bottomNavIndex = index;
+            });
+          },
           activeColor: kBlack,
           inactiveColor: kGreyLite,
           //other params
@@ -625,9 +565,7 @@ class _HomePageState extends State<HomePage>
                   fontSize: 20, color: kGrey7, fontWeight: FontWeight.w600),
             ),
           ),
-          SizedBox(
-            width: 16,
-          ),
+          SizedBox(width: 16),
           FloatingActionButton(
             heroTag: "schedule",
             backgroundColor: kMainColor,

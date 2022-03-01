@@ -163,6 +163,7 @@ class _AddReportState extends State<AddReport> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
+                          SizedBox(height: 5),
                           CustomTextField(
                             maxLines: 1,
                             controller: _nameOfReport,

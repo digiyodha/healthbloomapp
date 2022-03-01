@@ -304,7 +304,7 @@ class _AddMedicineState extends State<AddMedicine> {
                               borderRadius: 10,
                               disabledColor: kGreyLite,
                               width: 130,
-                              text: "Add More",
+                              text: _listOfTimes.isEmpty ? "Add" : "Add More",
                               onPressed: () async {
                                 setState(() {
                                   _selectMedicineTime(context);

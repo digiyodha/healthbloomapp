@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/view/documents/documents.dart';
+import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
 import '../../view/family_members/family_members.dart';
 import '../../view/water_intake/water_intake.dart';
@@ -58,8 +59,19 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 30,
+                SizedBox(height: 30),
+                DrawerContainerWidget(
+                  text: "Home",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(),
+                      ),
+                    );
+                  },
+                  selected: widget.selected == 0,
+                  icon: Icons.home,
                 ),
                 DrawerContainerWidget(
                   text: "Profile",

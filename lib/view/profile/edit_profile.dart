@@ -27,9 +27,9 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController _phone = TextEditingController();
   TextEditingController _city = TextEditingController();
   TextEditingController _state = TextEditingController();
-  String selectedGender = 'Male';
+  String selectedGender;
   List<String> gender = ['Male', 'Female', 'Other'];
-  String selectedBloodGroup = 'O+';
+  String selectedBloodGroup;
   List<String> bloodGroup = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'];
   Future<AddEditUserProfileResponse> addEditProfile(
       AddEditUserProfileRequest request) async {
