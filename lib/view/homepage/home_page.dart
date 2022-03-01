@@ -1,15 +1,12 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:health_bloom/components/textbuilder.dart';
-import 'package:health_bloom/model/response/get_user_response.dart';
-import 'package:health_bloom/services/api/repository/auth_repository.dart';
+import 'package:health_bloom/main.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/view/bill/add_bill.dart';
 import 'package:health_bloom/view/medicine/add_medicine.dart';
 import 'package:health_bloom/view/report/add_report.dart';
 import 'package:hexagon/hexagon.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 import '../../utils/drawer/custom_drawer.dart';
 import '../family_members/family_members.dart';
@@ -34,17 +31,11 @@ class _HomePageState extends State<HomePage>
   double _fabHeight = 56.0;
   Curve _curve = Curves.ease;
   DateTime today = DateTime.now();
-  Future _futureUser;
-  Future<GetUserResponse> getUser() async {
-    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    GetUserResponse _response = await adminAPI.getUserAPI();
-    return _response;
-  }
 
   @override
   void initState() {
     super.initState();
-    _futureUser = getUser();
+
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300))
           ..addListener(() {
@@ -89,71 +80,55 @@ class _HomePageState extends State<HomePage>
                 SizedBox(
                   height: 18,
                 ),
-                FutureBuilder<GetUserResponse>(
-                  future: _futureUser,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Row(
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 26),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.wb_sunny,
-                                      color: kMainColor,
-                                      size: 15,
-                                    ),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      "${DateFormat('EEEE, d MMM, yyyy').format(today)}" ??
-                                          '',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          letterSpacing: 1.5,
-                                          color: kMainColor,
-                                          fontWeight: FontWeight.w800),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  "Hi, ${snapshot.data.data.name.toString()}",
-                                  style: TextStyle(
-                                      fontSize: 34,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            height: 46,
-                            width: 46,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              image: DecorationImage(
-                                image: NetworkImage(snapshot.data.data.avatar ??
-                                    'https://winfort.net/wp-content/themes/consultix-1/images/no-image-found-360x260.png'),
-                                fit: BoxFit.cover,
+                          SizedBox(height: 26),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.wb_sunny,
+                                color: kMainColor,
+                                size: 15,
                               ),
-                            ),
-                          )
+                              SizedBox(width: 4),
+                              Text(
+                                "${DateFormat('EEEE, d MMM, yyyy').format(today)}" ??
+                                    '',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    letterSpacing: 1.5,
+                                    color: kMainColor,
+                                    fontWeight: FontWeight.w800),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            "Hi, ${sp.getString('name').toString()}",
+                            style: TextStyle(
+                                fontSize: 34, fontWeight: FontWeight.w600),
+                          ),
                         ],
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text("${snapshot.error}");
-                    }
-                    return Center(
-                      child: TextBuilder(
-                        text: 'Loading',
-                        color: Colors.white,
                       ),
-                    );
-                  },
+                    ),
+                    Container(
+                      height: 46,
+                      width: 46,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                          image: NetworkImage(sp.getString('profileImage') ??
+                              'https://winfort.net/wp-content/themes/consultix-1/images/no-image-found-360x260.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
                 SizedBox(
                   height: 24,

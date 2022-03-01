@@ -47,6 +47,7 @@ class _SignUpState extends State<SignUp> {
     });
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     RegisterLoginResponse _response = await adminAPI.loginAPI(request);
+    print("Register User Response: ${_response.toJson()}");
     if (_response.success) {
       sp.setString('id', _response.data.id);
       sp.setString('email', _response.data.emailId);
@@ -234,13 +235,14 @@ class _SignUpState extends State<SignUp> {
                                           setState(() {
                                             _loading = true;
                                           });
-
+                                          print("_auth ${_auth.toString()}");
                                           await loginUser(RegisterLoginRequest(
                                               name: _auth.currentUser
                                                       .displayName ??
-                                                  "",
+                                                  _name.text,
                                               emailId:
-                                                  _auth.currentUser.email ?? "",
+                                                  _auth.currentUser.email ??
+                                                      _email.text,
                                               uid: _auth.currentUser.uid,
                                               avatar:
                                                   _auth.currentUser.photoURL ??
@@ -287,6 +289,9 @@ class _SignUpState extends State<SignUp> {
                                           ));
                                         }
                                       } else {
+                                        setState(() {
+                                          _loading = false;
+                                        });
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
                                           content: Text(

@@ -42,6 +42,7 @@ class _LoginState extends State<Login> {
       sp.setString('email', _response.data.emailId);
       sp.setString('name', _response.data.name);
       sp.setString('xAuthToken', _response.data.xAuthToken);
+      sp.setString('profileImage', _response.data.avatar);
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),

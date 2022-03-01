@@ -27,9 +27,9 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController _phone = TextEditingController();
   TextEditingController _city = TextEditingController();
   TextEditingController _state = TextEditingController();
-  String selectedGender;
+  String selectedGender = 'Male';
   List<String> gender = ['Male', 'Female', 'Other'];
-  String selectedBloodGroup;
+  String selectedBloodGroup = 'O+';
   List<String> bloodGroup = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'];
   Future<AddEditUserProfileResponse> addEditProfile(
       AddEditUserProfileRequest request) async {
@@ -255,6 +255,7 @@ class _EditProfileState extends State<EditProfile> {
                                 const SizedBox(height: 20.0),
                                 TextFormField(
                                   controller: _phone,
+                                  keyboardType: TextInputType.number,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return "* Required";
