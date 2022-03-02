@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:health_bloom/components/textbuilder.dart';
+// ignore: unused_import
+import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/request/add_edit_user_profile_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
@@ -473,6 +475,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                       print(
                                           'Add Edit Profile Response ${_response.toJson()}');
                                       if (_response.success == true) {
+                                        // sp.setString(
+                                        //     'name', _response.data.name);
+                                        // sp.setString('profileImage',
+                                        //     _response.data.avatar);
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
                                           content: Text('Profile updated.'),

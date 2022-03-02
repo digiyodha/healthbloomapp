@@ -2,10 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_bloom/main.dart';
+import 'package:health_bloom/model/response/get_user_response.dart';
+import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/view/documents/documents.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/profile/profile.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
+import 'package:provider/provider.dart';
 import '../../view/family_members/family_members.dart';
 import '../../view/water_intake/water_intake.dart';
 import '../colors.dart';
@@ -20,6 +23,12 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+  Future<GetUserResponse> getUser() async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    GetUserResponse _response = await adminAPI.getUserAPI();
+    return _response;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -37,40 +46,49 @@ class _CustomDrawerState extends State<CustomDrawer> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, top: 20),
-                  child: Row(
-                    children: [
-                      sp.getString('profileImage') != null
-                          ? CircleAvatar(
-                              radius: 36,
-                              backgroundColor: kWhite,
-                              backgroundImage: NetworkImage(
-                                sp.getString('profileImage'),
+                FutureBuilder<GetUserResponse>(
+                  future: getUser(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 16, top: 20),
+                        child: Row(
+                          children: [
+                            snapshot.data.data.avatar != null &&
+                                    snapshot.data.data.avatar.isNotEmpty
+                                ? CircleAvatar(
+                                    radius: 36,
+                                    backgroundColor: kWhite,
+                                    backgroundImage: NetworkImage(
+                                      snapshot.data.data.avatar,
+                                    ),
+                                  )
+                                : CircleAvatar(
+                                    radius: 36,
+                                    backgroundColor: kWhite,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.person,
+                                        color: kGrey4,
+                                        size: 40,
+                                      ),
+                                    ),
+                                  ),
+                            SizedBox(width: 14),
+                            Expanded(
+                              child: Text(
+                                "${snapshot.data.data.name.toString()}",
+                                style: TextStyle(fontSize: 20, color: kWhite),
                               ),
                             )
-                          : CircleAvatar(
-                              radius: 36,
-                              backgroundColor: kWhite,
-                              child: Center(
-                                child: Icon(
-                                  Icons.person,
-                                  color: kGrey4,
-                                  size: 40,
-                                ),
-                              ),
-                            ),
-                      SizedBox(
-                        width: 14,
-                      ),
-                      Expanded(
-                        child: Text(
-                          "${sp.getString('name').toString()}",
-                          style: TextStyle(fontSize: 20, color: kWhite),
+                          ],
                         ),
-                      )
-                    ],
-                  ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
+                    return Center();
+                  },
                 ),
                 SizedBox(height: 30),
                 DrawerContainerWidget(
@@ -92,8 +110,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     Navigator.pop(context);
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                          return Profile();
-                        }));
+                      return Profile();
+                    }));
                   },
                   selected: widget.selected == 1,
                   icon: Icons.person,
