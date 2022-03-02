@@ -177,29 +177,29 @@ class _PhoneLoginOtpState extends State<PhoneLoginOtp> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 40.0),
-                Center(
-                  child: TextBuilder(
-                    text:
-                        'We will send to you a verification code to \nyour phone number',
-                    textAlign: TextAlign.center,
-                    color: Color(0xff695F61),
-                  ),
-                ),
-                const SizedBox(height: 20.0),
-                Center(
-                  child: InkWell(
-                    onTap: () {},
-                    child: CircleAvatar(
-                      backgroundColor: Color(0xff9577E2),
-                      radius: 15,
-                      child: Icon(
-                        Icons.chevron_right,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
+                // const SizedBox(height: 40.0),
+                // Center(
+                //   child: TextBuilder(
+                //     text:
+                //         'We will send to you a verification code to \nyour phone number',
+                //     textAlign: TextAlign.center,
+                //     color: Color(0xff695F61),
+                //   ),
+                // ),
+                // const SizedBox(height: 20.0),
+                // Center(
+                //   child: InkWell(
+                //     onTap: () {},
+                //     child: CircleAvatar(
+                //       backgroundColor: Color(0xff9577E2),
+                //       radius: 15,
+                //       child: Icon(
+                //         Icons.chevron_right,
+                //         color: Colors.white,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

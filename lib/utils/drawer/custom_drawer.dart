@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/view/documents/documents.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
+import 'package:health_bloom/view/profile/profile.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
 import '../../view/family_members/family_members.dart';
 import '../../view/water_intake/water_intake.dart';
@@ -40,8 +41,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   padding: const EdgeInsets.only(left: 16, top: 20),
                   child: Row(
                     children: [
-                      sp.getString('profileImage').isNotEmpty &&
-                              sp.getString('profileImage') != null
+                      sp.getString('profileImage') != null
                           ? CircleAvatar(
                               radius: 36,
                               backgroundColor: kWhite,
@@ -89,12 +89,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 DrawerContainerWidget(
                   text: "Profile",
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => EditProfile(),
-                    //   ),
-                    // );
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                          return Profile();
+                        }));
                   },
                   selected: widget.selected == 1,
                   icon: Icons.person,

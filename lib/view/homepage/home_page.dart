@@ -113,8 +113,7 @@ class _HomePageState extends State<HomePage>
                         ],
                       ),
                     ),
-                    sp.getString('profileImage').isNotEmpty &&
-                            sp.getString('profileImage') != null
+                    sp.getString('profileImage') != null
                         ? Container(
                             height: 46,
                             width: 46,

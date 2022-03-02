@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 import '../../main.dart';
 import '../../model/request/request.dart';
 import '../../model/response/response.dart';
+import '../homepage/home_page.dart';
 
 enum AuthMode { login, register, phone }
 
@@ -43,7 +44,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
 
-  Future loginUser(RegisterLoginRequest request) async {
+  Future loginUser(RegisterLoginRequest request,{bool soc = false}) async {
     setState(() {
       _loading = true;
     });
@@ -55,6 +56,14 @@ class _SignUpState extends State<SignUp> {
       sp.setString('email', _response.data.emailId);
       sp.setString('name', _response.data.name);
       sp.setString('xAuthToken', _response.data.xAuthToken);
+      sp.setString('profileImage', _response.data.avatar);
+      if(soc){
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+              (Route<dynamic> route) => false,
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Error Occurred"),
@@ -434,7 +443,7 @@ class _SignUpState extends State<SignUp> {
                                       uid: cred.user.uid,
                                       avatar: cred.user.photoURL ?? "",
                                       phoneNumber: null,
-                                      countryCode: null));
+                                      countryCode: null),soc: true);
                                 } else {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
@@ -472,7 +481,7 @@ class _SignUpState extends State<SignUp> {
                                       uid: cred.user.uid,
                                       avatar: cred.user.photoURL ?? "",
                                       phoneNumber: null,
-                                      countryCode: null));
+                                      countryCode: null),soc: true);
                                 } else {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(

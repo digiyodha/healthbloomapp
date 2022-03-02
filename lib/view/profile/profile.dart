@@ -44,7 +44,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: CustomDrawer(
-        selected: 3,
+        selected: 1,
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
