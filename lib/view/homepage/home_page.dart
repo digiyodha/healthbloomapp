@@ -447,7 +447,6 @@ class _HomePageState extends State<HomePage>
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             _settingModalBottomSheet(context);
-            
           },
           child: Icon(Icons.add),
         ),
@@ -641,10 +640,10 @@ class _HomePageState extends State<HomePage>
               ListTile(
                 leading: Icon(Icons.add),
                 title: Text('Bill'),
-                onTap: () => {
+                onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddBill()))
-                      Navigator.pop(context);
+                          MaterialPageRoute(builder: (context) => AddBill()))
+                      .whenComplete(() => Navigator.pop(context));
                 },
               ),
               ListTile(
@@ -652,18 +651,33 @@ class _HomePageState extends State<HomePage>
                 title: new Text('Report'),
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddBill()));
+                          MaterialPageRoute(builder: (context) => AddReport()))
+                      .whenComplete(() => Navigator.pop(context));
                 },
               ),
               ListTile(
                 leading: new Icon(Icons.add),
                 title: new Text('Prescription'),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddPrescription()))
+                      .whenComplete(() => Navigator.pop(context));
+                  // Navigator.pop(context);
+                },
               ),
               ListTile(
                 leading: new Icon(Icons.add),
                 title: new Text('Medicine'),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddMedicine()))
+                      .whenComplete(() => Navigator.pop(context));
+                  // Navigator.pop(context);
+                },
               ),
             ],
           ),
