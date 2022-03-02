@@ -172,7 +172,7 @@ exports.registerLoginUser = asyncHandler(async (req, res, next) => {
 
 //add edit user details
 exports.addEditUserDetails = asyncHandler(async (req, res, next) => {
-    var {gender, country_code, phone_number, avatar, 
+    var {gender, country_code, phone_number, avatar, name, 
       google_address, user_address, city, state, blood_group, _id} = req.body;
   const user = await User.findOneAndUpdate({ _id: _id },  {
     gender: gender,
@@ -183,7 +183,8 @@ exports.addEditUserDetails = asyncHandler(async (req, res, next) => {
     user_address: user_address,
     city: city,
     state: state,
-    blood_group: blood_group
+    blood_group: blood_group,
+    name: name
   } , {
       new: true
   });
