@@ -5,6 +5,10 @@ import 'package:health_bloom/model/request/get_documents_request.dart';
 import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
+import 'package:health_bloom/view/documents/view_bill_documents.dart';
+import 'package:health_bloom/view/documents/view_prescription_documents.dart';
+import 'package:health_bloom/view/documents/view_report_documents.dart';
+
 import 'package:health_bloom/view/prescription/add_prescription.dart';
 import 'package:health_bloom/view/report/add_report.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +34,6 @@ class _DocumentsState extends State<Documents> {
   int currentIndex = 0;
   bool _loading = false;
   GetAllDocumentsResponse _currentResponse;
-
   Future<void> _startDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
@@ -241,7 +244,16 @@ class _DocumentsState extends State<Documents> {
                 : "-",
             dateOfBill: _currentResponse.data.bill[index].date,
             avatar: _currentResponse.data.bill[index].patient.avatar,
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ViewBillDocuments(
+                    bill: _currentResponse.data.bill[index],
+                  ),
+                ),
+              );
+            },
             edit: () {
               Navigator.push(
                 context,
@@ -283,7 +295,18 @@ class _DocumentsState extends State<Documents> {
                 : "-",
             dateOfBill: _currentResponse.data.report[index].date,
             avatar: _currentResponse.data.report[index].patient.avatar,
-            onTap: () {},
+            onTap: () {
+              print(
+                  "Report ${_currentResponse.data.report[index].billImage.toList().toString()}");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ViewReportDocuments(
+                    report: _currentResponse.data.report[index],
+                  ),
+                ),
+              );
+            },
             edit: () {
               Navigator.push(
                 context,
@@ -326,7 +349,16 @@ class _DocumentsState extends State<Documents> {
             dateOfBill:
                 _currentResponse.data.prescription[index].consultationDate,
             avatar: _currentResponse.data.prescription[index].patient.avatar,
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ViewPrescriptionDocuments(
+                    prescriprion: _currentResponse.data.prescription[index],
+                  ),
+                ),
+              );
+            },
             edit: () {
               Navigator.push(
                 context,

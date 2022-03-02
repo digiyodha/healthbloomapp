@@ -29,7 +29,7 @@ class _AddMedicineState extends State<AddMedicine> {
   TextEditingController _date = TextEditingController();
   TextEditingController _duration = TextEditingController();
   TextEditingController _familyMember = TextEditingController();
-  DateTime startDate = DateTime.now();
+  DateTime startDate;
   bool _loading = false;
   Future _future;
   String _memberId;
@@ -41,7 +41,7 @@ class _AddMedicineState extends State<AddMedicine> {
   Future<void> _startDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: startDate,
+        initialDate: DateTime.now(),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != startDate) {
@@ -86,6 +86,8 @@ class _AddMedicineState extends State<AddMedicine> {
   void initState() {
     super.initState();
     _listOfTimes.clear();
+
+    print('Start date ' + startDate.toString());
     _future = getAllmember();
     if (widget.bill != null) {
       _medicineName.text = widget.bill.name.toString();
@@ -306,16 +308,16 @@ class _AddMedicineState extends State<AddMedicine> {
                               disabledColor: kGreyLite,
                               width: 130,
                               text: _listOfTimes.isEmpty ? "Add" : "Add More",
-                              onPressed: () async {
-                                setState(() {
+                              onPressed: () {
+                                if (startDate == null) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text("Select start date"),
+                                  ));
+                                } else {
+                                  setState(() {});
                                   _selectMedicineTime(context);
-                                  // _listOfTimes.add(DateTime(
-                                  //     startDate.year,
-                                  //     startDate.month,
-                                  //     startDate.day,
-                                  //     selectedTime.hour,
-                                  //     selectedTime.minute));
-                                });
+                                }
                               },
                             ),
                           ),
