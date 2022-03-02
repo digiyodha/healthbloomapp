@@ -249,6 +249,7 @@ class _ProfileState extends State<Profile> {
                                         snapshot.data.data.emailId ??
                                             '',
                                         style: TextStyle(
+
                                           fontWeight: FontWeight.w400,
                                           color: Colors.black,
                                         ),
