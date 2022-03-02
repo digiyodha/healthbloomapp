@@ -144,7 +144,7 @@ class _ProfileState extends State<Profile> {
                                       ),
                                       const SizedBox(height: 10.0),
                                       Text(
-                                        snapshot.data.data.name.toString() ??
+                                        snapshot.data.data.name ??
                                             '',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
@@ -161,7 +161,7 @@ class _ProfileState extends State<Profile> {
                                       ),
                                       const SizedBox(height: 10.0),
                                       Text(
-                                        snapshot.data.data.gender.toString() ??
+                                        snapshot.data.data.gender ??
                                             '',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
@@ -178,8 +178,7 @@ class _ProfileState extends State<Profile> {
                                       ),
                                       const SizedBox(height: 10.0),
                                       Text(
-                                        snapshot.data.data.bloodGroup
-                                                .toString() ??
+                                        snapshot.data.data.bloodGroup ??
                                             '',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
@@ -196,8 +195,7 @@ class _ProfileState extends State<Profile> {
                                       ),
                                       const SizedBox(height: 10.0),
                                       Text(
-                                        snapshot.data.data.phoneNumber
-                                                .toString() ??
+                                        snapshot.data.data.phoneNumber ??
                                             '',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
@@ -214,7 +212,7 @@ class _ProfileState extends State<Profile> {
                                       ),
                                       const SizedBox(height: 10.0),
                                       Text(
-                                        snapshot.data.data.city.toString() ??
+                                        snapshot.data.data.city ??
                                             '',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
@@ -231,7 +229,7 @@ class _ProfileState extends State<Profile> {
                                       ),
                                       const SizedBox(height: 10.0),
                                       Text(
-                                        snapshot.data.data.state.toString() ??
+                                        snapshot.data.data.state ??
                                             '',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
@@ -248,7 +246,7 @@ class _ProfileState extends State<Profile> {
                                       ),
                                       const SizedBox(height: 10.0),
                                       Text(
-                                        snapshot.data.data.emailId.toString() ??
+                                        snapshot.data.data.emailId ??
                                             '',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
