@@ -5,12 +5,14 @@ class AddMedicineResponse {
   });
 
   bool success;
-  Data data;
+  AddMedicineResponseData data;
 
   factory AddMedicineResponse.fromJson(Map<String, dynamic> json) =>
       AddMedicineResponse(
         success: json["success"] == null ? null : json["success"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        data: json["data"] == null
+            ? null
+            : AddMedicineResponseData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -19,8 +21,8 @@ class AddMedicineResponse {
       };
 }
 
-class Data {
-  Data({
+class AddMedicineResponseData {
+  AddMedicineResponseData({
     this.time,
     this.reminderTime,
     this.alarmTimer,
@@ -40,15 +42,16 @@ class Data {
   bool alarmTimer;
   String medicineName;
   int amount;
-  int dosage;
-  int doses;
+  String dosage;
+  String doses;
   String duration;
   DateTime startDate;
   String patient;
   String userId;
   String id;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory AddMedicineResponseData.fromJson(Map<String, dynamic> json) =>
+      AddMedicineResponseData(
         time: json["time"] == null
             ? null
             : List<DateTime>.from(json["time"].map((x) => DateTime.parse(x))),

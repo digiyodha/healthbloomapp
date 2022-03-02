@@ -14,8 +14,8 @@ class AddMedicineRequest {
 
   String medicineName;
   int amount;
-  int dosage;
-  int doses;
+  String dosage;
+  String doses;
   String duration;
   List<DateTime> time;
   DateTime startDate;
