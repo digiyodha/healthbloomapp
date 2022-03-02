@@ -44,7 +44,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
 
-  Future loginUser(RegisterLoginRequest request,{bool soc = false}) async {
+  Future loginUser(RegisterLoginRequest request, {bool soc = false}) async {
     setState(() {
       _loading = true;
     });
@@ -56,12 +56,12 @@ class _SignUpState extends State<SignUp> {
       sp.setString('email', _response.data.emailId);
       sp.setString('name', _response.data.name);
       sp.setString('xAuthToken', _response.data.xAuthToken);
-      sp.setString('profileImage', _response.data.avatar);
-      if(soc){
+      sp.setString('profileImage', _response.data.avatar ?? '');
+      if (soc) {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomePage()),
-              (Route<dynamic> route) => false,
+          (Route<dynamic> route) => false,
         );
       }
     } else {
@@ -319,7 +319,7 @@ class _SignUpState extends State<SignUp> {
                                                 _auth.currentUser.photoURL ??
                                                     "",
                                             phoneNumber: null,
-                                            countryCode: null));
+                                            countryCode: "91"));
                                         Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
@@ -437,13 +437,15 @@ class _SignUpState extends State<SignUp> {
                                   _loading = false;
                                 });
                                 if (cred != null) {
-                                  await loginUser(RegisterLoginRequest(
-                                      name: cred.user.displayName ?? "",
-                                      emailId: cred.user.email ?? "",
-                                      uid: cred.user.uid,
-                                      avatar: cred.user.photoURL ?? "",
-                                      phoneNumber: null,
-                                      countryCode: null),soc: true);
+                                  await loginUser(
+                                      RegisterLoginRequest(
+                                          name: cred.user.displayName ?? "",
+                                          emailId: cred.user.email ?? "",
+                                          uid: cred.user.uid,
+                                          avatar: cred.user.photoURL ?? "",
+                                          phoneNumber: null,
+                                          countryCode: null),
+                                      soc: true);
                                 } else {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
@@ -475,13 +477,15 @@ class _SignUpState extends State<SignUp> {
                                   _loading = false;
                                 });
                                 if (cred != null) {
-                                  await loginUser(RegisterLoginRequest(
-                                      name: cred.user.displayName ?? "",
-                                      emailId: cred.user.email ?? "",
-                                      uid: cred.user.uid,
-                                      avatar: cred.user.photoURL ?? "",
-                                      phoneNumber: null,
-                                      countryCode: null),soc: true);
+                                  await loginUser(
+                                      RegisterLoginRequest(
+                                          name: cred.user.displayName ?? "",
+                                          emailId: cred.user.email ?? "",
+                                          uid: cred.user.uid,
+                                          avatar: cred.user.photoURL ?? "",
+                                          phoneNumber: null,
+                                          countryCode: null),
+                                      soc: true);
                                 } else {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
