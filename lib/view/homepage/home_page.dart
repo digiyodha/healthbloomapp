@@ -9,6 +9,7 @@ import 'package:hexagon/hexagon.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../main.dart';
 import '../../utils/custom_bnb.dart';
 import '../../utils/drawer/custom_drawer.dart';
 import '../family_members/family_members.dart';
@@ -32,16 +33,33 @@ class _HomePageState extends State<HomePage>
   double _fabHeight = 56.0;
   Curve _curve = Curves.ease;
   DateTime today = DateTime.now();
+  DateTime _today = DateTime.now();
+  int _waterInMl;
+
   Future<GetUserResponse> getUser() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     GetUserResponse _response = await adminAPI.getUserAPI();
     return _response;
   }
 
+  getData() {
+    setState(() {
+      _waterInMl = null;
+    });
+    if (sp.getString("${_today.day}/${_today.month}/${_today.year}") != null) {
+      _waterInMl = int.parse(
+          sp.getString("${_today.day}/${_today.month}/${_today.year}"));
+    } else {
+      sp.setString("${_today.day}/${_today.month}/${_today.year}", "0");
+      _waterInMl = 0;
+    }
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
-
+    getData();
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300))
           ..addListener(() {
@@ -348,7 +366,10 @@ class _HomePageState extends State<HomePage>
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
                           return WaterIntake();
-                        }));
+                        })).whenComplete(() {
+                          getData();
+                          setState(() {});
+                        });
                       },
                       child: Container(
                         padding:
@@ -379,7 +400,7 @@ class _HomePageState extends State<HomePage>
                             ),
                             Spacer(),
                             Text(
-                              "750 ml",
+                              "$_waterInMl ml",
                               style: TextStyle(
                                   fontSize: 22,
                                   color: kWhite,
@@ -389,7 +410,7 @@ class _HomePageState extends State<HomePage>
                               height: 6,
                             ),
                             Text(
-                              "Last updates 3m ago",
+                              "Consumed today",
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 14,

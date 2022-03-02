@@ -467,6 +467,7 @@ class RegisterLoginResponseData {
     this.state,
     this.bloodGroup,
     this.xAuthToken,
+    this.newUser
   });
 
   String id;
@@ -483,6 +484,7 @@ class RegisterLoginResponseData {
   String state;
   String bloodGroup;
   String xAuthToken;
+  bool newUser;
 
   factory RegisterLoginResponseData.fromJson(Map<String, dynamic> json) => RegisterLoginResponseData(
     id: json["_id"] == null ? null : json["_id"],
@@ -499,6 +501,7 @@ class RegisterLoginResponseData {
     state: json["state"] == null ? null : json["state"],
     bloodGroup: json["blood_group"] == null ? null : json["blood_group"],
     xAuthToken: json["x_auth_token"] == null ? null : json["x_auth_token"],
+    newUser: json["new_user"] == null ? null : json["new_user"],
   );
 
   Map<String, dynamic> toJson() => {

@@ -14,9 +14,12 @@ import 'package:health_bloom/view/login/login.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../homepage/home_page.dart';
+
 class EditProfile extends StatefulWidget {
   final String id;
-  const EditProfile({Key key, this.id}) : super(key: key);
+  final bool phone;
+  const EditProfile({Key key, this.id,this.phone = false}) : super(key: key);
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -498,16 +501,20 @@ class _EditProfileState extends State<EditProfile> {
                                           .showSnackBar(SnackBar(
                                         content: Text('User created.'),
                                       ));
-                                      setState(() {
-                                        _loading = false;
-                                      });
 
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Login()),
-                                        (Route<dynamic> route) => false,
-                                      );
+                                      if(widget.phone){
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => HomePage())
+                                        );
+                                      }else{
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Login()),
+                                              (Route<dynamic> route) => false,
+                                        );
+                                      }
                                     }
                                   },
                                   child: TextBuilder(

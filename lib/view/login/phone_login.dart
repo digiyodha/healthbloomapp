@@ -12,6 +12,7 @@ import 'package:health_bloom/view/login/phone_login_otp.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
+import '../profile/edit_profile.dart';
 
 class PhoneLogin extends StatefulWidget {
   const PhoneLogin({Key key}) : super(key: key);
@@ -37,14 +38,29 @@ class _PhoneLoginState extends State<PhoneLogin> {
     RegisterLoginResponse _response = await adminAPI.loginAPI(request);
     if (_response.success) {
       sp.setString('id', _response.data.id);
-      sp.setString('email', _response.data.emailId);
-      sp.setString('name', _response.data.name);
+      sp.setString('email', _response.data.emailId ?? "");
+      sp.setString('name', _response.data.name ?? "");
       sp.setString('xAuthToken', _response.data.xAuthToken);
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-        (Route<dynamic> route) => false,
-      );
+
+      if(_response.data.newUser){
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => EditProfile(
+                id: sp.getString("id"),
+                phone: true,
+              )),
+              (Route<dynamic> route) => false,
+        );
+
+      }else{
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+              (Route<dynamic> route) => false,
+        );
+      }
+
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Error Occurred"),
@@ -78,6 +94,9 @@ class _PhoneLoginState extends State<PhoneLogin> {
         if (e.code == 'provider-already-linked') {
           await _auth.signInWithCredential(authCredential);
         }
+        setState(() {
+          isLoading = false;
+        });
       }
       setState(() {
         isLoading = false;
@@ -110,19 +129,29 @@ class _PhoneLoginState extends State<PhoneLogin> {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: verificationId, smsCode: otpCode.text);
 
-      UserCredential user = await _auth.signInWithCredential(credential);
-      if (user != null) {
-        await loginUser(RegisterLoginRequest(
-            name: user.user.displayName ?? "",
-            emailId: user.user.email ?? "",
-            uid: user.user.uid,
-            avatar: user.user.photoURL ?? "",
-            phoneNumber: null,
-            countryCode: null));
+      try{
+        UserCredential user = await _auth.signInWithCredential(credential);
+        if (user != null) {
+          await loginUser(RegisterLoginRequest(
+              name: user.user.displayName ?? "",
+              emailId: user.user.email ?? "",
+              uid: user.user.uid,
+              avatar: user.user.photoURL ?? "",
+              phoneNumber: null,
+              countryCode: null));
+        }
+        setState(() {
+          isLoading = false;
+        });
+      }catch (e){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Incorrect OTP entered!"),));
+        Navigator.pop(context);
+        Navigator.push(context, MaterialPageRoute(builder: (context){
+          return PhoneLogin();
+        }));
       }
-      setState(() {
-        isLoading = false;
-      });
+
+
     }
     setState(() {
       isLoading = false;
@@ -200,7 +229,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 5),
                                 child: TextBuilder(
-                                  text: 'Verification Code',
+                                  text: 'OTP Login',
                                   color: Colors.white,
                                   fontSize: 22,
                                   fontWeight: FontWeight.w500,
