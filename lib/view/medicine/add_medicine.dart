@@ -240,7 +240,6 @@ class _AddMedicineState extends State<AddMedicine> {
                             maxLines: 1,
                             controller: _duration,
                             label: "Duration",
-                            textInputType: TextInputType.number,
                             onChanged: () {},
                             onTap: () {},
                           ),

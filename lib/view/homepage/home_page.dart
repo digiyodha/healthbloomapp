@@ -434,24 +434,22 @@ class _HomePageState extends State<HomePage>
                                 size: 100,
                               ),
                             ),
-                            Spacer(),
-                            Text(
-                              "9:00 AM",
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  color: kWhite,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              "Dosage - 10 mg",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: kWhite.withOpacity(0.6),
-                                  fontWeight: FontWeight.w400),
-                            ),
+                            // Spacer(),
+                            // Text(
+                            //   "9:00 AM",
+                            //   style: TextStyle(
+                            //       fontSize: 22,
+                            //       color: kWhite,
+                            //       fontWeight: FontWeight.w600),
+                            // ),
+                            // SizedBox(height: 6),
+                            // Text(
+                            //   "Dosage - 10 mg",
+                            //   style: TextStyle(
+                            //       fontSize: 14,
+                            //       color: kWhite.withOpacity(0.6),
+                            //       fontWeight: FontWeight.w400),
+                            // ),
                             Spacer(),
                           ],
                         ),

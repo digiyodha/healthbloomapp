@@ -28,7 +28,7 @@ class UpdateProfile extends StatefulWidget {
 
 class _UpdateProfileState extends State<UpdateProfile> {
   bool _loading = false;
-
+  TextEditingController _name = TextEditingController();
   TextEditingController _phone = TextEditingController();
   TextEditingController _city = TextEditingController();
   TextEditingController _state = TextEditingController();
@@ -81,6 +81,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
     super.initState();
     if (widget.data != null) {
       _phone.text = widget.data.phoneNumber;
+      _name.text = widget.data.name;
       _city.text = widget.data.city;
       _state.text = widget.data.state;
       selectedGender = widget.data.gender;
@@ -309,6 +310,39 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     ),
                                   ),
                                 ),
+                                const SizedBox(height: 20.0),
+                                TextFormField(
+                                  controller: _name,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "* Required";
+                                    } else
+                                      return null;
+                                  },
+                                  style: TextStyle(
+                                    color: Color(0xff9884DF),
+                                  ),
+                                  decoration: InputDecoration(
+                                    labelStyle: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff9884DF),
+                                    ),
+                                    label: TextBuilder(text: 'Name'),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 15),
+                                    suffixIcon: Icon(
+                                      Icons.people,
+                                      color: Color(0xff9884DF),
+                                    ),
+                                    border: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
                                 // const SizedBox(height: 20.0),
                                 // TextFormField(
                                 //   controller: _city,
@@ -450,45 +484,40 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                       _loading = true;
                                     });
 
-                                    if (_city.text.isNotEmpty &&
-                                        _state.text.isNotEmpty &&
-                                        _phone.text.isNotEmpty &&
-                                        selectedBloodGroup != null &&
-                                        selectedGender != null) {
-                                      AddEditUserProfileRequest _request =
-                                          AddEditUserProfileRequest(
-                                        userAddress: '',
-                                        googleAddress: '',
-                                        bloodGroup: selectedBloodGroup,
-                                        city: _city.text,
-                                        countryCode: '+91',
-                                        gender: selectedGender,
-                                        avatar: _uploadAvatarUrl ?? "",
-                                        phoneNumber: _phone.text,
-                                        state: _state.text,
-                                        id: widget.data.id,
-                                      );
-                                      AddEditUserProfileResponse _response =
-                                          await addEditProfile(_request);
-                                      print(
-                                          'Add Edit Profile Request ${_request.toJson()}');
-                                      print(
-                                          'Add Edit Profile Response ${_response.toJson()}');
-                                      if (_response.success == true) {
-                                        // sp.setString(
-                                        //     'name', _response.data.name);
-                                        // sp.setString('profileImage',
-                                        //     _response.data.avatar);
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text('Profile updated.'),
-                                        ));
-                                        setState(() {
-                                          _loading = false;
-                                        });
+                                    AddEditUserProfileRequest _request =
+                                        AddEditUserProfileRequest(
+                                      userAddress: '',
+                                      googleAddress: '',
+                                      bloodGroup: selectedBloodGroup,
+                                      name: _name.text,
+                                      city: _city.text,
+                                      countryCode: '+91',
+                                      gender: selectedGender,
+                                      avatar: _uploadAvatarUrl ?? "",
+                                      phoneNumber: _phone.text,
+                                      state: _state.text,
+                                      id: widget.data.id,
+                                    );
+                                    AddEditUserProfileResponse _response =
+                                        await addEditProfile(_request);
+                                    print(
+                                        'Add Edit Profile Request ${_request.toJson()}');
+                                    print(
+                                        'Add Edit Profile Response ${_response.toJson()}');
+                                    if (_response.success == true) {
+                                      // sp.setString(
+                                      //     'name', _response.data.name);
+                                      // sp.setString('profileImage',
+                                      //     _response.data.avatar);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text('Profile updated.'),
+                                      ));
+                                      setState(() {
+                                        _loading = false;
+                                      });
 
-                                        Navigator.pop(context);
-                                      }
+                                      Navigator.pop(context);
                                     }
                                   },
                                   child: TextBuilder(

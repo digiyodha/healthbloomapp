@@ -1,8 +1,22 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:health_bloom/components/custom_contained_button.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
-
 import '../../utils/text_field/custom_text_field.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:async';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as path;
+import 'dart:convert';
+
+import 'package:universal_html/html.dart' as html;
+import 'package:http/http.dart' as http;
 
 class ViewBillDocuments extends StatefulWidget {
   final GetAllDocumentsResponseBill bill;
@@ -19,6 +33,14 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
   TextEditingController _description = TextEditingController();
 
   List<String> files = [];
+
+  UploadTask task;
+  String _progress = "-";
+  bool _uploadStatus = false;
+
+  final Dio _dio = Dio();
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   @override
   void initState() {
@@ -176,8 +198,7 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
                                                               ],
                                                             ),
                                                             SizedBox(
-                                                              height: 16,
-                                                            ),
+                                                                height: 16),
                                                             Container(
                                                               margin: EdgeInsets
                                                                   .all(1),
@@ -191,22 +212,24 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
                                                                     .cover,
                                                               ),
                                                             ),
-                                                            // SizedBox(height: 16,),
-                                                            // CustomContainedButton(
-                                                            //   text: "Download",
-                                                            //   textSize: 20,
-                                                            //   weight: FontWeight.w600,
-                                                            //   height: 48,
-                                                            //   width: 328,
-                                                            //   disabledColor: kTeal4,
-                                                            //   onPressed: () async{
-                                                            //     if(kIsWeb){
-                                                            //       downloadImage(widget.url,widget.assetName);
-                                                            //     }else{
-                                                            //       _download(widget.assetName, widget.url);
-                                                            //     }
-                                                            //   },
-                                                            // )
+                                                            SizedBox(
+                                                              height: 16,
+                                                            ),
+                                                            CustomContainedButton(
+                                                              text: "Download",
+                                                              textSize: 20,
+                                                              weight: FontWeight
+                                                                  .w600,
+                                                              height: 48,
+                                                              width: 328,
+                                                              onPressed:
+                                                                  () async {
+                                                                _download(
+                                                                    'download image',
+                                                                    files[
+                                                                        index]);
+                                                              },
+                                                            )
                                                           ],
                                                         ),
                                                       );
@@ -257,5 +280,129 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
         ],
       ),
     );
+  }
+
+  Future<void> _download(String fileName, String fileUrl) async {
+    final dir = await _getDownloadDirectory();
+    print(dir);
+    final isPermissionStatusGranted = await _requestPermissions();
+
+    print(isPermissionStatusGranted);
+
+    if (isPermissionStatusGranted || Platform.isIOS) {
+      final savePath = path.join(dir.path, fileName);
+      await _startDownload(savePath, fileUrl);
+    } else {
+      // handle the scenario when user declines the permissions
+    }
+  }
+
+  Future<bool> _requestPermissions() async {
+    var permission = await Permission.storage.status;
+    var permission2 = await Permission.manageExternalStorage.status;
+
+    if (permission != PermissionStatus.granted) {
+      await Permission.storage.request();
+      permission = await Permission.storage.status;
+    }
+
+    if (permission2 != PermissionStatus.granted) {
+      await Permission.manageExternalStorage.request();
+      permission = await Permission.manageExternalStorage.status;
+    }
+
+    return permission == PermissionStatus.granted &&
+        permission2 == PermissionStatus.granted;
+  }
+
+  Future<Directory> _getDownloadDirectory() async {
+    if (Platform.isAndroid) {
+      return await DownloadsPathProvider.downloadsDirectory;
+    }
+
+    // in this example we are using only Android and iOS so I can assume
+    // that you are not trying it for other platforms and the if statement
+    // for iOS is unnecessary
+
+    // iOS directory visible to user
+    return await getApplicationDocumentsDirectory();
+  }
+
+  Future<void> _startDownload(String savePath, String fileUrl) async {
+    Map<String, dynamic> result = {
+      'isSuccess': false,
+      'filePath': null,
+      'error': null,
+    };
+
+    try {
+      final response = await _dio.download(fileUrl, savePath,
+          onReceiveProgress: _onReceiveProgress);
+      result['isSuccess'] = response.statusCode == 200;
+      result['filePath'] = savePath;
+      print(result);
+    } catch (ex) {
+      result['error'] = ex.toString();
+      print(result);
+    } finally {
+      await _showNotification(result);
+    }
+  }
+
+  Future<void> _showNotification(Map<String, dynamic> downloadStatus) async {
+    print("SHOW NOTIFICATION");
+    final android = AndroidNotificationDetails('channel id', 'channel name',
+        priority: Priority.high, importance: Importance.max);
+
+    final iOS = IOSNotificationDetails();
+    final platform = NotificationDetails(android: android, iOS: iOS);
+    final json = jsonEncode(downloadStatus);
+    final isSuccess = downloadStatus['isSuccess'];
+
+    await flutterLocalNotificationsPlugin.show(
+        0, // notification id
+        isSuccess ? 'Success' : 'Failure',
+        isSuccess
+            ? 'File has been downloaded successfully!'
+            : 'There was an error while downloading the file.',
+        platform,
+        payload: json);
+  }
+
+  void _onReceiveProgress(int received, int total) {
+    if (total != -1) {
+      setState(() {
+        _progress = (received / total * 100).toStringAsFixed(0) + "%";
+      });
+    }
+  }
+
+  Future<void> downloadImage(String imageUrl, String name) async {
+    try {
+      // first we make a request to the url like you did
+      // in the android and ios version
+      final http.Response r = await http.get(
+        Uri.parse(imageUrl),
+      );
+
+      // we get the bytes from the body
+      final data = r.bodyBytes;
+      // and encode them to base64
+      final base64data = base64Encode(data);
+
+      // then we create and AnchorElement with the html package
+      final a = html.AnchorElement(href: 'data:image/jpeg;base64,$base64data');
+
+      // set the name of the file we want the image to get
+      // downloaded to
+      a.download = name;
+
+      // and we click the AnchorElement which downloads the image
+      a.click();
+      // finally we remove the AnchorElement
+      a.remove();
+    } catch (e) {
+      print(e);
+    }
   }
 }

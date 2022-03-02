@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/delete_member_request.dart';
 import 'package:health_bloom/model/response/delete_member_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
@@ -207,76 +208,91 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                             right: 0,
                                             child: InkWell(
                                                 onTap: () async {
-                                                  // showDialog(
-                                                  //   context: context,
-                                                  //   useSafeArea: true,
-                                                  //   barrierDismissible: true,
-                                                  //   builder: (context) {
-                                                  //     return FutureBuilder(
-                                                  //       builder: (context,
-                                                  //           snapshot) {
-                                                  //         return AlertDialog(
-                                                  //           title: Text(
-                                                  //               'Delete ${member.name}'),
-                                                  //           content: Text(
-                                                  //               'Are you sure!'),
-                                                  //           actions: [
-                                                  //             TextButton(
-                                                  //                 onPressed:
-                                                  //                     () {
-                                                  //                   Navigator.pop(
-                                                  //                       context);
-                                                  //                 },
-                                                  //                 child: TextBuilder(
-                                                  //                     text:
-                                                  //                         'No')),
-                                                  //             MaterialButton(
-                                                  //               shape: RoundedRectangleBorder(
-                                                  //                   borderRadius:
-                                                  //                       BorderRadius.circular(
-                                                  //                           6)),
-                                                  //               color: Color(
-                                                  //                   0xffFF9B91),
-                                                  //               onPressed:
-                                                  //                   () async {
+                                                  showDialog(
+                                                    context: context,
+                                                    useSafeArea: true,
+                                                    barrierDismissible: true,
+                                                    builder: (context) {
+                                                      return FutureBuilder(
+                                                        builder: (context,
+                                                            snapshot) {
+                                                          return AlertDialog(
+                                                            title: Text(
+                                                                'Delete ${member.name}'),
+                                                            content: Text(
+                                                                'Are you sure!'),
+                                                            actions: [
+                                                              TextButton(
+                                                                  onPressed:
+                                                                      () {},
+                                                                  child: TextBuilder(
+                                                                      text:
+                                                                          'No')),
+                                                              MaterialButton(
+                                                                shape: RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            6)),
+                                                                color: Color(
+                                                                    0xffFF9B91),
+                                                                onPressed:
+                                                                    () async {
+                                                                  setState(() {
+                                                                    _loading =
+                                                                        true;
+                                                                  });
 
-                                                  //               },
-                                                  //               child:
-                                                  //                   TextBuilder(
-                                                  //                 text: 'Yes',
-                                                  //                 color: Colors
-                                                  //                     .white,
-                                                  //               ),
-                                                  //             )
-                                                  //           ],
-                                                  //         );
-                                                  //       },
-                                                  //     );
-                                                  //   },
-                                                  // );
+                                                                  DeleteMemberRequest
+                                                                      _request =
+                                                                      DeleteMemberRequest(
+                                                                          familyMemberId:
+                                                                              member.id);
+                                                                  DeleteMemberResponse
+                                                                      _response =
+                                                                      await deleteMemeber(
+                                                                          _request);
 
-                                                  setState(() {
-                                                    _loading = true;
-                                                  });
-                                                  final adminAPI = Provider.of<
-                                                          NetworkRepository>(
-                                                      context,
-                                                      listen: false);
-                                                  DeleteMemberResponse
-                                                      _response = await adminAPI
-                                                          .deleteMemberAPI(
-                                                              DeleteMemberRequest(
-                                                                  familyMemberId:
-                                                                      member
-                                                                          .id))
-                                                          .whenComplete(() =>
-                                                              setState(() {
-                                                                _loading =
-                                                                    false;
-                                                              }));
-                                                  if (_response.success) {
-                                                    getAllmember();
-                                                  }
+                                                                  print(
+                                                                      'Delete Member Request ${_request.toJson()}');
+                                                                  print(
+                                                                      'Delete Member Response ${_response.toJson()}');
+                                                                  if (_response
+                                                                          .success ==
+                                                                      true) {
+                                                                    ScaffoldMessenger.of(
+                                                                            context)
+                                                                        .showSnackBar(
+                                                                            SnackBar(
+                                                                      content: Text(
+                                                                          'deleted.'),
+                                                                    ));
+                                                                    setState(
+                                                                        () {
+                                                                      _loading =
+                                                                          false;
+                                                                    });
+                                                                    Navigator.pop(
+                                                                        context,
+                                                                        true);
+                                                                  }
+                                                                },
+                                                                child:
+                                                                    TextBuilder(
+                                                                  text: 'Yes',
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                              )
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                  ).whenComplete(
+                                                      () => setState(() {
+                                                            // _loading = false;
+                                                            getAllmember();
+                                                          }));
                                                 },
                                                 child: Icon(
                                                   Icons.delete,
