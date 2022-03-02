@@ -5,8 +5,8 @@ var Schema       = mongoose.Schema;
 var MedicineSchema = new Schema({
     medicine_name: String,
     amount: Number,
-    dosage: Number,
-    doses: Number,
+    dosage: String,
+    doses: String,
     duration: String,
     time: [{
         type: Date

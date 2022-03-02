@@ -10,8 +10,7 @@ var UserSchema = new Schema({
     phone_number: String,
     gender: {
       type: String,
-      enum: ['Male', 'Female', 'Other'],
-      default: 'Male'
+      enum: [null, 'Male', 'Female', 'Other'],
     },
     google_address: String,
     user_address: String,
@@ -20,8 +19,7 @@ var UserSchema = new Schema({
     avatar: String,
     blood_group: {
       type: String,
-      enum: ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'],
-      default: 'O+'
+      enum: [null, 'A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'],
     },
     uid: String
 

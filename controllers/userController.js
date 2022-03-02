@@ -70,38 +70,40 @@ exports.registerLoginUser = asyncHandler(async (req, res, next) => {
     if (email_id) {
         userDetailsObj.email_id = email_id;
     }else{
-      userDetailsObj.email_id = "";
+      userDetailsObj.email_id = null;
     }
     if (uid) {
         userDetailsObj.uid = uid;
     }else{
-      userDetailsObj.uid = "";
+      userDetailsObj.uid = null;
     }
     if (avatar) {
         userDetailsObj.avatar = avatar;
     }else{ 
-      userDetailsObj.avatar = "";
+      userDetailsObj.avatar = null;
     }
     if (country_code) {
       userDetailsObj.country_code = country_code;
     }else{
-      userDetailsObj.country_code = "";
+      userDetailsObj.country_code = null;
     }
     if (phone_number) {
       userDetailsObj.phone_number = phone_number;
     }else{
-      userDetailsObj.phone_number = "";
+      userDetailsObj.phone_number = null;
     }
     if (name) {
       userDetailsObj.name = name;
     }else{
-      userDetailsObj.name = "";
+      userDetailsObj.name = null;
     }
 
-    userDetailsObj.google_address = "";
-    userDetailsObj.user_address = "";
-    userDetailsObj.city = "";
-    userDetailsObj.state = "";
+    userDetailsObj.google_address = null;
+    userDetailsObj.user_address = null;
+    userDetailsObj.city = null;
+    userDetailsObj.state = null;
+    userDetailsObj.gender = null;
+    userDetailsObj.blood_group = null;
     user = await User.create({ ...userDetailsObj });
   }
   var token = jwt.sign({ data: user._id }, dbConfig.JWT_SECRET, {
