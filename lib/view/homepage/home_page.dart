@@ -444,36 +444,12 @@ class _HomePageState extends State<HomePage>
             ),
           ),
         ),
-        floatingActionButton: CircleAvatar(
-          radius: _fabOpened ? 120 : 30,
-          backgroundColor: Colors.transparent,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              if (_fabOpened)
-                Column(
-                  children: [
-                    Transform(
-                      transform: Matrix4.translationValues(
-                          0.0, _translateButton.value * 3.0, 0.0),
-                      child: addPrescription(),
-                    ),
-                    Transform(
-                      transform: Matrix4.translationValues(
-                          0.0, _translateButton.value * 2.0, 0.0),
-                      child: addReport(),
-                    ),
-                    Transform(
-                      transform: Matrix4.translationValues(
-                          0.0, _translateButton.value, 0.0),
-                      child: addBill(),
-                    ),
-                  ],
-                ),
-              buttonFAB()
-            ],
-          ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _settingModalBottomSheet(context);
+            
+          },
+          child: Icon(Icons.add),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: CustomBnb(
@@ -653,5 +629,46 @@ class _HomePageState extends State<HomePage>
       _animationController.reverse();
     }
     _fabOpened = !_fabOpened;
+  }
+
+  void _settingModalBottomSheet(context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return Container(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.add),
+                title: Text('Bill'),
+                onTap: () => {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddBill()))
+                      Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: new Icon(Icons.add),
+                title: new Text('Report'),
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddBill()));
+                },
+              ),
+              ListTile(
+                leading: new Icon(Icons.add),
+                title: new Text('Prescription'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: new Icon(Icons.add),
+                title: new Text('Medicine'),
+                onTap: () {},
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
