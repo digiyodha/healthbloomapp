@@ -61,6 +61,8 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 exports.registerLoginUser = asyncHandler(async (req, res, next) => {
   var {email_id, uid, avatar, phone_number, country_code, name} = req.body;
 
+  var new_user = false;
+
   var user = await User.findOne({
     'uid': uid
   });
@@ -105,6 +107,7 @@ exports.registerLoginUser = asyncHandler(async (req, res, next) => {
     userDetailsObj.gender = null;
     userDetailsObj.blood_group = null;
     user = await User.create({ ...userDetailsObj });
+    new_user = true;
   }
   var token = jwt.sign({ data: user._id }, dbConfig.JWT_SECRET, {
     expiresIn: '12h',
@@ -124,7 +127,8 @@ exports.registerLoginUser = asyncHandler(async (req, res, next) => {
     city: user.city,
     state: user.state,
     blood_group: user.blood_group,
-    x_auth_token: token
+    x_auth_token: token,
+    new_user: new_user
   }
   res.status(200).json({ success: true, data: userData });
 });
