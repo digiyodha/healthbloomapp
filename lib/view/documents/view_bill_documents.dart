@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:health_bloom/components/custom_contained_button.dart';
 import 'package:health_bloom/model/response/response.dart';
@@ -36,7 +37,6 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
 
   UploadTask task;
   String _progress = "-";
-  bool _uploadStatus = false;
 
   final Dio _dio = Dio();
 
@@ -224,10 +224,27 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
                                                               width: 328,
                                                               onPressed:
                                                                   () async {
+                                                                // final taskId =
+                                                                //     await FlutterDownloader
+                                                                //         .enqueue(
+                                                                //   url:
+                                                                //       'your download link',
+                                                                //   savedDir:
+                                                                //       'the path of directory where you want to save downloaded files',
+                                                                //   showNotification:
+                                                                //       true, // show download progress in status bar (for Android)
+                                                                //   openFileFromNotification:
+                                                                //       true, // click on notification to open downloaded file (for Android)
+                                                                // );
                                                                 _download(
-                                                                    'download image',
+                                                                    'image',
                                                                     files[
                                                                         index]);
+
+                                                                downloadImage(
+                                                                    files[
+                                                                        index],
+                                                                    'images');
                                                               },
                                                             )
                                                           ],

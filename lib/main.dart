@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/services/api/networking.dart';
+
 import 'package:health_bloom/services/api/networkmanager/auth_networkmanager.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
@@ -45,5 +46,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
