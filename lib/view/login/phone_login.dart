@@ -29,6 +29,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
   TextEditingController otpCode = TextEditingController();
   bool isLoading = false;
   String verificationId;
+  int _resendToken;
 
   Future loginUser(RegisterLoginRequest request) async {
     setState(() {
@@ -77,12 +78,13 @@ class _PhoneLoginState extends State<PhoneLogin> {
         verificationCompleted: _onVerificationCompleted,
         verificationFailed: _onVerificationFailed,
         codeSent: _onCodeSent,
-        codeAutoRetrievalTimeout: _onCodeTimeout);
+        codeAutoRetrievalTimeout: _onCodeTimeout,
+        forceResendingToken: _resendToken);
   }
 
   _onVerificationCompleted(PhoneAuthCredential authCredential) async {
     print("verification completed ${authCredential.smsCode}");
-    User user = FirebaseAuth.instance.currentUser;
+    User user = await FirebaseAuth.instance.currentUser;
     setState(() {
       this.otpCode.text = authCredential.smsCode;
     });
@@ -117,45 +119,57 @@ class _PhoneLoginState extends State<PhoneLogin> {
     print(forceResendingToken);
     print("code sent");
 
-    await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => PhoneLoginOtp(
-                  controller: otpCode,
-                  phoneNumber: phoneNumber,
-                )));
+    if(_resendToken != null){
 
-    if (otpCode.text.length == 6) {
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          verificationId: verificationId, smsCode: otpCode.text);
+    }else{
+      _resendToken = forceResendingToken;
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PhoneLoginOtp(
+                controller: otpCode,
+                phoneNumber: phoneNumber,
+                resend: (){
+                  phoneSignIn(
+                      phoneNumber: "+91${phoneNumber.text}");
+                },
+              )));
 
-      try{
-        UserCredential user = await _auth.signInWithCredential(credential);
+      if (otpCode.text.length == 6) {
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+            verificationId: verificationId, smsCode: otpCode.text);
+
+        UserCredential user;
+
+        try{
+          UserCredential _user = await _auth.signInWithCredential(credential);
+          user = _user;
+        }catch (e){
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()),));
+          Navigator.pop(context);
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return PhoneLogin();
+          }));
+        }
+
         if (user != null) {
           await loginUser(RegisterLoginRequest(
-              name: user.user.displayName ?? "",
-              emailId: user.user.email ?? "",
+              name: "",
+              emailId: "",
               uid: user.user.uid,
-              avatar: user.user.photoURL ?? "",
-              phoneNumber: null,
+              avatar: "",
+              phoneNumber: user.user.phoneNumber,
               countryCode: null));
         }
         setState(() {
           isLoading = false;
         });
-      }catch (e){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Incorrect OTP entered!"),));
-        Navigator.pop(context);
-        Navigator.push(context, MaterialPageRoute(builder: (context){
-          return PhoneLogin();
-        }));
       }
-
-
+      setState(() {
+        isLoading = false;
+      });
     }
-    setState(() {
-      isLoading = false;
-    });
+
   }
 
   _onCodeTimeout(String timeout) {

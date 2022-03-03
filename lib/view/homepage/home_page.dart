@@ -102,82 +102,79 @@ class _HomePageState extends State<HomePage>
             child: Column(
               children: [
                 SizedBox(height: 18),
-                FutureBuilder<GetUserResponse>(
-                  future: getUser(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Row(
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 26),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.wb_sunny,
-                                      color: kMainColor,
-                                      size: 15,
-                                    ),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      "${DateFormat('EEEE, d MMM, yyyy').format(today)}" ??
-                                          '',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          letterSpacing: 1.5,
-                                          color: kMainColor,
-                                          fontWeight: FontWeight.w800),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  "Hi, ${snapshot.data.data.name.toString()}",
-                                  style: TextStyle(
-                                      fontSize: 34,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
+                          InkWell(
+                            onTap: (){
+                              Scaffold.of(context).openDrawer();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Icon(Icons.menu),
                             ),
                           ),
-                          snapshot.data.data.avatar != null &&
-                                  snapshot.data.data.avatar.isNotEmpty
-                              ? Container(
-                                  height: 46,
-                                  width: 46,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    image: DecorationImage(
-                                      image: NetworkImage(
-                                          snapshot.data.data.avatar),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  height: 46,
-                                  width: 46,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.person,
-                                      color: kGrey4,
-                                      size: 40,
-                                    ),
-                                  ),
-                                )
+                          SizedBox(height: 26),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.wb_sunny,
+                                color: kMainColor,
+                                size: 15,
+                              ),
+                              SizedBox(width: 4),
+                              Text(
+                                "${DateFormat('EEEE, d MMM, yyyy').format(today)}" ??
+                                    '',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    letterSpacing: 1.5,
+                                    color: kMainColor,
+                                    fontWeight: FontWeight.w800),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            "Hi, ${sp.getString('name') ?? "User"}",
+                            style: TextStyle(
+                                fontSize: 34,
+                                fontWeight: FontWeight.w600),
+                          ),
                         ],
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text("${snapshot.error}");
-                    }
-                    return Center();
-                  },
+                      ),
+                    ),
+                    sp.getString('profileImage') != null && sp.getString('profileImage') != ""
+                        ?  Container(
+                      height: 46,
+                      width: 46,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                          image: NetworkImage(sp.getString('profileImage')),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
+                        : Container(
+                      height: 46,
+                      width: 46,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.person,
+                          color: kGrey4,
+                          size: 40,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
                 SizedBox(height: 24),
                 Container(

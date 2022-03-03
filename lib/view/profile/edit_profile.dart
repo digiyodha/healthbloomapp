@@ -14,6 +14,7 @@ import 'package:health_bloom/view/login/login.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../main.dart';
 import '../homepage/home_page.dart';
 
 class EditProfile extends StatefulWidget {
@@ -167,6 +168,38 @@ class _EditProfileState extends State<EditProfile> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const SizedBox(height: 50.0),
+                                TextFormField(
+                                  controller: _name,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "* Required";
+                                    } else
+                                      return null;
+                                  },
+                                  style: TextStyle(
+                                    color: Color(0xff9884DF),
+                                  ),
+                                  decoration: InputDecoration(
+                                    labelStyle: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff9884DF),
+                                    ),
+                                    label: TextBuilder(text: 'Name'),
+                                    contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 15),
+                                    suffixIcon: Icon(
+                                      Icons.people,
+                                      color: Color(0xff9884DF),
+                                    ),
+                                    border: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 20.0),
                                 DropdownButton<String>(
                                     underline: Container(
                                       height: 1,
@@ -301,39 +334,6 @@ class _EditProfileState extends State<EditProfile> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 20.0),
-                                TextFormField(
-                                  controller: _name,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "* Required";
-                                    } else
-                                      return null;
-                                  },
-                                  style: TextStyle(
-                                    color: Color(0xff9884DF),
-                                  ),
-                                  decoration: InputDecoration(
-                                    labelStyle: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xff9884DF),
-                                    ),
-                                    label: TextBuilder(text: 'Name'),
-                                    contentPadding:
-                                        EdgeInsets.symmetric(horizontal: 15),
-                                    suffixIcon: Icon(
-                                      Icons.people,
-                                      color: Color(0xff9884DF),
-                                    ),
-                                    border: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
                                 // const SizedBox(height: 20.0),
                                 // TextFormField(
                                 //   controller: _city,
@@ -503,6 +503,8 @@ class _EditProfileState extends State<EditProfile> {
                                       ));
 
                                       if(widget.phone){
+                                        sp.setString('name', _response.data.name);
+                                        sp.setString('profileImage', _response.data.avatar ?? "");
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(builder: (context) => HomePage())

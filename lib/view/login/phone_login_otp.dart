@@ -5,7 +5,8 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 class PhoneLoginOtp extends StatefulWidget {
   final TextEditingController controller;
   final TextEditingController phoneNumber;
-  const PhoneLoginOtp({Key key, this.controller,this.phoneNumber}) : super(key: key);
+  final Function resend;
+  const PhoneLoginOtp({Key key, this.controller,this.phoneNumber,this.resend}) : super(key: key);
 
   @override
   State<PhoneLoginOtp> createState() => _PhoneLoginOtpState();
@@ -143,11 +144,17 @@ class _PhoneLoginOtpState extends State<PhoneLoginOtp> {
                         //   thickness: 1,
                         // ),
                         const SizedBox(height: 15.0),
-                        TextBuilder(
-                          text: "Resend OTP ?",
-                          color: Color(0xff7561B3),
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
+                        InkWell(
+                          onTap: (){
+                            widget.resend();
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("OTP resent!"),));
+                          },
+                          child: TextBuilder(
+                            text: "Resend OTP ?",
+                            color: Color(0xff7561B3),
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const SizedBox(height: 50.0),
                         MaterialButton(

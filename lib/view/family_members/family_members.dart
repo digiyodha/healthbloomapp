@@ -224,7 +224,9 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                                             actions: [
                                                               TextButton(
                                                                   onPressed:
-                                                                      () {},
+                                                                      () {
+                                                                    Navigator.pop(context);
+                                                                      },
                                                                   child: TextBuilder(
                                                                       text:
                                                                           'No')),

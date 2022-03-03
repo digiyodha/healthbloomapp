@@ -46,49 +46,37 @@ class _CustomDrawerState extends State<CustomDrawer> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FutureBuilder<GetUserResponse>(
-                  future: getUser(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 16, top: 20),
-                        child: Row(
-                          children: [
-                            snapshot.data.data.avatar != null &&
-                                    snapshot.data.data.avatar.isNotEmpty
-                                ? CircleAvatar(
-                                    radius: 36,
-                                    backgroundColor: kWhite,
-                                    backgroundImage: NetworkImage(
-                                      snapshot.data.data.avatar,
-                                    ),
-                                  )
-                                : CircleAvatar(
-                                    radius: 36,
-                                    backgroundColor: kWhite,
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.person,
-                                        color: kGrey4,
-                                        size: 40,
-                                      ),
-                                    ),
-                                  ),
-                            SizedBox(width: 14),
-                            Expanded(
-                              child: Text(
-                                "${snapshot.data.data.name.toString()}",
-                                style: TextStyle(fontSize: 20, color: kWhite),
-                              ),
-                            )
-                          ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 20),
+                  child: Row(
+                    children: [ sp.getString('profileImage') != null && sp.getString('profileImage') != ""
+                          ? CircleAvatar(
+                        radius: 36,
+                        backgroundColor: kWhite,
+                        backgroundImage: NetworkImage(
+                          sp.getString('profileImage'),
                         ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text("${snapshot.error}");
-                    }
-                    return Center();
-                  },
+                      )
+                          : CircleAvatar(
+                        radius: 36,
+                        backgroundColor: kWhite,
+                        child: Center(
+                          child: Icon(
+                            Icons.person,
+                            color: kGrey4,
+                            size: 40,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 14),
+                      Expanded(
+                        child: Text(
+                          sp.getString('name') ?? "User",
+                          style: TextStyle(fontSize: 20, color: kWhite),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 SizedBox(height: 30),
                 DrawerContainerWidget(
