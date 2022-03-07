@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:health_bloom/model/request/search_mdecine_request.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
+import 'package:health_bloom/model/response/search_medicne_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/view/bill/add_bill.dart';
@@ -30,6 +32,7 @@ class _HomePageState extends State<HomePage>
   Animation<Color> _buttonColor;
   Animation<Color> _iconColor;
   AnimationController _animationController;
+  bool _loading = false;
   double _fabHeight = 56.0;
   Curve _curve = Curves.ease;
   DateTime today = DateTime.now();
@@ -40,6 +43,20 @@ class _HomePageState extends State<HomePage>
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     GetUserResponse _response = await adminAPI.getUserAPI();
     return _response;
+  }
+
+  SearchMedicineResponse _currentResponse;
+  Future searchMedicine() async {
+    setState(() {
+      _currentResponse = null;
+    });
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    SearchMedicineResponse _response =
+        await adminAPI.searchMedicineAPI(SearchMedicineRequest(name: ''));
+    setState(() {
+      _currentResponse = _response;
+      _loading = false;
+    });
   }
 
   getData() {
@@ -59,6 +76,7 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
+
     getData();
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300))
@@ -83,6 +101,7 @@ class _HomePageState extends State<HomePage>
         CurvedAnimation(
             parent: _animationController,
             curve: Interval(0.00, 0.75, curve: _curve)));
+    searchMedicine();
   }
 
   @override
@@ -110,7 +129,7 @@ class _HomePageState extends State<HomePage>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           InkWell(
-                            onTap: (){
+                            onTap: () {
                               Scaffold.of(context).openDrawer();
                             },
                             child: Padding(
@@ -142,38 +161,39 @@ class _HomePageState extends State<HomePage>
                           Text(
                             "Hi, ${sp.getString('name') ?? "User"}",
                             style: TextStyle(
-                                fontSize: 34,
-                                fontWeight: FontWeight.w600),
+                                fontSize: 34, fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
                     ),
-                    sp.getString('profileImage') != null && sp.getString('profileImage') != ""
-                        ?  Container(
-                      height: 46,
-                      width: 46,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        image: DecorationImage(
-                          image: NetworkImage(sp.getString('profileImage')),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    )
+                    sp.getString('profileImage') != null &&
+                            sp.getString('profileImage') != ""
+                        ? Container(
+                            height: 46,
+                            width: 46,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              image: DecorationImage(
+                                image:
+                                    NetworkImage(sp.getString('profileImage')),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
                         : Container(
-                      height: 46,
-                      width: 46,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.person,
-                          color: kGrey4,
-                          size: 40,
-                        ),
-                      ),
-                    )
+                            height: 46,
+                            width: 46,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.person,
+                                color: kGrey4,
+                                size: 40,
+                              ),
+                            ),
+                          )
                   ],
                 ),
                 SizedBox(height: 24),
@@ -252,9 +272,11 @@ class _HomePageState extends State<HomePage>
                     InkWell(
                       onTap: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddMedicine()));
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddMedicine()))
+                            .whenComplete(
+                                () => setState((() => searchMedicine())));
                       },
                       child: Icon(
                         Icons.add,
@@ -265,70 +287,26 @@ class _HomePageState extends State<HomePage>
                   ],
                 ),
                 SizedBox(height: 14),
-                Container(
-                  height: 220,
-                  child: ListView.builder(
-                    itemCount: 3,
-                    shrinkWrap: true,
-                    physics: ScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: Container(
-                          height: 220,
-                          width: 170,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: Color(0xffAF8EFF),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "MEDICINE",
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: kWhite,
-                                    letterSpacing: 1.5),
-                              ),
-                              Spacer(),
-                              Align(
-                                alignment: Alignment.center,
-                                child: Container(
-                                  height: 100,
-                                  width: 100,
-                                  child: Image.asset("assets/images/drug2.png"),
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                "9:30 AM",
-                                style: TextStyle(
-                                    fontSize: 22,
-                                    color: kWhite,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              SizedBox(
-                                height: 6,
-                              ),
-                              Text(
-                                "Dosage - 5 mg",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: kWhite.withOpacity(0.6),
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              Spacer(),
-                            ],
-                          ),
+                _currentResponse != null
+                    ? Container(
+                        height: 220,
+                        child: ListView.builder(
+                          itemCount: _currentResponse.data.length,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          physics: ScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (BuildContext context, int index) {
+                            return MedicineCard(
+                              time: _currentResponse.data[index].time.first,
+                              dosages: _currentResponse.data[index].dosage,
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                ),
+                      )
+                    : Center(
+                        child: CircularProgressIndicator(),
+                      ),
                 SizedBox(height: 14),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -718,6 +696,67 @@ class _HomePageState extends State<HomePage>
           ),
         );
       },
+    );
+  }
+}
+
+class MedicineCard extends StatelessWidget {
+  final DateTime time;
+  final String dosages;
+  const MedicineCard({
+    Key key,
+    this.time,
+    this.dosages,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 16),
+      child: Container(
+        height: 220,
+        width: 170,
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Color(0xffAF8EFF),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "MEDICINE",
+              style: TextStyle(fontSize: 12, color: kWhite, letterSpacing: 1.5),
+            ),
+            Spacer(),
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                height: 100,
+                width: 100,
+                child: Image.asset("assets/images/drug2.png"),
+              ),
+            ),
+            Spacer(),
+            Text(
+              '${DateFormat('hh:mm a').format(time).toString()}' ?? '',
+              style: TextStyle(
+                  fontSize: 22, color: kWhite, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(
+              height: 6,
+            ),
+            Text(
+              "Dosage - ${dosages.toString()} mg" ?? '',
+              style: TextStyle(
+                  fontSize: 14,
+                  color: kWhite.withOpacity(0.6),
+                  fontWeight: FontWeight.w400),
+            ),
+            Spacer(),
+          ],
+        ),
+      ),
     );
   }
 }

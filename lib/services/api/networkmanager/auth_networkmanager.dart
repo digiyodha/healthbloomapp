@@ -12,6 +12,7 @@ import 'package:health_bloom/model/request/edit_member_request.dart';
 import 'package:health_bloom/model/request/edit_prescription_request.dart';
 import 'package:health_bloom/model/request/edit_report_request.dart';
 import 'package:health_bloom/model/request/get_documents_request.dart';
+import 'package:health_bloom/model/request/search_mdecine_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
 import 'package:health_bloom/model/response/add_family_response.dart';
 import 'package:health_bloom/model/response/add_medicine_response.dart';
@@ -24,6 +25,7 @@ import 'package:health_bloom/model/response/edit_prescription_response.dart';
 import 'package:health_bloom/model/response/edit_report_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
+import 'package:health_bloom/model/response/search_medicne_response.dart';
 import 'package:health_bloom/services/api/endpoints.dart';
 import 'package:health_bloom/services/api/endpoints/auth_endpoint.dart';
 import 'package:health_bloom/services/api/results.dart';
@@ -423,6 +425,28 @@ class NetworkManager {
       print(response);
 
       return Success<AddMedicineResponse>(response);
+    }
+    return result;
+  }
+
+  // Search Medicne
+  Future<Result> searchMedicine(SearchMedicineRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.searchMedicine;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      SearchMedicineResponse response =
+          SearchMedicineResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<SearchMedicineResponse>(response);
     }
     return result;
   }

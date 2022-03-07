@@ -242,8 +242,12 @@ class _DocumentsState extends State<Documents> {
             nameOfPatients: _currentResponse.data.bill[index].patient != null
                 ? _currentResponse.data.bill[index].patient.name
                 : "-",
-            dateOfBill: _currentResponse.data.bill[index].date,
-            avatar: _currentResponse.data.bill[index].patient.avatar,
+            dateOfBill: _currentResponse.data.bill[index].patient != null
+                ? _currentResponse.data.bill[index].date
+                : null,
+            avatar: _currentResponse.data.bill[index].patient != null
+                ? _currentResponse.data.bill[index].patient.avatar
+                : '',
             onTap: () {
               Navigator.push(
                 context,
@@ -293,8 +297,12 @@ class _DocumentsState extends State<Documents> {
             nameOfPatients: _currentResponse.data.report[index].patient != null
                 ? _currentResponse.data.report[index].patient.name
                 : "-",
-            dateOfBill: _currentResponse.data.report[index].date,
-            avatar: _currentResponse.data.report[index].patient.avatar,
+            dateOfBill: _currentResponse.data.bill[index].patient != null
+                ? _currentResponse.data.report[index].date
+                : null,
+            avatar: _currentResponse.data.bill[index].patient != null
+                ? _currentResponse.data.report[index].patient.avatar
+                : '',
             onTap: () {
               print(
                   "Report ${_currentResponse.data.report[index].billImage.toList().toString()}");
@@ -346,9 +354,12 @@ class _DocumentsState extends State<Documents> {
                 _currentResponse.data.prescription[index].patient != null
                     ? _currentResponse.data.prescription[index].patient.name
                     : "-",
-            dateOfBill:
-                _currentResponse.data.prescription[index].consultationDate,
-            avatar: _currentResponse.data.prescription[index].patient.avatar,
+            dateOfBill: _currentResponse.data.bill[index].patient != null
+                ? _currentResponse.data.prescription[index].consultationDate
+                : null,
+            avatar: _currentResponse.data.bill[index].patient != null
+                ? _currentResponse.data.prescription[index].patient.avatar
+                : '',
             onTap: () {
               Navigator.push(
                 context,

@@ -1,7 +1,16 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:health_bloom/components/custom_contained_button.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
-
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../utils/text_field/custom_text_field.dart';
 
 class ViewReportDocuments extends StatefulWidget {
@@ -18,6 +27,12 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
   TextEditingController _description = TextEditingController();
 
   List<String> files = [];
+
+  String _progress = "-";
+
+  final Dio _dio = Dio();
+  DateTime date = DateTime.now();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   @override
   void initState() {
@@ -180,22 +195,24 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
                                                                     .cover,
                                                               ),
                                                             ),
-                                                            // SizedBox(height: 16,),
-                                                            // CustomContainedButton(
-                                                            //   text: "Download",
-                                                            //   textSize: 20,
-                                                            //   weight: FontWeight.w600,
-                                                            //   height: 48,
-                                                            //   width: 328,
-                                                            //   disabledColor: kTeal4,
-                                                            //   onPressed: () async{
-                                                            //     if(kIsWeb){
-                                                            //       downloadImage(widget.url,widget.assetName);
-                                                            //     }else{
-                                                            //       _download(widget.assetName, widget.url);
-                                                            //     }
-                                                            //   },
-                                                            // )
+                                                            SizedBox(
+                                                              height: 16,
+                                                            ),
+                                                            CustomContainedButton(
+                                                              text: "Download",
+                                                              textSize: 20,
+                                                              weight: FontWeight
+                                                                  .w600,
+                                                              height: 48,
+                                                              width: 328,
+                                                              onPressed:
+                                                                  () async {
+                                                                await _download(
+                                                                    '${date.day}-${date.month}-${date.year}-${date.millisecond}.jpg',
+                                                                    files[
+                                                                        index]);
+                                                              },
+                                                            )
                                                           ],
                                                         ),
                                                       );
@@ -248,5 +265,106 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
         ],
       ),
     );
+  }
+
+  Future<void> _download(String fileName, String fileUrl) async {
+    print('Download started');
+    final dir = await _getDownloadDirectory();
+    print(dir);
+    final isPermissionStatusGranted = await _requestPermissions();
+
+    print('Permition granted ${isPermissionStatusGranted}');
+
+    if (isPermissionStatusGranted || Platform.isAndroid) {
+      final savePath = path.join(dir.path, fileName);
+      await _startDownload(savePath, fileUrl);
+    } else {
+      // handle the scenario when user declines the permissions
+    }
+  }
+
+  Future<bool> _requestPermissions() async {
+    print('Permition dialog');
+    var permission = await Permission.storage.status;
+    var permission2 = await Permission.manageExternalStorage.status;
+
+    if (permission != PermissionStatus.granted) {
+      await Permission.storage.request();
+      permission = await Permission.storage.status;
+    }
+
+    if (permission2 != PermissionStatus.granted) {
+      await Permission.manageExternalStorage.request();
+      permission = await Permission.manageExternalStorage.status;
+    }
+
+    return permission == PermissionStatus.granted &&
+        permission2 == PermissionStatus.granted;
+  }
+
+  Future<Directory> _getDownloadDirectory() async {
+    if (Platform.isAndroid) {
+      return await DownloadsPathProvider.downloadsDirectory;
+    }
+
+    // in this example we are using only Android and iOS so I can assume
+    // that you are not trying it for other platforms and the if statement
+    // for iOS is unnecessary
+
+    // iOS directory visible to user
+    return await getApplicationDocumentsDirectory();
+  }
+
+  Future<void> _startDownload(String savePath, String fileUrl) async {
+    Map<String, dynamic> result = {
+      'isSuccess': false,
+      'filePath': null,
+      'error': null,
+    };
+
+    try {
+      final response = await _dio.download(fileUrl, savePath,
+          onReceiveProgress: _onReceiveProgress);
+      result['isSuccess'] = response.statusCode == 200;
+      result['filePath'] = savePath;
+      print('Result ' + result.toString());
+    } catch (ex) {
+      result['error'] = ex.toString();
+      print('Result ' + result.toString());
+    } finally {
+      // await ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text("Downloading..."),
+      // ));
+      await _showNotification(result);
+    }
+  }
+
+  Future<void> _showNotification(Map<String, dynamic> downloadStatus) async {
+    print("SHOW NOTIFICATION");
+    final android = AndroidNotificationDetails(
+        'channel id', 'channel name', 'channel description',
+        priority: Priority.high, importance: Importance.max, playSound: true);
+
+    final iOS = IOSNotificationDetails();
+    final platform = NotificationDetails(android: android, iOS: iOS);
+    final json = jsonEncode(downloadStatus);
+    final isSuccess = downloadStatus['isSuccess'];
+
+    await flutterLocalNotificationsPlugin.show(
+        0, // notification id
+        isSuccess ? 'Success' : 'Failure',
+        isSuccess
+            ? 'File has been downloaded successfully!'
+            : 'There was an error while downloading the file.',
+        platform,
+        payload: json);
+  }
+
+  void _onReceiveProgress(int received, int total) {
+    if (total != -1) {
+      setState(() {
+        _progress = (received / total * 100).toStringAsFixed(0) + "%";
+      });
+    }
   }
 }

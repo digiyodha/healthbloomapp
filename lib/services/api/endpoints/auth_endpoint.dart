@@ -23,6 +23,7 @@ class AuthEndpoints {
   static get editBill => AuthEndpoint("/v1/bill/", Method.put);
   static get editReport => AuthEndpoint("/v1/report/", Method.put);
   static get editPrescription => AuthEndpoint("/v1/prescription/", Method.put);
+  static get searchMedicine => AuthEndpoint("/v1/medicine/search/", Method.put);
 
   // Get
   static get getMember => AuthEndpoint("/v1/family/id/", Method.put);

@@ -121,9 +121,9 @@ class MedicalBillsCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 5.0),
                               TextBuilder(
-                                text:
-                                    '${dateOfBill.day}-${dateOfBill.month}-${dateOfBill.year}' ??
-                                        '',
+                                text: dateOfBill != null
+                                    ? '${dateOfBill.day}-${dateOfBill.month}-${dateOfBill.year}'
+                                    : '',
                                 color: Colors.white,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,

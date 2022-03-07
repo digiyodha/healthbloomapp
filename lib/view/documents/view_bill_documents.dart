@@ -12,12 +12,8 @@ import '../../utils/text_field/custom_text_field.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as path;
 import 'dart:convert';
-
-import 'package:universal_html/html.dart' as html;
-import 'package:http/http.dart' as http;
 
 class ViewBillDocuments extends StatefulWidget {
   final GetAllDocumentsResponseBill bill;
@@ -35,17 +31,17 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
 
   List<String> files = [];
 
-  UploadTask task;
   String _progress = "-";
 
   final Dio _dio = Dio();
-
+  DateTime date = DateTime.now();
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   @override
   void initState() {
     super.initState();
-
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('app_icon');
     if (widget.bill != null) {
       _billName.text = widget.bill.name.toString();
       _amount.text = widget.bill.amount.toString();
@@ -224,27 +220,10 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
                                                               width: 328,
                                                               onPressed:
                                                                   () async {
-                                                                // final taskId =
-                                                                //     await FlutterDownloader
-                                                                //         .enqueue(
-                                                                //   url:
-                                                                //       'your download link',
-                                                                //   savedDir:
-                                                                //       'the path of directory where you want to save downloaded files',
-                                                                //   showNotification:
-                                                                //       true, // show download progress in status bar (for Android)
-                                                                //   openFileFromNotification:
-                                                                //       true, // click on notification to open downloaded file (for Android)
-                                                                // );
-                                                                _download(
-                                                                    'image',
+                                                                await _download(
+                                                                    '${date.day}-${date.month}-${date.year}-${date.millisecond}.jpg',
                                                                     files[
                                                                         index]);
-
-                                                                downloadImage(
-                                                                    files[
-                                                                        index],
-                                                                    'images');
                                                               },
                                                             )
                                                           ],
@@ -300,13 +279,14 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
   }
 
   Future<void> _download(String fileName, String fileUrl) async {
+    print('Download started');
     final dir = await _getDownloadDirectory();
     print(dir);
     final isPermissionStatusGranted = await _requestPermissions();
 
-    print(isPermissionStatusGranted);
+    print('Permition granted ${isPermissionStatusGranted}');
 
-    if (isPermissionStatusGranted || Platform.isIOS) {
+    if (isPermissionStatusGranted || Platform.isAndroid) {
       final savePath = path.join(dir.path, fileName);
       await _startDownload(savePath, fileUrl);
     } else {
@@ -315,6 +295,7 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
   }
 
   Future<bool> _requestPermissions() async {
+    print('Permition dialog');
     var permission = await Permission.storage.status;
     var permission2 = await Permission.manageExternalStorage.status;
 
@@ -357,18 +338,22 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
           onReceiveProgress: _onReceiveProgress);
       result['isSuccess'] = response.statusCode == 200;
       result['filePath'] = savePath;
-      print(result);
+      print('Result ' + result.toString());
     } catch (ex) {
       result['error'] = ex.toString();
-      print(result);
+      print('Result ' + result.toString());
     } finally {
+      // await ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text("Downloading..."),
+      // ));
       await _showNotification(result);
     }
   }
 
   Future<void> _showNotification(Map<String, dynamic> downloadStatus) async {
     print("SHOW NOTIFICATION");
-    final android = AndroidNotificationDetails('channel id', 'channel name',
+    final android = AndroidNotificationDetails(
+        'channel id', 'channel name', 'channel description',
         priority: Priority.high, importance: Importance.max);
 
     final iOS = IOSNotificationDetails();
@@ -391,35 +376,6 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
       setState(() {
         _progress = (received / total * 100).toStringAsFixed(0) + "%";
       });
-    }
-  }
-
-  Future<void> downloadImage(String imageUrl, String name) async {
-    try {
-      // first we make a request to the url like you did
-      // in the android and ios version
-      final http.Response r = await http.get(
-        Uri.parse(imageUrl),
-      );
-
-      // we get the bytes from the body
-      final data = r.bodyBytes;
-      // and encode them to base64
-      final base64data = base64Encode(data);
-
-      // then we create and AnchorElement with the html package
-      final a = html.AnchorElement(href: 'data:image/jpeg;base64,$base64data');
-
-      // set the name of the file we want the image to get
-      // downloaded to
-      a.download = name;
-
-      // and we click the AnchorElement which downloads the image
-      a.click();
-      // finally we remove the AnchorElement
-      a.remove();
-    } catch (e) {
-      print(e);
     }
   }
 }
