@@ -17,6 +17,7 @@ class AuthEndpoints {
   static get addMember => AuthEndpoint("/v1/family/", Method.post);
   static get addPrescription => AuthEndpoint("/v1/prescription/", Method.post);
   static get addMedicine => AuthEndpoint("/v1/medicine/", Method.post);
+  static get addInsurance => AuthEndpoint("/v1/insurance/", Method.post);
 
   // Edit
   static get editMember => AuthEndpoint("/v1/family/", Method.put);
@@ -24,6 +25,9 @@ class AuthEndpoints {
   static get editReport => AuthEndpoint("/v1/report/", Method.put);
   static get editPrescription => AuthEndpoint("/v1/prescription/", Method.put);
   static get searchMedicine => AuthEndpoint("/v1/medicine/search/", Method.put);
+  static get editInsurance => AuthEndpoint("/v1/insurance/", Method.put);
+  static get searchInsurance =>
+      AuthEndpoint("/v1/insurance/search/", Method.put);
 
   // Get
   static get getMember => AuthEndpoint("/v1/family/id/", Method.put);
@@ -37,4 +41,5 @@ class AuthEndpoints {
   static get deleteReport => AuthEndpoint("/v1/report/", Method.delete);
   static get deleteBill => AuthEndpoint("/v1/bill/", Method.delete);
   static get deleteMember => AuthEndpoint("/v1/family/id/", Method.delete);
+  static get deleteInsurance => AuthEndpoint("/v1/insurance/", Method.delete);
 }

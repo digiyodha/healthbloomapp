@@ -148,7 +148,7 @@ class _DocumentsState extends State<Documents> {
                           controller: _fromDate,
                           label: "Start Date",
                           textInputType: TextInputType.text,
-                          onChanged: () {},
+                          onChanged: (val) {},
                           onTap: () {
                             _startDate(context);
                           },
@@ -162,7 +162,7 @@ class _DocumentsState extends State<Documents> {
                           controller: _toDate,
                           label: "End Date",
                           textInputType: TextInputType.text,
-                          onChanged: () {},
+                          onChanged: (val) {},
                           onTap: () {
                             _endDate(context);
                           },

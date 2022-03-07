@@ -5,14 +5,12 @@ class EditMemberResponse {
   });
 
   bool success;
-  EditMemberResponseData data;
+  Data data;
 
   factory EditMemberResponse.fromJson(Map<String, dynamic> json) =>
       EditMemberResponse(
         success: json["success"] == null ? null : json["success"],
-        data: json["data"] == null
-            ? null
-            : EditMemberResponseData.fromJson(json["data"]),
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -21,8 +19,8 @@ class EditMemberResponse {
       };
 }
 
-class EditMemberResponseData {
-  EditMemberResponseData({
+class Data {
+  Data({
     this.name,
     this.relationship,
     this.age,
@@ -38,8 +36,7 @@ class EditMemberResponseData {
   String userId;
   String id;
 
-  factory EditMemberResponseData.fromJson(Map<String, dynamic> json) =>
-      EditMemberResponseData(
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
         name: json["name"] == null ? null : json["name"],
         relationship:
             json["relationship"] == null ? null : json["relationship"],

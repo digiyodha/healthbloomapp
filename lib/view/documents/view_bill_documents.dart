@@ -33,7 +33,7 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
   bool isloading = false;
   List<String> files = [];
 
-  String _progress = "-";
+  String progress = "-";
 
   final Dio _dio = Dio();
   DateTime date = DateTime.now();
@@ -132,7 +132,7 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
                       enabled: false,
                       label: "Name of Bill",
                       textInputType: TextInputType.name,
-                      onChanged: () {},
+                      onChanged: (val) {},
                       onTap: () {},
                     ),
                     SizedBox(height: 16),
@@ -142,7 +142,7 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
                       controller: _amount,
                       label: "Amount",
                       textInputType: TextInputType.number,
-                      onChanged: () {},
+                      onChanged: (val) {},
                       onTap: () {},
                     ),
                     SizedBox(height: 16),
@@ -153,7 +153,7 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
                       controller: _date,
                       label: "Date of Bill",
                       textInputType: TextInputType.text,
-                      onChanged: () {},
+                      onChanged: (val) {},
                       onTap: () {},
                     ),
                     SizedBox(height: 16),
@@ -163,7 +163,7 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
                       controller: _description,
                       label: "Description",
                       textInputType: TextInputType.name,
-                      onChanged: () {},
+                      onChanged: (val) {},
                       onTap: () {},
                     ),
                     SizedBox(height: 24),
@@ -395,7 +395,7 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
   void _onReceiveProgress(int received, int total) {
     if (total != -1) {
       setState(() {
-        _progress = (received / total * 100).toStringAsFixed(0) + "%";
+        progress = (received / total * 100).toStringAsFixed(0) + "%";
       });
     }
   }

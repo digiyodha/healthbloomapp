@@ -170,7 +170,7 @@ class _AddBillState extends State<AddBill> {
                             controller: _billName,
                             label: "Name of Bill",
                             textInputType: TextInputType.name,
-                            onChanged: () {},
+                            onChanged: (val) {},
                             onTap: () {},
                           ),
                           SizedBox(height: 16),
@@ -179,7 +179,7 @@ class _AddBillState extends State<AddBill> {
                             controller: _amount,
                             label: "Amount",
                             textInputType: TextInputType.number,
-                            onChanged: () {},
+                            onChanged: (val) {},
                             onTap: () {},
                           ),
                           SizedBox(
@@ -191,7 +191,7 @@ class _AddBillState extends State<AddBill> {
                             controller: _date,
                             label: "Date of Bill",
                             textInputType: TextInputType.text,
-                            onChanged: () {},
+                            onChanged: (val) {},
                             onTap: () {
                               _selectDate(context);
                             },
@@ -204,7 +204,7 @@ class _AddBillState extends State<AddBill> {
                             controller: _description,
                             label: "Description",
                             textInputType: TextInputType.name,
-                            onChanged: () {},
+                            onChanged: (val) {},
                             onTap: () {},
                           ),
                           SizedBox(

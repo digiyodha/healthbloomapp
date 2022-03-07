@@ -6,6 +6,7 @@ import 'package:health_bloom/model/response/search_medicne_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/view/bill/add_bill.dart';
+import 'package:health_bloom/view/insurance/add_insurance.dart';
 import 'package:health_bloom/view/medicine/add_medicine.dart';
 import 'package:health_bloom/view/medicine/view_medicine.dart';
 import 'package:health_bloom/view/report/add_report.dart';
@@ -689,7 +690,6 @@ class _HomePageState extends State<HomePage>
                           MaterialPageRoute(
                               builder: (context) => AddPrescription()))
                       .whenComplete(() => Navigator.pop(context));
-                  // Navigator.pop(context);
                 },
               ),
               ListTile(
@@ -701,7 +701,17 @@ class _HomePageState extends State<HomePage>
                           MaterialPageRoute(
                               builder: (context) => AddMedicine()))
                       .whenComplete(() => Navigator.pop(context));
-                  // Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: new Icon(Icons.add),
+                title: new Text('Insurance'),
+                onTap: () {
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddInsurance()))
+                      .whenComplete(() => Navigator.pop(context));
                 },
               ),
             ],

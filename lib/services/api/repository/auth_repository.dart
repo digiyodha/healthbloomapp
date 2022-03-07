@@ -1,28 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/model/request/add_edit_user_profile_request.dart';
+import 'package:health_bloom/model/request/add_insurance_request.dart';
 import 'package:health_bloom/model/request/add_medicine_request.dart';
 import 'package:health_bloom/model/request/add_member_request.dart';
 import 'package:health_bloom/model/request/add_prescription_request.dart';
 import 'package:health_bloom/model/request/add_report_request.dart';
+import 'package:health_bloom/model/request/delete_insurence_request.dart';
 import 'package:health_bloom/model/request/delete_member_request.dart';
 import 'package:health_bloom/model/request/edit_bill_request.dart';
+import 'package:health_bloom/model/request/edit_insurance_request.dart';
 import 'package:health_bloom/model/request/edit_member_request.dart';
 import 'package:health_bloom/model/request/edit_prescription_request.dart';
 import 'package:health_bloom/model/request/edit_report_request.dart';
 import 'package:health_bloom/model/request/get_documents_request.dart';
+import 'package:health_bloom/model/request/search_insurance_request.dart';
 import 'package:health_bloom/model/request/search_mdecine_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
 import 'package:health_bloom/model/response/add_family_response.dart';
+import 'package:health_bloom/model/response/add_insurance_response.dart';
 import 'package:health_bloom/model/response/add_medicine_response.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
 import 'package:health_bloom/model/response/add_report_response.dart';
+import 'package:health_bloom/model/response/delete_insurance_response.dart';
 import 'package:health_bloom/model/response/delete_member_response.dart';
 import 'package:health_bloom/model/response/edit_bill_response.dart';
+import 'package:health_bloom/model/response/edit_insurance_response.dart';
 import 'package:health_bloom/model/response/edit_member_response.dart';
 import 'package:health_bloom/model/response/edit_prescription_response.dart';
 import 'package:health_bloom/model/response/edit_report_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
+import 'package:health_bloom/model/response/search_insurance_response.dart';
 import 'package:health_bloom/model/response/search_medicne_response.dart';
 import 'package:health_bloom/services/api/networkmanager/auth_networkmanager.dart';
 import 'package:health_bloom/services/api/results.dart';
@@ -189,5 +197,37 @@ class NetworkRepository with ChangeNotifier {
     if (apiResult is Success) return apiResult.data;
     if (apiResult is Error) throw apiResult.error;
     return searchMedicineAPI(request);
+  }
+
+  Future<AddInsuranceResponse> addInsuranceAPI(
+      AddInsuranceRequest request) async {
+    Result apiResult = await apiClient.addInsurance(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return addInsuranceAPI(request);
+  }
+
+  Future<EditInsuranceResponse> editInsuranceAPI(
+      EditInsuranceRequest request) async {
+    Result apiResult = await apiClient.editInsurance(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return editInsuranceAPI(request);
+  }
+
+  Future<SearchInsuranceResponse> searchInsuranceAPI(
+      SearchInsuranceRequest request) async {
+    Result apiResult = await apiClient.searchInsurance(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return searchInsuranceAPI(request);
+  }
+
+  Future<DeleteInsuranceResponse> deleteInsuranceAPI(
+      DeleteInsuranceRequest request) async {
+    Result apiResult = await apiClient.deleteInsurance(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return deleteInsuranceAPI(request);
   }
 }

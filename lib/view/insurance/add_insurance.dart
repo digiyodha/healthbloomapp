@@ -1,81 +1,41 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:health_bloom/model/request/add_prescription_request.dart';
-import 'package:health_bloom/model/request/edit_prescription_request.dart';
-import 'package:health_bloom/model/response/add_precsription_response.dart';
-import 'package:health_bloom/model/response/edit_prescription_response.dart';
-import 'package:health_bloom/model/response/get_all_member_response.dart';
-import 'package:health_bloom/services/api/repository/auth_repository.dart';
+import 'package:health_bloom/model/request/add_insurance_request.dart';
+import 'package:health_bloom/model/request/edit_insurance_request.dart';
+import 'package:health_bloom/model/response/add_insurance_response.dart';
+import 'package:health_bloom/model/response/edit_insurance_response.dart';
+import 'package:health_bloom/model/response/search_insurance_response.dart';
 import 'package:health_bloom/utils/colors.dart';
-import 'package:health_bloom/utils/drop_down/custom_dropdown.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:provider/provider.dart';
 import '../../components/custom_contained_button.dart';
-import '../../model/response/response.dart';
+import '../../model/response/get_all_member_response.dart';
+import '../../services/api/repository/auth_repository.dart';
+import '../../utils/drop_down/custom_dropdown.dart';
 import '../../utils/text_field/custom_text_field.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
 
-class AddPrescription extends StatefulWidget {
-  final GetAllDocumentsResponsePrescription prescription;
-  const AddPrescription({Key key, this.prescription}) : super(key: key);
+class AddInsurance extends StatefulWidget {
+  final SearchInsuranceResponseDatum insurance;
+  const AddInsurance({Key key, this.insurance}) : super(key: key);
 
   @override
-  State<AddPrescription> createState() => _AddPrescriptionState();
+  State<AddInsurance> createState() => _AddInsuranceState();
 }
 
-class _AddPrescriptionState extends State<AddPrescription> {
-  TextEditingController _doctor = TextEditingController();
-  TextEditingController _hospital = TextEditingController();
-  TextEditingController _date = TextEditingController();
-  TextEditingController _patient = TextEditingController();
-  TextEditingController _userAilment = TextEditingController();
-  TextEditingController _drAdvice = TextEditingController();
-  String selectedPatient;
-  DateTime selectedDate = DateTime.now();
+class _AddInsuranceState extends State<AddInsurance> {
+  TextEditingController _orgName = TextEditingController();
+  TextEditingController _familyMember = TextEditingController();
+
   FilePickerResult _attachmentFile;
   File _file;
   UploadTask task;
   bool _loading = false;
   List<String> files = [];
-  Future<AddPrescriptionResponse> addPrescription(
-      AddPrescriptionRequest request) async {
-    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    AddPrescriptionResponse _response =
-        await adminAPI.addPrescriptionAPI(request);
-    return _response;
-  }
-
-  Future<EditPriscriptionResponse> editPrescription(
-      EditPriscriptionRequest request) async {
-    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    EditPriscriptionResponse _response =
-        await adminAPI.editPrescriptionAPI(request);
-    return _response;
-  }
-
-  Future _futureMembers;
-  Future<GetAllMemberResponse> getAllmember() async {
-    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    GetAllMemberResponse _response = await adminAPI.getAllMemberAPI();
-    return _response;
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-      _date.text =
-          "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
-    }
-  }
+  Future _future;
+  String _memberId;
 
   Future getFile(BuildContext context) async {
     setState(() {
@@ -101,21 +61,35 @@ class _AddPrescriptionState extends State<AddPrescription> {
     }
   }
 
+  Future<AddInsuranceResponse> addInsurance(AddInsuranceRequest request) async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    AddInsuranceResponse _response = await adminAPI.addInsuranceAPI(request);
+    return _response;
+  }
+
+  Future<EditInsuranceResponse> editInsurance(
+      EditInsuranceRequest request) async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    EditInsuranceResponse _response = await adminAPI.editInsuranceAPI(request);
+    return _response;
+  }
+
+  Future<GetAllMemberResponse> getAllmember() async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    GetAllMemberResponse _response = await adminAPI.getAllMemberAPI();
+    return _response;
+  }
+
   @override
   void initState() {
     super.initState();
-    _futureMembers = getAllmember();
-    if (widget.prescription != null) {
-      _doctor.text = widget.prescription.doctorName;
-      _hospital.text = widget.prescription.clinicName;
-      _date.text =
-          "${widget.prescription.consultationDate.day}/${widget.prescription.consultationDate.month}/${widget.prescription.consultationDate.year}";
-      _drAdvice.text = widget.prescription.doctorAdvice;
-      _patient.text = widget.prescription.patient.name;
-      _userAilment.text = widget.prescription.userAilment;
-      selectedPatient = widget.prescription.patient.id;
-      selectedDate = widget.prescription.consultationDate;
-      files = widget.prescription.prescriptionImage;
+    _future = getAllmember();
+    if (widget.insurance != null) {
+      _orgName.text = widget.insurance.organisationName.toString();
+      _familyMember.text = widget.insurance.patient.name;
+      _memberId = widget.insurance.patient.id;
+
+      files = widget.insurance.insuranceImage;
     }
   }
 
@@ -132,16 +106,15 @@ class _AddPrescriptionState extends State<AddPrescription> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text(widget.prescription != null
-            ? "Edit Prescription"
-            : "Add Prescription"),
+        title:
+            Text(widget.insurance != null ? "Edit Insurance" : "Add Insurance"),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
       body: FutureBuilder<GetAllMemberResponse>(
-        future: _futureMembers,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
+        future: _future,
+        builder: (context, data) {
+          if (data.hasData) {
             return Stack(
               children: [
                 Positioned(
@@ -152,7 +125,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
                     height: 300,
                     width: double.infinity,
                     child: Image.asset(
-                      "assets/images/medical_report.jpg",
+                      "assets/images/insurance.jpg",
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -175,68 +148,22 @@ class _AddPrescriptionState extends State<AddPrescription> {
                           SizedBox(height: 5),
                           CustomTextField(
                             maxLines: 1,
-                            controller: _doctor,
-                            label: "Doctor Name",
-                            textInputType: TextInputType.name,
-                            onChanged: (val) {},
-                            onTap: () {},
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          CustomTextField(
-                            maxLines: 1,
-                            controller: _hospital,
-                            label: "Hospital/Clinic Name",
-                            textInputType: TextInputType.name,
-                            onChanged: (val) {},
-                            onTap: () {},
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          CustomTextField(
-                            readOnly: true,
-                            maxLines: 1,
-                            controller: _date,
-                            label: "Consultation Date",
-                            textInputType: TextInputType.text,
-                            onChanged: (val) {},
-                            onTap: () {
-                              _selectDate(context);
-                            },
-                          ),
-                          SizedBox(height: 16),
-                          CustomTextField(
-                            maxLines: 1,
-                            controller: _userAilment,
-                            label: "User Ailment",
-                            textInputType: TextInputType.name,
+                            controller: _orgName,
+                            label: "Organization Name",
                             onChanged: (val) {},
                             onTap: () {},
                           ),
                           SizedBox(height: 16),
                           CustomDropDown(
-                            title: "Select Patient",
-                            controller: _patient,
+                            title: "Select Family Member",
+                            controller: _familyMember,
                             dropDownData:
-                                snapshot.data.data.map((e) => e.name).toList(),
+                                data.data.data.map((e) => e.name).toList(),
                             stateCallback: (int i) {
-                              selectedPatient = snapshot.data.data[i].id;
+                              _memberId = data.data.data[i].id;
                             },
                           ),
-                          SizedBox(height: 16),
-                          CustomTextField(
-                            maxLines: 3,
-                            controller: _drAdvice,
-                            label: "Dr. Advice",
-                            textInputType: TextInputType.name,
-                            onChanged: (val) {},
-                            onTap: () {},
-                          ),
-                          SizedBox(
-                            height: 24,
-                          ),
+                          SizedBox(height: 24),
                           if (files.isNotEmpty)
                             Column(
                               children: [
@@ -360,7 +287,9 @@ class _AddPrescriptionState extends State<AddPrescription> {
                                             )),
                                   ),
                                 ),
-                                SizedBox(height: 24),
+                                SizedBox(
+                                  height: 24,
+                                ),
                               ],
                             ),
                           Container(
@@ -373,7 +302,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
                                 height: 58,
                                 textSize: 16,
                                 disabledColor: kGreyLite,
-                                text: "Add Prescriptions",
+                                text: "Add Bill",
                                 onPressed: () {
                                   getFile(context);
                                 },
@@ -381,7 +310,9 @@ class _AddPrescriptionState extends State<AddPrescription> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 16),
+                          SizedBox(
+                            height: 16,
+                          ),
                         ],
                       ),
                     ),
@@ -390,10 +321,9 @@ class _AddPrescriptionState extends State<AddPrescription> {
                 if (_loading) LoadingWidget()
               ],
             );
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
+          } else {
+            return LoadingWidget();
           }
-          return Center(child: CircularProgressIndicator());
         },
       ),
       bottomNavigationBar: Container(
@@ -410,101 +340,58 @@ class _AddPrescriptionState extends State<AddPrescription> {
             disabledColor: kGreyLite,
             text: "Submit",
             onPressed: () async {
-              if (widget.prescription != null) {
-                if (_drAdvice.text.isNotEmpty &&
-                    _doctor.text.isNotEmpty &&
-                    _userAilment.text.isNotEmpty &&
-                    _hospital.text.isNotEmpty &&
-                    files.isNotEmpty &&
-                    _patient.text.isNotEmpty) {
+              if (widget.insurance != null) {
+                if (_orgName.text.isNotEmpty && _familyMember.text.isNotEmpty) {
                   setState(() {
                     _loading = true;
                   });
-                  EditPriscriptionRequest _request = EditPriscriptionRequest(
-                    id: widget.prescription.id,
-                    consultationDate: selectedDate,
-                    doctorAdvice: _drAdvice.text,
-                    clinicName: _hospital.text,
-                    patient: selectedPatient,
-                    doctorName: _doctor.text,
-                    prescriptionImage: files,
-                    userAilment: _userAilment.text,
-                  );
-                  EditPriscriptionResponse _response =
-                      await editPrescription(_request);
-                  print('Edit Prescription Request ${_request.toJson()}');
-                  print('Edit Prescription Response ${_response.toJson()}');
-                  if (_response.success == true) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Updated successfully!'),
-                    ));
-                    setState(() {
-                      _loading = false;
-                    });
 
-                    Navigator.pop(context);
-                  } else {
-                    setState(() {
-                      _loading = false;
-                    });
+                  EditInsuranceRequest _request = EditInsuranceRequest(
+                    id: widget.insurance.id,
+                    organisationName: _orgName.text,
+                    insuranceImage: files,
+                    patient: _memberId,
+                  );
+                  print('Edit Insurance request ${_request.toJson()}');
+                  EditInsuranceResponse _response =
+                      await editInsurance(_request);
+                  print('Edit Insurance response ${_response.toJson()}');
+                  if (_response.success) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Please fill all the details'),
+                      content: Text("Updated successfully!"),
                     ));
+                    await Future.delayed(Duration(seconds: 1));
+                    Navigator.pop(context);
                   }
                 } else {
-                  setState(() {
-                    _loading = false;
-                  });
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Please fill all the details'),
+                    content: Text("Please fill all the details"),
                   ));
                 }
               } else {
-                if (_drAdvice.text.isNotEmpty &&
-                    _doctor.text.isNotEmpty &&
-                    _userAilment.text.isNotEmpty &&
-                    _hospital.text.isNotEmpty &&
-                    files.isNotEmpty &&
-                    _patient.text.isNotEmpty) {
+                if (_orgName.text.isNotEmpty && _familyMember.text.isNotEmpty) {
                   setState(() {
                     _loading = true;
                   });
-                  AddPrescriptionRequest _request = AddPrescriptionRequest(
-                    consultationDate: _date.text,
-                    doctorAdvice: _drAdvice.text,
-                    clinicName: _hospital.text,
-                    patient: selectedPatient,
-                    doctorName: _doctor.text,
-                    prescriptionImage: files,
-                    userAilment: _userAilment.text,
-                  );
-                  AddPrescriptionResponse _response =
-                      await addPrescription(_request);
-                  print('Add Prescription Request ${_request.toJson()}');
-                  print('Add Prescription Response ${_response.toJson()}');
-                  if (_response.success == true) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Added successfully!'),
-                    ));
-                    setState(() {
-                      _loading = false;
-                    });
 
-                    Navigator.pop(context);
-                  } else {
-                    setState(() {
-                      _loading = false;
-                    });
+                  AddInsuranceRequest _request = AddInsuranceRequest(
+                    organisationName: _orgName.text,
+                    patient: _memberId,
+                    insuranceImage: files,
+                  );
+                  print('Add Insurance request ${_request.toJson()}');
+                  AddInsuranceResponse _response = await addInsurance(_request);
+                  print('Add Insurance response ${_response.toJson()}');
+                  if (_response.success) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Please fill all the details'),
+                      content: Text("Added successfully!"),
                     ));
+                    await Future.delayed(Duration(seconds: 1));
+                    Navigator.pop(context);
                   }
                 } else {
-                  setState(() {
-                    _loading = false;
-                  });
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Please fill all the details'),
+                    content: Text("Please fill all the details"),
                   ));
                 }
               }

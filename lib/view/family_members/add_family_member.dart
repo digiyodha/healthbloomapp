@@ -2,20 +2,24 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/add_member_request.dart';
 import 'package:health_bloom/model/request/edit_member_request.dart';
 import 'package:health_bloom/model/response/add_family_response.dart';
 import 'package:health_bloom/model/response/edit_member_response.dart';
+import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+
 import '../../components/custom_contained_button.dart';
 import '../../utils/text_field/custom_text_field.dart';
 
 class AddFamilyMembers extends StatefulWidget {
-  const AddFamilyMembers({Key key}) : super(key: key);
+  final GetAllMemberResponseDatum member;
+  const AddFamilyMembers({Key key, this.member}) : super(key: key);
 
   @override
   State<AddFamilyMembers> createState() => _AddFamilyMembersState();
@@ -66,6 +70,21 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.member != null) {
+      print('Member Name ${widget.member.name}');
+      _name.text = widget.member.name;
+      print('Member Relation ${widget.member.relationship}');
+      _relation.text = widget.member.relationship;
+      print('Member Age ${widget.member.age}');
+      _age = widget.member.age;
+      print('Member Avatar ${widget.member.avatar}');
+      _uploadAvatarUrl = widget.member.avatar;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -78,7 +97,9 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text("Add Family Members"),
+        title: Text(widget.member != null
+            ? "Edit Family Members"
+            : "Add Family Members"),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -93,28 +114,30 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
             disabledColor: kGreyLite,
             text: "Submit",
             onPressed: () async {
-              setState(() {
-                _loading = true;
-              });
-
-              if (_name.text.isNotEmpty && _relation.text.isNotEmpty) {
-                AddMemberRequest _request = AddMemberRequest(
-                    age: _age,
-                    avatar: _uploadAvatarUrl ?? '',
-                    name: _name.text,
-                    relationship: _relation.text);
-                AddMemberResponse _response = await addMember(_request);
-                print('Add Meember Request ${_request.toJson()}');
-                print('Add Meember Response ${_response.toJson()}');
-                if (_response.success == true) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Added'),
-                  ));
+              if (widget.member != null) {
+                if (_name.text.isNotEmpty && _relation.text.isNotEmpty) {
                   setState(() {
-                    _loading = false;
+                    _loading = true;
                   });
+                  EditMemberRequest _request = EditMemberRequest(
+                      id: widget.member.id,
+                      age: _age,
+                      avatar: _uploadAvatarUrl ?? '',
+                      name: _name.text,
+                      relationship: _relation.text);
+                  EditMemberResponse _response = await editMember(_request);
+                  print('Edit Meember Request ${_request.toJson()}');
+                  print('Edit Meember Response ${_response.toJson()}');
+                  if (_response.success == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Updated'),
+                    ));
+                    setState(() {
+                      _loading = false;
+                    });
 
-                  Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
                 } else {
                   setState(() {
                     _loading = false;
@@ -124,12 +147,36 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                   ));
                 }
               } else {
-                setState(() {
-                  _loading = false;
-                });
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Please fill all the details'),
-                ));
+                if (_name.text.isNotEmpty && _relation.text.isNotEmpty) {
+                  setState(() {
+                    _loading = true;
+                  });
+                  AddMemberRequest _request = AddMemberRequest(
+                      age: _age,
+                      avatar: _uploadAvatarUrl ?? '',
+                      name: _name.text,
+                      relationship: _relation.text);
+                  AddMemberResponse _response = await addMember(_request);
+                  print('Add Meember Request ${_request.toJson()}');
+                  print('Add Meember Response ${_response.toJson()}');
+                  if (_response.success == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Added'),
+                    ));
+                    setState(() {
+                      _loading = false;
+                    });
+
+                    Navigator.pop(context);
+                  }
+                } else {
+                  setState(() {
+                    _loading = false;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Please fill all the details'),
+                  ));
+                }
               }
             },
             width: double.infinity,
@@ -167,6 +214,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                             topLeft: Radius.circular(30))),
                     child: ListView(
                       children: [
+                        TextBuilder(text: _uploadAvatarUrl.toString()),
                         CustomTextField(
                           maxLines: 1,
                           controller: _name,
@@ -178,7 +226,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                           },
                           label: "Name",
                           textInputType: TextInputType.name,
-                          onChanged: () {},
+                          onChanged: (val) {},
                           onTap: () {},
                         ),
                         SizedBox(height: 16),
@@ -193,7 +241,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                           },
                           label: "Relationship",
                           textInputType: TextInputType.name,
-                          onChanged: () {},
+                          onChanged: (val) {},
                           onTap: () {},
                         ),
                         SizedBox(height: 24),

@@ -29,7 +29,7 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
 
   List<String> files = [];
 
-  String _progress = "-";
+  String progress = "-";
 
   final Dio _dio = Dio();
   DateTime date = DateTime.now();
@@ -126,7 +126,7 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
                       enabled: false,
                       label: "Name of Bill",
                       textInputType: TextInputType.name,
-                      onChanged: () {},
+                      onChanged: (val) {},
                       onTap: () {},
                     ),
                     SizedBox(height: 16),
@@ -137,7 +137,7 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
                       controller: _date,
                       label: "Date of Bill",
                       textInputType: TextInputType.text,
-                      onChanged: () {},
+                      onChanged: (val) {},
                       onTap: () {},
                     ),
                     SizedBox(height: 16),
@@ -147,7 +147,7 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
                       controller: _description,
                       label: "Description",
                       textInputType: TextInputType.name,
-                      onChanged: () {},
+                      onChanged: (val) {},
                       onTap: () {},
                     ),
                     SizedBox(height: 24),
@@ -383,7 +383,7 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
   void _onReceiveProgress(int received, int total) {
     if (total != -1) {
       setState(() {
-        _progress = (received / total * 100).toStringAsFixed(0) + "%";
+        progress = (received / total * 100).toStringAsFixed(0) + "%";
       });
     }
   }

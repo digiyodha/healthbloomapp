@@ -225,8 +225,9 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                                               TextButton(
                                                                   onPressed:
                                                                       () {
-                                                                    Navigator.pop(context);
-                                                                      },
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
                                                                   child: TextBuilder(
                                                                       text:
                                                                           'No')),
@@ -298,6 +299,29 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                                 },
                                                 child: Icon(
                                                   Icons.delete,
+                                                  size: 20,
+                                                  color: Colors.white,
+                                                )),
+                                          ),
+                                          Positioned(
+                                            bottom: 0,
+                                            left: 0,
+                                            child: InkWell(
+                                                onTap: () async {
+                                                  Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  AddFamilyMembers(
+                                                                      member:
+                                                                          member)))
+                                                      .whenComplete(() {
+                                                    setState(() {});
+                                                    getAllmember();
+                                                  });
+                                                },
+                                                child: Icon(
+                                                  Icons.edit,
                                                   size: 20,
                                                   color: Colors.white,
                                                 )),

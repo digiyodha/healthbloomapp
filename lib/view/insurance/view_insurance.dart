@@ -1,36 +1,35 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:health_bloom/components/custom_contained_button.dart';
-import 'package:health_bloom/model/response/response.dart';
+import 'package:health_bloom/model/response/search_insurance_response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:open_file/open_file.dart';
+import 'package:share/share.dart';
+
+import '../../utils/text_field/custom_text_field.dart';
 import 'package:path_provider/path_provider.dart';
+import 'dart:async';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as path;
-import '../../utils/text_field/custom_text_field.dart';
+import 'dart:convert';
 
-class ViewPrescriptionDocuments extends StatefulWidget {
-  final GetAllDocumentsResponsePrescription prescriprion;
-  const ViewPrescriptionDocuments({Key key, this.prescriprion})
-      : super(key: key);
+class ViewInsurance extends StatefulWidget {
+  final SearchInsuranceResponseDatum insurance;
+  const ViewInsurance({Key key, this.insurance}) : super(key: key);
 
   @override
-  State<ViewPrescriptionDocuments> createState() =>
-      _ViewPrescriptionDocumentsState();
+  State<ViewInsurance> createState() => _ViewInsurance();
 }
 
-class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
-  TextEditingController _drName = TextEditingController();
-  TextEditingController _hospital = TextEditingController();
-  TextEditingController _cunsultationDate = TextEditingController();
-  TextEditingController _userAilment = TextEditingController();
-  TextEditingController _drAdvice = TextEditingController();
+class _ViewInsurance extends State<ViewInsurance> {
+  TextEditingController _orgName = TextEditingController();
 
+  bool isloading = false;
   List<String> files = [];
 
   String progress = "-";
@@ -38,9 +37,11 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
   final Dio _dio = Dio();
   DateTime date = DateTime.now();
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
   @override
   void initState() {
     super.initState();
+
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     final android = AndroidInitializationSettings('@mipmap/ic_launcher');
     final iOS = IOSInitializationSettings();
@@ -48,16 +49,11 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
 
     flutterLocalNotificationsPlugin.initialize(initSettings,
         onSelectNotification: _onSelectNotification);
-    if (widget.prescriprion != null) {
-      _drName.text = widget.prescriprion.doctorName.toString();
-      _hospital.text = widget.prescriprion.clinicName.toString();
-      _cunsultationDate.text =
-          "${widget.prescriprion.consultationDate.day}/${widget.prescriprion.consultationDate.month}/${widget.prescriprion.consultationDate.year}";
-      _userAilment.text = widget.prescriprion.userAilment.toString();
 
-      _drAdvice.text = widget.prescriprion.doctorAdvice.toString();
+    if (widget.insurance != null) {
+      _orgName.text = widget.insurance.organisationName.toString();
 
-      files = widget.prescriprion.prescriptionImage;
+      files = widget.insurance.insuranceImage;
     }
   }
 
@@ -90,7 +86,7 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text("View Prescription"),
+        title: Text("View Insurance"),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -104,7 +100,7 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
               height: 300,
               width: double.infinity,
               child: Image.asset(
-                "assets/images/medical_report.jpg",
+                "assets/images/insurance.jpg",
                 fit: BoxFit.cover,
               ),
             ),
@@ -127,50 +123,9 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
                     SizedBox(height: 5),
                     CustomTextField(
                       maxLines: 1,
-                      controller: _drName,
+                      controller: _orgName,
                       enabled: false,
-                      label: "Doctor Name",
-                      textInputType: TextInputType.name,
-                      onChanged: (val) {},
-                      onTap: () {},
-                    ),
-                    SizedBox(height: 16),
-                    CustomTextField(
-                      maxLines: 1,
-                      enabled: false,
-                      controller: _hospital,
-                      label: "Hospital Name",
-                      textInputType: TextInputType.number,
-                      onChanged: (val) {},
-                      onTap: () {},
-                    ),
-                    SizedBox(height: 16),
-                    CustomTextField(
-                      enabled: false,
-                      readOnly: true,
-                      maxLines: 1,
-                      controller: _cunsultationDate,
-                      label: "Cunsultation Date",
-                      textInputType: TextInputType.text,
-                      onChanged: (val) {},
-                      onTap: () {},
-                    ),
-                    SizedBox(height: 16),
-                    CustomTextField(
-                      maxLines: 1,
-                      enabled: false,
-                      controller: _userAilment,
-                      label: "User Ailment",
-                      textInputType: TextInputType.name,
-                      onChanged: (val) {},
-                      onTap: () {},
-                    ),
-                    SizedBox(height: 16),
-                    CustomTextField(
-                      maxLines: 3,
-                      enabled: false,
-                      controller: _userAilment,
-                      label: "Dr Advice",
+                      label: "Organization Name",
                       textInputType: TextInputType.name,
                       onChanged: (val) {},
                       onTap: () {},
@@ -228,8 +183,7 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
                                                               ],
                                                             ),
                                                             SizedBox(
-                                                              height: 16,
-                                                            ),
+                                                                height: 16),
                                                             Container(
                                                               margin: EdgeInsets
                                                                   .all(1),
@@ -244,24 +198,49 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
                                                               ),
                                                             ),
                                                             SizedBox(
-                                                              height: 16,
-                                                            ),
-                                                            CustomContainedButton(
-                                                              text: "Download",
-                                                              textSize: 20,
-                                                              weight: FontWeight
-                                                                  .w600,
-                                                              height: 48,
-                                                              width: 328,
-                                                              onPressed:
-                                                                  () async {
-                                                                await _download(
-                                                                    '${date.day}-${date.month}-${date.year}-${date.millisecond}.jpg',
-                                                                    files[
-                                                                        index]);
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
+                                                                height: 16),
+                                                            Row(
+                                                              children: [
+                                                                Expanded(
+                                                                  child:
+                                                                      CustomContainedButton(
+                                                                    text:
+                                                                        "Download",
+                                                                    textSize:
+                                                                        20,
+                                                                    weight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    height: 48,
+                                                                    width: 328,
+                                                                    onPressed:
+                                                                        () async {
+                                                                      await _download(
+                                                                          '${date.day}-${date.month}-${date.year}-${date.millisecond}.jpg',
+                                                                          files[
+                                                                              index]);
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    width:
+                                                                        20.0),
+                                                                IconButton(
+                                                                    hoverColor:
+                                                                        kMainColor,
+                                                                    color:
+                                                                        kMainColor,
+                                                                    onPressed:
+                                                                        () {
+                                                                      fileShare(
+                                                                          files[
+                                                                              index]);
+                                                                    },
+                                                                    icon: Icon(Icons
+                                                                        .share))
+                                                              ],
                                                             )
                                                           ],
                                                         ),
@@ -301,14 +280,10 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
                                       )),
                             ),
                           ),
-                          SizedBox(
-                            height: 24,
-                          ),
+                          SizedBox(height: 24),
                         ],
                       ),
-                    SizedBox(
-                      height: 16,
-                    ),
+                    SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -316,6 +291,13 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
           ),
         ],
       ),
+    );
+  }
+
+  fileShare(String url) {
+    Share.share(
+      url,
+      subject: 'Insurence Claim Attachments',
     );
   }
 

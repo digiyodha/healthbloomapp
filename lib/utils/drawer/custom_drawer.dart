@@ -6,6 +6,7 @@ import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/view/documents/documents.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
+import 'package:health_bloom/view/insurance/insurance.dart';
 import 'package:health_bloom/view/profile/profile.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -49,25 +50,27 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16, top: 20),
                   child: Row(
-                    children: [ sp.getString('profileImage') != null && sp.getString('profileImage') != ""
+                    children: [
+                      sp.getString('profileImage') != null &&
+                              sp.getString('profileImage') != ""
                           ? CircleAvatar(
-                        radius: 36,
-                        backgroundColor: kWhite,
-                        backgroundImage: NetworkImage(
-                          sp.getString('profileImage'),
-                        ),
-                      )
+                              radius: 36,
+                              backgroundColor: kWhite,
+                              backgroundImage: NetworkImage(
+                                sp.getString('profileImage'),
+                              ),
+                            )
                           : CircleAvatar(
-                        radius: 36,
-                        backgroundColor: kWhite,
-                        child: Center(
-                          child: Icon(
-                            Icons.person,
-                            color: kGrey4,
-                            size: 40,
-                          ),
-                        ),
-                      ),
+                              radius: 36,
+                              backgroundColor: kWhite,
+                              child: Center(
+                                child: Icon(
+                                  Icons.person,
+                                  color: kGrey4,
+                                  size: 40,
+                                ),
+                              ),
+                            ),
                       SizedBox(width: 14),
                       Expanded(
                         child: Text(
@@ -142,7 +145,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 DrawerContainerWidget(
                   text: "Insurance Claim",
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return Insurance();
+                    }));
+                  },
                   selected: widget.selected == 5,
                   icon: Icons.picture_as_pdf,
                 ),
