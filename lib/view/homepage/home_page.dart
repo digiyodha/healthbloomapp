@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_bloom/components/medicine_card.dart';
 import 'package:health_bloom/model/request/search_mdecine_request.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/model/response/search_medicne_response.dart';
@@ -6,6 +7,7 @@ import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/view/bill/add_bill.dart';
 import 'package:health_bloom/view/medicine/add_medicine.dart';
+import 'package:health_bloom/view/medicine/view_medicine.dart';
 import 'package:health_bloom/view/report/add_report.dart';
 import 'package:hexagon/hexagon.dart';
 import 'package:intl/intl.dart';
@@ -298,6 +300,16 @@ class _HomePageState extends State<HomePage>
                           padding: EdgeInsets.zero,
                           itemBuilder: (BuildContext context, int index) {
                             return MedicineCard(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ViewMedicine(
+                                      medicne: _currentResponse.data[index],
+                                    ),
+                                  ),
+                                );
+                              },
                               time: _currentResponse.data[index].time.first,
                               dosages: _currentResponse.data[index].dosage,
                             );
@@ -696,67 +708,6 @@ class _HomePageState extends State<HomePage>
           ),
         );
       },
-    );
-  }
-}
-
-class MedicineCard extends StatelessWidget {
-  final DateTime time;
-  final String dosages;
-  const MedicineCard({
-    Key key,
-    this.time,
-    this.dosages,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 16),
-      child: Container(
-        height: 220,
-        width: 170,
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Color(0xffAF8EFF),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "MEDICINE",
-              style: TextStyle(fontSize: 12, color: kWhite, letterSpacing: 1.5),
-            ),
-            Spacer(),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                height: 100,
-                width: 100,
-                child: Image.asset("assets/images/drug2.png"),
-              ),
-            ),
-            Spacer(),
-            Text(
-              '${DateFormat('hh:mm a').format(time).toString()}' ?? '',
-              style: TextStyle(
-                  fontSize: 22, color: kWhite, fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              height: 6,
-            ),
-            Text(
-              "Dosage - ${dosages.toString()} mg" ?? '',
-              style: TextStyle(
-                  fontSize: 14,
-                  color: kWhite.withOpacity(0.6),
-                  fontWeight: FontWeight.w400),
-            ),
-            Spacer(),
-          ],
-        ),
-      ),
     );
   }
 }
