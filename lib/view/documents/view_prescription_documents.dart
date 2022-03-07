@@ -8,6 +8,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:health_bloom/components/custom_contained_button.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as path;
@@ -29,7 +30,6 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
   TextEditingController _cunsultationDate = TextEditingController();
   TextEditingController _userAilment = TextEditingController();
   TextEditingController _drAdvice = TextEditingController();
-  TextEditingController _familyMember = TextEditingController();
 
   List<String> files = [];
 
@@ -41,17 +41,39 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
   @override
   void initState() {
     super.initState();
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    final android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    final iOS = IOSInitializationSettings();
+    final initSettings = InitializationSettings(android: android, iOS: iOS);
 
+    flutterLocalNotificationsPlugin.initialize(initSettings,
+        onSelectNotification: _onSelectNotification);
     if (widget.prescriprion != null) {
       _drName.text = widget.prescriprion.doctorName.toString();
       _hospital.text = widget.prescriprion.clinicName.toString();
       _cunsultationDate.text =
           "${widget.prescriprion.consultationDate.day}/${widget.prescriprion.consultationDate.month}/${widget.prescriprion.consultationDate.year}";
       _userAilment.text = widget.prescriprion.userAilment.toString();
-      _familyMember.text = widget.prescriprion.patient.name;
+
       _drAdvice.text = widget.prescriprion.doctorAdvice.toString();
 
       files = widget.prescriprion.prescriptionImage;
+    }
+  }
+
+  Future<void> _onSelectNotification(String json) async {
+    final obj = jsonDecode(json);
+
+    if (obj['isSuccess']) {
+      OpenFile.open(obj['filePath']);
+    } else {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text('Error'),
+          content: Text('${obj['error']}'),
+        ),
+      );
     }
   }
 
@@ -237,9 +259,8 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
                                                                     '${date.day}-${date.month}-${date.year}-${date.millisecond}.jpg',
                                                                     files[
                                                                         index]);
-                                                                await Navigator
-                                                                    .pop(
-                                                                        context);
+                                                                Navigator.pop(
+                                                                    context);
                                                               },
                                                             )
                                                           ],
@@ -363,19 +384,14 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
       result['error'] = ex.toString();
       print('Result ' + result.toString());
     } finally {
-      // await ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //   content: Text("Downloading..."),
-      // ));
       await _showNotification(result);
     }
   }
 
   Future<void> _showNotification(Map<String, dynamic> downloadStatus) async {
-    print("SHOW NOTIFICATION");
     final android = AndroidNotificationDetails(
         'channel id', 'channel name', 'channel description',
-        priority: Priority.high, importance: Importance.max, playSound: true);
-
+        priority: Priority.high, importance: Importance.max);
     final iOS = IOSNotificationDetails();
     final platform = NotificationDetails(android: android, iOS: iOS);
     final json = jsonEncode(downloadStatus);

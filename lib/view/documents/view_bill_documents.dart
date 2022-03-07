@@ -8,6 +8,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:health_bloom/components/custom_contained_button.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
+import 'package:open_file/open_file.dart';
 import '../../utils/text_field/custom_text_field.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
@@ -29,6 +30,7 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
   TextEditingController _date = TextEditingController();
   TextEditingController _description = TextEditingController();
 
+  bool isloading = false;
   List<String> files = [];
 
   String _progress = "-";
@@ -40,8 +42,15 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
   @override
   void initState() {
     super.initState();
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    final android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    final iOS = IOSInitializationSettings();
+    final initSettings = InitializationSettings(android: android, iOS: iOS);
+
+    flutterLocalNotificationsPlugin.initialize(initSettings,
+        onSelectNotification: _onSelectNotification);
+
     if (widget.bill != null) {
       _billName.text = widget.bill.name.toString();
       _amount.text = widget.bill.amount.toString();
@@ -50,6 +59,22 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
       _description.text = widget.bill.description;
 
       files = widget.bill.billImage;
+    }
+  }
+
+  Future<void> _onSelectNotification(String json) async {
+    final obj = jsonDecode(json);
+
+    if (obj['isSuccess']) {
+      OpenFile.open(obj['filePath']);
+    } else {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text('Error'),
+          content: Text('${obj['error']}'),
+        ),
+      );
     }
   }
 
@@ -209,8 +234,7 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
                                                               ),
                                                             ),
                                                             SizedBox(
-                                                              height: 16,
-                                                            ),
+                                                                height: 16),
                                                             CustomContainedButton(
                                                               text: "Download",
                                                               textSize: 20,
@@ -224,6 +248,8 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
                                                                     '${date.day}-${date.month}-${date.year}-${date.millisecond}.jpg',
                                                                     files[
                                                                         index]);
+                                                                Navigator.pop(
+                                                                    context);
                                                               },
                                                             )
                                                           ],
@@ -343,19 +369,14 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
       result['error'] = ex.toString();
       print('Result ' + result.toString());
     } finally {
-      // await ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //   content: Text("Downloading..."),
-      // ));
       await _showNotification(result);
     }
   }
 
   Future<void> _showNotification(Map<String, dynamic> downloadStatus) async {
-    print("SHOW NOTIFICATION");
     final android = AndroidNotificationDetails(
         'channel id', 'channel name', 'channel description',
         priority: Priority.high, importance: Importance.max);
-
     final iOS = IOSNotificationDetails();
     final platform = NotificationDetails(android: android, iOS: iOS);
     final json = jsonEncode(downloadStatus);

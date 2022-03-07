@@ -297,10 +297,10 @@ class _DocumentsState extends State<Documents> {
             nameOfPatients: _currentResponse.data.report[index].patient != null
                 ? _currentResponse.data.report[index].patient.name
                 : "-",
-            dateOfBill: _currentResponse.data.bill[index].patient != null
+            dateOfBill: _currentResponse.data.report[index].patient != null
                 ? _currentResponse.data.report[index].date
                 : null,
-            avatar: _currentResponse.data.bill[index].patient != null
+            avatar: _currentResponse.data.report[index].patient != null
                 ? _currentResponse.data.report[index].patient.avatar
                 : '',
             onTap: () {
@@ -354,10 +354,11 @@ class _DocumentsState extends State<Documents> {
                 _currentResponse.data.prescription[index].patient != null
                     ? _currentResponse.data.prescription[index].patient.name
                     : "-",
-            dateOfBill: _currentResponse.data.bill[index].patient != null
-                ? _currentResponse.data.prescription[index].consultationDate
-                : null,
-            avatar: _currentResponse.data.bill[index].patient != null
+            dateOfBill:
+                _currentResponse.data.prescription[index].patient != null
+                    ? _currentResponse.data.prescription[index].consultationDate
+                    : null,
+            avatar: _currentResponse.data.prescription[index].patient != null
                 ? _currentResponse.data.prescription[index].patient.avatar
                 : '',
             onTap: () {
