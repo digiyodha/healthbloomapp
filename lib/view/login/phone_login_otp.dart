@@ -6,7 +6,8 @@ class PhoneLoginOtp extends StatefulWidget {
   final TextEditingController controller;
   final TextEditingController phoneNumber;
   final Function resend;
-  const PhoneLoginOtp({Key key, this.controller,this.phoneNumber,this.resend}) : super(key: key);
+  const PhoneLoginOtp({Key key, this.controller, this.phoneNumber, this.resend})
+      : super(key: key);
 
   @override
   State<PhoneLoginOtp> createState() => _PhoneLoginOtpState();
@@ -17,6 +18,7 @@ class _PhoneLoginOtpState extends State<PhoneLoginOtp> {
   TextEditingController otp2 = TextEditingController();
   TextEditingController otp3 = TextEditingController();
   TextEditingController otp4 = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +71,8 @@ class _PhoneLoginOtpState extends State<PhoneLoginOtp> {
                         ),
                         const SizedBox(height: 15.0),
                         TextBuilder(
-                          text: "we'll text you on ${widget.phoneNumber.text}",
+                          text:
+                              "We will send you a verification code to your ${widget.phoneNumber.text}",
                           color: Color(0xff695F61),
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -145,9 +148,11 @@ class _PhoneLoginOtpState extends State<PhoneLoginOtp> {
                         // ),
                         const SizedBox(height: 15.0),
                         InkWell(
-                          onTap: (){
+                          onTap: () {
                             widget.resend();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("OTP resent!"),));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("OTP resent!"),
+                            ));
                           },
                           child: TextBuilder(
                             text: "Resend OTP ?",

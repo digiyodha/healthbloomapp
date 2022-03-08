@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/medicine_card.dart';
+import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/search_mdecine_request.dart';
+import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/model/response/search_medicne_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
@@ -8,6 +10,7 @@ import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/view/bill/add_bill.dart';
 import 'package:health_bloom/view/insurance/add_insurance.dart';
 import 'package:health_bloom/view/medicine/add_medicine.dart';
+import 'package:health_bloom/view/medicine/list_medicine.dart';
 import 'package:health_bloom/view/medicine/view_medicine.dart';
 import 'package:health_bloom/view/report/add_report.dart';
 import 'package:hexagon/hexagon.dart';
@@ -41,10 +44,17 @@ class _HomePageState extends State<HomePage>
   DateTime today = DateTime.now();
   DateTime _today = DateTime.now();
   int _waterInMl;
-
+  final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   Future<GetUserResponse> getUser() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     GetUserResponse _response = await adminAPI.getUserAPI();
+    return _response;
+  }
+
+  Future _getMembers;
+  Future<GetAllMemberResponse> getAllmember() async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    GetAllMemberResponse _response = await adminAPI.getAllMemberAPI();
     return _response;
   }
 
@@ -79,7 +89,7 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-
+    _getMembers = getAllmember();
     getData();
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300))
@@ -114,6 +124,7 @@ class _HomePageState extends State<HomePage>
         return false;
       },
       child: Scaffold(
+        key: _drawerKey,
         drawer: CustomDrawer(
           selected: 0,
         ),
@@ -133,7 +144,7 @@ class _HomePageState extends State<HomePage>
                         children: [
                           InkWell(
                             onTap: () {
-                              Scaffold.of(context).openDrawer();
+                              _drawerKey.currentState.openDrawer();
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8),
@@ -275,14 +286,14 @@ class _HomePageState extends State<HomePage>
                     InkWell(
                       onTap: () {
                         Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AddMedicine()))
-                            .whenComplete(
-                                () => setState((() => searchMedicine())));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ListMedicine(),
+                          ),
+                        );
                       },
                       child: Icon(
-                        Icons.add,
+                        Icons.more_horiz,
                         color: kGreyText,
                         size: 28,
                       ),
@@ -292,7 +303,7 @@ class _HomePageState extends State<HomePage>
                 SizedBox(height: 14),
                 _currentResponse != null
                     ? Container(
-                        height: 220,
+                        height: _currentResponse.data.length != 0 ? 220 : 0,
                         child: ListView.builder(
                           itemCount: _currentResponse.data.length,
                           shrinkWrap: true,
@@ -311,6 +322,8 @@ class _HomePageState extends State<HomePage>
                                   ),
                                 );
                               },
+                              medicineName:
+                                  _currentResponse.data[index].medicineName,
                               time: _currentResponse.data[index].time.first,
                               dosages: _currentResponse.data[index].dosage,
                             );
@@ -320,6 +333,11 @@ class _HomePageState extends State<HomePage>
                     : Center(
                         child: CircularProgressIndicator(),
                       ),
+                // _currentResponse.data != null
+                //     ? Center(
+                //         child: TextBuilder(text: 'No medicines found'),
+                //       )
+                //     : Container(),
                 SizedBox(height: 14),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -415,7 +433,11 @@ class _HomePageState extends State<HomePage>
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
                           return FamilyMembers();
-                        }));
+                        })).whenComplete(() {
+                          setState(() {
+                            _getMembers = getAllmember();
+                          });
+                        });
                       },
                       child: Container(
                         padding:
@@ -443,22 +465,45 @@ class _HomePageState extends State<HomePage>
                                 size: 100,
                               ),
                             ),
-                            // Spacer(),
-                            // Text(
-                            //   "9:00 AM",
-                            //   style: TextStyle(
-                            //       fontSize: 22,
-                            //       color: kWhite,
-                            //       fontWeight: FontWeight.w600),
-                            // ),
-                            // SizedBox(height: 6),
-                            // Text(
-                            //   "Dosage - 10 mg",
-                            //   style: TextStyle(
-                            //       fontSize: 14,
-                            //       color: kWhite.withOpacity(0.6),
-                            //       fontWeight: FontWeight.w400),
-                            // ),
+                            Spacer(),
+                            FutureBuilder<GetAllMemberResponse>(
+                              future: _getMembers,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        snapshot.data.data.length != 0
+                                            ? "${snapshot.data.data.length.toString()} Members"
+                                            : '0 Members',
+                                        style: TextStyle(
+                                            fontSize: 22,
+                                            color: kWhite,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      SizedBox(height: 6),
+                                      Text(
+                                        "Updated at - 2 AM",
+                                        // "Time - ${DateFormat('hh:mm a').format().toString()}",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: kWhite.withOpacity(0.6),
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text("${snapshot.error}");
+                                }
+                                return Center(
+                                    child: TextBuilder(
+                                  text: 'Fetching users...',
+                                  color: Colors.white,
+                                ));
+                              },
+                            ),
                             Spacer(),
                           ],
                         ),
@@ -700,7 +745,12 @@ class _HomePageState extends State<HomePage>
                           context,
                           MaterialPageRoute(
                               builder: (context) => AddMedicine()))
-                      .whenComplete(() => Navigator.pop(context));
+                      .whenComplete(() {
+                    setState(() {
+                      Navigator.pop(context);
+                      searchMedicine();
+                    });
+                  });
                 },
               ),
               ListTile(

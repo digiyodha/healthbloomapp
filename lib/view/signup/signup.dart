@@ -195,6 +195,8 @@ class _SignUpState extends State<SignUp> {
                                 ),
                                 child: TextFormField(
                                   controller: _name,
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
                                   inputFormatters: [
                                     LengthLimitingTextInputFormatter(30),
                                   ],
@@ -320,11 +322,15 @@ class _SignUpState extends State<SignUp> {
                                                     "",
                                             phoneNumber: null,
                                             countryCode: "91"));
+
                                         Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => EditProfile(
                                                     id: sp.getString("id"),
+                                                    name: _auth.currentUser
+                                                            .displayName ??
+                                                        _name.text,
                                                   )),
                                           (Route<dynamic> route) => false,
                                         );
@@ -527,7 +533,7 @@ class _SignUpState extends State<SignUp> {
                         child: RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
-                            text: 'Already have An Account ? ',
+                            text: 'already have an account ? ',
                             style: TextStyle(),
                             children: <TextSpan>[
                               TextSpan(

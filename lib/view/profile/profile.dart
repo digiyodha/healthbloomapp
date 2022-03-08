@@ -167,7 +167,7 @@ class _ProfileState extends State<Profile> {
                                     Text(
                                       'Blood Group',
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.w500,
                                         color: Color(0xff9884DF),
                                       ),
                                     ),

@@ -1,5 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/edit_bill_request.dart';
 import 'package:health_bloom/model/response/edit_bill_response.dart';
 import 'package:health_bloom/model/response/response.dart';
@@ -126,7 +127,8 @@ class _AddBillState extends State<AddBill> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text(widget.bill != null ? "Edit Bill" : "Add Bill"),
+        title: TextBuilder(
+            text: widget.bill != null ? "Edit Bill" : "Add Bill", fontSize: 22),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -146,6 +148,8 @@ class _AddBillState extends State<AddBill> {
                     child: Image.asset(
                       "assets/images/medical_bill.jpg",
                       fit: BoxFit.cover,
+                      color: Colors.black,
+                      colorBlendMode: BlendMode.softLight,
                     ),
                   ),
                 ),
@@ -168,6 +172,7 @@ class _AddBillState extends State<AddBill> {
                           CustomTextField(
                             maxLines: 1,
                             controller: _billName,
+                            textCapitalization: TextCapitalization.sentences,
                             label: "Name of Bill",
                             textInputType: TextInputType.name,
                             onChanged: (val) {},
@@ -182,9 +187,7 @@ class _AddBillState extends State<AddBill> {
                             onChanged: (val) {},
                             onTap: () {},
                           ),
-                          SizedBox(
-                            height: 16,
-                          ),
+                          SizedBox(height: 16),
                           CustomTextField(
                             readOnly: true,
                             maxLines: 1,
@@ -196,20 +199,17 @@ class _AddBillState extends State<AddBill> {
                               _selectDate(context);
                             },
                           ),
-                          SizedBox(
-                            height: 16,
-                          ),
+                          SizedBox(height: 16),
                           CustomTextField(
                             maxLines: 3,
                             controller: _description,
+                            textCapitalization: TextCapitalization.sentences,
                             label: "Description",
                             textInputType: TextInputType.name,
                             onChanged: (val) {},
                             onTap: () {},
                           ),
-                          SizedBox(
-                            height: 16,
-                          ),
+                          SizedBox(height: 16),
                           CustomDropDown(
                             title: "Select Family Member",
                             controller: _familyMember,

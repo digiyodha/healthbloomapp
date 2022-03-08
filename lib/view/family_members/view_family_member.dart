@@ -1,72 +1,28 @@
-import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:health_bloom/model/request/add_member_request.dart';
-import 'package:health_bloom/model/request/edit_member_request.dart';
-import 'package:health_bloom/model/response/add_family_response.dart';
-import 'package:health_bloom/model/response/edit_member_response.dart';
+
 import 'package:health_bloom/model/response/get_all_member_response.dart';
-import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 
-import '../../components/custom_contained_button.dart';
 import '../../utils/text_field/custom_text_field.dart';
 
-class AddFamilyMembers extends StatefulWidget {
+class ViewFamilyMembers extends StatefulWidget {
   final GetAllMemberResponseDatum member;
-  const AddFamilyMembers({Key key, this.member}) : super(key: key);
+  const ViewFamilyMembers({Key key, this.member}) : super(key: key);
 
   @override
-  State<AddFamilyMembers> createState() => _AddFamilyMembersState();
+  State<ViewFamilyMembers> createState() => _ViewFamilyMembersState();
 }
 
-class _AddFamilyMembersState extends State<AddFamilyMembers> {
+class _ViewFamilyMembersState extends State<ViewFamilyMembers> {
   bool _loading = false;
 
   TextEditingController _name = TextEditingController();
   TextEditingController _relation = TextEditingController();
   int _age = 18;
-  Future<AddMemberResponse> addMember(AddMemberRequest request) async {
-    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    AddMemberResponse _response = await adminAPI.addMemberAPI(request);
-    return _response;
-  }
-
-  Future<EditMemberResponse> editMember(EditMemberRequest request) async {
-    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    EditMemberResponse _response = await adminAPI.editMemberAPI(request);
-    return _response;
-  }
 
   String _uploadAvatarUrl;
   bool _profileLoading = false;
-  Future<XFile> singleImage() async {
-    return await ImagePicker().pickImage(source: ImageSource.gallery);
-  }
-
-  Future<String> uploadImage(XFile image) async {
-    Reference db =
-        FirebaseStorage.instance.ref('memberProfile/${getImagePath(image)}');
-    setState(() {
-      _profileLoading = true;
-    });
-    await db.putFile(File(image.path));
-    return await db.getDownloadURL().whenComplete(
-          () => setState(() {
-            _profileLoading = false;
-            _uploadAvatarUrl = db.getDownloadURL().toString();
-            print('_uploadAvatarUrl ${_uploadAvatarUrl.toString()}');
-          }),
-        );
-  }
-
-  String getImagePath(XFile image) {
-    return image.path.split('/').last;
-  }
 
   @override
   void initState() {
@@ -96,92 +52,10 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text(widget.member != null
-            ? "Edit Family Members"
-            : "Add Family Members"),
+        title: Text("View Family Member"),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 24),
-        height: 75,
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: CustomContainedButton(
-            height: 58,
-            textSize: 16,
-            disabledColor: kGreyLite,
-            text: "Submit",
-            onPressed: () async {
-              if (widget.member != null) {
-                if (_name.text.isNotEmpty && _relation.text.isNotEmpty) {
-                  setState(() {
-                    _loading = true;
-                  });
-                  EditMemberRequest _request = EditMemberRequest(
-                      id: widget.member.id,
-                      age: _age,
-                      avatar: _uploadAvatarUrl ?? '',
-                      name: _name.text,
-                      relationship: _relation.text);
-                  EditMemberResponse _response = await editMember(_request);
-                  print('Edit Meember Request ${_request.toJson()}');
-                  print('Edit Meember Response ${_response.toJson()}');
-                  if (_response.success == true) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Updated'),
-                    ));
-                    setState(() {
-                      _loading = false;
-                    });
-
-                    Navigator.pop(context);
-                  }
-                } else {
-                  setState(() {
-                    _loading = false;
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Please fill all the details'),
-                  ));
-                }
-              } else {
-                if (_name.text.isNotEmpty && _relation.text.isNotEmpty) {
-                  setState(() {
-                    _loading = true;
-                  });
-                  AddMemberRequest _request = AddMemberRequest(
-                      age: _age,
-                      avatar: _uploadAvatarUrl ?? '',
-                      name: _name.text,
-                      relationship: _relation.text);
-                  AddMemberResponse _response = await addMember(_request);
-                  print('Add Meember Request ${_request.toJson()}');
-                  print('Add Meember Response ${_response.toJson()}');
-                  if (_response.success == true) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Added'),
-                    ));
-                    setState(() {
-                      _loading = false;
-                    });
-
-                    Navigator.pop(context);
-                  }
-                } else {
-                  setState(() {
-                    _loading = false;
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Please fill all the details'),
-                  ));
-                }
-              }
-            },
-            width: double.infinity,
-          ),
-        ),
-      ),
       body: Stack(
         children: [
           Container(
@@ -216,7 +90,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                         CustomTextField(
                           maxLines: 1,
                           controller: _name,
-                          textCapitalization: TextCapitalization.sentences,
+                          enabled: false,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return "* Required";
@@ -232,7 +106,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                         CustomTextField(
                           maxLines: 1,
                           controller: _relation,
-                          textCapitalization: TextCapitalization.sentences,
+                          enabled: false,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return "* Required";
@@ -256,14 +130,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                             ),
                             Spacer(),
                             InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (_age <= 1)
-                                    _age == 0;
-                                  else
-                                    _age--;
-                                });
-                              },
+                              onTap: () {},
                               child: CircleAvatar(
                                 radius: 12,
                                 backgroundColor: kMainColor,
@@ -285,11 +152,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                               ),
                             ),
                             InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _age++;
-                                });
-                              },
+                              onTap: () {},
                               child: CircleAvatar(
                                 radius: 12,
                                 backgroundColor: kMainColor,
@@ -314,11 +177,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       InkWell(
-                        onTap: () async {
-                          XFile _imageFile = await singleImage();
-                          _uploadAvatarUrl = await uploadImage(_imageFile);
-                          setState(() {});
-                        },
+                        onTap: () async {},
                         child: Container(
                           height: 106,
                           width: 106,

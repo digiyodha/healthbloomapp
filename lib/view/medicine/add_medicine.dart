@@ -112,7 +112,9 @@ class _AddMedicineState extends State<AddMedicine> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text(widget.bill != null ? "Edit Medicine" : "Add Medicine"),
+        title: TextBuilder(
+            text: widget.bill != null ? "Edit Medicine" : "Add Medicine",
+            fontSize: 22),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -132,6 +134,8 @@ class _AddMedicineState extends State<AddMedicine> {
                     child: Image.asset(
                       "assets/images/medicines-list.jpg",
                       fit: BoxFit.cover,
+                      color: Colors.black,
+                      colorBlendMode: BlendMode.softLight,
                     ),
                   ),
                 ),
@@ -155,6 +159,7 @@ class _AddMedicineState extends State<AddMedicine> {
                           CustomTextField(
                             maxLines: 1,
                             controller: _medicineName,
+                            textCapitalization: TextCapitalization.sentences,
                             label: "Medicine Name",
                             textInputType: TextInputType.name,
                             onChanged: (val) {},

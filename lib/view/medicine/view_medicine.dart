@@ -65,7 +65,7 @@ class _ViewMedicineState extends State<ViewMedicine> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text("View Medicine"),
+        title: TextBuilder(text: "View Medicine", fontSize: 22),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -81,6 +81,8 @@ class _ViewMedicineState extends State<ViewMedicine> {
               child: Image.asset(
                 "assets/images/medicines-list.jpg",
                 fit: BoxFit.cover,
+                color: Colors.black,
+                colorBlendMode: BlendMode.softLight,
               ),
             ),
           ),

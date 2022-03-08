@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:health_bloom/components/custom_contained_button.dart';
+import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/response/search_insurance_response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:open_file/open_file.dart';
@@ -86,7 +87,10 @@ class _ViewInsurance extends State<ViewInsurance> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text("View Insurance"),
+        title: TextBuilder(
+          text: "View Insurance",
+          fontSize: 22,
+        ),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -102,6 +106,8 @@ class _ViewInsurance extends State<ViewInsurance> {
               child: Image.asset(
                 "assets/images/insurance.jpg",
                 fit: BoxFit.cover,
+                color: Colors.black,
+                colorBlendMode: BlendMode.softLight,
               ),
             ),
           ),

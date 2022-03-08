@@ -3,6 +3,7 @@ import 'package:health_bloom/utils/colors.dart';
 import 'package:intl/intl.dart';
 
 class MedicineCard extends StatelessWidget {
+  final String medicineName;
   final DateTime time;
   final String dosages;
   final Function onTap;
@@ -11,6 +12,7 @@ class MedicineCard extends StatelessWidget {
     this.time,
     this.dosages,
     this.onTap,
+    this.medicineName,
   }) : super(key: key);
 
   @override
@@ -31,7 +33,7 @@ class MedicineCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "MEDICINE",
+                medicineName ?? '',
                 style:
                     TextStyle(fontSize: 12, color: kWhite, letterSpacing: 1.5),
               ),

@@ -20,7 +20,9 @@ import '../homepage/home_page.dart';
 class EditProfile extends StatefulWidget {
   final String id;
   final bool phone;
-  const EditProfile({Key key, this.id,this.phone = false}) : super(key: key);
+  final String name;
+  const EditProfile({Key key, this.id, this.phone = false, this.name})
+      : super(key: key);
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -79,7 +81,9 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    if (widget.id != null) {}
+    if (widget.name != null) {
+      _name.text = widget.name;
+    }
   }
 
   @override
@@ -170,6 +174,8 @@ class _EditProfileState extends State<EditProfile> {
                                 const SizedBox(height: 50.0),
                                 TextFormField(
                                   controller: _name,
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return "* Required";
@@ -177,6 +183,8 @@ class _EditProfileState extends State<EditProfile> {
                                       return null;
                                   },
                                   style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
                                     color: Color(0xff9884DF),
                                   ),
                                   decoration: InputDecoration(
@@ -186,7 +194,7 @@ class _EditProfileState extends State<EditProfile> {
                                     ),
                                     label: TextBuilder(text: 'Name'),
                                     contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 15),
+                                        EdgeInsets.symmetric(horizontal: 15),
                                     suffixIcon: Icon(
                                       Icons.people,
                                       color: Color(0xff9884DF),
@@ -312,6 +320,8 @@ class _EditProfileState extends State<EditProfile> {
                                       return null;
                                   },
                                   style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
                                     color: Color(0xff9884DF),
                                   ),
                                   decoration: InputDecoration(
@@ -369,6 +379,8 @@ class _EditProfileState extends State<EditProfile> {
                                 const SizedBox(height: 20.0),
                                 TextFormField(
                                   controller: _city,
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return "* Required";
@@ -376,6 +388,8 @@ class _EditProfileState extends State<EditProfile> {
                                       return null;
                                   },
                                   style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
                                     color: Color(0xff9884DF),
                                   ),
                                   decoration: InputDecoration(
@@ -401,6 +415,8 @@ class _EditProfileState extends State<EditProfile> {
                                 const SizedBox(height: 20.0),
                                 TextFormField(
                                   controller: _state,
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return "* Required";
@@ -408,6 +424,8 @@ class _EditProfileState extends State<EditProfile> {
                                       return null;
                                   },
                                   style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
                                     color: Color(0xff9884DF),
                                   ),
                                   decoration: InputDecoration(
@@ -502,19 +520,22 @@ class _EditProfileState extends State<EditProfile> {
                                         content: Text('User created.'),
                                       ));
 
-                                      if(widget.phone){
-                                        sp.setString('name', _response.data.name);
-                                        sp.setString('profileImage', _response.data.avatar ?? "");
+                                      if (widget.phone) {
+                                        sp.setString(
+                                            'name', _response.data.name);
+                                        sp.setString('profileImage',
+                                            _response.data.avatar ?? "");
                                         Navigator.push(
                                             context,
-                                            MaterialPageRoute(builder: (context) => HomePage())
-                                        );
-                                      }else{
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    HomePage()));
+                                      } else {
                                         Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => Login()),
-                                              (Route<dynamic> route) => false,
+                                          (Route<dynamic> route) => false,
                                         );
                                       }
                                     }

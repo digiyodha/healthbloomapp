@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/custom_tab.dart';
 import 'package:health_bloom/components/medical_bills_card.dart';
+import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/get_documents_request.dart';
 import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/utils/colors.dart';
@@ -106,7 +107,10 @@ class _DocumentsState extends State<Documents> {
         iconTheme: IconThemeData(color: kWhite),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text("Documents"),
+        title: TextBuilder(
+          text: "Documents",
+          fontSize: 22,
+        ),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -122,6 +126,8 @@ class _DocumentsState extends State<Documents> {
               child: Image.asset(
                 "assets/images/medical_bill.jpg",
                 fit: BoxFit.cover,
+                color: Colors.black,
+                colorBlendMode: BlendMode.softLight,
               ),
             ),
           ),
@@ -304,8 +310,6 @@ class _DocumentsState extends State<Documents> {
                 ? _currentResponse.data.report[index].patient.avatar
                 : '',
             onTap: () {
-              print(
-                  "Report ${_currentResponse.data.report[index].billImage.toList().toString()}");
               Navigator.push(
                 context,
                 MaterialPageRoute(

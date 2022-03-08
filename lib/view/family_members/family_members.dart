@@ -6,6 +6,7 @@ import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
+import 'package:health_bloom/view/family_members/view_family_member.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/drawer/custom_drawer.dart';
@@ -125,7 +126,15 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                 itemBuilder: (BuildContext context, int i) {
                                   final member = snapshot.data.data[i];
                                   return InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ViewFamilyMembers(
+                                                    member: member,
+                                                  )));
+                                    },
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 10, vertical: 14),

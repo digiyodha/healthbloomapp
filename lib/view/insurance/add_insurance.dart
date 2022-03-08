@@ -1,5 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/add_insurance_request.dart';
 import 'package:health_bloom/model/request/edit_insurance_request.dart';
 import 'package:health_bloom/model/response/add_insurance_response.dart';
@@ -106,8 +107,9 @@ class _AddInsuranceState extends State<AddInsurance> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title:
-            Text(widget.insurance != null ? "Edit Insurance" : "Add Insurance"),
+        title: TextBuilder(
+            text: widget.insurance != null ? "Edit Insurance" : "Add Insurance",
+            fontSize: 22),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -127,6 +129,8 @@ class _AddInsuranceState extends State<AddInsurance> {
                     child: Image.asset(
                       "assets/images/insurance.jpg",
                       fit: BoxFit.cover,
+                      color: Colors.black,
+                      colorBlendMode: BlendMode.softLight,
                     ),
                   ),
                 ),
@@ -149,6 +153,7 @@ class _AddInsuranceState extends State<AddInsurance> {
                           CustomTextField(
                             maxLines: 1,
                             controller: _orgName,
+                            textCapitalization: TextCapitalization.sentences,
                             label: "Organization Name",
                             onChanged: (val) {},
                             onTap: () {},
@@ -302,7 +307,7 @@ class _AddInsuranceState extends State<AddInsurance> {
                                 height: 58,
                                 textSize: 16,
                                 disabledColor: kGreyLite,
-                                text: "Add Bill",
+                                text: "Add Insurance",
                                 onPressed: () {
                                   getFile(context);
                                 },

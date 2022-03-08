@@ -42,7 +42,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     AddEditUserProfileResponse _response =
         await adminAPI.addEditProfileAPI(request);
-    if(_response.success){
+    if (_response.success) {
       sp.setString('profileImage', _response.data.avatar);
       sp.setString('name', _response.data.name);
     }
@@ -199,7 +199,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     ),
                                     label: TextBuilder(text: 'Name'),
                                     contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 15),
+                                        EdgeInsets.symmetric(horizontal: 15),
                                     suffixIcon: Icon(
                                       Icons.people,
                                       color: Color(0xff9884DF),
@@ -348,38 +348,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                   ),
                                 ),
 
-                                // const SizedBox(height: 20.0),
-                                // TextFormField(
-                                //   controller: _city,
-                                //   validator: (value) {
-                                //     if (value == null || value.isEmpty) {
-                                //       return "* Required";
-                                //     } else
-                                //       return null;
-                                //   },
-                                //   style: TextStyle(
-                                //     color: Color(0xff9884DF),
-                                //   ),
-                                //   decoration: InputDecoration(
-                                //     labelStyle: TextStyle(
-                                //       fontWeight: FontWeight.w500,
-                                //       color: Color(0xff9884DF),
-                                //     ),
-                                //     label: TextBuilder(text: 'Address'),
-                                //     contentPadding:
-                                //         EdgeInsets.symmetric(horizontal: 15),
-                                //     suffixIcon: Icon(
-                                //       Icons.gps_fixed,
-                                //       color: Color(0xff9884DF),
-                                //     ),
-                                //     border: UnderlineInputBorder(
-                                //       borderSide: BorderSide(
-                                //         width: 1,
-                                //         color: Colors.grey,
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
                                 const SizedBox(height: 20.0),
                                 TextFormField(
                                   controller: _city,

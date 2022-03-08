@@ -43,25 +43,23 @@ class _PhoneLoginState extends State<PhoneLogin> {
       sp.setString('name', _response.data.name ?? "");
       sp.setString('xAuthToken', _response.data.xAuthToken);
 
-      if(_response.data.newUser){
+      if (_response.data.newUser) {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
               builder: (context) => EditProfile(
-                id: sp.getString("id"),
-                phone: true,
-              )),
-              (Route<dynamic> route) => false,
+                    id: sp.getString("id"),
+                    phone: true,
+                  )),
+          (Route<dynamic> route) => false,
         );
-
-      }else{
+      } else {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomePage()),
-              (Route<dynamic> route) => false,
+          (Route<dynamic> route) => false,
         );
       }
-
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Error Occurred"),
@@ -119,21 +117,19 @@ class _PhoneLoginState extends State<PhoneLogin> {
     print(forceResendingToken);
     print("code sent");
 
-    if(_resendToken != null){
-
-    }else{
+    if (_resendToken != null) {
+    } else {
       _resendToken = forceResendingToken;
       await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => PhoneLoginOtp(
-                controller: otpCode,
-                phoneNumber: phoneNumber,
-                resend: (){
-                  phoneSignIn(
-                      phoneNumber: "+91${phoneNumber.text}");
-                },
-              )));
+                    controller: otpCode,
+                    phoneNumber: phoneNumber,
+                    resend: () {
+                      phoneSignIn(phoneNumber: "+91${phoneNumber.text}");
+                    },
+                  )));
 
       if (otpCode.text.length == 6) {
         PhoneAuthCredential credential = PhoneAuthProvider.credential(
@@ -141,13 +137,15 @@ class _PhoneLoginState extends State<PhoneLogin> {
 
         UserCredential user;
 
-        try{
+        try {
           UserCredential _user = await _auth.signInWithCredential(credential);
           user = _user;
-        }catch (e){
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()),));
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(e.toString()),
+          ));
           Navigator.pop(context);
-          Navigator.push(context, MaterialPageRoute(builder: (context){
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
             return PhoneLogin();
           }));
         }
@@ -169,7 +167,6 @@ class _PhoneLoginState extends State<PhoneLogin> {
         isLoading = false;
       });
     }
-
   }
 
   _onCodeTimeout(String timeout) {
@@ -243,7 +240,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 5),
                                 child: TextBuilder(
-                                  text: 'OTP Login',
+                                  text: 'Verification Code',
                                   color: Colors.white,
                                   fontSize: 22,
                                   fontWeight: FontWeight.w500,

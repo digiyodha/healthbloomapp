@@ -1,5 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/add_report_request.dart';
 import 'package:health_bloom/model/request/edit_report_request.dart';
 import 'package:health_bloom/model/response/add_report_response.dart';
@@ -125,7 +126,9 @@ class _AddReportState extends State<AddReport> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text(widget.report != null ? "Edit Report" : "Add Report"),
+        title: TextBuilder(
+            text: widget.report != null ? "Edit Report" : "Add Report",
+            fontSize: 22),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -145,6 +148,8 @@ class _AddReportState extends State<AddReport> {
                     child: Image.asset(
                       "assets/images/medical_report.jpg",
                       fit: BoxFit.cover,
+                      color: Colors.black,
+                      colorBlendMode: BlendMode.softLight,
                     ),
                   ),
                 ),
@@ -167,7 +172,8 @@ class _AddReportState extends State<AddReport> {
                           CustomTextField(
                             maxLines: 1,
                             controller: _nameOfReport,
-                            label: "Name Of Report",
+                            label: "Name of Report",
+                            textCapitalization: TextCapitalization.sentences,
                             textInputType: TextInputType.name,
                             onChanged: (val) {},
                             onTap: () {},
@@ -188,6 +194,7 @@ class _AddReportState extends State<AddReport> {
                           CustomTextField(
                             maxLines: 3,
                             controller: _description,
+                            textCapitalization: TextCapitalization.sentences,
                             label: "Description",
                             textInputType: TextInputType.name,
                             onChanged: (val) {},

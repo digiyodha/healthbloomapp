@@ -1,5 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/add_prescription_request.dart';
 import 'package:health_bloom/model/request/edit_prescription_request.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
@@ -73,7 +74,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
         selectedDate = picked;
       });
       _date.text =
-          "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
+          "${selectedDate.day}-${selectedDate.month}-${selectedDate.year}";
     }
   }
 
@@ -106,7 +107,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
     super.initState();
     _futureMembers = getAllmember();
     if (widget.prescription != null) {
-      _doctor.text = widget.prescription.doctorName;
+      _doctor.text = widget.prescription.doctorName.replaceAll('Dr. ', '');
       _hospital.text = widget.prescription.clinicName;
       _date.text =
           "${widget.prescription.consultationDate.day}/${widget.prescription.consultationDate.month}/${widget.prescription.consultationDate.year}";
@@ -132,9 +133,11 @@ class _AddPrescriptionState extends State<AddPrescription> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text(widget.prescription != null
-            ? "Edit Prescription"
-            : "Add Prescription"),
+        title: TextBuilder(
+            text: widget.prescription != null
+                ? "Edit Prescription"
+                : "Add Prescription",
+            fontSize: 22),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -154,6 +157,8 @@ class _AddPrescriptionState extends State<AddPrescription> {
                     child: Image.asset(
                       "assets/images/medical_report.jpg",
                       fit: BoxFit.cover,
+                      color: Colors.black,
+                      colorBlendMode: BlendMode.softLight,
                     ),
                   ),
                 ),
@@ -176,17 +181,18 @@ class _AddPrescriptionState extends State<AddPrescription> {
                           CustomTextField(
                             maxLines: 1,
                             controller: _doctor,
+                            textCapitalization: TextCapitalization.sentences,
                             label: "Doctor Name",
+                            prefix: TextBuilder(text: 'Dr. '),
                             textInputType: TextInputType.name,
                             onChanged: (val) {},
                             onTap: () {},
                           ),
-                          SizedBox(
-                            height: 16,
-                          ),
+                          SizedBox(height: 16),
                           CustomTextField(
                             maxLines: 1,
                             controller: _hospital,
+                            textCapitalization: TextCapitalization.sentences,
                             label: "Hospital/Clinic Name",
                             textInputType: TextInputType.name,
                             onChanged: (val) {},
@@ -210,6 +216,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
                           CustomTextField(
                             maxLines: 1,
                             controller: _userAilment,
+                            textCapitalization: TextCapitalization.sentences,
                             label: "User Ailment",
                             textInputType: TextInputType.name,
                             onChanged: (val) {},
@@ -229,6 +236,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
                           CustomTextField(
                             maxLines: 3,
                             controller: _drAdvice,
+                            textCapitalization: TextCapitalization.sentences,
                             label: "Dr. Advice",
                             textInputType: TextInputType.name,
                             onChanged: (val) {},
@@ -426,7 +434,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
                     doctorAdvice: _drAdvice.text,
                     clinicName: _hospital.text,
                     patient: selectedPatient,
-                    doctorName: _doctor.text,
+                    doctorName: "Dr. ${_doctor.text}",
                     prescriptionImage: files,
                     userAilment: _userAilment.text,
                   );
@@ -474,7 +482,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
                     doctorAdvice: _drAdvice.text,
                     clinicName: _hospital.text,
                     patient: selectedPatient,
-                    doctorName: _doctor.text,
+                    doctorName: "Dr. ${_doctor.text}",
                     prescriptionImage: files,
                     userAilment: _userAilment.text,
                   );

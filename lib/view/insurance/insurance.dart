@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/insurance_card.dart';
+import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/delete_insurence_request.dart';
 import 'package:health_bloom/model/request/search_insurance_request.dart';
 import 'package:health_bloom/model/response/delete_insurance_response.dart';
@@ -61,7 +62,10 @@ class _InsuranceState extends State<Insurance> {
         iconTheme: IconThemeData(color: kWhite),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text("Insurance"),
+        title: TextBuilder(
+          text: "Insurance",
+          fontSize: 22,
+        ),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -79,6 +83,8 @@ class _InsuranceState extends State<Insurance> {
                 child: Image.asset(
                   "assets/images/insurance.jpg",
                   fit: BoxFit.cover,
+                  color: Colors.black,
+                  colorBlendMode: BlendMode.softLight,
                 ),
               ),
             ),

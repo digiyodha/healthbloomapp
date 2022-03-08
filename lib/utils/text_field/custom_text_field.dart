@@ -14,6 +14,8 @@ class CustomTextField extends StatefulWidget {
   final int maxLength;
   final double labelSize;
   final Function(String) validator;
+  final Widget prefix;
+  final TextCapitalization textCapitalization;
   CustomTextField(
       {this.controller,
       this.label,
@@ -32,7 +34,9 @@ class CustomTextField extends StatefulWidget {
       this.maxLength,
       this.minLines,
       this.labelSize = 16,
-      this.validator});
+      this.validator,
+      this.prefix,
+      this.textCapitalization = TextCapitalization.none});
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -61,6 +65,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       minLines: widget.minLines,
       validator: widget.validator,
       onChanged: widget.onChanged,
+      textCapitalization: widget.textCapitalization,
       onTap: () {
         widget.onTap();
       },
@@ -71,6 +76,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         alignLabelWithHint: true,
         fillColor: widget.readOnly ? Color(0xffF7F8FB) : kWhite,
         filled: true,
+        prefix: widget.prefix,
         errorBorder:
             OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
         focusedBorder: widget.readOnly
