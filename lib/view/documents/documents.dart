@@ -30,11 +30,13 @@ class Documents extends StatefulWidget {
 class _DocumentsState extends State<Documents> {
   TextEditingController _fromDate = TextEditingController();
   TextEditingController _toDate = TextEditingController();
+  TextEditingController _search = TextEditingController();
   DateTime selectedStartDate;
   DateTime selectedEndDate;
   int currentIndex = 0;
   bool _loading = false;
   GetAllDocumentsResponse _currentResponse;
+
   Future<void> _startDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
@@ -98,139 +100,154 @@ class _DocumentsState extends State<Documents> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: CustomDrawer(
-        selected: 3,
-      ),
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: kWhite),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: TextBuilder(
-          text: "Documents",
-          fontSize: 22,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        drawer: CustomDrawer(
+          selected: 3,
         ),
-        centerTitle: true,
-      ),
-      backgroundColor: kWhite,
-      body: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: 300,
-              width: double.infinity,
-              child: Image.asset(
-                "assets/images/medical_bill.jpg",
-                fit: BoxFit.cover,
-                color: Colors.black,
-                colorBlendMode: BlendMode.softLight,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: kWhite),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          title: TextBuilder(
+            text: "Documents",
+            fontSize: 22,
+          ),
+          centerTitle: true,
+        ),
+        backgroundColor: kWhite,
+        body: Stack(
+          children: [
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: 300,
+                width: double.infinity,
+                child: Image.asset(
+                  "assets/images/medical_bill.jpg",
+                  fit: BoxFit.cover,
+                  color: Colors.black,
+                  colorBlendMode: BlendMode.softLight,
+                ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            left: 0,
-            top: 180,
-            child: Container(
-              padding: EdgeInsets.only(top: 40, left: 24, right: 24),
-              decoration: BoxDecoration(
-                  color: kWhite,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      topLeft: Radius.circular(30))),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomTextField(
-                          readOnly: true,
-                          maxLines: 1,
-                          controller: _fromDate,
-                          label: "Start Date",
-                          textInputType: TextInputType.text,
-                          onChanged: (val) {},
-                          onTap: () {
-                            _startDate(context);
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 20.0),
-                      Expanded(
-                        child: CustomTextField(
-                          readOnly: true,
-                          maxLines: 1,
-                          controller: _toDate,
-                          label: "End Date",
-                          textInputType: TextInputType.text,
-                          onChanged: (val) {},
-                          onTap: () {
-                            _endDate(context);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24.0),
-                  Container(
-                    color: Colors.white,
-                    child: Row(
+            Positioned(
+              bottom: 0,
+              right: 0,
+              left: 0,
+              top: 180,
+              child: Container(
+                padding: EdgeInsets.only(top: 40, left: 24, right: 24),
+                decoration: BoxDecoration(
+                    color: kWhite,
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(30),
+                        topLeft: Radius.circular(30))),
+                child: Column(
+                  children: [
+                    CustomTextField(
+                      maxLines: 1,
+                      controller: _search,
+                      label: "Search",
+                      textInputType: TextInputType.name,
+                      onChanged: (val) {
+                        getDocuments();
+                      },
+                      onTap: () {},
+                    ),
+                    SizedBox(height: 16),
+                    Row(
                       children: [
                         Expanded(
-                          child: CustomTab(
+                          child: CustomTextField(
+                            readOnly: true,
+                            maxLines: 1,
+                            controller: _fromDate,
+                            label: "Start Date",
+                            textInputType: TextInputType.text,
+                            onChanged: (val) {},
                             onTap: () {
-                              setState(() {
-                                currentIndex = 0;
-                              });
+                              _startDate(context);
                             },
-                            icon: 'assets/icons/bill.png',
-                            title: 'Bills',
-                            isSelected: currentIndex == 0,
                           ),
                         ),
+                        const SizedBox(width: 20.0),
                         Expanded(
-                          child: CustomTab(
+                          child: CustomTextField(
+                            readOnly: true,
+                            maxLines: 1,
+                            controller: _toDate,
+                            label: "End Date",
+                            textInputType: TextInputType.text,
+                            onChanged: (val) {},
                             onTap: () {
-                              setState(() {
-                                currentIndex = 1;
-                              });
+                              _endDate(context);
                             },
-                            icon: 'assets/icons/business-report.png',
-                            title: 'Reports',
-                            isSelected: currentIndex == 1,
-                          ),
-                        ),
-                        Expanded(
-                          child: CustomTab(
-                            onTap: () {
-                              setState(() {
-                                currentIndex = 2;
-                              });
-                            },
-                            icon: 'assets/icons/medical-prescription.png',
-                            title: 'Prescriptions',
-                            isSelected: currentIndex == 2,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  Expanded(
-                    child:
-                        _currentResponse != null ? getList() : LoadingWidget(),
-                  ),
-                  SizedBox(height: 16),
-                ],
+                    const SizedBox(height: 24.0),
+                    Container(
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: CustomTab(
+                              onTap: () {
+                                setState(() {
+                                  currentIndex = 0;
+                                });
+                              },
+                              icon: 'assets/icons/bill.png',
+                              title: 'Bills',
+                              isSelected: currentIndex == 0,
+                            ),
+                          ),
+                          Expanded(
+                            child: CustomTab(
+                              onTap: () {
+                                setState(() {
+                                  currentIndex = 1;
+                                });
+                              },
+                              icon: 'assets/icons/business-report.png',
+                              title: 'Reports',
+                              isSelected: currentIndex == 1,
+                            ),
+                          ),
+                          Expanded(
+                            child: CustomTab(
+                              onTap: () {
+                                setState(() {
+                                  currentIndex = 2;
+                                });
+                              },
+                              icon: 'assets/icons/medical-prescription.png',
+                              title: 'Prescriptions',
+                              isSelected: currentIndex == 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: _currentResponse != null
+                          ? getList()
+                          : LoadingWidget(),
+                    ),
+                    SizedBox(height: 16),
+                  ],
+                ),
               ),
             ),
-          ),
-          if (_loading) LoadingWidget()
-        ],
+            if (_loading) LoadingWidget()
+          ],
+        ),
       ),
     );
   }
@@ -243,53 +260,57 @@ class _DocumentsState extends State<Documents> {
         itemCount: _currentResponse.data.bill.length,
         physics: ScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          return MedicalBillsCard(
-            nameOfBill: _currentResponse.data.bill[index].name,
-            nameOfPatients: _currentResponse.data.bill[index].patient != null
-                ? _currentResponse.data.bill[index].patient.name
-                : "-",
-            dateOfBill: _currentResponse.data.bill[index].patient != null
-                ? _currentResponse.data.bill[index].date
-                : null,
-            avatar: _currentResponse.data.bill[index].patient != null
-                ? _currentResponse.data.bill[index].patient.avatar
-                : '',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ViewBillDocuments(
-                    bill: _currentResponse.data.bill[index],
+          if (_currentResponse.data.bill[index].name
+              .toLowerCase()
+              .contains(_search.text.toLowerCase()))
+            return MedicalBillsCard(
+              nameOfBill: _currentResponse.data.bill[index].name,
+              nameOfPatients: _currentResponse.data.bill[index].patient != null
+                  ? _currentResponse.data.bill[index].patient.name
+                  : "-",
+              dateOfBill: _currentResponse.data.bill[index].patient != null
+                  ? _currentResponse.data.bill[index].date
+                  : null,
+              avatar: _currentResponse.data.bill[index].patient != null
+                  ? _currentResponse.data.bill[index].patient.avatar
+                  : '',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewBillDocuments(
+                      bill: _currentResponse.data.bill[index],
+                    ),
                   ),
-                ),
-              );
-            },
-            edit: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddBill(
-                    bill: _currentResponse.data.bill[index],
+                );
+              },
+              edit: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddBill(
+                      bill: _currentResponse.data.bill[index],
+                    ),
                   ),
-                ),
-              ).whenComplete(() => setState(() {
-                    getDocuments();
-                  }));
-            },
-            delete: () async {
-              setState(() {
-                _loading = true;
-              });
-              final adminAPI =
-                  Provider.of<NetworkRepository>(context, listen: false);
-              DeleteBillResponse _response = await adminAPI.deleteBillAPI(
-                  DeleteDocumentRequest(
-                      id: _currentResponse.data.bill[index].id));
-              if (_response.success) {
-                getDocuments();
-              }
-            },
-          );
+                ).whenComplete(() => setState(() {
+                      getDocuments();
+                    }));
+              },
+              delete: () async {
+                setState(() {
+                  _loading = true;
+                });
+                final adminAPI =
+                    Provider.of<NetworkRepository>(context, listen: false);
+                DeleteBillResponse _response = await adminAPI.deleteBillAPI(
+                    DeleteDocumentRequest(
+                        id: _currentResponse.data.bill[index].id));
+                if (_response.success) {
+                  getDocuments();
+                }
+              },
+            );
+          return Container();
         },
       );
     if (currentIndex == 1)
@@ -298,52 +319,57 @@ class _DocumentsState extends State<Documents> {
         itemCount: _currentResponse.data.report.length,
         physics: ScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          return MedicalBillsCard(
-            nameOfBill: _currentResponse.data.report[index].name,
-            nameOfPatients: _currentResponse.data.report[index].patient != null
-                ? _currentResponse.data.report[index].patient.name
-                : "-",
-            dateOfBill: _currentResponse.data.report[index].patient != null
-                ? _currentResponse.data.report[index].date
-                : null,
-            avatar: _currentResponse.data.report[index].patient != null
-                ? _currentResponse.data.report[index].patient.avatar
-                : '',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ViewReportDocuments(
-                    report: _currentResponse.data.report[index],
+          if (_currentResponse.data.report[index].name
+              .toLowerCase()
+              .contains(_search.text.toLowerCase()))
+            return MedicalBillsCard(
+              nameOfBill: _currentResponse.data.report[index].name,
+              nameOfPatients:
+                  _currentResponse.data.report[index].patient != null
+                      ? _currentResponse.data.report[index].patient.name
+                      : "-",
+              dateOfBill: _currentResponse.data.report[index].patient != null
+                  ? _currentResponse.data.report[index].date
+                  : null,
+              avatar: _currentResponse.data.report[index].patient != null
+                  ? _currentResponse.data.report[index].patient.avatar
+                  : '',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewReportDocuments(
+                      report: _currentResponse.data.report[index],
+                    ),
                   ),
-                ),
-              );
-            },
-            edit: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      AddReport(report: _currentResponse.data.report[index]),
-                ),
-              ).whenComplete(() => setState(() {
-                    getDocuments();
-                  }));
-            },
-            delete: () async {
-              setState(() {
-                _loading = true;
-              });
-              final adminAPI =
-                  Provider.of<NetworkRepository>(context, listen: false);
-              DeleteReportResponse _response = await adminAPI.deleteReportAPI(
-                  DeleteDocumentRequest(
-                      id: _currentResponse.data.report[index].id));
-              if (_response.success) {
-                getDocuments();
-              }
-            },
-          );
+                );
+              },
+              edit: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        AddReport(report: _currentResponse.data.report[index]),
+                  ),
+                ).whenComplete(() => setState(() {
+                      getDocuments();
+                    }));
+              },
+              delete: () async {
+                setState(() {
+                  _loading = true;
+                });
+                final adminAPI =
+                    Provider.of<NetworkRepository>(context, listen: false);
+                DeleteReportResponse _response = await adminAPI.deleteReportAPI(
+                    DeleteDocumentRequest(
+                        id: _currentResponse.data.report[index].id));
+                if (_response.success) {
+                  getDocuments();
+                }
+              },
+            );
+          return Container();
         },
       );
     if (currentIndex == 2)
@@ -352,54 +378,59 @@ class _DocumentsState extends State<Documents> {
         itemCount: _currentResponse.data.prescription.length,
         physics: ScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          return MedicalBillsCard(
-            nameOfBill: _currentResponse.data.prescription[index].doctorName,
-            nameOfPatients:
-                _currentResponse.data.prescription[index].patient != null
-                    ? _currentResponse.data.prescription[index].patient.name
-                    : "-",
-            dateOfBill:
-                _currentResponse.data.prescription[index].patient != null
-                    ? _currentResponse.data.prescription[index].consultationDate
-                    : null,
-            avatar: _currentResponse.data.prescription[index].patient != null
-                ? _currentResponse.data.prescription[index].patient.avatar
-                : '',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ViewPrescriptionDocuments(
-                    prescriprion: _currentResponse.data.prescription[index],
+          if (_currentResponse.data.prescription[index].doctorName
+              .toLowerCase()
+              .contains(_search.text.toLowerCase()))
+            return MedicalBillsCard(
+              nameOfBill: _currentResponse.data.prescription[index].doctorName,
+              nameOfPatients:
+                  _currentResponse.data.prescription[index].patient != null
+                      ? _currentResponse.data.prescription[index].patient.name
+                      : "-",
+              dateOfBill: _currentResponse.data.prescription[index].patient !=
+                      null
+                  ? _currentResponse.data.prescription[index].consultationDate
+                  : null,
+              avatar: _currentResponse.data.prescription[index].patient != null
+                  ? _currentResponse.data.prescription[index].patient.avatar
+                  : '',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewPrescriptionDocuments(
+                      prescriprion: _currentResponse.data.prescription[index],
+                    ),
                   ),
-                ),
-              );
-            },
-            edit: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddPrescription(
-                      prescription: _currentResponse.data.prescription[index]),
-                ),
-              ).whenComplete(() => setState(() {
-                    getDocuments();
-                  }));
-            },
-            delete: () async {
-              setState(() {
-                _loading = true;
-              });
-              final adminAPI =
-                  Provider.of<NetworkRepository>(context, listen: false);
-              DeletePrescriptionResponse _response =
-                  await adminAPI.deletePrescriptionAPI(DeleteDocumentRequest(
-                      id: _currentResponse.data.prescription[index].id));
-              if (_response.success) {
-                getDocuments();
-              }
-            },
-          );
+                );
+              },
+              edit: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddPrescription(
+                        prescription:
+                            _currentResponse.data.prescription[index]),
+                  ),
+                ).whenComplete(() => setState(() {
+                      getDocuments();
+                    }));
+              },
+              delete: () async {
+                setState(() {
+                  _loading = true;
+                });
+                final adminAPI =
+                    Provider.of<NetworkRepository>(context, listen: false);
+                DeletePrescriptionResponse _response =
+                    await adminAPI.deletePrescriptionAPI(DeleteDocumentRequest(
+                        id: _currentResponse.data.prescription[index].id));
+                if (_response.success) {
+                  getDocuments();
+                }
+              },
+            );
+          return Container();
         },
       );
     return Container();
