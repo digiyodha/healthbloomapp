@@ -120,7 +120,8 @@ class _FamilyMembersState extends State<FamilyMembers> {
                           future: getAllmember(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              return snapshot.data.data.length != 0
+                              return snapshot.data.data.length != 0 &&
+                                      snapshot.data.data.isNotEmpty
                                   ? GridView.builder(
                                       padding: EdgeInsets.all(0),
                                       itemCount: snapshot.data.data.length,
@@ -361,7 +362,9 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                     )
                                   : Center(
                                       child: TextBuilder(
-                                          text: 'No family Members'),
+                                        text: 'No family Members',
+                                        color: Colors.white,
+                                      ),
                                     );
                             } else if (snapshot.hasError) {
                               return Text("${snapshot.error}");
