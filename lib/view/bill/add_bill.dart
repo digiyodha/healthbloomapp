@@ -51,7 +51,7 @@ class _AddBillState extends State<AddBill> {
         selectedDate = picked;
       });
       _date.text =
-          "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+          "${selectedDate.day}-${selectedDate.month}-${selectedDate.year}";
     }
   }
 
@@ -105,7 +105,7 @@ class _AddBillState extends State<AddBill> {
       _billName.text = widget.bill.name.toString();
       _amount.text = widget.bill.amount.toString();
       _date.text =
-          "${widget.bill.date.day}/${widget.bill.date.month}/${widget.bill.date.year}";
+          "${widget.bill.date.day}-${widget.bill.date.month}-${widget.bill.date.year}";
       _description.text = widget.bill.description;
       _familyMember.text = widget.bill.patient.name;
       _memberId = widget.bill.patient.id;
@@ -128,7 +128,10 @@ class _AddBillState extends State<AddBill> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: TextBuilder(
-            text: widget.bill != null ? "Edit Bill" : "Add Bill", fontSize: 22),
+          text: widget.bill != null ? "Edit Bill" : "Add Bill",
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+        ),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -148,8 +151,8 @@ class _AddBillState extends State<AddBill> {
                     child: Image.asset(
                       "assets/images/medical_bill.jpg",
                       fit: BoxFit.cover,
-                      color: Colors.black,
-                      colorBlendMode: BlendMode.softLight,
+                      color: Colors.black45,
+                      colorBlendMode: BlendMode.hardLight,
                     ),
                   ),
                 ),

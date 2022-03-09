@@ -6,6 +6,7 @@ import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:health_bloom/components/custom_contained_button.dart';
+import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:open_file/open_file.dart';
@@ -48,7 +49,7 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
     if (widget.report != null) {
       _billName.text = widget.report.name.toString();
       _date.text =
-          "${widget.report.date.day}/${widget.report.date.month}/${widget.report.date.year}";
+          "${widget.report.date.day}-${widget.report.date.month}-${widget.report.date.year}";
       _description.text = widget.report.description;
 
       files = widget.report.reportImage;
@@ -85,7 +86,11 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text("View Report"),
+        title: TextBuilder(
+          text: "View Report",
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+        ),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -101,6 +106,8 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
               child: Image.asset(
                 "assets/images/medical_report.jpg",
                 fit: BoxFit.cover,
+                color: Colors.black45,
+                colorBlendMode: BlendMode.hardLight,
               ),
             ),
           ),

@@ -6,6 +6,7 @@ import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:health_bloom/components/custom_contained_button.dart';
+import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:open_file/open_file.dart';
@@ -52,7 +53,7 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
       _drName.text = widget.prescriprion.doctorName.toString();
       _hospital.text = widget.prescriprion.clinicName.toString();
       _cunsultationDate.text =
-          "${widget.prescriprion.consultationDate.day}/${widget.prescriprion.consultationDate.month}/${widget.prescriprion.consultationDate.year}";
+          "${widget.prescriprion.consultationDate.day}-${widget.prescriprion.consultationDate.month}-${widget.prescriprion.consultationDate.year}";
       _userAilment.text = widget.prescriprion.userAilment.toString();
 
       _drAdvice.text = widget.prescriprion.doctorAdvice.toString();
@@ -90,7 +91,11 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text("View Prescription"),
+        title: TextBuilder(
+          text: "View Prescription",
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+        ),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -106,6 +111,8 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
               child: Image.asset(
                 "assets/images/medical_report.jpg",
                 fit: BoxFit.cover,
+                color: Colors.black45,
+                colorBlendMode: BlendMode.hardLight,
               ),
             ),
           ),

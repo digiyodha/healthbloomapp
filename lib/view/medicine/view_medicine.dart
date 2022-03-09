@@ -39,7 +39,7 @@ class _ViewMedicineState extends State<ViewMedicine> {
     if (widget.medicne != null) {
       _medicineName.text = widget.medicne.medicineName;
       _date.text =
-          "${widget.medicne.startDate.day}/${widget.medicne.startDate.month}/${widget.medicne.startDate.year}";
+          "${widget.medicne.startDate.day}-${widget.medicne.startDate.month}-${widget.medicne.startDate.year}";
 
       startDate = widget.medicne.startDate;
       _dosage.text = widget.medicne.dosage;
@@ -65,7 +65,11 @@ class _ViewMedicineState extends State<ViewMedicine> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: TextBuilder(text: "View Medicine", fontSize: 22),
+        title: TextBuilder(
+          text: "View Medicine",
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+        ),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -81,8 +85,8 @@ class _ViewMedicineState extends State<ViewMedicine> {
               child: Image.asset(
                 "assets/images/medicines-list.jpg",
                 fit: BoxFit.cover,
-                color: Colors.black,
-                colorBlendMode: BlendMode.softLight,
+                color: Colors.black45,
+                colorBlendMode: BlendMode.hardLight,
               ),
             ),
           ),

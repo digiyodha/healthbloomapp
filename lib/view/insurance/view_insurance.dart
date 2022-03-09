@@ -106,8 +106,8 @@ class _ViewInsurance extends State<ViewInsurance> {
               child: Image.asset(
                 "assets/images/insurance.jpg",
                 fit: BoxFit.cover,
-                color: Colors.black,
-                colorBlendMode: BlendMode.softLight,
+                color: Colors.black45,
+                colorBlendMode: BlendMode.hardLight,
               ),
             ),
           ),

@@ -49,7 +49,7 @@ class _AddMedicineState extends State<AddMedicine> {
         startDate = picked;
       });
 
-      _date.text = "${startDate.day}/${startDate.month}/${startDate.year}";
+      _date.text = "${startDate.day}-${startDate.month}-${startDate.year}";
     }
   }
 
@@ -92,7 +92,7 @@ class _AddMedicineState extends State<AddMedicine> {
     if (widget.bill != null) {
       _medicineName.text = widget.bill.name.toString();
       _date.text =
-          "${widget.bill.date.day}/${widget.bill.date.month}/${widget.bill.date.year}";
+          "${widget.bill.date.day}-${widget.bill.date.month}-${widget.bill.date.year}";
       _memberId = widget.bill.patient.id;
       startDate = widget.bill.date;
     }
@@ -113,8 +113,10 @@ class _AddMedicineState extends State<AddMedicine> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: TextBuilder(
-            text: widget.bill != null ? "Edit Medicine" : "Add Medicine",
-            fontSize: 22),
+          text: widget.bill != null ? "Edit Medicine" : "Add Medicine",
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+        ),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -134,8 +136,8 @@ class _AddMedicineState extends State<AddMedicine> {
                     child: Image.asset(
                       "assets/images/medicines-list.jpg",
                       fit: BoxFit.cover,
-                      color: Colors.black,
-                      colorBlendMode: BlendMode.softLight,
+                      color: Colors.black45,
+                      colorBlendMode: BlendMode.hardLight,
                     ),
                   ),
                 ),
@@ -452,7 +454,8 @@ class _AddMedicineState extends State<AddMedicine> {
                   _familyMember.text.isNotEmpty &&
                   _memberId != null &&
                   startDate != null &&
-                  remainderTime != null) {
+                  remainderTime != null &&
+                  _listOfTimes.isNotEmpty) {
                 setState(() {
                   _loading = true;
                 });

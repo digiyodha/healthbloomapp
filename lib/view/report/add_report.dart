@@ -69,7 +69,7 @@ class _AddReportState extends State<AddReport> {
         selectedDate = picked;
       });
       _date.text =
-          "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+          "${selectedDate.day}-${selectedDate.month}-${selectedDate.year}";
     }
   }
 
@@ -104,7 +104,7 @@ class _AddReportState extends State<AddReport> {
     if (widget.report != null) {
       _nameOfReport.text = widget.report.name;
       _date.text =
-          "${widget.report.date.day}/${widget.report.date.month}/${widget.report.date.year}";
+          "${widget.report.date.day}-${widget.report.date.month}-${widget.report.date.year}";
       _description.text = widget.report.description;
       _patient.text = widget.report.patient.name;
       selectedPatient = widget.report.patient.id;
@@ -127,8 +127,10 @@ class _AddReportState extends State<AddReport> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: TextBuilder(
-            text: widget.report != null ? "Edit Report" : "Add Report",
-            fontSize: 22),
+          text: widget.report != null ? "Edit Report" : "Add Report",
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+        ),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -148,8 +150,8 @@ class _AddReportState extends State<AddReport> {
                     child: Image.asset(
                       "assets/images/medical_report.jpg",
                       fit: BoxFit.cover,
-                      color: Colors.black,
-                      colorBlendMode: BlendMode.softLight,
+                      color: Colors.black45,
+                      colorBlendMode: BlendMode.hardLight,
                     ),
                   ),
                 ),

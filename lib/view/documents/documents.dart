@@ -48,7 +48,7 @@ class _DocumentsState extends State<Documents> {
         selectedStartDate = picked;
       });
       _fromDate.text =
-          "${selectedStartDate.day}/${selectedStartDate.month}/${selectedStartDate.year}";
+          "${selectedStartDate.day}-${selectedStartDate.month}-${selectedStartDate.year}";
       getDocuments();
     }
   }
@@ -72,7 +72,7 @@ class _DocumentsState extends State<Documents> {
         // getDocuments();
       }
       _toDate.text =
-          "${selectedEndDate.day}/${selectedEndDate.month}/${selectedEndDate.year}";
+          "${selectedEndDate.day}-${selectedEndDate.month}-${selectedEndDate.year}";
       getDocuments();
     }
   }
@@ -100,25 +100,27 @@ class _DocumentsState extends State<Documents> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        drawer: CustomDrawer(
-          selected: 3,
+    return Scaffold(
+      drawer: CustomDrawer(
+        selected: 3,
+      ),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: kWhite),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        // leading: Icon(icon),
+        title: TextBuilder(
+          text: "Documents",
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
         ),
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: kWhite),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          title: TextBuilder(
-            text: "Documents",
-            fontSize: 22,
-          ),
-          centerTitle: true,
-        ),
-        backgroundColor: kWhite,
-        body: Stack(
+        centerTitle: true,
+      ),
+      backgroundColor: kWhite,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Stack(
           children: [
             Positioned(
               top: 0,
@@ -130,8 +132,8 @@ class _DocumentsState extends State<Documents> {
                 child: Image.asset(
                   "assets/images/medical_bill.jpg",
                   fit: BoxFit.cover,
-                  color: Colors.black,
-                  colorBlendMode: BlendMode.softLight,
+                  color: Colors.black45,
+                  colorBlendMode: BlendMode.hardLight,
                 ),
               ),
             ),

@@ -48,7 +48,11 @@ class _FamilyMembersState extends State<FamilyMembers> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text("Family Members"),
+        title: TextBuilder(
+          text: "Family Members",
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+        ),
         centerTitle: true,
       ),
       drawer: CustomDrawer(
@@ -70,6 +74,8 @@ class _FamilyMembersState extends State<FamilyMembers> {
                     child: Image.asset(
                       "assets/images/family.png",
                       fit: BoxFit.cover,
+                      color: Colors.black45,
+                      colorBlendMode: BlendMode.hardLight,
                     ),
                   ),
                 ),
@@ -114,233 +120,249 @@ class _FamilyMembersState extends State<FamilyMembers> {
                           future: getAllmember(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              return GridView.builder(
-                                padding: EdgeInsets.all(0),
-                                itemCount: snapshot.data.data.length,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        childAspectRatio: 0.75,
-                                        crossAxisSpacing: 16,
-                                        mainAxisSpacing: 16),
-                                itemBuilder: (BuildContext context, int i) {
-                                  final member = snapshot.data.data[i];
-                                  return InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ViewFamilyMembers(
-                                                    member: member,
-                                                  )));
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 14),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: Color(0xff8B80F8),
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          Container(
-                                            height: double.infinity,
-                                            width: double.infinity,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                              return snapshot.data.data.length != 0
+                                  ? GridView.builder(
+                                      padding: EdgeInsets.all(0),
+                                      itemCount: snapshot.data.data.length,
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              childAspectRatio: 0.75,
+                                              crossAxisSpacing: 16,
+                                              mainAxisSpacing: 16),
+                                      itemBuilder:
+                                          (BuildContext context, int i) {
+                                        final member = snapshot.data.data[i];
+                                        return InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ViewFamilyMembers(
+                                                          member: member,
+                                                        )));
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 14),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              color: Color(0xff8B80F8),
+                                            ),
+                                            child: Stack(
                                               children: [
-                                                member.avatar.isNotEmpty &&
-                                                        member.avatar.length !=
-                                                            null &&
-                                                        member.avatar != null &&
-                                                        member.avatar.length !=
-                                                            0
-                                                    ? CircleAvatar(
-                                                        radius: 40,
-                                                        backgroundImage:
-                                                            NetworkImage(
-                                                          member.avatar,
-                                                          scale: 1.0,
-                                                        ),
-                                                      )
-                                                    : CircleAvatar(
-                                                        radius: 40,
-                                                        backgroundColor: kWhite,
-                                                        child: Center(
-                                                          child: Icon(
-                                                            Icons.person,
-                                                            color: kGrey4,
-                                                            size: 40,
-                                                          ),
-                                                        ),
+                                                Container(
+                                                  height: double.infinity,
+                                                  width: double.infinity,
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      member.avatar.isNotEmpty &&
+                                                              member.avatar
+                                                                      .length !=
+                                                                  null &&
+                                                              member.avatar !=
+                                                                  null &&
+                                                              member.avatar
+                                                                      .length !=
+                                                                  0
+                                                          ? CircleAvatar(
+                                                              radius: 40,
+                                                              backgroundImage:
+                                                                  NetworkImage(
+                                                                member.avatar,
+                                                                scale: 1.0,
+                                                              ),
+                                                            )
+                                                          : CircleAvatar(
+                                                              radius: 40,
+                                                              backgroundColor:
+                                                                  kWhite,
+                                                              child: Center(
+                                                                child: Icon(
+                                                                  Icons.person,
+                                                                  color: kGrey4,
+                                                                  size: 40,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                      Spacer(),
+                                                      Text(
+                                                        member.name
+                                                                .toString() ??
+                                                            '',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                            fontSize: 22,
+                                                            color: kWhite,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                        maxLines: 1,
+                                                        textAlign:
+                                                            TextAlign.center,
                                                       ),
-                                                Spacer(),
-                                                Text(
-                                                  member.name.toString() ?? '',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontSize: 22,
-                                                      color: kWhite,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                                  maxLines: 1,
-                                                  textAlign: TextAlign.center,
+                                                      SizedBox(height: 6),
+                                                      Text(
+                                                        member.relationship
+                                                                .toString() ??
+                                                            '',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            color: kWhite
+                                                                .withOpacity(
+                                                                    0.6),
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                        maxLines: 1,
+                                                      ),
+                                                      Spacer(),
+                                                    ],
+                                                  ),
                                                 ),
-                                                SizedBox(height: 6),
-                                                Text(
-                                                  member.relationship
-                                                          .toString() ??
-                                                      '',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: kWhite
-                                                          .withOpacity(0.6),
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                  maxLines: 1,
+                                                Positioned(
+                                                  bottom: 0,
+                                                  right: 0,
+                                                  child: InkWell(
+                                                      onTap: () async {
+                                                        showDialog(
+                                                          context: context,
+                                                          useSafeArea: true,
+                                                          barrierDismissible:
+                                                              true,
+                                                          builder: (context) {
+                                                            return FutureBuilder(
+                                                              builder: (context,
+                                                                  snapshot) {
+                                                                return AlertDialog(
+                                                                  title: Text(
+                                                                      'Delete ${member.name}'),
+                                                                  content: Text(
+                                                                      'Are you sure!'),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                        child: TextBuilder(
+                                                                            text:
+                                                                                'No')),
+                                                                    MaterialButton(
+                                                                      shape: RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(6)),
+                                                                      color: Color(
+                                                                          0xffFF9B91),
+                                                                      onPressed:
+                                                                          () async {
+                                                                        setState(
+                                                                            () {
+                                                                          _loading =
+                                                                              true;
+                                                                        });
+
+                                                                        DeleteMemberRequest
+                                                                            _request =
+                                                                            DeleteMemberRequest(familyMemberId: member.id);
+                                                                        DeleteMemberResponse
+                                                                            _response =
+                                                                            await deleteMemeber(_request);
+
+                                                                        print(
+                                                                            'Delete Member Request ${_request.toJson()}');
+                                                                        print(
+                                                                            'Delete Member Response ${_response.toJson()}');
+                                                                        if (_response.success ==
+                                                                            true) {
+                                                                          ScaffoldMessenger.of(context)
+                                                                              .showSnackBar(SnackBar(
+                                                                            content:
+                                                                                Text('deleted.'),
+                                                                          ));
+                                                                          setState(
+                                                                              () {
+                                                                            _loading =
+                                                                                false;
+                                                                          });
+                                                                          Navigator.pop(
+                                                                              context,
+                                                                              true);
+                                                                        }
+                                                                      },
+                                                                      child:
+                                                                          TextBuilder(
+                                                                        text:
+                                                                            'Yes',
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                );
+                                                              },
+                                                            );
+                                                          },
+                                                        ).whenComplete(
+                                                            () => setState(() {
+                                                                  // _loading = false;
+                                                                  getAllmember();
+                                                                }));
+                                                      },
+                                                      child: Icon(
+                                                        Icons.delete,
+                                                        size: 20,
+                                                        color: Colors.white,
+                                                      )),
                                                 ),
-                                                Spacer(),
+                                                Positioned(
+                                                  bottom: 0,
+                                                  left: 0,
+                                                  child: InkWell(
+                                                      onTap: () async {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    AddFamilyMembers(
+                                                                        member:
+                                                                            member))).whenComplete(
+                                                            () {
+                                                          setState(() {});
+                                                          getAllmember();
+                                                        });
+                                                      },
+                                                      child: Icon(
+                                                        Icons.edit,
+                                                        size: 20,
+                                                        color: Colors.white,
+                                                      )),
+                                                )
                                               ],
                                             ),
                                           ),
-                                          Positioned(
-                                            bottom: 0,
-                                            right: 0,
-                                            child: InkWell(
-                                                onTap: () async {
-                                                  showDialog(
-                                                    context: context,
-                                                    useSafeArea: true,
-                                                    barrierDismissible: true,
-                                                    builder: (context) {
-                                                      return FutureBuilder(
-                                                        builder: (context,
-                                                            snapshot) {
-                                                          return AlertDialog(
-                                                            title: Text(
-                                                                'Delete ${member.name}'),
-                                                            content: Text(
-                                                                'Are you sure!'),
-                                                            actions: [
-                                                              TextButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                  child: TextBuilder(
-                                                                      text:
-                                                                          'No')),
-                                                              MaterialButton(
-                                                                shape: RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            6)),
-                                                                color: Color(
-                                                                    0xffFF9B91),
-                                                                onPressed:
-                                                                    () async {
-                                                                  setState(() {
-                                                                    _loading =
-                                                                        true;
-                                                                  });
-
-                                                                  DeleteMemberRequest
-                                                                      _request =
-                                                                      DeleteMemberRequest(
-                                                                          familyMemberId:
-                                                                              member.id);
-                                                                  DeleteMemberResponse
-                                                                      _response =
-                                                                      await deleteMemeber(
-                                                                          _request);
-
-                                                                  print(
-                                                                      'Delete Member Request ${_request.toJson()}');
-                                                                  print(
-                                                                      'Delete Member Response ${_response.toJson()}');
-                                                                  if (_response
-                                                                          .success ==
-                                                                      true) {
-                                                                    ScaffoldMessenger.of(
-                                                                            context)
-                                                                        .showSnackBar(
-                                                                            SnackBar(
-                                                                      content: Text(
-                                                                          'deleted.'),
-                                                                    ));
-                                                                    setState(
-                                                                        () {
-                                                                      _loading =
-                                                                          false;
-                                                                    });
-                                                                    Navigator.pop(
-                                                                        context,
-                                                                        true);
-                                                                  }
-                                                                },
-                                                                child:
-                                                                    TextBuilder(
-                                                                  text: 'Yes',
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              )
-                                                            ],
-                                                          );
-                                                        },
-                                                      );
-                                                    },
-                                                  ).whenComplete(
-                                                      () => setState(() {
-                                                            // _loading = false;
-                                                            getAllmember();
-                                                          }));
-                                                },
-                                                child: Icon(
-                                                  Icons.delete,
-                                                  size: 20,
-                                                  color: Colors.white,
-                                                )),
-                                          ),
-                                          Positioned(
-                                            bottom: 0,
-                                            left: 0,
-                                            child: InkWell(
-                                                onTap: () async {
-                                                  Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  AddFamilyMembers(
-                                                                      member:
-                                                                          member)))
-                                                      .whenComplete(() {
-                                                    setState(() {});
-                                                    getAllmember();
-                                                  });
-                                                },
-                                                child: Icon(
-                                                  Icons.edit,
-                                                  size: 20,
-                                                  color: Colors.white,
-                                                )),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
+                                        );
+                                      },
+                                    )
+                                  : Center(
+                                      child: TextBuilder(
+                                          text: 'No family Members'),
+                                    );
                             } else if (snapshot.hasError) {
                               return Text("${snapshot.error}");
                             }

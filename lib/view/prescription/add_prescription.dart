@@ -110,7 +110,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
       _doctor.text = widget.prescription.doctorName.replaceAll('Dr. ', '');
       _hospital.text = widget.prescription.clinicName;
       _date.text =
-          "${widget.prescription.consultationDate.day}/${widget.prescription.consultationDate.month}/${widget.prescription.consultationDate.year}";
+          "${widget.prescription.consultationDate.day}-${widget.prescription.consultationDate.month}-${widget.prescription.consultationDate.year}";
       _drAdvice.text = widget.prescription.doctorAdvice;
       _patient.text = widget.prescription.patient.name;
       _userAilment.text = widget.prescription.userAilment;
@@ -134,10 +134,12 @@ class _AddPrescriptionState extends State<AddPrescription> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: TextBuilder(
-            text: widget.prescription != null
-                ? "Edit Prescription"
-                : "Add Prescription",
-            fontSize: 22),
+          text: widget.prescription != null
+              ? "Edit Prescription"
+              : "Add Prescription",
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+        ),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -157,8 +159,8 @@ class _AddPrescriptionState extends State<AddPrescription> {
                     child: Image.asset(
                       "assets/images/medical_report.jpg",
                       fit: BoxFit.cover,
-                      color: Colors.black,
-                      colorBlendMode: BlendMode.softLight,
+                      color: Colors.black45,
+                      colorBlendMode: BlendMode.hardLight,
                     ),
                   ),
                 ),

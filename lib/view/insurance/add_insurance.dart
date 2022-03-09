@@ -108,8 +108,10 @@ class _AddInsuranceState extends State<AddInsurance> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: TextBuilder(
-            text: widget.insurance != null ? "Edit Insurance" : "Add Insurance",
-            fontSize: 22),
+          text: widget.insurance != null ? "Edit Insurance" : "Add Insurance",
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+        ),
         centerTitle: true,
       ),
       backgroundColor: kWhite,
@@ -129,8 +131,8 @@ class _AddInsuranceState extends State<AddInsurance> {
                     child: Image.asset(
                       "assets/images/insurance.jpg",
                       fit: BoxFit.cover,
-                      color: Colors.black,
-                      colorBlendMode: BlendMode.softLight,
+                      color: Colors.black45,
+                      colorBlendMode: BlendMode.hardLight,
                     ),
                   ),
                 ),

@@ -65,6 +65,7 @@ class _InsuranceState extends State<Insurance> {
         title: TextBuilder(
           text: "Insurance",
           fontSize: 22,
+          fontWeight: FontWeight.w800,
         ),
         centerTitle: true,
       ),
@@ -83,8 +84,8 @@ class _InsuranceState extends State<Insurance> {
                 child: Image.asset(
                   "assets/images/insurance.jpg",
                   fit: BoxFit.cover,
-                  color: Colors.black,
-                  colorBlendMode: BlendMode.softLight,
+                  color: Colors.black45,
+                  colorBlendMode: BlendMode.hardLight,
                 ),
               ),
             ),

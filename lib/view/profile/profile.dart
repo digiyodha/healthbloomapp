@@ -65,9 +65,14 @@ class _ProfileState extends State<Profile> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              height: 35,
-                              width: 35,
+                            IconButton(
+                              onPressed: () {
+                                Scaffold.of(context).openDrawer();
+                              },
+                              icon: Icon(
+                                Icons.reorder,
+                                color: Colors.white,
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 8),

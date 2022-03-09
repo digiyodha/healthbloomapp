@@ -87,9 +87,15 @@ class _HomePageState extends State<HomePage>
     setState(() {});
   }
 
+  String _msg = '';
   @override
   void initState() {
     super.initState();
+    // if (_currentResponse != null || _currentResponse.data.length == 0) {
+    //   setState(() {
+    //     _msg = 'No Medicine Found';
+    //   });
+    // }
     _getMembers = getAllmember();
     getData();
     _animationController =
@@ -302,43 +308,40 @@ class _HomePageState extends State<HomePage>
                   ],
                 ),
                 SizedBox(height: 14),
-                _currentResponse != null
-                    ? Container(
-                        height: _currentResponse.data.length != 0 ? 220 : 0,
-                        child: ListView.builder(
-                          itemCount: _currentResponse.data.length,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          physics: ScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (BuildContext context, int index) {
-                            return MedicineCard(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ViewMedicine(
-                                      medicne: _currentResponse.data[index],
-                                    ),
-                                  ),
+                _currentResponse == null
+                    ? CircularProgressIndicator()
+                    : _currentResponse.data.isNotEmpty
+                        ? Container(
+                            height: _currentResponse.data.length != 0 ? 220 : 0,
+                            child: ListView.builder(
+                              itemCount: _currentResponse.data.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              physics: ScrollPhysics(),
+                              padding: EdgeInsets.zero,
+                              itemBuilder: (BuildContext context, int index) {
+                                return MedicineCard(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ViewMedicine(
+                                          medicne: _currentResponse.data[index],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  medicineName:
+                                      _currentResponse.data[index].medicineName,
+                                  time: _currentResponse.data[index].time.first,
+                                  dosages: _currentResponse.data[index].dosage,
                                 );
                               },
-                              medicineName:
-                                  _currentResponse.data[index].medicineName,
-                              time: _currentResponse.data[index].time.first,
-                              dosages: _currentResponse.data[index].dosage,
-                            );
-                          },
-                        ),
-                      )
-                    : Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                // _currentResponse == null
-                //     ? Center(
-                //         child: TextBuilder(text: 'No medicines found'),
-                //       )
-                //     : Container(),
+                            ),
+                          )
+                        : Center(
+                            child: TextBuilder(text: 'No data found'),
+                          ),
                 SizedBox(height: 14),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -478,7 +481,7 @@ class _HomePageState extends State<HomePage>
                                       Text(
                                         snapshot.data.data.length != 0
                                             ? "${snapshot.data.data.length.toString()} Members"
-                                            : '0 Members',
+                                            : 'No Family Members',
                                         style: TextStyle(
                                             fontSize: 22,
                                             color: kWhite,
