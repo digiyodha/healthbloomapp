@@ -68,6 +68,7 @@ class _HomePageState extends State<HomePage>
         await adminAPI.searchMedicineAPI(SearchMedicineRequest(name: ''));
     setState(() {
       _currentResponse = _response;
+      print("Search Medicine Response ${_currentResponse.toJson()}");
       _loading = false;
     });
   }
@@ -333,7 +334,7 @@ class _HomePageState extends State<HomePage>
                     : Center(
                         child: CircularProgressIndicator(),
                       ),
-                // _currentResponse.data != null
+                // _currentResponse == null
                 //     ? Center(
                 //         child: TextBuilder(text: 'No medicines found'),
                 //       )

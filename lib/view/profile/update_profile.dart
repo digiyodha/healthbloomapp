@@ -190,6 +190,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                       return null;
                                   },
                                   style: TextStyle(
+                                    fontWeight: FontWeight.w500,
                                     color: Color(0xff9884DF),
                                   ),
                                   decoration: InputDecoration(
@@ -325,6 +326,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                       return null;
                                   },
                                   style: TextStyle(
+                                    fontWeight: FontWeight.w500,
                                     color: Color(0xff9884DF),
                                   ),
                                   decoration: InputDecoration(
@@ -358,6 +360,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                       return null;
                                   },
                                   style: TextStyle(
+                                    fontWeight: FontWeight.w500,
                                     color: Color(0xff9884DF),
                                   ),
                                   decoration: InputDecoration(
@@ -390,6 +393,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                       return null;
                                   },
                                   style: TextStyle(
+                                    fontWeight: FontWeight.w500,
                                     color: Color(0xff9884DF),
                                   ),
                                   decoration: InputDecoration(
