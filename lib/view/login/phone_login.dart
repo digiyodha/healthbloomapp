@@ -47,10 +47,12 @@ class _PhoneLoginState extends State<PhoneLogin> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-              builder: (context) => EditProfile(
-                    id: sp.getString("id"),
-                    phone: true,
-                  )),
+            builder: (context) => EditProfile(
+              id: sp.getString("id"),
+              phone: true,
+              phoneNumber: phoneNumber.text,
+            ),
+          ),
           (Route<dynamic> route) => false,
         );
       } else {
@@ -319,6 +321,9 @@ class _PhoneLoginState extends State<PhoneLogin> {
                                 const SizedBox(height: 30.0),
                                 TextFormField(
                                   controller: phoneNumber,
+                                  autofillHints: [
+                                    AutofillHints.telephoneNumberNational,
+                                  ],
                                   style: TextStyle(
                                     color: Color(0xff8D68F5),
                                   ),

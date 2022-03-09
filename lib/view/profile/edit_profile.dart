@@ -21,7 +21,9 @@ class EditProfile extends StatefulWidget {
   final String id;
   final bool phone;
   final String name;
-  const EditProfile({Key key, this.id, this.phone = false, this.name})
+  final String phoneNumber;
+  const EditProfile(
+      {Key key, this.id, this.phone = false, this.name, this.phoneNumber})
       : super(key: key);
 
   @override
@@ -83,6 +85,9 @@ class _EditProfileState extends State<EditProfile> {
     super.initState();
     if (widget.name != null) {
       _name.text = widget.name;
+    }
+    if (widget.phoneNumber != null) {
+      _phone.text = widget.phoneNumber;
     }
   }
 
@@ -313,6 +318,9 @@ class _EditProfileState extends State<EditProfile> {
                                 TextFormField(
                                   controller: _phone,
                                   keyboardType: TextInputType.number,
+                                  autofillHints: [
+                                    AutofillHints.telephoneNumberNational,
+                                  ],
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return "* Required";

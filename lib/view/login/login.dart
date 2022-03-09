@@ -192,6 +192,7 @@ class _LoginState extends State<Login> {
                                 ),
                                 child: TextFormField(
                                   controller: _email,
+                                  autofillHints: {AutofillHints.email},
                                   inputFormatters: [
                                     LengthLimitingTextInputFormatter(40),
                                   ],

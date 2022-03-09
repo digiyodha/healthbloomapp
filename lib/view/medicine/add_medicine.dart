@@ -27,7 +27,7 @@ class _AddMedicineState extends State<AddMedicine> {
   TextEditingController _dosage = TextEditingController();
   TextEditingController _dose = TextEditingController();
   TextEditingController _date = TextEditingController();
-  TextEditingController _duration = TextEditingController();
+  TextEditingController _days = TextEditingController();
   TextEditingController _familyMember = TextEditingController();
   DateTime startDate;
   bool _loading = false;
@@ -243,8 +243,8 @@ class _AddMedicineState extends State<AddMedicine> {
                           SizedBox(height: 16),
                           CustomTextField(
                             maxLines: 1,
-                            controller: _duration,
-                            label: "Duration",
+                            controller: _days,
+                            label: "Days",
                             onChanged: (val) {},
                             onTap: () {},
                           ),
@@ -448,7 +448,7 @@ class _AddMedicineState extends State<AddMedicine> {
                   _date.text.isNotEmpty &&
                   _dosage.text.isNotEmpty &&
                   _dose.text.isNotEmpty &&
-                  _duration.text.isNotEmpty &&
+                  _days.text.isNotEmpty &&
                   _familyMember.text.isNotEmpty &&
                   _memberId != null &&
                   startDate != null &&
@@ -461,7 +461,7 @@ class _AddMedicineState extends State<AddMedicine> {
                   amount: _amountPill,
                   dosage: _dosage.text,
                   doses: _dose.text,
-                  duration: _duration.text,
+                  duration: _days.text,
                   startDate: startDate,
                   reminderTime: remainderTime,
                   alarmTimer: setAlarm,

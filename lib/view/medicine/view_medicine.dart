@@ -19,7 +19,7 @@ class _ViewMedicineState extends State<ViewMedicine> {
   TextEditingController _dosage = TextEditingController();
   TextEditingController _dose = TextEditingController();
   TextEditingController _date = TextEditingController();
-  TextEditingController _duration = TextEditingController();
+  TextEditingController _days = TextEditingController();
 
   DateTime startDate;
 
@@ -44,7 +44,7 @@ class _ViewMedicineState extends State<ViewMedicine> {
       startDate = widget.medicne.startDate;
       _dosage.text = widget.medicne.dosage;
       _dose.text = widget.medicne.doses;
-      _duration.text = widget.medicne.duration;
+      _days.text = widget.medicne.duration;
       setAlarm = widget.medicne.alarmTimer;
       remainderTime = widget.medicne.reminderTime;
       _amountPill = widget.medicne.amount;
@@ -182,8 +182,8 @@ class _ViewMedicineState extends State<ViewMedicine> {
                     CustomTextField(
                       maxLines: 1,
                       enabled: false,
-                      controller: _duration,
-                      label: "Duration",
+                      controller: _days,
+                      label: "Days",
                       onChanged: (val) {},
                       onTap: () {},
                     ),

@@ -226,6 +226,7 @@ class _SignUpState extends State<SignUp> {
                                 ),
                                 child: TextFormField(
                                   controller: _email,
+                                  autofillHints: {AutofillHints.email},
                                   inputFormatters: [
                                     LengthLimitingTextInputFormatter(40),
                                   ],

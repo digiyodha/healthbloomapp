@@ -709,7 +709,7 @@ class _HomePageState extends State<HomePage>
           child: Wrap(
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.add),
+                leading: new Icon(Icons.add),
                 title: Text('Bill'),
                 onTap: () {
                   Navigator.push(context,
