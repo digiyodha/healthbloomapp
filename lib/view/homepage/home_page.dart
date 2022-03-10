@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/medicine_card.dart';
 import 'package:health_bloom/components/textbuilder.dart';
+import 'package:health_bloom/model/request/delete_mdecine_request.dart';
 import 'package:health_bloom/model/request/search_mdecine_request.dart';
+import 'package:health_bloom/model/response/delete_medicine_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/model/response/search_medicne_response.dart';
@@ -70,6 +72,14 @@ class _HomePageState extends State<HomePage>
       print("Search Medicine Response ${_currentResponse.toJson()}");
       _loading = false;
     });
+  }
+
+  Future<DeleteMedicineResponse> deleteMedicine(
+      DeleteMedicineRequest request) async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    DeleteMedicineResponse _response =
+        await adminAPI.deleteMedicineAPI(request);
+    return _response;
   }
 
   getData() {
@@ -333,6 +343,89 @@ class _HomePageState extends State<HomePage>
                                       _currentResponse.data[index].medicineName,
                                   time: _currentResponse.data[index].time.first,
                                   dosages: _currentResponse.data[index].dosage,
+                                  edit: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AddMedicine(
+                                            medicine:
+                                                _currentResponse.data[index]),
+                                      ),
+                                    ).whenComplete(() {
+                                      setState(() {
+                                        searchMedicine();
+                                      });
+                                    });
+                                  },
+                                  delete: () {
+                                    showDialog(
+                                      context: context,
+                                      useSafeArea: true,
+                                      barrierDismissible: true,
+                                      builder: (context) {
+                                        return FutureBuilder(
+                                          builder: (context, snapshot) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                  'Delete ${_currentResponse.data[index].medicineName}'),
+                                              content: Text('Are you sure!'),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: TextBuilder(
+                                                        text: 'No')),
+                                                MaterialButton(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              6)),
+                                                  color: Color(0xffFF9B91),
+                                                  onPressed: () async {
+                                                    DeleteMedicineRequest
+                                                        _request =
+                                                        DeleteMedicineRequest(
+                                                            id: _currentResponse
+                                                                .data[index]
+                                                                .id);
+                                                    DeleteMedicineResponse
+                                                        _response =
+                                                        await deleteMedicine(
+                                                            _request);
+
+                                                    print(
+                                                        'Delete Medicine Request ${_request.toJson()}');
+                                                    print(
+                                                        'Delete Medicine Response ${_response.toJson()}');
+                                                    if (_response.success ==
+                                                        true) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              SnackBar(
+                                                        content:
+                                                            Text('deleted.'),
+                                                      ));
+
+                                                      Navigator.pop(
+                                                          context, true);
+                                                    }
+                                                  },
+                                                  child: TextBuilder(
+                                                    text: 'Yes',
+                                                    color: Colors.white,
+                                                  ),
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ).whenComplete(() => setState(() {
+                                          searchMedicine();
+                                        }));
+                                  },
                                 );
                               },
                             ),

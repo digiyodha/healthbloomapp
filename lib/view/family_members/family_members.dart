@@ -321,7 +321,6 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                                           },
                                                         ).whenComplete(
                                                             () => setState(() {
-                                                                  // _loading = false;
                                                                   getAllmember();
                                                                 }));
                                                       },

@@ -4,7 +4,6 @@ import 'package:health_bloom/model/request/add_medicine_request.dart';
 import 'package:health_bloom/model/request/edit_medicine._request.dart';
 import 'package:health_bloom/model/response/add_medicine_response.dart';
 import 'package:health_bloom/model/response/edit_medicine_response.dart';
-import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/model/response/search_medicne_response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/drop_down/custom_dropdown.dart';
@@ -103,7 +102,7 @@ class _AddMedicineState extends State<AddMedicine> {
       _medicineName.text = widget.medicine.medicineName.toString();
       _date.text =
           "${widget.medicine.startDate.day}-${widget.medicine.startDate.month}-${widget.medicine.startDate.year}";
-      _memberId = widget.medicine.patient.id;
+
       startDate = widget.medicine.startDate;
       setAlarm = widget.medicine.alarmTimer;
       _dosage.text = widget.medicine.dosage;
@@ -112,6 +111,7 @@ class _AddMedicineState extends State<AddMedicine> {
       _familyMember.text = widget.medicine.patient.name;
       _memberId = widget.medicine.patient.id;
       _listOfTimes = widget.medicine.time;
+      remainderTime = widget.medicine.reminderTime;
     }
   }
 
