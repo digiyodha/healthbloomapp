@@ -290,7 +290,11 @@ class _HomePageState extends State<HomePage>
                           MaterialPageRoute(
                             builder: (context) => ListMedicine(),
                           ),
-                        );
+                        ).whenComplete(() {
+                          setState(() {
+                            searchMedicine();
+                          });
+                        });
                       },
                       child: Icon(
                         Icons.more_horiz,

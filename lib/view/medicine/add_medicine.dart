@@ -5,6 +5,7 @@ import 'package:health_bloom/model/request/edit_medicine._request.dart';
 import 'package:health_bloom/model/response/add_medicine_response.dart';
 import 'package:health_bloom/model/response/edit_medicine_response.dart';
 import 'package:health_bloom/model/response/response.dart';
+import 'package:health_bloom/model/response/search_medicne_response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/drop_down/custom_dropdown.dart';
 import 'package:health_bloom/utils/loading.dart';
@@ -17,8 +18,8 @@ import '../../services/api/repository/auth_repository.dart';
 import '../../utils/text_field/custom_text_field.dart';
 
 class AddMedicine extends StatefulWidget {
-  final GetAllDocumentsResponseBill bill;
-  const AddMedicine({Key key, this.bill}) : super(key: key);
+  final SearchMedicineResponseDatum medicine;
+  const AddMedicine({Key key, this.medicine}) : super(key: key);
 
   @override
   State<AddMedicine> createState() => _AddMedicineState();
@@ -98,12 +99,19 @@ class _AddMedicineState extends State<AddMedicine> {
 
     print('Start date ' + startDate.toString());
     _future = getAllmember();
-    if (widget.bill != null) {
-      _medicineName.text = widget.bill.name.toString();
+    if (widget.medicine != null) {
+      _medicineName.text = widget.medicine.medicineName.toString();
       _date.text =
-          "${widget.bill.date.day}-${widget.bill.date.month}-${widget.bill.date.year}";
-      _memberId = widget.bill.patient.id;
-      startDate = widget.bill.date;
+          "${widget.medicine.startDate.day}-${widget.medicine.startDate.month}-${widget.medicine.startDate.year}";
+      _memberId = widget.medicine.patient.id;
+      startDate = widget.medicine.startDate;
+      setAlarm = widget.medicine.alarmTimer;
+      _dosage.text = widget.medicine.dosage;
+      _dose.text = widget.medicine.doses;
+      _days.text = widget.medicine.duration;
+      _familyMember.text = widget.medicine.patient.name;
+      _memberId = widget.medicine.patient.id;
+      _listOfTimes = widget.medicine.time;
     }
   }
 
@@ -122,7 +130,7 @@ class _AddMedicineState extends State<AddMedicine> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: TextBuilder(
-          text: widget.bill != null ? "Edit Medicine" : "Add Medicine",
+          text: widget.medicine != null ? "Edit Medicine" : "Add Medicine",
           fontSize: 22,
           fontWeight: FontWeight.w800,
         ),
@@ -455,52 +463,103 @@ class _AddMedicineState extends State<AddMedicine> {
             disabledColor: kGreyLite,
             text: "Submit",
             onPressed: () async {
-              if (_medicineName.text.isNotEmpty &&
-                  _date.text.isNotEmpty &&
-                  _dosage.text.isNotEmpty &&
-                  _dose.text.isNotEmpty &&
-                  _days.text.isNotEmpty &&
-                  _familyMember.text.isNotEmpty &&
-                  _memberId != null &&
-                  startDate != null &&
-                  remainderTime != null &&
-                  _listOfTimes.isNotEmpty) {
-                setState(() {
-                  _loading = true;
-                });
-                AddMedicineRequest _request = AddMedicineRequest(
-                  medicineName: _medicineName.text,
-                  amount: _amountPill,
-                  dosage: _dosage.text,
-                  doses: _dose.text,
-                  duration: _days.text,
-                  startDate: startDate,
-                  reminderTime: remainderTime,
-                  alarmTimer: setAlarm,
-                  patient: _memberId,
-                  time: List.generate(
-                    _listOfTimes.length,
-                    (index) => _listOfTimes[index],
-                  ),
-                );
-                print("Add Medicine Request ${_request.toJson()}");
-                AddMedicineResponse _response = await addMedicine(_request);
-                print("Add Medicine Response ${_response.toJson()}");
-
-                if (_response.success == true) {
+              if (widget.medicine != null) {
+                if (_medicineName.text.isNotEmpty &&
+                    _date.text.isNotEmpty &&
+                    _dosage.text.isNotEmpty &&
+                    _dose.text.isNotEmpty &&
+                    _days.text.isNotEmpty &&
+                    _familyMember.text.isNotEmpty &&
+                    _memberId != null &&
+                    startDate != null &&
+                    remainderTime != null &&
+                    _listOfTimes.isNotEmpty) {
                   setState(() {
-                    _loading = false;
+                    _loading = true;
                   });
+                  EditMedicineRequest _request = EditMedicineRequest(
+                    id: widget.medicine.id,
+                    medicineName: _medicineName.text,
+                    amount: _amountPill,
+                    dosage: _dosage.text,
+                    doses: _dose.text,
+                    duration: _days.text,
+                    startDate: startDate,
+                    reminderTime: remainderTime,
+                    alarmTimer: setAlarm,
+                    patient: _memberId,
+                    time: List.generate(
+                      _listOfTimes.length,
+                      (index) => _listOfTimes[index],
+                    ),
+                  );
+                  print("Edit Medicine Request ${_request.toJson()}");
+                  EditMedicineResponse _response = await editMedicine(_request);
+                  print("Edit Medicine Response ${_response.toJson()}");
+
+                  if (_response.success == true) {
+                    setState(() {
+                      _loading = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Updated successfully!"),
+                    ));
+                    await Future.delayed(Duration(seconds: 1));
+                    Navigator.pop(context);
+                  }
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("Added successfully!"),
+                    content: Text("Please fill all the details"),
                   ));
-                  await Future.delayed(Duration(seconds: 1));
-                  Navigator.pop(context);
                 }
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("Please fill all the details"),
-                ));
+                if (_medicineName.text.isNotEmpty &&
+                    _date.text.isNotEmpty &&
+                    _dosage.text.isNotEmpty &&
+                    _dose.text.isNotEmpty &&
+                    _days.text.isNotEmpty &&
+                    _familyMember.text.isNotEmpty &&
+                    _memberId != null &&
+                    startDate != null &&
+                    remainderTime != null &&
+                    _listOfTimes.isNotEmpty) {
+                  setState(() {
+                    _loading = true;
+                  });
+                  AddMedicineRequest _request = AddMedicineRequest(
+                    medicineName: _medicineName.text,
+                    amount: _amountPill,
+                    dosage: _dosage.text,
+                    doses: _dose.text,
+                    duration: _days.text,
+                    startDate: startDate,
+                    reminderTime: remainderTime,
+                    alarmTimer: setAlarm,
+                    patient: _memberId,
+                    time: List.generate(
+                      _listOfTimes.length,
+                      (index) => _listOfTimes[index],
+                    ),
+                  );
+                  print("Add Medicine Request ${_request.toJson()}");
+                  AddMedicineResponse _response = await addMedicine(_request);
+                  print("Add Medicine Response ${_response.toJson()}");
+
+                  if (_response.success == true) {
+                    setState(() {
+                      _loading = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Added successfully!"),
+                    ));
+                    await Future.delayed(Duration(seconds: 1));
+                    Navigator.pop(context);
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Please fill all the details"),
+                  ));
+                }
               }
             },
             width: double.infinity,

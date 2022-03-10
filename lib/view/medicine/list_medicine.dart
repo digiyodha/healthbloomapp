@@ -6,8 +6,8 @@ import 'package:health_bloom/model/response/search_medicne_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
+import 'package:health_bloom/view/medicine/add_medicine.dart';
 import 'package:health_bloom/view/medicine/view_medicine.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ListMedicine extends StatefulWidget {
@@ -145,6 +145,21 @@ class _ListMedicineState extends State<ListMedicine> {
                                           height: double.infinity,
                                           width: double.infinity,
                                           padding: EdgeInsets.zero,
+                                          edit: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AddMedicine(
+                                                        medicine: medicine),
+                                              ),
+                                            ).whenComplete(() {
+                                              setState(() {
+                                                searchMedicine();
+                                              });
+                                            });
+                                          },
+                                          delete: () {},
                                         );
                                       },
                                     ),
