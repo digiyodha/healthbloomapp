@@ -28,6 +28,8 @@ class AddMemberResponseData {
     this.age,
     this.avatar,
     this.userId,
+    this.createdAt,
+    this.updatedAt,
     this.id,
   });
 
@@ -36,6 +38,8 @@ class AddMemberResponseData {
   int age;
   String avatar;
   String userId;
+  DateTime createdAt;
+  DateTime updatedAt;
   String id;
 
   factory AddMemberResponseData.fromJson(Map<String, dynamic> json) =>
@@ -46,6 +50,12 @@ class AddMemberResponseData {
         age: json["age"] == null ? null : json["age"],
         avatar: json["avatar"] == null ? null : json["avatar"],
         userId: json["user_id"] == null ? null : json["user_id"],
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
         id: json["id"] == null ? null : json["id"],
       );
 
@@ -55,6 +65,8 @@ class AddMemberResponseData {
         "age": age == null ? null : age,
         "avatar": avatar == null ? null : avatar,
         "user_id": userId == null ? null : userId,
+        "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
+        "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
         "id": id == null ? null : id,
       };
 }

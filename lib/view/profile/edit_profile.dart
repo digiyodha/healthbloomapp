@@ -103,7 +103,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         return false;
       },
       child: Scaffold(
@@ -141,17 +141,21 @@ class _EditProfileState extends State<EditProfile> {
                             ),
                           ),
                           InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pushAndRemoveUntil(
                                 context,
-                                MaterialPageRoute(builder: (context) => HomePage()),
-                                    (Route<dynamic> route) => false,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage()),
+                                (Route<dynamic> route) => false,
                               );
                             },
                             child: Container(
-                              margin: EdgeInsets.only(right: 16,top: 8),
+                              margin: EdgeInsets.only(right: 16, top: 8),
                               width: 40,
-                              child: Text("Skip..",style: TextStyle(color: kWhite,fontSize: 16),),
+                              child: Text(
+                                "Skip",
+                                style: TextStyle(color: kWhite, fontSize: 16),
+                              ),
                             ),
                           )
                         ],
@@ -242,7 +246,8 @@ class _EditProfileState extends State<EditProfile> {
                                         ),
                                       ),
                                       icon: Padding(
-                                        padding: const EdgeInsets.only(right: 13),
+                                        padding:
+                                            const EdgeInsets.only(right: 13),
                                         child: Icon(
                                           Icons.people_alt,
                                           color: Color(0xff9884DF),
@@ -259,8 +264,9 @@ class _EditProfileState extends State<EditProfile> {
                                           return DropdownMenuItem<String>(
                                             value: gen,
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 15),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15),
                                               child: Text(
                                                 gen,
                                                 style: TextStyle(
@@ -293,7 +299,8 @@ class _EditProfileState extends State<EditProfile> {
                                       ),
                                       isExpanded: true,
                                       icon: Padding(
-                                        padding: const EdgeInsets.only(right: 13),
+                                        padding:
+                                            const EdgeInsets.only(right: 13),
                                         child: Icon(
                                           Icons.opacity,
                                           color: Color(0xff9884DF),
@@ -311,8 +318,9 @@ class _EditProfileState extends State<EditProfile> {
                                           return DropdownMenuItem<String>(
                                             value: blood,
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 15),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15),
                                               child: Text(
                                                 blood,
                                                 style: TextStyle(

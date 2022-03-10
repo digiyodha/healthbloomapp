@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/add_medicine_request.dart';
+import 'package:health_bloom/model/request/edit_medicine._request.dart';
 import 'package:health_bloom/model/response/add_medicine_response.dart';
+import 'package:health_bloom/model/response/edit_medicine_response.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/drop_down/custom_dropdown.dart';
@@ -72,6 +74,13 @@ class _AddMedicineState extends State<AddMedicine> {
   Future<AddMedicineResponse> addMedicine(AddMedicineRequest request) async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     AddMedicineResponse _response = await adminAPI.addmedicineAPI(request);
+    print("Add Medicine Response ${_response.toJson()}");
+    return _response;
+  }
+
+  Future<EditMedicineResponse> editMedicine(EditMedicineRequest request) async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    EditMedicineResponse _response = await adminAPI.editMedicineAPI(request);
     print("Add Medicine Response ${_response.toJson()}");
     return _response;
   }
@@ -246,7 +255,7 @@ class _AddMedicineState extends State<AddMedicine> {
                           CustomTextField(
                             maxLines: 1,
                             controller: _days,
-                            label: "Days",
+                            label: "Duration (Days)",
                             onChanged: (val) {},
                             onTap: () {},
                           ),
@@ -339,7 +348,7 @@ class _AddMedicineState extends State<AddMedicine> {
                           ExpansionTile(
                             tilePadding: EdgeInsets.zero,
                             title: TextBuilder(
-                                text: 'Add remainder',
+                                text: 'Add Reminder',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                                 color: kGrey7),
@@ -370,7 +379,7 @@ class _AddMedicineState extends State<AddMedicine> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   TextBuilder(
-                                      text: 'Remainder Time',
+                                      text: 'Reminder Time',
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
                                       color: kGrey7),

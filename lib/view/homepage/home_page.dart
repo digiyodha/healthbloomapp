@@ -8,7 +8,6 @@ import 'package:health_bloom/model/response/search_medicne_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/view/bill/add_bill.dart';
-import 'package:health_bloom/view/insurance/add_insurance.dart';
 import 'package:health_bloom/view/medicine/add_medicine.dart';
 import 'package:health_bloom/view/medicine/list_medicine.dart';
 import 'package:health_bloom/view/medicine/view_medicine.dart';
@@ -87,15 +86,9 @@ class _HomePageState extends State<HomePage>
     setState(() {});
   }
 
-  String _msg = '';
   @override
   void initState() {
     super.initState();
-    // if (_currentResponse != null || _currentResponse.data.length == 0) {
-    //   setState(() {
-    //     _msg = 'No Medicine Found';
-    //   });
-    // }
     _getMembers = getAllmember();
     getData();
     _animationController =
@@ -340,11 +333,11 @@ class _HomePageState extends State<HomePage>
                             ),
                           )
                         : Center(
-                            child: TextBuilder(text: 'No data found'),
+                            child: TextBuilder(text: 'No Medicine Found'),
                           ),
                 SizedBox(height: 14),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
                       "Water Intake & Family Member",
@@ -353,11 +346,11 @@ class _HomePageState extends State<HomePage>
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Icon(
-                      Icons.more_horiz,
-                      color: kGreyText,
-                      size: 28,
-                    )
+                    // Icon(
+                    //   Icons.more_horiz,
+                    //   color: kGreyText,
+                    //   size: 28,
+                    // )
                   ],
                 ),
                 SizedBox(height: 14),
@@ -474,22 +467,29 @@ class _HomePageState extends State<HomePage>
                               future: _getMembers,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
+                                  List<DateTime> time = snapshot.data.data
+                                          .map((e) => e.updatedAt)
+                                          .toList() ??
+                                      [];
                                   return Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         snapshot.data.data.length != 0
-                                            ? "${snapshot.data.data.length.toString()} Members"
+                                            ? "${snapshot.data.data.length.toString()} Family Members"
                                             : 'No Family Members',
                                         style: TextStyle(
-                                            fontSize: 22,
+                                            fontSize: 18,
                                             color: kWhite,
                                             fontWeight: FontWeight.w600),
                                       ),
                                       SizedBox(height: 6),
                                       Text(
-                                        "Updated at - 2 AM",
+                                        snapshot.data.data.length != 0 &&
+                                                time.isNotEmpty
+                                            ? "Updated at - ${today.difference(time.first).inHours.toString() + ' hours ago'}"
+                                            : "Updated at - ${today.difference(today).inHours.toString() + ' hours ago'}",
                                         // "Time - ${DateFormat('hh:mm a').format().toString()}",
                                         style: TextStyle(
                                             fontSize: 14,
@@ -757,17 +757,17 @@ class _HomePageState extends State<HomePage>
                   });
                 },
               ),
-              ListTile(
-                leading: new Icon(Icons.add),
-                title: new Text('Insurance'),
-                onTap: () {
-                  Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddInsurance()))
-                      .whenComplete(() => Navigator.pop(context));
-                },
-              ),
+              // ListTile(
+              //   leading: new Icon(Icons.add),
+              //   title: new Text('Insurance'),
+              //   onTap: () {
+              //     Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //                 builder: (context) => AddInsurance()))
+              //         .whenComplete(() => Navigator.pop(context));
+              //   },
+              // ),
             ],
           ),
         );

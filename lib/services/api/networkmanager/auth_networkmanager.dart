@@ -8,9 +8,11 @@ import 'package:health_bloom/model/request/add_member_request.dart';
 import 'package:health_bloom/model/request/add_prescription_request.dart';
 import 'package:health_bloom/model/request/add_report_request.dart';
 import 'package:health_bloom/model/request/delete_insurence_request.dart';
+import 'package:health_bloom/model/request/delete_mdecine_request.dart';
 import 'package:health_bloom/model/request/delete_member_request.dart';
 import 'package:health_bloom/model/request/edit_bill_request.dart';
 import 'package:health_bloom/model/request/edit_insurance_request.dart';
+import 'package:health_bloom/model/request/edit_medicine._request.dart';
 import 'package:health_bloom/model/request/edit_member_request.dart';
 import 'package:health_bloom/model/request/edit_prescription_request.dart';
 import 'package:health_bloom/model/request/edit_report_request.dart';
@@ -24,9 +26,11 @@ import 'package:health_bloom/model/response/add_medicine_response.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
 import 'package:health_bloom/model/response/add_report_response.dart';
 import 'package:health_bloom/model/response/delete_insurance_response.dart';
+import 'package:health_bloom/model/response/delete_medicine_response.dart';
 import 'package:health_bloom/model/response/delete_member_response.dart';
 import 'package:health_bloom/model/response/edit_bill_response.dart';
 import 'package:health_bloom/model/response/edit_insurance_response.dart';
+import 'package:health_bloom/model/response/edit_medicine_response.dart';
 import 'package:health_bloom/model/response/edit_member_response.dart';
 import 'package:health_bloom/model/response/edit_prescription_response.dart';
 import 'package:health_bloom/model/response/edit_report_response.dart';
@@ -543,6 +547,50 @@ class NetworkManager {
       print(response);
 
       return Success<DeleteInsuranceResponse>(response);
+    }
+    return result;
+  }
+
+  // Edit medicine
+  Future<Result> editMedicine(EditMedicineRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.editMedicine;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      EditMedicineResponse response =
+          EditMedicineResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<EditMedicineResponse>(response);
+    }
+    return result;
+  }
+
+  // Delete medicine
+  Future<Result> deleteMedicine(DeleteMedicineRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.deleteMedicine;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      DeleteMedicineResponse response =
+          DeleteMedicineResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<DeleteMedicineResponse>(response);
     }
     return result;
   }

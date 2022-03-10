@@ -31,6 +31,7 @@ class GetAllMemberResponseDatum {
     this.age,
     this.avatar,
     this.userId,
+    this.updatedAt,
     this.id,
   });
 
@@ -39,6 +40,7 @@ class GetAllMemberResponseDatum {
   int age;
   String avatar;
   String userId;
+  DateTime updatedAt;
   String id;
 
   factory GetAllMemberResponseDatum.fromJson(Map<String, dynamic> json) =>
@@ -49,6 +51,9 @@ class GetAllMemberResponseDatum {
         age: json["age"] == null ? null : json["age"],
         avatar: json["avatar"] == null ? null : json["avatar"],
         userId: json["user_id"] == null ? null : json["user_id"],
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
         id: json["id"] == null ? null : json["id"],
       );
 
@@ -58,6 +63,9 @@ class GetAllMemberResponseDatum {
         "age": age == null ? null : age,
         "avatar": avatar == null ? null : avatar,
         "user_id": userId == null ? null : userId,
+        "updatedAt": updatedAt == null
+            ? null
+            : "${updatedAt.year.toString().padLeft(4, '0')}-${updatedAt.month.toString().padLeft(2, '0')}-${updatedAt.day.toString().padLeft(2, '0')}",
         "id": id == null ? null : id,
       };
 }

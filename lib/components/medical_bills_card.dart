@@ -79,6 +79,7 @@ class MedicalBillsCard extends StatelessWidget {
                   padding: EdgeInsets.all(10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,14 +99,12 @@ class MedicalBillsCard extends StatelessWidget {
                           )
                         ],
                       ),
-                      const SizedBox(height: 10.0),
                       TextBuilder(
                         text: nameOfPatients.toString() ?? '',
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                       ),
-                      Spacer(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

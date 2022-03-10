@@ -7,23 +7,29 @@ class MedicineCard extends StatelessWidget {
   final DateTime time;
   final String dosages;
   final Function onTap;
+  final double height;
+  final double width;
+  final EdgeInsetsGeometry padding;
   const MedicineCard({
     Key key,
     this.time,
     this.dosages,
     this.onTap,
     this.medicineName,
+    this.height = 220,
+    this.width = 170,
+    this.padding = const EdgeInsets.only(right: 16),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 16),
+      padding: padding,
       child: InkWell(
         onTap: onTap,
         child: Container(
-          height: 220,
-          width: 170,
+          height: height,
+          width: width,
           padding: EdgeInsets.symmetric(horizontal: 14, vertical: 16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),

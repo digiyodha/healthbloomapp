@@ -28,6 +28,7 @@ class AuthEndpoints {
   static get editInsurance => AuthEndpoint("/v1/insurance/", Method.put);
   static get searchInsurance =>
       AuthEndpoint("/v1/insurance/search/", Method.put);
+  static get editMedicine => AuthEndpoint("/v1/medicine/", Method.put);
 
   // Get
   static get getMember => AuthEndpoint("/v1/family/id/", Method.put);
@@ -42,4 +43,5 @@ class AuthEndpoints {
   static get deleteBill => AuthEndpoint("/v1/bill/", Method.delete);
   static get deleteMember => AuthEndpoint("/v1/family/id/", Method.delete);
   static get deleteInsurance => AuthEndpoint("/v1/insurance/", Method.delete);
+  static get deleteMedicine => AuthEndpoint("/v1/medicine/", Method.delete);
 }

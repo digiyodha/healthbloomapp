@@ -5,12 +5,14 @@ class EditMemberResponse {
   });
 
   bool success;
-  Data data;
+  EditMemberResponseData data;
 
   factory EditMemberResponse.fromJson(Map<String, dynamic> json) =>
       EditMemberResponse(
         success: json["success"] == null ? null : json["success"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        data: json["data"] == null
+            ? null
+            : EditMemberResponseData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -19,13 +21,15 @@ class EditMemberResponse {
       };
 }
 
-class Data {
-  Data({
+class EditMemberResponseData {
+  EditMemberResponseData({
     this.name,
     this.relationship,
     this.age,
     this.avatar,
     this.userId,
+    this.createdAt,
+    this.updatedAt,
     this.id,
   });
 
@@ -34,15 +38,24 @@ class Data {
   int age;
   String avatar;
   String userId;
+  DateTime createdAt;
+  DateTime updatedAt;
   String id;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory EditMemberResponseData.fromJson(Map<String, dynamic> json) =>
+      EditMemberResponseData(
         name: json["name"] == null ? null : json["name"],
         relationship:
             json["relationship"] == null ? null : json["relationship"],
         age: json["age"] == null ? null : json["age"],
         avatar: json["avatar"] == null ? null : json["avatar"],
         userId: json["user_id"] == null ? null : json["user_id"],
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
         id: json["id"] == null ? null : json["id"],
       );
 
@@ -52,6 +65,8 @@ class Data {
         "age": age == null ? null : age,
         "avatar": avatar == null ? null : avatar,
         "user_id": userId == null ? null : userId,
+        "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
+        "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
         "id": id == null ? null : id,
       };
 }

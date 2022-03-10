@@ -129,18 +129,6 @@ class _ViewFamilyMembersState extends State<ViewFamilyMembers> {
                                   color: kGrey7),
                             ),
                             Spacer(),
-                            InkWell(
-                              onTap: () {},
-                              child: CircleAvatar(
-                                radius: 12,
-                                backgroundColor: kMainColor,
-                                child: Icon(
-                                  Icons.remove,
-                                  color: kWhite,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12),
                               child: Text(
@@ -149,18 +137,6 @@ class _ViewFamilyMembersState extends State<ViewFamilyMembers> {
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
                                     color: kGrey7),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {},
-                              child: CircleAvatar(
-                                radius: 12,
-                                backgroundColor: kMainColor,
-                                child: Icon(
-                                  Icons.add,
-                                  color: kWhite,
-                                  size: 16,
-                                ),
                               ),
                             ),
                           ],
@@ -176,68 +152,51 @@ class _ViewFamilyMembersState extends State<ViewFamilyMembers> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      InkWell(
-                        onTap: () async {},
-                        child: Container(
-                          height: 106,
-                          width: 106,
-                          child: Stack(
-                            children: [
-                              _uploadAvatarUrl != null &&
-                                      _uploadAvatarUrl.isNotEmpty
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(16),
-                                      child: Image.network(
-                                        _uploadAvatarUrl,
-                                        height: 100,
-                                        width: 100,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : Container(
+                      Container(
+                        height: 106,
+                        width: 106,
+                        child: Stack(
+                          children: [
+                            _uploadAvatarUrl != null &&
+                                    _uploadAvatarUrl.isNotEmpty
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: Image.network(
+                                      _uploadAvatarUrl,
                                       height: 100,
                                       width: 100,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          color: kWhite,
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.black26,
-                                                blurRadius: 10)
-                                          ]),
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.person,
-                                          color: kGrey4,
-                                          size: 60,
-                                        ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Container(
+                                    height: 100,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        color: kWhite,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.black26,
+                                              blurRadius: 10)
+                                        ]),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.person,
+                                        color: kGrey4,
+                                        size: 60,
                                       ),
                                     ),
-                              _profileLoading
-                                  ? Center(
-                                      child: Container(
-                                        height: 50.0,
-                                        width: 50.0,
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    )
-                                  : Container(),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: CircleAvatar(
-                                  radius: 14,
-                                  backgroundColor: kMainColor,
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: kWhite,
-                                    size: 16,
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
+                            _profileLoading
+                                ? Center(
+                                    child: Container(
+                                      height: 50.0,
+                                      width: 50.0,
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  )
+                                : Container(),
+                          ],
                         ),
                       )
                     ],

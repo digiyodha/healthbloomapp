@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_bloom/components/medicine_card.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/search_mdecine_request.dart';
 import 'package:health_bloom/model/response/search_medicne_response.dart';
@@ -17,6 +18,7 @@ class ListMedicine extends StatefulWidget {
 }
 
 class _ListMedicineState extends State<ListMedicine> {
+  bool _isLoading = false;
   SearchMedicineResponse _currentResponse;
 
   Future searchMedicine() async {
@@ -57,158 +59,116 @@ class _ListMedicineState extends State<ListMedicine> {
         ),
         centerTitle: true,
       ),
-      body: Container(
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 300,
-                width: double.infinity,
-                child: Image.asset(
-                  "assets/images/medicines-list.jpg",
-                  fit: BoxFit.cover,
-                  color: Colors.black45,
-                  colorBlendMode: BlendMode.hardLight,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 300,
-                width: double.infinity,
-                color: kMainColor.withOpacity(0.3),
-              ),
-            ),
-            Column(
+      body: Stack(
+        children: [
+          Container(
+            child: Stack(
               children: [
-                SizedBox(height: 100),
-                Expanded(
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
                   child: Container(
-                    // height: double.infinity,
+                    height: 300,
                     width: double.infinity,
-                    margin: EdgeInsets.only(
-                        bottom: 0, left: 18, right: 18, top: 20),
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                        color: kMainColor,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(16),
-                            topRight: Radius.circular(16))),
-                    child: _currentResponse == null
-                        ? Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                          )
-                        : _currentResponse.data.isNotEmpty
-                            ? Container(
-                                height: MediaQuery.of(context).size.height,
-                                width: MediaQuery.of(context).size.width,
-                                child: GridView.builder(
-                                  itemCount: _currentResponse.data.length,
-                                  padding: EdgeInsets.only(bottom: 34),
-                                  physics: ScrollPhysics(),
-                                  shrinkWrap: true,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          childAspectRatio: 0.75,
-                                          crossAxisSpacing: 16,
-                                          mainAxisSpacing: 16),
-                                  itemBuilder: (BuildContext context, int i) {
-                                    final medicine = _currentResponse.data[i];
-                                    return InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ViewMedicine(
-                                              medicne: medicine,
-                                            ),
-                                          ),
+                    child: Image.asset(
+                      "assets/images/medicines-list.jpg",
+                      fit: BoxFit.cover,
+                      color: Colors.black45,
+                      colorBlendMode: BlendMode.hardLight,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 300,
+                    width: double.infinity,
+                    color: kMainColor.withOpacity(0.3),
+                  ),
+                ),
+                Column(
+                  children: [
+                    SizedBox(height: 100),
+                    Expanded(
+                      child: Container(
+                        width: double.infinity,
+                        margin: EdgeInsets.only(
+                            bottom: 0, left: 18, right: 18, top: 20),
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                            color: kMainColor,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(16),
+                                topRight: Radius.circular(16))),
+                        child: _currentResponse == null
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                    color: Colors.white),
+                              )
+                            : _currentResponse.data.isNotEmpty
+                                ? Container(
+                                    height: MediaQuery.of(context).size.height,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: GridView.builder(
+                                      itemCount: _currentResponse.data.length,
+                                      padding: EdgeInsets.only(bottom: 34),
+                                      physics: ScrollPhysics(),
+                                      shrinkWrap: true,
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              childAspectRatio: 0.75,
+                                              crossAxisSpacing: 16,
+                                              mainAxisSpacing: 16),
+                                      itemBuilder:
+                                          (BuildContext context, int i) {
+                                        final medicine =
+                                            _currentResponse.data[i];
+                                        return MedicineCard(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ViewMedicine(
+                                                  medicne: medicine,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          medicineName: medicine.medicineName,
+                                          time: medicine.time.first,
+                                          dosages: medicine.dosage,
+                                          height: double.infinity,
+                                          width: double.infinity,
+                                          padding: EdgeInsets.zero,
                                         );
                                       },
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 14, vertical: 16),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          color: Color(0xffAF8EFF),
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              medicine.medicineName ?? '',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: kWhite,
-                                                  letterSpacing: 1.5),
-                                            ),
-                                            Spacer(),
-                                            Align(
-                                              alignment: Alignment.center,
-                                              child: Container(
-                                                height: 100,
-                                                width: 100,
-                                                child: Image.asset(
-                                                    "assets/images/drug2.png"),
-                                              ),
-                                            ),
-                                            Spacer(),
-                                            Text(
-                                              '${DateFormat('hh:mm a').format(medicine.time.first).toString()}' ??
-                                                  '',
-                                              style: TextStyle(
-                                                  fontSize: 22,
-                                                  color: kWhite,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            SizedBox(
-                                              height: 6,
-                                            ),
-                                            Text(
-                                              "Dosage - ${medicine.dosage.toString()} mg" ??
-                                                  '',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color:
-                                                      kWhite.withOpacity(0.6),
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            Spacer(),
-                                          ],
-                                        ),
+                                    ),
+                                  )
+                                : Container(
+                                    height: MediaQuery.of(context).size.height,
+                                    width: MediaQuery.of(context).size.width,
+                                    alignment: Alignment.center,
+                                    child: Center(
+                                      child: TextBuilder(
+                                        text: 'No Medicine Found',
+                                        color: Colors.white,
                                       ),
-                                    );
-                                  },
-                                ),
-                              )
-                            : Container(
-                                height: MediaQuery.of(context).size.height,
-                                width: MediaQuery.of(context).size.width,
-                                alignment: Alignment.center,
-                                child: Center(
-                                  child: TextBuilder(
-                                    text: 'No data found',
-                                    color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                              ),
-                  ),
-                )
+                      ),
+                    )
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
+          ),
+          if (_isLoading) LoadingWidget(color: Colors.white)
+        ],
       ),
     );
   }

@@ -187,7 +187,7 @@ class _ViewMedicineState extends State<ViewMedicine> {
                       maxLines: 1,
                       enabled: false,
                       controller: _days,
-                      label: "Days",
+                      label: "Duration (Days)",
                       onChanged: (val) {},
                       onTap: () {},
                     ),

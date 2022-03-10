@@ -6,9 +6,11 @@ import 'package:health_bloom/model/request/add_member_request.dart';
 import 'package:health_bloom/model/request/add_prescription_request.dart';
 import 'package:health_bloom/model/request/add_report_request.dart';
 import 'package:health_bloom/model/request/delete_insurence_request.dart';
+import 'package:health_bloom/model/request/delete_mdecine_request.dart';
 import 'package:health_bloom/model/request/delete_member_request.dart';
 import 'package:health_bloom/model/request/edit_bill_request.dart';
 import 'package:health_bloom/model/request/edit_insurance_request.dart';
+import 'package:health_bloom/model/request/edit_medicine._request.dart';
 import 'package:health_bloom/model/request/edit_member_request.dart';
 import 'package:health_bloom/model/request/edit_prescription_request.dart';
 import 'package:health_bloom/model/request/edit_report_request.dart';
@@ -22,9 +24,11 @@ import 'package:health_bloom/model/response/add_medicine_response.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
 import 'package:health_bloom/model/response/add_report_response.dart';
 import 'package:health_bloom/model/response/delete_insurance_response.dart';
+import 'package:health_bloom/model/response/delete_medicine_response.dart';
 import 'package:health_bloom/model/response/delete_member_response.dart';
 import 'package:health_bloom/model/response/edit_bill_response.dart';
 import 'package:health_bloom/model/response/edit_insurance_response.dart';
+import 'package:health_bloom/model/response/edit_medicine_response.dart';
 import 'package:health_bloom/model/response/edit_member_response.dart';
 import 'package:health_bloom/model/response/edit_prescription_response.dart';
 import 'package:health_bloom/model/response/edit_report_response.dart';
@@ -229,5 +233,21 @@ class NetworkRepository with ChangeNotifier {
     if (apiResult is Success) return apiResult.data;
     if (apiResult is Error) throw apiResult.error;
     return deleteInsuranceAPI(request);
+  }
+
+  Future<EditMedicineResponse> editMedicineAPI(
+      EditMedicineRequest request) async {
+    Result apiResult = await apiClient.editMedicine(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return editMedicineAPI(request);
+  }
+
+  Future<DeleteMedicineResponse> deleteMedicineAPI(
+      DeleteMedicineRequest request) async {
+    Result apiResult = await apiClient.deleteMedicine(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return deleteMedicineAPI(request);
   }
 }

@@ -21,7 +21,7 @@ class _WalkthroughState extends State<Walkthrough> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         return false;
       },
       child: Scaffold(
@@ -96,7 +96,8 @@ class _WalkthroughState extends State<Walkthrough> {
                                       Column(
                                         children: [
                                           Text(
-                                            walks.walkthrough[index].title ?? "",
+                                            walks.walkthrough[index].title ??
+                                                "",
                                             style: TextStyle(
                                                 fontSize: 24,
                                                 color: kMainColor,
@@ -110,7 +111,8 @@ class _WalkthroughState extends State<Walkthrough> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 40),
                                             child: Text(
-                                              walks.walkthrough[index].description ??
+                                              walks.walkthrough[index]
+                                                      .description ??
                                                   "",
                                               style: TextStyle(
                                                   fontSize: 16,
@@ -127,7 +129,8 @@ class _WalkthroughState extends State<Walkthrough> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 40),
                                           child: Image.asset(
-                                              walks.walkthrough[index].image ?? ""),
+                                              walks.walkthrough[index].image ??
+                                                  ""),
                                         ),
                                       ),
                                     ],
@@ -152,8 +155,9 @@ class _WalkthroughState extends State<Walkthrough> {
                                   duration: Duration(milliseconds: 200),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color:
-                                          currentIndex == 0 ? kMainColor : kGreyLite),
+                                      color: currentIndex == 0
+                                          ? kMainColor
+                                          : kGreyLite),
                                 ),
                               ),
                             ),
@@ -166,8 +170,9 @@ class _WalkthroughState extends State<Walkthrough> {
                                   duration: Duration(milliseconds: 200),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color:
-                                          currentIndex == 1 ? kMainColor : kGreyLite),
+                                      color: currentIndex == 1
+                                          ? kMainColor
+                                          : kGreyLite),
                                 ),
                               ),
                             ),
@@ -180,8 +185,9 @@ class _WalkthroughState extends State<Walkthrough> {
                                   duration: Duration(milliseconds: 200),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color:
-                                          currentIndex == 2 ? kMainColor : kGreyLite),
+                                      color: currentIndex == 2
+                                          ? kMainColor
+                                          : kGreyLite),
                                 ),
                               ),
                             ),
@@ -197,7 +203,8 @@ class _WalkthroughState extends State<Walkthrough> {
                         disabledColor: kGreyLite,
                         text: "Get Started",
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
                             return SignUp();
                           }));
                         },
@@ -209,7 +216,7 @@ class _WalkthroughState extends State<Walkthrough> {
                     ),
                     RichText(
                       text: TextSpan(
-                          text: "Already have account?",
+                          text: "already have an account?",
                           style: TextStyle(
                               fontSize: 14,
                               color: kGreyText,
