@@ -540,7 +540,7 @@ class _SignUpState extends State<SignUp> {
                         child: RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
-                            text: 'already have an account ? ',
+                            text: 'Already have an account ? ',
                             style: TextStyle(),
                             children: <TextSpan>[
                               TextSpan(
