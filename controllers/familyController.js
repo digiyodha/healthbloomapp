@@ -57,7 +57,7 @@ exports.getFamilyMember = asyncHandler(async (req, res, next) => {
 
 //get all family members
 exports.getAllFamilyMembers = asyncHandler(async (req, res, next) => {
-    const user = await Family.find({user_id: req.user._id});
+    const user = await Family.find({user_id: req.user._id}).sort({updatedAt: -1});
     if(!user)
     {
         return next(

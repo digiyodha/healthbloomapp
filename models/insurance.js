@@ -14,7 +14,7 @@ var InsuranceSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'User'
     }
-}, {strict: false}, {
+},{
     timestamps: true
 });
 

@@ -23,7 +23,7 @@ var UserSchema = new Schema({
     },
     uid: String
 
-}, {strict: false}, {
+}, {
   timestamps: true
 });
 

@@ -99,6 +99,51 @@ exports.searchMedicine = asyncHandler(async (req, res, next) => {
     res.status(200).json({ success: true, data: medicine_object });
 });
 
+//search Medicine
+exports.getNext10MedicinesByTime = asyncHandler(async (req, res, next) => {
+
+
+
+    var date_time = Date.now();
+    
+
+    // const bill = await Bill.find({$text: {$search: name}});
+    const medicineObject = await Medicine.find({$or: [
+        {
+            medicine_name: {
+                $regex: name,
+                $options: 'i'
+            }
+        }
+    ],  
+        user_id: req.user.id});
+
+    var medicine_object = [];
+    var medicinePromise = await medicineObject.map(async function(medicine){
+        var patientObject = await Family.findOne({_id: medicine.patient});
+        var userObject = await User.findOne({_id: medicine.user_id});
+
+        medicine_object.push({
+            _id: medicine._id,
+            medicine_name: medicine.medicine_name,
+            amount: medicine.amount,
+            dosage: medicine.dosage,
+            doses: medicine.doses,
+            duration: medicine.duration,
+            time: medicine.time,
+            start_date: medicine.start_date,
+            reminder_time: medicine.reminder_time,
+            alarm_timer: medicine.alarm_timer,
+            patient: patientObject,
+            // user: userObject
+            user_id: medicine.user_id
+
+        });
+    });
+    await Promise.all(medicinePromise);
+    res.status(200).json({ success: true, data: medicine_object });
+});
+
 
 //delete medicine
 exports.deleteMedicine = asyncHandler(async (req, res, next) => {
