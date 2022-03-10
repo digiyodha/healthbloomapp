@@ -83,25 +83,30 @@ class MedicineCard extends StatelessWidget {
             Positioned(
               top: 0,
               right: 0,
-              child: IconButton(
-                onPressed: edit,
-                icon: Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.symmetric(horizontal: 0),
+                    onPressed: edit,
+                    icon: Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: delete,
+                    icon: Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  )
+                ],
               ),
             ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: IconButton(
-                onPressed: delete,
-                icon: Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
-              ),
-            )
           ],
         ),
       ),

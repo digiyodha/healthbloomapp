@@ -309,6 +309,7 @@ class _HomePageState extends State<HomePage>
                     ? CircularProgressIndicator()
                     : _currentResponse.data.isNotEmpty
                         ? Container(
+                            width: double.infinity,
                             height: _currentResponse.data.length != 0 ? 220 : 0,
                             child: ListView.builder(
                               itemCount: _currentResponse.data.length,

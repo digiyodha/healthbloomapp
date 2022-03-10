@@ -135,8 +135,8 @@ class _SignUpState extends State<SignUp> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color(0xff8560F6),
-              Color(0xff9672F8),
+              Color(0xff8C67F5),
+              Color(0xff8C67F5),
             ],
             begin: Alignment.centerLeft,
             stops: [0, 2],
@@ -152,24 +152,24 @@ class _SignUpState extends State<SignUp> {
               padding: const EdgeInsets.all(18.0),
               child: Stack(
                 children: [
+                  Positioned(
+                    top: -10,
+                    right: 0,
+                    child: Image.asset(
+                      'assets/icons/auth_logo.png',
+                      height: 150,
+                    ),
+                  ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextBuilder(
-                            text: "Here's Your \nFirst step \nwith us",
-                            color: Colors.white,
-                            fontSize: 30,
-                            fontWeight: FontWeight.w800,
-                          ),
-                          Image.asset(
-                            'assets/icons/logo.png',
-                            height: 110,
-                          )
-                        ],
+                      const SizedBox(height: 14.0),
+                      TextBuilder(
+                        text: "Here's Your \nFirst step \nwith us",
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.w800,
                       ),
                       const SizedBox(height: 50.0),
                       Card(
