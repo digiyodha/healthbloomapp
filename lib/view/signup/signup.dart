@@ -302,13 +302,16 @@ class _SignUpState extends State<SignUp> {
                                       _password.text.isNotEmpty) {
                                     if (_password.text.length > 7) {
                                       try {
-                                        await _auth
+                                        setState(() {
+                                          _loading = true;
+                                        });
+                                        final UserCredential user = await _auth
                                             .createUserWithEmailAndPassword(
                                           email: _email.text,
                                           password: _password.text,
                                         );
-                                        setState(() {
-                                          _loading = true;
+                                        await user.user.sendEmailVerification().whenComplete(() {
+                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Verification link has been sent to your Email. Please verify your account!"),));
                                         });
                                         print("_auth ${_auth.toString()}");
                                         await loginUser(RegisterLoginRequest(
@@ -385,6 +388,9 @@ class _SignUpState extends State<SignUp> {
                                           Text('Please fill all the details'),
                                     ));
                                   }
+                                  setState(() {
+                                    _loading = false;
+                                  });
                                 },
                                 child: TextBuilder(
                                   text: 'SIGN UP',

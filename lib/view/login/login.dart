@@ -299,21 +299,35 @@ class _LoginState extends State<Login> {
                                       setState(() {
                                         _loading = true;
                                       });
-                                      await _auth.signInWithEmailAndPassword(
+                                      final UserCredential user = await _auth
+                                          .signInWithEmailAndPassword(
                                         email: _email.text,
                                         password: _password.text,
                                       );
 
-                                      await loginUser(RegisterLoginRequest(
-                                          name: _auth.currentUser.displayName ??
-                                              "",
-                                          emailId:
-                                              _auth.currentUser.email ?? "",
-                                          uid: _auth.currentUser.uid,
-                                          avatar:
-                                              _auth.currentUser.photoURL ?? "",
-                                          phoneNumber: null,
-                                          countryCode: null));
+                                      if (user.user.emailVerified) {
+                                        await loginUser(RegisterLoginRequest(
+                                            name:
+                                                _auth.currentUser.displayName ??
+                                                    "",
+                                            emailId:
+                                                _auth.currentUser.email ?? "",
+                                            uid: _auth.currentUser.uid,
+                                            avatar:
+                                                _auth.currentUser.photoURL ??
+                                                    "",
+                                            phoneNumber: null,
+                                            countryCode: null));
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              "Please verify yourself through the verification link sent on your Email."),
+                                        ));
+                                        setState(() {
+                                          _loading = false;
+                                        });
+                                      }
                                     } on FirebaseAuthException catch (e) {
                                       if (e.code == 'user-not-found') {
                                         setState(() {
