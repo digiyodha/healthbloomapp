@@ -8,9 +8,6 @@ var MedicineSchema = new Schema({
     dosage: String,
     doses: String,
     duration: String,
-    time: [{
-        type: Date
-    }],
     start_date: Date,
     reminder_time: {
         type: String,
@@ -33,9 +30,31 @@ var MedicineSchema = new Schema({
     timestamps: true
 });
 
+var TimeSchema = new Schema({
+    start_time: Date,
+    end_time: Date,
+    medicine_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'Medicine'
+    },
+    is_active: {
+        type: Boolean,
+        defaultValue: true
+    },
+    user_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+      }
+},{
+    timestamps: true
+});
+
 medicine = mongoose.model("Medicine", MedicineSchema);
+timeMedicine = mongoose.model("TimeMedicine", TimeSchema);
+
 
 
 module.exports = {
     Medicine: medicine,
+    TimeMedicine: timeMedicine
 }
