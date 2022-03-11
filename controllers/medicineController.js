@@ -113,6 +113,13 @@ exports.searchMedicine = asyncHandler(async (req, res, next) => {
         var userObject = await User.findOne({_id: medicine.user_id});
         var timeObject = await TimeMedicine.find({medicine_id: medicine._id});
 
+        var nextMedicineDose = await TimeMedicine.find({
+            user_id: req.user._id,
+            is_active: true,
+            medicine_id: medicine._id
+        }
+        ).sort({'start_time': 1}).limit(1);
+
         medicine_object.push({
             _id: medicine._id,
             medicine_name: medicine.medicine_name,
@@ -125,7 +132,8 @@ exports.searchMedicine = asyncHandler(async (req, res, next) => {
             reminder_time: medicine.reminder_time,
             alarm_timer: medicine.alarm_timer,
             patient: patientObject,
-            user_id: medicine.user_id
+            user_id: medicine.user_id,
+            start_hour: nextMedicineDose.length != 0 ? nextMedicineDose[0].start_time : null
 
         });
     });
@@ -178,6 +186,7 @@ exports.getNextMedicinesByTime = asyncHandler(async (req, res, next) => {
         console.log(tm);
         var medicine = await Medicine.findOne({_id: tm.medicine_id});
         var patientObject = await Family.findOne({_id: medicine.patient});
+        var timeObject = await TimeMedicine.find({medicine_id: tm.medicine_id});
 
         medicine_object.push({
             _id: medicine._id,
@@ -186,7 +195,7 @@ exports.getNextMedicinesByTime = asyncHandler(async (req, res, next) => {
             dosage: medicine.dosage,
             doses: medicine.doses,
             duration: medicine.duration,
-            timeObject: tm,
+            timeObject: timeObject,
             start_date: medicine.start_date,
             reminder_time: medicine.reminder_time,
             alarm_timer: medicine.alarm_timer,
@@ -230,6 +239,12 @@ exports.getMedicine = asyncHandler(async (req, res, next) => {
     var patientObject = await Family.findOne({_id: medicine.patient});
     var userObject = await User.findOne({_id: medicine.user_id});
     var timeObject = await TimeMedicine.find({medicine_id: medicine._id});
+    var nextMedicineDose = await TimeMedicine.find({
+        user_id: req.user._id,
+        is_active: true,
+        medicine_id: medicine._id
+    }
+    ).sort({'start_time': 1}).limit(1);
 
     var medicine_object = {
         _id: medicine._id,
@@ -244,7 +259,8 @@ exports.getMedicine = asyncHandler(async (req, res, next) => {
         alarm_timer: medicine.alarm_timer,
         patient: patientObject,
         // user: userObject
-        user_id: medicine.user_id
+        user_id: medicine.user_id,
+        start_hour: nextMedicineDose.length != 0 ? nextMedicineDose[0].start_time : null
 
     };
     res.status(200).json({ success: true, data: medicine_object });
