@@ -1,19 +1,19 @@
-class SearchMedicineResponse {
-  SearchMedicineResponse({
+class GetNextMedicineResponse {
+  GetNextMedicineResponse({
     this.success,
     this.data,
   });
 
   bool success;
-  List<SearchMedicineResponseDatum> data;
+  List<GetNextMedicineResponseDatum> data;
 
-  factory SearchMedicineResponse.fromJson(Map<String, dynamic> json) =>
-      SearchMedicineResponse(
+  factory GetNextMedicineResponse.fromJson(Map<String, dynamic> json) =>
+      GetNextMedicineResponse(
         success: json["success"] == null ? null : json["success"],
         data: json["data"] == null
             ? null
-            : List<SearchMedicineResponseDatum>.from(json["data"]
-                .map((x) => SearchMedicineResponseDatum.fromJson(x))),
+            : List<GetNextMedicineResponseDatum>.from(json["data"]
+                .map((x) => GetNextMedicineResponseDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -24,8 +24,8 @@ class SearchMedicineResponse {
       };
 }
 
-class SearchMedicineResponseDatum {
-  SearchMedicineResponseDatum({
+class GetNextMedicineResponseDatum {
+  GetNextMedicineResponseDatum({
     this.id,
     this.medicineName,
     this.amount,
@@ -55,8 +55,8 @@ class SearchMedicineResponseDatum {
   String userId;
   DateTime startHour;
 
-  factory SearchMedicineResponseDatum.fromJson(Map<String, dynamic> json) =>
-      SearchMedicineResponseDatum(
+  factory GetNextMedicineResponseDatum.fromJson(Map<String, dynamic> json) =>
+      GetNextMedicineResponseDatum(
         id: json["_id"] == null ? null : json["_id"],
         medicineName:
             json["medicine_name"] == null ? null : json["medicine_name"],

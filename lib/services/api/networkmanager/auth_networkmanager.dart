@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/request/add_edit_user_profile_request.dart';
+import 'package:health_bloom/model/request/add_feedback_request.dart';
 import 'package:health_bloom/model/request/add_insurance_request.dart';
 import 'package:health_bloom/model/request/add_medicine_request.dart';
 import 'package:health_bloom/model/request/add_member_request.dart';
@@ -17,10 +18,13 @@ import 'package:health_bloom/model/request/edit_member_request.dart';
 import 'package:health_bloom/model/request/edit_prescription_request.dart';
 import 'package:health_bloom/model/request/edit_report_request.dart';
 import 'package:health_bloom/model/request/get_documents_request.dart';
+import 'package:health_bloom/model/request/get_mdecine_request.dart';
+import 'package:health_bloom/model/request/get_next_medicine_response.dart';
 import 'package:health_bloom/model/request/search_insurance_request.dart';
 import 'package:health_bloom/model/request/search_mdecine_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
 import 'package:health_bloom/model/response/add_family_response.dart';
+import 'package:health_bloom/model/response/add_feedback_response.dart';
 import 'package:health_bloom/model/response/add_insurance_response.dart';
 import 'package:health_bloom/model/response/add_medicine_response.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
@@ -35,6 +39,8 @@ import 'package:health_bloom/model/response/edit_member_response.dart';
 import 'package:health_bloom/model/response/edit_prescription_response.dart';
 import 'package:health_bloom/model/response/edit_report_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
+import 'package:health_bloom/model/response/get_feedback_options_response.dart';
+import 'package:health_bloom/model/response/get_medicine_response.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/model/response/search_insurance_response.dart';
 import 'package:health_bloom/model/response/search_medicne_response.dart';
@@ -591,6 +597,94 @@ class NetworkManager {
       print(response);
 
       return Success<DeleteMedicineResponse>(response);
+    }
+    return result;
+  }
+
+  // Next medicine
+  Future<Result> getNextMedicine() async {
+    AuthEndpoint endpoint = AuthEndpoints.getNextMedicine;
+    // endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      GetNextMedicineResponse response =
+          GetNextMedicineResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<GetNextMedicineResponse>(response);
+    }
+    return result;
+  }
+
+  // Get medicine
+  Future<Result> getMedicine(GetMedicineRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.getMedicine;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      GetMedicineResponse response =
+          GetMedicineResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<GetMedicineResponse>(response);
+    }
+    return result;
+  }
+
+  // Get feedback options
+  Future<Result> getFeedbackOptions() async {
+    AuthEndpoint endpoint = AuthEndpoints.getFeedbackOptions;
+    // endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      GetFeedbackOptionsResponse response = GetFeedbackOptionsResponse.fromJson(
+          json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<GetFeedbackOptionsResponse>(response);
+    }
+    return result;
+  }
+
+  // Add feedback
+  Future<Result> addFeedback(AddFeedbackRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.addFeedback;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      AddFeedbackResponse response =
+          AddFeedbackResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<AddFeedbackResponse>(response);
     }
     return result;
   }

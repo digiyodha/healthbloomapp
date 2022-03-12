@@ -18,7 +18,7 @@ class _WalkthroughState extends State<Walkthrough> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         return false;
       },
       child: Scaffold(
@@ -87,14 +87,19 @@ class _WalkthroughState extends State<Walkthrough> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 40),
                                         child: Image.asset(
-                                            walks.walkthrough[index].image ?? "",
-                                        height: MediaQuery.of(context).size.height * 0.35,),
+                                          walks.walkthrough[index].image ?? "",
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.35,
+                                        ),
                                       ),
                                       Spacer(),
                                       Column(
                                         children: [
                                           Text(
-                                            walks.walkthrough[index].title ?? "",
+                                            walks.walkthrough[index].title ??
+                                                "",
                                             style: TextStyle(
                                                 fontSize: 24,
                                                 color: kMainColor,
@@ -108,7 +113,8 @@ class _WalkthroughState extends State<Walkthrough> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 40),
                                             child: Text(
-                                              walks.walkthrough[index].description ??
+                                              walks.walkthrough[index]
+                                                      .description ??
                                                   "",
                                               style: TextStyle(
                                                   fontSize: 16,
@@ -124,7 +130,9 @@ class _WalkthroughState extends State<Walkthrough> {
                                 )),
                       ),
                     ),
-                    SizedBox(height: 24,),
+                    SizedBox(
+                      height: 24,
+                    ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 30),
                       child: Container(
@@ -142,8 +150,9 @@ class _WalkthroughState extends State<Walkthrough> {
                                   duration: Duration(milliseconds: 200),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color:
-                                          currentIndex == 0 ? kMainColor : kGreyLite),
+                                      color: currentIndex == 0
+                                          ? kMainColor
+                                          : kGreyLite),
                                 ),
                               ),
                             ),
@@ -156,8 +165,9 @@ class _WalkthroughState extends State<Walkthrough> {
                                   duration: Duration(milliseconds: 200),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color:
-                                          currentIndex == 1 ? kMainColor : kGreyLite),
+                                      color: currentIndex == 1
+                                          ? kMainColor
+                                          : kGreyLite),
                                 ),
                               ),
                             ),
@@ -170,8 +180,9 @@ class _WalkthroughState extends State<Walkthrough> {
                                   duration: Duration(milliseconds: 200),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color:
-                                          currentIndex == 2 ? kMainColor : kGreyLite),
+                                      color: currentIndex == 2
+                                          ? kMainColor
+                                          : kGreyLite),
                                 ),
                               ),
                             ),
@@ -190,29 +201,27 @@ class _WalkthroughState extends State<Walkthrough> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     InkWell(
-                      onTap: (){
+                      onTap: () {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (context) => SignUp()),
-                              (Route<dynamic> route) => false,
+                          (Route<dynamic> route) => false,
                         );
                       },
                       child: Container(
                         height: 30,
                         padding: EdgeInsets.symmetric(horizontal: 8),
                         decoration: BoxDecoration(
-                          color: Color(0xffFEFFFF),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(6),
-                            bottomLeft: Radius.circular(6)
-                          )
-                        ),
+                            color: Color(0xffFEFFFF),
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                bottomLeft: Radius.circular(6))),
                         child: Center(
-                          child: Text("Let\'s go",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600
-                          ),),
+                          child: Text(
+                            " Skip ",
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600),
+                          ),
                         ),
                       ),
                     )

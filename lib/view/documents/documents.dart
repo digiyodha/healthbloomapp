@@ -30,7 +30,7 @@ class Documents extends StatefulWidget {
 class _DocumentsState extends State<Documents> {
   TextEditingController _fromDate = TextEditingController();
   TextEditingController _toDate = TextEditingController();
-  TextEditingController _search = TextEditingController();
+  TextEditingController search = TextEditingController();
   DateTime selectedStartDate;
   DateTime selectedEndDate;
   int currentIndex = 0;
@@ -77,6 +77,7 @@ class _DocumentsState extends State<Documents> {
     }
   }
 
+  List<GetAllDocumentsResponseBill> foundBill = [];
   Future getDocuments() async {
     setState(() {
       _currentResponse = null;
@@ -88,7 +89,6 @@ class _DocumentsState extends State<Documents> {
             toDate: selectedEndDate ?? null));
     setState(() {
       _currentResponse = _response;
-      _loading = false;
     });
   }
 
@@ -153,11 +153,17 @@ class _DocumentsState extends State<Documents> {
                   children: [
                     CustomTextField(
                       maxLines: 1,
-                      controller: _search,
+                      controller: search,
                       label: "Search",
                       textInputType: TextInputType.name,
                       onChanged: (val) {
                         getDocuments();
+
+                        // foundBill = _currentResponse.data.bill
+                        //     .where((element) => element.name
+                        //         .toLowerCase()
+                        //         .contains(search.text.toLowerCase()))
+                        //     .toList();
                       },
                       onTap: () {},
                     ),
@@ -256,6 +262,7 @@ class _DocumentsState extends State<Documents> {
 
   Widget getList() {
     print("Response ${_currentResponse.toJson()}");
+
     if (currentIndex == 0)
       return ListView.builder(
         padding: EdgeInsets.only(top: 16, bottom: 20),
@@ -264,7 +271,7 @@ class _DocumentsState extends State<Documents> {
         itemBuilder: (BuildContext context, int index) {
           if (_currentResponse.data.bill[index].name
               .toLowerCase()
-              .contains(_search.text.toLowerCase()))
+              .contains(search.text.toLowerCase()))
             return MedicalBillsCard(
               nameOfBill: _currentResponse.data.bill[index].name,
               nameOfPatients: _currentResponse.data.bill[index].patient != null
@@ -312,9 +319,11 @@ class _DocumentsState extends State<Documents> {
                 }
               },
             );
+
           return Container();
         },
       );
+
     if (currentIndex == 1)
       return ListView.builder(
         padding: EdgeInsets.only(top: 16, bottom: 20),
@@ -323,7 +332,7 @@ class _DocumentsState extends State<Documents> {
         itemBuilder: (BuildContext context, int index) {
           if (_currentResponse.data.report[index].name
               .toLowerCase()
-              .contains(_search.text.toLowerCase()))
+              .contains(search.text.toLowerCase()))
             return MedicalBillsCard(
               nameOfBill: _currentResponse.data.report[index].name,
               nameOfPatients:
@@ -382,7 +391,7 @@ class _DocumentsState extends State<Documents> {
         itemBuilder: (BuildContext context, int index) {
           if (_currentResponse.data.prescription[index].doctorName
               .toLowerCase()
-              .contains(_search.text.toLowerCase()))
+              .contains(search.text.toLowerCase()))
             return MedicalBillsCard(
               nameOfBill: _currentResponse.data.prescription[index].doctorName,
               nameOfPatients:

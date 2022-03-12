@@ -48,7 +48,9 @@ class _ViewMedicineState extends State<ViewMedicine> {
       setAlarm = widget.medicne.alarmTimer;
       remainderTime = widget.medicne.reminderTime;
       _amountPill = widget.medicne.amount;
-      _listOfTimes = widget.medicne.time;
+      widget.medicne.timeObject.forEach((element) {
+        _listOfTimes.add(element.startTime);
+      });
     }
   }
 

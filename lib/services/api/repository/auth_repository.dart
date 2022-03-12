@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/model/request/add_edit_user_profile_request.dart';
+import 'package:health_bloom/model/request/add_feedback_request.dart';
 import 'package:health_bloom/model/request/add_insurance_request.dart';
 import 'package:health_bloom/model/request/add_medicine_request.dart';
 import 'package:health_bloom/model/request/add_member_request.dart';
@@ -15,10 +16,13 @@ import 'package:health_bloom/model/request/edit_member_request.dart';
 import 'package:health_bloom/model/request/edit_prescription_request.dart';
 import 'package:health_bloom/model/request/edit_report_request.dart';
 import 'package:health_bloom/model/request/get_documents_request.dart';
+import 'package:health_bloom/model/request/get_mdecine_request.dart';
+import 'package:health_bloom/model/request/get_next_medicine_response.dart';
 import 'package:health_bloom/model/request/search_insurance_request.dart';
 import 'package:health_bloom/model/request/search_mdecine_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
 import 'package:health_bloom/model/response/add_family_response.dart';
+import 'package:health_bloom/model/response/add_feedback_response.dart';
 import 'package:health_bloom/model/response/add_insurance_response.dart';
 import 'package:health_bloom/model/response/add_medicine_response.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
@@ -33,6 +37,8 @@ import 'package:health_bloom/model/response/edit_member_response.dart';
 import 'package:health_bloom/model/response/edit_prescription_response.dart';
 import 'package:health_bloom/model/response/edit_report_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
+import 'package:health_bloom/model/response/get_feedback_options_response.dart';
+import 'package:health_bloom/model/response/get_medicine_response.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/model/response/search_insurance_response.dart';
 import 'package:health_bloom/model/response/search_medicne_response.dart';
@@ -249,5 +255,33 @@ class NetworkRepository with ChangeNotifier {
     if (apiResult is Success) return apiResult.data;
     if (apiResult is Error) throw apiResult.error;
     return deleteMedicineAPI(request);
+  }
+
+  Future<GetNextMedicineResponse> getNextMedicineAPI() async {
+    Result apiResult = await apiClient.getNextMedicine();
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return getNextMedicineAPI();
+  }
+
+  Future<GetMedicineResponse> getMedicineAPI(GetMedicineRequest request) async {
+    Result apiResult = await apiClient.getMedicine(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return getMedicineAPI(request);
+  }
+
+  Future<GetFeedbackOptionsResponse> getFeedbackOptionsAPI() async {
+    Result apiResult = await apiClient.getFeedbackOptions();
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return getFeedbackOptionsAPI();
+  }
+
+  Future<AddFeedbackResponse> addFeedbackAPI(AddFeedbackRequest request) async {
+    Result apiResult = await apiClient.addFeedback(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return addFeedbackAPI(request);
   }
 }

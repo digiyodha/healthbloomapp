@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:intl/intl.dart';
 
@@ -10,8 +11,9 @@ class MedicineCard extends StatelessWidget {
   final double height;
   final double width;
   final EdgeInsetsGeometry padding;
-  final Function() edit;
+
   final Function() delete;
+  final bool hideIcon;
   const MedicineCard({
     Key key,
     this.time,
@@ -21,8 +23,8 @@ class MedicineCard extends StatelessWidget {
     this.height = 220,
     this.width = 170,
     this.padding = const EdgeInsets.only(right: 16),
-    this.edit,
     this.delete,
+    this.hideIcon = false,
   }) : super(key: key);
 
   @override
@@ -59,6 +61,24 @@ class MedicineCard extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
+                  calculateDifference(time) == 0
+                      ? TextBuilder(
+                          text: 'Today',
+                          fontSize: 16,
+                          color: kWhite,
+                          fontWeight: FontWeight.w600)
+                      : calculateDifference(time) == 1
+                          ? TextBuilder(
+                              text: 'Tomorrow',
+                              fontSize: 16,
+                              color: kWhite,
+                              fontWeight: FontWeight.w600)
+                          : TextBuilder(
+                              text: "${DateFormat('EEEE').format(time)}" ?? '',
+                              fontSize: 16,
+                              color: kWhite,
+                              fontWeight: FontWeight.w600),
+                  Spacer(),
                   Text(
                     '${DateFormat('hh:mm a').format(time).toString()}' ?? '',
                     style: TextStyle(
@@ -66,9 +86,7 @@ class MedicineCard extends StatelessWidget {
                         color: kWhite,
                         fontWeight: FontWeight.w600),
                   ),
-                  SizedBox(
-                    height: 6,
-                  ),
+                  SizedBox(height: 6),
                   Text(
                     "Dosage - ${dosages.toString()} mg" ?? '',
                     style: TextStyle(
@@ -86,24 +104,28 @@ class MedicineCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  IconButton(
-                    alignment: Alignment.centerRight,
-                    padding: EdgeInsets.symmetric(horizontal: 0),
-                    onPressed: edit,
-                    icon: Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: delete,
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                  )
+                  // hideIcon
+                  //     ? IconButton(
+                  //         alignment: Alignment.centerRight,
+                  //         padding: EdgeInsets.symmetric(horizontal: 0),
+                  //         onPressed: edit,
+                  //         icon: Icon(
+                  //           Icons.edit,
+                  //           color: Colors.white,
+                  //           size: 15,
+                  //         ),
+                  //       )
+                  //     : Container(),
+                  hideIcon
+                      ? IconButton(
+                          onPressed: delete,
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                        )
+                      : Container()
                 ],
               ),
             ),
@@ -112,4 +134,12 @@ class MedicineCard extends StatelessWidget {
       ),
     );
   }
+}
+
+final now = DateTime.now();
+int calculateDifference(DateTime date) {
+  DateTime now = DateTime.now();
+  return DateTime(date.year, date.month, date.day)
+      .difference(DateTime(now.year, now.month, now.day))
+      .inDays;
 }

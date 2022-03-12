@@ -43,6 +43,7 @@ dependencies:
   flutter_downloader: ^1.7.0
   open_file: ^3.2.1
   share: ^0.6.5+4
+  flutter_arc_text: ^0.5.0
 
 dev_dependencies:
   flutter_test:

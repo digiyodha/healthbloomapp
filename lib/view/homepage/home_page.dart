@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/medicine_card.dart';
 import 'package:health_bloom/components/textbuilder.dart';
-import 'package:health_bloom/model/request/delete_mdecine_request.dart';
-import 'package:health_bloom/model/request/search_mdecine_request.dart';
-import 'package:health_bloom/model/response/delete_medicine_response.dart';
+import 'package:health_bloom/model/request/get_next_medicine_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
-import 'package:health_bloom/model/response/search_medicne_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/view/bill/add_bill.dart';
+import 'package:health_bloom/view/medicine/about_medicine.dart';
 import 'package:health_bloom/view/medicine/add_medicine.dart';
 import 'package:health_bloom/view/medicine/list_medicine.dart';
-import 'package:health_bloom/view/medicine/view_medicine.dart';
+
+import 'package:health_bloom/view/profile/profile.dart';
 import 'package:health_bloom/view/report/add_report.dart';
 import 'package:hexagon/hexagon.dart';
 import 'package:intl/intl.dart';
@@ -59,26 +58,10 @@ class _HomePageState extends State<HomePage>
     return _response;
   }
 
-  SearchMedicineResponse _currentResponse;
-  Future searchMedicine() async {
-    setState(() {
-      _currentResponse = null;
-    });
+  Future<GetNextMedicineResponse> getNextMedicine() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    SearchMedicineResponse _response =
-        await adminAPI.searchMedicineAPI(SearchMedicineRequest(name: ''));
-    setState(() {
-      _currentResponse = _response;
-      print("Search Medicine Response ${_currentResponse.toJson()}");
-      _loading = false;
-    });
-  }
-
-  Future<DeleteMedicineResponse> deleteMedicine(
-      DeleteMedicineRequest request) async {
-    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    DeleteMedicineResponse _response =
-        await adminAPI.deleteMedicineAPI(request);
+    GetNextMedicineResponse _response = await adminAPI.getNextMedicineAPI();
+    print('length ' + _response.data.length.toString());
     return _response;
   }
 
@@ -124,7 +107,7 @@ class _HomePageState extends State<HomePage>
         CurvedAnimation(
             parent: _animationController,
             curve: Interval(0.00, 0.75, curve: _curve)));
-    searchMedicine();
+    getNextMedicine();
   }
 
   @override
@@ -192,29 +175,45 @@ class _HomePageState extends State<HomePage>
                     ),
                     sp.getString('profileImage') != null &&
                             sp.getString('profileImage') != ""
-                        ? Container(
-                            height: 46,
-                            width: 46,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              image: DecorationImage(
-                                image:
-                                    NetworkImage(sp.getString('profileImage')),
-                                fit: BoxFit.cover,
+                        ? InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Profile()));
+                            },
+                            child: Container(
+                              height: 46,
+                              width: 46,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      sp.getString('profileImage')),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           )
-                        : Container(
-                            height: 46,
-                            width: 46,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Center(
-                              child: Icon(
-                                Icons.person,
-                                color: kGrey4,
-                                size: 40,
+                        : InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Profile()));
+                            },
+                            child: Container(
+                              height: 46,
+                              width: 46,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.person,
+                                  color: kGrey4,
+                                  size: 40,
+                                ),
                               ),
                             ),
                           )
@@ -302,7 +301,7 @@ class _HomePageState extends State<HomePage>
                           ),
                         ).whenComplete(() {
                           setState(() {
-                            searchMedicine();
+                            getNextMedicine();
                           });
                         });
                       },
@@ -315,124 +314,56 @@ class _HomePageState extends State<HomePage>
                   ],
                 ),
                 SizedBox(height: 14),
-                _currentResponse == null
-                    ? CircularProgressIndicator()
-                    : _currentResponse.data.isNotEmpty
-                        ? Container(
-                            width: double.infinity,
-                            height: _currentResponse.data.length != 0 ? 220 : 0,
-                            child: ListView.builder(
-                              itemCount: _currentResponse.data.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              physics: ScrollPhysics(),
-                              padding: EdgeInsets.zero,
-                              itemBuilder: (BuildContext context, int index) {
-                                return MedicineCard(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ViewMedicine(
-                                          medicne: _currentResponse.data[index],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  medicineName:
-                                      _currentResponse.data[index].medicineName,
-                                  time: _currentResponse.data[index].time.first,
-                                  dosages: _currentResponse.data[index].dosage,
-                                  edit: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => AddMedicine(
-                                            medicine:
-                                                _currentResponse.data[index]),
-                                      ),
-                                    ).whenComplete(() {
-                                      setState(() {
-                                        searchMedicine();
-                                      });
-                                    });
-                                  },
-                                  delete: () {
-                                    showDialog(
-                                      context: context,
-                                      useSafeArea: true,
-                                      barrierDismissible: true,
-                                      builder: (context) {
-                                        return FutureBuilder(
-                                          builder: (context, snapshot) {
-                                            return AlertDialog(
-                                              title: Text(
-                                                  'Delete ${_currentResponse.data[index].medicineName}'),
-                                              content: Text('Are you sure!'),
-                                              actions: [
-                                                TextButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: TextBuilder(
-                                                        text: 'No')),
-                                                MaterialButton(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              6)),
-                                                  color: Color(0xffFF9B91),
-                                                  onPressed: () async {
-                                                    DeleteMedicineRequest
-                                                        _request =
-                                                        DeleteMedicineRequest(
-                                                            id: _currentResponse
-                                                                .data[index]
-                                                                .id);
-                                                    DeleteMedicineResponse
-                                                        _response =
-                                                        await deleteMedicine(
-                                                            _request);
-
-                                                    print(
-                                                        'Delete Medicine Request ${_request.toJson()}');
-                                                    print(
-                                                        'Delete Medicine Response ${_response.toJson()}');
-                                                    if (_response.success ==
-                                                        true) {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                              SnackBar(
-                                                        content:
-                                                            Text('deleted.'),
-                                                      ));
-
-                                                      Navigator.pop(
-                                                          context, true);
-                                                    }
-                                                  },
-                                                  child: TextBuilder(
-                                                    text: 'Yes',
-                                                    color: Colors.white,
-                                                  ),
-                                                )
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      },
-                                    ).whenComplete(() => setState(() {
-                                          searchMedicine();
-                                        }));
-                                  },
-                                );
-                              },
-                            ),
-                          )
-                        : Center(
-                            child: TextBuilder(text: 'No Medicine Found'),
-                          ),
+                FutureBuilder<GetNextMedicineResponse>(
+                  future: getNextMedicine(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return snapshot.data.data.isNotEmpty
+                          ? Container(
+                              width: double.infinity,
+                              height: snapshot.data.data.length == 0 ? 40 : 220,
+                              child: ListView.builder(
+                                itemCount: snapshot.data.data.length,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                physics: ScrollPhysics(),
+                                padding: EdgeInsets.zero,
+                                itemBuilder: (BuildContext context, int i) {
+                                  return MedicineCard(
+                                    onTap: () {
+                                      if (snapshot.data.data[i].patient != null)
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => AboutMedicine(
+                                                id: snapshot.data.data[i].id),
+                                          ),
+                                        ).whenComplete(() {
+                                          setState(() {
+                                            getNextMedicine();
+                                          });
+                                        });
+                                    },
+                                    medicineName:
+                                        snapshot.data.data[i].medicineName,
+                                    time: snapshot.data.data[i].startHour,
+                                    dosages: snapshot.data.data[i].dosage,
+                                  );
+                                },
+                              ),
+                            )
+                          : Center(
+                              child: TextBuilder(
+                                text: 'No Medicine Found',
+                                color: Colors.black,
+                              ),
+                            );
+                    } else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
+                ),
                 SizedBox(height: 14),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -850,7 +781,7 @@ class _HomePageState extends State<HomePage>
                       .whenComplete(() {
                     setState(() {
                       Navigator.pop(context);
-                      searchMedicine();
+                      getNextMedicine();
                     });
                   });
                 },

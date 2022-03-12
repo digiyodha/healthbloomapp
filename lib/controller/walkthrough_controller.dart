@@ -6,7 +6,7 @@ class WalkthroughController {
         image: 'assets/images/health-tracking.png',
         title: 'Health Tracking',
         description:
-            'Track and get reminder of your water and medicine intake'),
+            'Track and get reminder of your medicine and water intake'),
     WalkthroughModel(
         image: 'assets/images/medical-report.png',
         title: 'Medical Reports',

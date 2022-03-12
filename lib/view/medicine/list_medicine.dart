@@ -9,7 +9,7 @@ import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/medicine/add_medicine.dart';
-import 'package:health_bloom/view/medicine/view_medicine.dart';
+import 'package:health_bloom/view/medicine/list_about_medicine.dart';
 import 'package:provider/provider.dart';
 
 class ListMedicine extends StatefulWidget {
@@ -130,7 +130,7 @@ class _ListMedicineState extends State<ListMedicine> {
                                       gridDelegate:
                                           SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 2,
-                                              childAspectRatio: 0.75,
+                                              childAspectRatio: 0.65,
                                               crossAxisSpacing: 16,
                                               mainAxisSpacing: 16),
                                       itemBuilder:
@@ -139,108 +139,91 @@ class _ListMedicineState extends State<ListMedicine> {
                                             _currentResponse.data[i];
                                         return MedicineCard(
                                           onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ViewMedicine(
-                                                  medicne: medicine,
+                                            if (medicine.patient != null)
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ListAboutMedicine(
+                                                    id: medicine.id,
+                                                  ),
                                                 ),
-                                              ),
-                                            );
+                                              ).whenComplete(() {
+                                                setState(() {
+                                                  searchMedicine();
+                                                });
+                                              });
                                           },
-                                          medicineName: medicine.medicineName,
-                                          time: medicine.time.first,
-                                          dosages: medicine.dosage,
+                                          medicineName:
+                                              medicine.medicineName ?? '',
+                                          time: medicine.startHour,
+                                          dosages: medicine.dosage ?? '',
                                           height: double.infinity,
                                           width: double.infinity,
                                           padding: EdgeInsets.zero,
-                                          edit: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AddMedicine(
-                                                        medicine: medicine),
-                                              ),
-                                            ).whenComplete(() {
-                                              setState(() {
-                                                searchMedicine();
-                                              });
-                                            });
-                                          },
+                                          hideIcon: true,
                                           delete: () {
                                             showDialog(
                                               context: context,
                                               useSafeArea: true,
                                               barrierDismissible: true,
                                               builder: (context) {
-                                                return FutureBuilder(
-                                                  builder: (context, snapshot) {
-                                                    return AlertDialog(
-                                                      title: Text(
-                                                          'Delete ${medicine.medicineName}'),
-                                                      content:
-                                                          Text('Are you sure!'),
-                                                      actions: [
-                                                        TextButton(
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                            child: TextBuilder(
-                                                                text: 'No')),
-                                                        MaterialButton(
-                                                          shape: RoundedRectangleBorder(
+                                                return AlertDialog(
+                                                  title: Text(
+                                                      'Delete ${medicine.medicineName}'),
+                                                  content:
+                                                      Text('Are you sure!'),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: TextBuilder(
+                                                            text: 'No')),
+                                                    MaterialButton(
+                                                      shape:
+                                                          RoundedRectangleBorder(
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
                                                                           6)),
-                                                          color:
-                                                              Color(0xffFF9B91),
-                                                          onPressed: () async {
-                                                            DeleteMedicineRequest
-                                                                _request =
-                                                                DeleteMedicineRequest(
-                                                                    id: medicine
-                                                                        .id);
-                                                            DeleteMedicineResponse
-                                                                _response =
-                                                                await deleteMedicine(
-                                                                    _request);
+                                                      color: Color(0xffFF9B91),
+                                                      onPressed: () async {
+                                                        DeleteMedicineRequest
+                                                            _request =
+                                                            DeleteMedicineRequest(
+                                                                id: medicine
+                                                                    .id);
+                                                        DeleteMedicineResponse
+                                                            _response =
+                                                            await deleteMedicine(
+                                                                _request);
 
-                                                            print(
-                                                                'Delete Medicine Request ${_request.toJson()}');
-                                                            print(
-                                                                'Delete Medicine Response ${_response.toJson()}');
-                                                            if (_response
-                                                                    .success ==
-                                                                true) {
-                                                              ScaffoldMessenger
-                                                                      .of(
-                                                                          context)
-                                                                  .showSnackBar(
-                                                                      SnackBar(
-                                                                content: Text(
-                                                                    'deleted.'),
-                                                              ));
-                                                              // setState(() {
-                                                              //   _loading =
-                                                              //       false;
-                                                              // });
-                                                              Navigator.pop(
-                                                                  context,
-                                                                  true);
-                                                            }
-                                                          },
-                                                          child: TextBuilder(
-                                                            text: 'Yes',
-                                                            color: Colors.white,
-                                                          ),
-                                                        )
-                                                      ],
-                                                    );
-                                                  },
+                                                        print(
+                                                            'Delete Medicine Request ${_request.toJson()}');
+                                                        print(
+                                                            'Delete Medicine Response ${_response.toJson()}');
+                                                        if (_response.success ==
+                                                            true) {
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                                  SnackBar(
+                                                            content: Text(
+                                                                'deleted.'),
+                                                          ));
+
+                                                          Navigator.pop(
+                                                              context, true);
+                                                        }
+                                                      },
+                                                      child: TextBuilder(
+                                                        text: 'Yes',
+                                                        color: Colors.white,
+                                                      ),
+                                                    )
+                                                  ],
                                                 );
                                               },
                                             ).whenComplete(() => setState(() {
@@ -271,6 +254,26 @@ class _ListMedicineState extends State<ListMedicine> {
           ),
           if (_isLoading) LoadingWidget(color: Colors.white)
         ],
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(right: 16),
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return AddMedicine();
+            })).whenComplete(() => setState(() {
+                  searchMedicine();
+                }));
+          },
+          backgroundColor: Color(0xffFF9B91),
+          child: Center(
+            child: Icon(
+              Icons.add,
+              color: kWhite,
+              size: 24,
+            ),
+          ),
+        ),
       ),
     );
   }

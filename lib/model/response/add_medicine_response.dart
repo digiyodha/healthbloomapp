@@ -10,9 +10,7 @@ class AddMedicineResponse {
   factory AddMedicineResponse.fromJson(Map<String, dynamic> json) =>
       AddMedicineResponse(
         success: json["success"] == null ? null : json["success"],
-        data: json["data"] == null
-            ? null
-            : AddMedicineResponseData.fromJson(json["data"]),
+        data: json["data"] == null ? null : AddMedicineResponseData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -23,7 +21,6 @@ class AddMedicineResponse {
 
 class AddMedicineResponseData {
   AddMedicineResponseData({
-    this.time,
     this.reminderTime,
     this.alarmTimer,
     this.medicineName,
@@ -34,10 +31,11 @@ class AddMedicineResponseData {
     this.startDate,
     this.patient,
     this.userId,
+    this.createdAt,
+    this.updatedAt,
     this.id,
   });
 
-  List<DateTime> time;
   String reminderTime;
   bool alarmTimer;
   String medicineName;
@@ -48,13 +46,11 @@ class AddMedicineResponseData {
   DateTime startDate;
   String patient;
   String userId;
+  DateTime createdAt;
+  DateTime updatedAt;
   String id;
 
-  factory AddMedicineResponseData.fromJson(Map<String, dynamic> json) =>
-      AddMedicineResponseData(
-        time: json["time"] == null
-            ? null
-            : List<DateTime>.from(json["time"].map((x) => DateTime.parse(x))),
+  factory AddMedicineResponseData.fromJson(Map<String, dynamic> json) => AddMedicineResponseData(
         reminderTime:
             json["reminder_time"] == null ? null : json["reminder_time"],
         alarmTimer: json["alarm_timer"] == null ? null : json["alarm_timer"],
@@ -69,13 +65,16 @@ class AddMedicineResponseData {
             : DateTime.parse(json["start_date"]),
         patient: json["patient"] == null ? null : json["patient"],
         userId: json["user_id"] == null ? null : json["user_id"],
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
         id: json["id"] == null ? null : json["id"],
       );
 
   Map<String, dynamic> toJson() => {
-        "time": time == null
-            ? null
-            : List<dynamic>.from(time.map((x) => x.toIso8601String())),
         "reminder_time": reminderTime == null ? null : reminderTime,
         "alarm_timer": alarmTimer == null ? null : alarmTimer,
         "medicine_name": medicineName == null ? null : medicineName,
@@ -86,6 +85,8 @@ class AddMedicineResponseData {
         "start_date": startDate == null ? null : startDate.toIso8601String(),
         "patient": patient == null ? null : patient,
         "user_id": userId == null ? null : userId,
+        "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
+        "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
         "id": id == null ? null : id,
       };
 }

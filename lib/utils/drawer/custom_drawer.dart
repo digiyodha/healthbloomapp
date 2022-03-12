@@ -5,6 +5,7 @@ import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/view/documents/documents.dart';
+import 'package:health_bloom/view/feedback/feedback_page.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/insurance/insurance.dart';
 import 'package:health_bloom/view/profile/profile.dart';
@@ -168,6 +169,19 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   icon: Icons.settings,
                 ),
                 DrawerContainerWidget(
+                  text: "Feedback",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FeedbackPage(),
+                      ),
+                    );
+                  },
+                  selected: widget.selected == 8,
+                  icon: Icons.feedback,
+                ),
+                DrawerContainerWidget(
                   text: "Logout",
                   onTap: () async {
                     await _signOut();
@@ -177,7 +191,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       return SplashScreen();
                     }));
                   },
-                  selected: widget.selected == 8,
+                  selected: widget.selected == 9,
                   icon: Icons.logout,
                 ),
                 SizedBox(

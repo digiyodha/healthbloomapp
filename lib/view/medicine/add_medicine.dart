@@ -4,7 +4,7 @@ import 'package:health_bloom/model/request/add_medicine_request.dart';
 import 'package:health_bloom/model/request/edit_medicine._request.dart';
 import 'package:health_bloom/model/response/add_medicine_response.dart';
 import 'package:health_bloom/model/response/edit_medicine_response.dart';
-import 'package:health_bloom/model/response/search_medicne_response.dart';
+import 'package:health_bloom/model/response/get_medicine_response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/drop_down/custom_dropdown.dart';
 import 'package:health_bloom/utils/loading.dart';
@@ -17,9 +17,11 @@ import '../../services/api/repository/auth_repository.dart';
 import '../../utils/text_field/custom_text_field.dart';
 
 class AddMedicine extends StatefulWidget {
-  final SearchMedicineResponseDatum medicine;
-  const AddMedicine({Key key, this.medicine}) : super(key: key);
-
+  final GetMedicineResponseData medicine;
+  const AddMedicine({
+    Key key,
+    this.medicine,
+  }) : super(key: key);
   @override
   State<AddMedicine> createState() => _AddMedicineState();
 }
@@ -110,7 +112,10 @@ class _AddMedicineState extends State<AddMedicine> {
       _days.text = widget.medicine.duration;
       _familyMember.text = widget.medicine.patient.name;
       _memberId = widget.medicine.patient.id;
-      _listOfTimes = widget.medicine.time;
+      widget.medicine.timeObject.forEach((element) {
+        _listOfTimes.add(element.startTime);
+      });
+
       remainderTime = widget.medicine.reminderTime;
     }
   }
