@@ -78,7 +78,12 @@ class _DocumentsState extends State<Documents> {
   }
 
   List<GetAllDocumentsResponseBill> foundBill = [];
+  List<GetAllDocumentsResponseBill> foundReport = [];
+  List<GetAllDocumentsResponsePrescription> foundPrescription = [];
   Future getDocuments() async {
+    foundBill.clear();
+    foundReport.clear();
+    foundPrescription.clear();
     setState(() {
       _currentResponse = null;
     });
@@ -87,6 +92,15 @@ class _DocumentsState extends State<Documents> {
         GetDocumentsRequest(
             fromDate: selectedStartDate ?? null,
             toDate: selectedEndDate ?? null));
+    _response.data.bill.forEach((element) {
+      foundBill.add(element);
+    });
+    _response.data.report.forEach((element) {
+      foundReport.add(element);
+    });
+    _response.data.prescription.forEach((element) {
+      foundPrescription.add(element);
+    });
     setState(() {
       _currentResponse = _response;
     });
@@ -96,6 +110,22 @@ class _DocumentsState extends State<Documents> {
   void initState() {
     super.initState();
     getDocuments();
+  }
+
+  onSearch(String search) {
+    print('Search Query $search');
+    setState(() {
+      foundBill = _currentResponse.data.bill
+          .where((e) => e.name.toLowerCase().contains(search))
+          .toList();
+
+      foundReport = _currentResponse.data.report
+          .where((e) => e.name.toLowerCase().contains(search))
+          .toList();
+      foundPrescription = _currentResponse.data.prescription
+          .where((e) => e.doctorName.toLowerCase().contains(search))
+          .toList();
+    });
   }
 
   @override
@@ -156,15 +186,7 @@ class _DocumentsState extends State<Documents> {
                       controller: search,
                       label: "Search",
                       textInputType: TextInputType.name,
-                      onChanged: (val) {
-                        getDocuments();
-
-                        // foundBill = _currentResponse.data.bill
-                        //     .where((element) => element.name
-                        //         .toLowerCase()
-                        //         .contains(search.text.toLowerCase()))
-                        //     .toList();
-                      },
+                      onChanged: (value) => onSearch(value),
                       onTap: () {},
                     ),
                     SizedBox(height: 16),
@@ -264,186 +286,180 @@ class _DocumentsState extends State<Documents> {
     print("Response ${_currentResponse.toJson()}");
 
     if (currentIndex == 0)
-      return ListView.builder(
-        padding: EdgeInsets.only(top: 16, bottom: 20),
-        itemCount: _currentResponse.data.bill.length,
-        physics: ScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) {
-          if (_currentResponse.data.bill[index].name
-              .toLowerCase()
-              .contains(search.text.toLowerCase()))
-            return MedicalBillsCard(
-              nameOfBill: _currentResponse.data.bill[index].name,
-              nameOfPatients: _currentResponse.data.bill[index].patient != null
-                  ? _currentResponse.data.bill[index].patient.name
-                  : "-",
-              dateOfBill: _currentResponse.data.bill[index].patient != null
-                  ? _currentResponse.data.bill[index].date
-                  : null,
-              avatar: _currentResponse.data.bill[index].patient != null
-                  ? _currentResponse.data.bill[index].patient.avatar
-                  : '',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ViewBillDocuments(
-                      bill: _currentResponse.data.bill[index],
-                    ),
-                  ),
+      return foundBill.isNotEmpty
+          ? ListView.builder(
+              padding: EdgeInsets.only(top: 16, bottom: 20),
+              itemCount: foundBill.length,
+              physics: ScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) {
+                return MedicalBillsCard(
+                  nameOfBill: foundBill[index].name,
+                  nameOfPatients: foundBill[index].patient != null
+                      ? foundBill[index].patient.name
+                      : "-",
+                  dateOfBill: foundBill[index].patient != null
+                      ? foundBill[index].date
+                      : null,
+                  avatar: foundBill[index].patient != null
+                      ? foundBill[index].patient.avatar
+                      : '',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewBillDocuments(
+                          bill: foundBill[index],
+                        ),
+                      ),
+                    );
+                  },
+                  edit: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddBill(
+                          bill: foundBill[index],
+                        ),
+                      ),
+                    ).whenComplete(() => setState(() {
+                          getDocuments();
+                        }));
+                  },
+                  delete: () async {
+                    setState(() {
+                      _loading = true;
+                    });
+                    final adminAPI =
+                        Provider.of<NetworkRepository>(context, listen: false);
+                    DeleteBillResponse _response = await adminAPI.deleteBillAPI(
+                        DeleteDocumentRequest(id: foundBill[index].id));
+                    if (_response.success) {
+                      getDocuments();
+                    }
+                  },
                 );
               },
-              edit: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddBill(
-                      bill: _currentResponse.data.bill[index],
-                    ),
-                  ),
-                ).whenComplete(() => setState(() {
-                      getDocuments();
-                    }));
-              },
-              delete: () async {
-                setState(() {
-                  _loading = true;
-                });
-                final adminAPI =
-                    Provider.of<NetworkRepository>(context, listen: false);
-                DeleteBillResponse _response = await adminAPI.deleteBillAPI(
-                    DeleteDocumentRequest(
-                        id: _currentResponse.data.bill[index].id));
-                if (_response.success) {
-                  getDocuments();
-                }
-              },
+            )
+          : Center(
+              child: TextBuilder(text: 'no results found!'),
             );
-
-          return Container();
-        },
-      );
 
     if (currentIndex == 1)
-      return ListView.builder(
-        padding: EdgeInsets.only(top: 16, bottom: 20),
-        itemCount: _currentResponse.data.report.length,
-        physics: ScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) {
-          if (_currentResponse.data.report[index].name
-              .toLowerCase()
-              .contains(search.text.toLowerCase()))
-            return MedicalBillsCard(
-              nameOfBill: _currentResponse.data.report[index].name,
-              nameOfPatients:
-                  _currentResponse.data.report[index].patient != null
-                      ? _currentResponse.data.report[index].patient.name
+      return foundReport.isNotEmpty
+          ? ListView.builder(
+              padding: EdgeInsets.only(top: 16, bottom: 20),
+              itemCount: foundReport.length,
+              physics: ScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) {
+                return MedicalBillsCard(
+                  nameOfBill: foundReport[index].name,
+                  nameOfPatients: foundReport[index].patient != null
+                      ? foundReport[index].patient.name
                       : "-",
-              dateOfBill: _currentResponse.data.report[index].patient != null
-                  ? _currentResponse.data.report[index].date
-                  : null,
-              avatar: _currentResponse.data.report[index].patient != null
-                  ? _currentResponse.data.report[index].patient.avatar
-                  : '',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ViewReportDocuments(
-                      report: _currentResponse.data.report[index],
-                    ),
-                  ),
+                  dateOfBill: foundReport[index].patient != null
+                      ? foundReport[index].date
+                      : null,
+                  avatar: foundReport[index].patient != null
+                      ? foundReport[index].patient.avatar
+                      : '',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewReportDocuments(
+                          report: foundReport[index],
+                        ),
+                      ),
+                    );
+                  },
+                  edit: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            AddReport(report: foundReport[index]),
+                      ),
+                    ).whenComplete(() => setState(() {
+                          getDocuments();
+                        }));
+                  },
+                  delete: () async {
+                    setState(() {
+                      _loading = true;
+                    });
+                    final adminAPI =
+                        Provider.of<NetworkRepository>(context, listen: false);
+                    DeleteReportResponse _response =
+                        await adminAPI.deleteReportAPI(
+                            DeleteDocumentRequest(id: foundReport[index].id));
+                    if (_response.success) {
+                      getDocuments();
+                    }
+                  },
                 );
               },
-              edit: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        AddReport(report: _currentResponse.data.report[index]),
-                  ),
-                ).whenComplete(() => setState(() {
-                      getDocuments();
-                    }));
-              },
-              delete: () async {
-                setState(() {
-                  _loading = true;
-                });
-                final adminAPI =
-                    Provider.of<NetworkRepository>(context, listen: false);
-                DeleteReportResponse _response = await adminAPI.deleteReportAPI(
-                    DeleteDocumentRequest(
-                        id: _currentResponse.data.report[index].id));
-                if (_response.success) {
-                  getDocuments();
-                }
-              },
+            )
+          : Center(
+              child: TextBuilder(text: 'no results found!'),
             );
-          return Container();
-        },
-      );
     if (currentIndex == 2)
-      return ListView.builder(
-        padding: EdgeInsets.only(top: 16, bottom: 20),
-        itemCount: _currentResponse.data.prescription.length,
-        physics: ScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) {
-          if (_currentResponse.data.prescription[index].doctorName
-              .toLowerCase()
-              .contains(search.text.toLowerCase()))
-            return MedicalBillsCard(
-              nameOfBill: _currentResponse.data.prescription[index].doctorName,
-              nameOfPatients:
-                  _currentResponse.data.prescription[index].patient != null
-                      ? _currentResponse.data.prescription[index].patient.name
+      return foundPrescription.isNotEmpty
+          ? ListView.builder(
+              padding: EdgeInsets.only(top: 16, bottom: 20),
+              itemCount: foundPrescription.length,
+              physics: ScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) {
+                return MedicalBillsCard(
+                  nameOfBill: foundPrescription[index].doctorName,
+                  nameOfPatients: foundPrescription[index].patient != null
+                      ? foundPrescription[index].patient.name
                       : "-",
-              dateOfBill: _currentResponse.data.prescription[index].patient !=
-                      null
-                  ? _currentResponse.data.prescription[index].consultationDate
-                  : null,
-              avatar: _currentResponse.data.prescription[index].patient != null
-                  ? _currentResponse.data.prescription[index].patient.avatar
-                  : '',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ViewPrescriptionDocuments(
-                      prescriprion: _currentResponse.data.prescription[index],
-                    ),
-                  ),
+                  dateOfBill: foundPrescription[index].patient != null
+                      ? foundPrescription[index].consultationDate
+                      : null,
+                  avatar: foundPrescription[index].patient != null
+                      ? foundPrescription[index].patient.avatar
+                      : '',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewPrescriptionDocuments(
+                          prescriprion: foundPrescription[index],
+                        ),
+                      ),
+                    );
+                  },
+                  edit: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddPrescription(
+                            prescription: foundPrescription[index]),
+                      ),
+                    ).whenComplete(() => setState(() {
+                          getDocuments();
+                        }));
+                  },
+                  delete: () async {
+                    setState(() {
+                      _loading = true;
+                    });
+                    final adminAPI =
+                        Provider.of<NetworkRepository>(context, listen: false);
+                    DeletePrescriptionResponse _response = await adminAPI
+                        .deletePrescriptionAPI(DeleteDocumentRequest(
+                            id: foundPrescription[index].id));
+                    if (_response.success) {
+                      getDocuments();
+                    }
+                  },
                 );
               },
-              edit: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddPrescription(
-                        prescription:
-                            _currentResponse.data.prescription[index]),
-                  ),
-                ).whenComplete(() => setState(() {
-                      getDocuments();
-                    }));
-              },
-              delete: () async {
-                setState(() {
-                  _loading = true;
-                });
-                final adminAPI =
-                    Provider.of<NetworkRepository>(context, listen: false);
-                DeletePrescriptionResponse _response =
-                    await adminAPI.deletePrescriptionAPI(DeleteDocumentRequest(
-                        id: _currentResponse.data.prescription[index].id));
-                if (_response.success) {
-                  getDocuments();
-                }
-              },
+            )
+          : Center(
+              child: TextBuilder(text: 'no results found!'),
             );
-          return Container();
-        },
-      );
     return Container();
   }
 }

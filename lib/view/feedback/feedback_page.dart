@@ -209,6 +209,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                         height: 575,
                         width: double.infinity,
                         clipBehavior: Clip.antiAlias,
+                        padding: EdgeInsets.only(top: 60),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
@@ -220,7 +221,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const SizedBox(height: 60.0),
+                              // const SizedBox(height: 60.0),
                               TextBuilder(
                                 text: 'Which area that\nneed improvement?',
                                 fontSize: 20,
@@ -274,14 +275,14 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                               "Total ${feedbacckIds.toList().toString()}");
                                         },
                                         title: option.feedbackName.toString(),
-                                        bgColor: feedbacckIds
-                                                .contains(option.feedbackName)
-                                            ? Color(0xffAF8EFD)
-                                            : Colors.black,
-                                        textColor: feedbacckIds
-                                                .contains(option.feedbackName)
-                                            ? Colors.grey
-                                            : Colors.white,
+                                        bgColor:
+                                            feedbacckIds.contains(option.id)
+                                                ? Color(0xffAF8EFD)
+                                                : Colors.black,
+                                        textColor:
+                                            feedbacckIds.contains(option.id)
+                                                ? Colors.white
+                                                : Colors.white,
                                       ),
                                   ],
                                 ),
