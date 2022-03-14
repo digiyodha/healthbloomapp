@@ -21,7 +21,11 @@ var UserSchema = new Schema({
       type: String,
       enum: [null, 'A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'],
     },
-    uid: String
+    uid: String,
+    is_active: {
+      type: Boolean,
+      default: true
+    }
 
 }, {
   timestamps: true

@@ -9,6 +9,7 @@ var MedicineSchema = new Schema({
     doses: String,
     duration: String,
     start_date: Date,
+    description: String,
     reminder_time: {
         type: String,
         enum : ['Daily', 'Weekly', 'Monthly'],

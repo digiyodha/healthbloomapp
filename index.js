@@ -53,6 +53,8 @@ app.use("/v1/document", require("./routers/documentRouter"));
 app.use("/v1/insurance", require("./routers/insuranceRouter"));
 app.use("/v1/medicine", require("./routers/medicineRouter"));
 app.use("/v1/feedback", require("./routers/feedbackRouter"));
+app.use("/v1/admin", require("./routers/adminRouter"));
+
 
 
 

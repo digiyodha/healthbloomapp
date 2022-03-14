@@ -14,7 +14,7 @@ var fns = require('date-fns')
 //add Medicine
 exports.addMedicine = asyncHandler(async (req, res, next) => {
     var {medicine_name, amount, dosage, doses, duration, time, start_date,
-        reminder_time, alarm_timer, patient} = req.body;
+        reminder_time, alarm_timer, patient, description} = req.body;
     const medicine = await Medicine.create({
         medicine_name: medicine_name,
         amount: amount,
@@ -25,7 +25,8 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
         reminder_time: reminder_time,
         alarm_timer: alarm_timer,
         patient: patient, 
-        user_id: req.user._id
+        user_id: req.user._id,
+        description: description
     });
 
     var timePromise = await time.map(async function(timestamp){
@@ -53,7 +54,7 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
 //edit Medicine
 exports.editMedicine = asyncHandler(async (req, res, next) => {
     var {medicine_name, amount, dosage, doses, duration, time, start_date,
-        reminder_time, alarm_timer, patient, _id} = req.body;
+        reminder_time, alarm_timer, patient, _id, description} = req.body;
 
 
     const medicine = await Medicine.findOneAndUpdate({_id: _id},{
@@ -66,7 +67,8 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
         reminder_time: reminder_time,
         alarm_timer: alarm_timer,
         patient: patient, 
-        user_id: req.user._id
+        user_id: req.user._id,
+        description: description
     });
 
     await TimeMedicine.deleteMany({medicine_id: _id});
@@ -133,6 +135,7 @@ exports.searchMedicine = asyncHandler(async (req, res, next) => {
             alarm_timer: medicine.alarm_timer,
             patient: patientObject,
             user_id: medicine.user_id,
+            description: medicine.description,
             start_hour: nextMedicineDose.length != 0 ? nextMedicineDose[0].start_time : null
 
         });
@@ -201,7 +204,8 @@ exports.getNextMedicinesByTime = asyncHandler(async (req, res, next) => {
             alarm_timer: medicine.alarm_timer,
             patient: patientObject,
             user_id: medicine.user_id,
-            start_hour: tm.start_time
+            start_hour: tm.start_time,
+            description: medicine.description
         });
     });
     await Promise.all(medicinePromise);
@@ -260,6 +264,7 @@ exports.getMedicine = asyncHandler(async (req, res, next) => {
         patient: patientObject,
         // user: userObject
         user_id: medicine.user_id,
+        description: medicine.description,
         start_hour: nextMedicineDose.length != 0 ? nextMedicineDose[0].start_time : null
 
     };
@@ -289,6 +294,7 @@ exports.getMedicineFamily = asyncHandler(async (req, res, next) => {
             reminder_time: medicine.reminder_time,
             alarm_timer: medicine.alarm_timer,
             patient: patientObject,
+            description: medicine.description,
             // user: userObject
             user_id: medicine.user_id
 

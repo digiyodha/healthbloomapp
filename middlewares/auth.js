@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const {User} = require("../models/user");
+const {Admin} = require("../models/admin");
 const ErrorResponse = require("../utils/ErrorResponse");
 const asyncHandler = require("./asyncHandler");
 const dbConfig = require('.././config/database.js');
@@ -36,10 +37,22 @@ exports.protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-// Grants access to only certain roles
-// exports.authorize = (...roles) => (req, res, next) => {
-//   if (!roles.includes(req.user.role)) {
-//     return next(new ErrorResponse(`Not authorized to access this route`, 401));
-//   }
-//   next();
-// };
+
+exports.adminProtect = asyncHandler(async (req, res, next) => {
+  let token = req.headers['x-auth-token'] || req.query['validate-token'];
+
+  if (!token) {
+    return next(new ErrorResponse(`Not authorized to access this route`, 401));
+  }
+
+  try {
+    console.log(token);
+    // Attach found user to req.body
+    const { data: userId } = jwt.verify(token, dbConfig.JWT_SECRET);
+    console.log(jwt.verify(token, dbConfig.JWT_SECRET));
+    req.user = await Admin.findById(userId);
+    next();
+  } catch (error) {
+    next(new ErrorResponse(`Not authorized to access this route`, 401));
+  }
+});

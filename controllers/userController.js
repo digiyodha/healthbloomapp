@@ -106,8 +106,18 @@ exports.registerLoginUser = asyncHandler(async (req, res, next) => {
     userDetailsObj.state = null;
     userDetailsObj.gender = null;
     userDetailsObj.blood_group = null;
+    userDetailsObj.is_active = true;
     user = await User.create({ ...userDetailsObj });
     new_user = true;
+  }
+  else
+  {
+    if(user.is_active == false)
+    {
+      return next(
+        new ErrorResponse(`User deactivated!`, 404)
+      );
+    }
   }
   var token = jwt.sign({ data: user._id }, dbConfig.JWT_SECRET, {
     expiresIn: '12h',
