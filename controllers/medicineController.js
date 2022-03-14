@@ -89,7 +89,7 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
     if(!medicine)
     {
         return next(
-        new ErrorResponse(`Medicine creation unsuccessful`, 404)
+        new ErrorResponse(`Medicine updation unsuccessful`, 404)
         );
     }
     res.status(200).json({ success: true, data: medicine });

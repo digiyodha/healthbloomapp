@@ -138,6 +138,7 @@ exports.registerLoginUser = asyncHandler(async (req, res, next) => {
     state: user.state,
     blood_group: user.blood_group,
     x_auth_token: token,
+    is_active: user.is_active,
     new_user: new_user
   }
   res.status(200).json({ success: true, data: userData });

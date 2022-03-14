@@ -7,6 +7,8 @@ const _ = require('lodash');
 const { Admin } = require("../models/admin");
 const { Family } = require("../models/family");
 const { subDays } = require("date-fns");
+const { Medicine } = require("../models/medicine");
+
 
 
 
@@ -146,7 +148,6 @@ res.status(200).json({ success: true, data: user_object });
 
 exports.analytics = asyncHandler(async (req, res, next) => {
 
-    const {user_id} = req.body;
     var totalUsers = await User.find({});
 
     var activeUsers = await User.find({is_active: true});
