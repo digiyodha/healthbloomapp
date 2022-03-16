@@ -372,8 +372,8 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
 
   Future<void> _showNotification(Map<String, dynamic> downloadStatus) async {
     final android = AndroidNotificationDetails(
-        'channel id', 'channel name', 'channel description',
-        priority: Priority.high, importance: Importance.max);
+        'channel id', 'channel name',
+        priority: Priority.high, importance: Importance.max,channelDescription: 'channel description',);
     final iOS = IOSNotificationDetails();
     final platform = NotificationDetails(android: android, iOS: iOS);
     final json = jsonEncode(downloadStatus);

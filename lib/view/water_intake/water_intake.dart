@@ -1,7 +1,9 @@
+import 'package:cron/cron.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/main.dart';
+import 'package:health_bloom/view/water_intake/water_settings.dart';
 import '../../components/custom_contained_button.dart';
 import '../../utils/drawer/custom_drawer.dart';
 
@@ -17,27 +19,47 @@ class _WaterIntakeState extends State<WaterIntake> {
   double _percent;
   DateTime _today = DateTime.now();
   int _waterInMl;
-  int _totalIntakeDaily = 1400;
+  int _totalIntakeDaily;
+  int _glassVolume;
 
   getData() {
     setState(() {
       _waterInMl = null;
     });
+
+
+    if(sp.getInt("dailyIntake") == null){
+      sp.setInt("dailyIntake", 1500);
+      _totalIntakeDaily = 1500;
+    }else{
+      _totalIntakeDaily = sp.getInt("dailyIntake");
+    }
+
+    if(sp.getInt("glassVolume") == null){
+      sp.setInt("glassVolume", 300);
+      _glassVolume = 300;
+    }else{
+      _glassVolume = sp.getInt("glassVolume");
+    }
+
+
     if (sp.getString("${_today.day}/${_today.month}/${_today.year}") != null) {
       _waterInMl = int.parse(
           sp.getString("${_today.day}/${_today.month}/${_today.year}"));
-      if(_waterInMl > _totalIntakeDaily)
-        _waterInMl = _totalIntakeDaily;
+      if (_waterInMl > _totalIntakeDaily) _waterInMl = _totalIntakeDaily;
     } else {
       sp.setString("${_today.day}/${_today.month}/${_today.year}", "0");
       _waterInMl = 0;
     }
-    _percent = (_waterInMl/_totalIntakeDaily);
+
+
+    _percent = (_waterInMl / _totalIntakeDaily);
     setState(() {});
   }
 
-  addData(){
-    sp.setString("${_today.day}/${_today.month}/${_today.year}", _waterInMl.toString());
+  addData() {
+    sp.setString(
+        "${_today.day}/${_today.month}/${_today.year}", _waterInMl.toString());
   }
 
   @override
@@ -55,11 +77,24 @@ class _WaterIntakeState extends State<WaterIntake> {
       ),
       backgroundColor: kWhite,
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: kBlack
-        ),
+        iconTheme: IconThemeData(color: kBlack),
         elevation: 0,
         backgroundColor: kWhite,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showGeneralDialog(context: context, pageBuilder:(_,__,___){
+                return WaterSettings();
+              }).whenComplete(() {
+                getData();
+              });
+            },
+            icon: Icon(Icons.settings_outlined),
+          ),
+          SizedBox(
+            width: 4,
+          )
+        ],
       ),
       body: Column(
         children: [
@@ -133,7 +168,8 @@ class _WaterIntakeState extends State<WaterIntake> {
                           decoration: BoxDecoration(
                               color: kMainColor, shape: BoxShape.circle),
                           child: Center(
-                            child: Text("${sp.getString("${_today.day}/${_today.month}/${_today.year}") ?? ""}",
+                            child: Text(
+                              "${sp.getString("${_today.day}/${_today.month}/${_today.year}") ?? ""}",
                               style: TextStyle(fontSize: 16, color: kWhite),
                             ),
                           ),
@@ -360,7 +396,7 @@ class _WaterIntakeState extends State<WaterIntake> {
                             color: kBlack),
                         children: [
                           TextSpan(
-                            text: "Glass 200 ml",
+                            text: "Glass $_glassVolume ml",
                             style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w400,
@@ -375,15 +411,17 @@ class _WaterIntakeState extends State<WaterIntake> {
                     disabledColor: kGreyLite,
                     text: "Add Drink",
                     onPressed: () {
-                      if(_glassCount != 0){
-                        _waterInMl = int.parse(
-                            sp.getString("${_today.day}/${_today.month}/${_today.year}"));
-                        _waterInMl += 200 * _glassCount;
+                      if (_glassCount != 0) {
+                        _waterInMl = int.parse(sp.getString(
+                            "${_today.day}/${_today.month}/${_today.year}"));
+                        _waterInMl += _glassVolume * _glassCount;
                         _glassCount = 0;
                         addData();
                         getData();
-                      }else{
-                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please add the water quantity first!"),));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("Please add the water quantity first!"),
+                        ));
                       }
                     },
                     width: double.infinity,
