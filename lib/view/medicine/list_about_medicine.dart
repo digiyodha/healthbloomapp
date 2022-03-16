@@ -57,8 +57,12 @@ class _ListAboutMedicineState extends State<ListAboutMedicine> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        AddMedicine(medicine: _getMedicine.data),
+                    builder: (context) => AddMedicine(
+                      id: _getMedicine.data.id,
+                      getMedicine: _getMedicine.data,
+                      searchMedicine: null,
+                      getNextMedicine: null,
+                    ),
                   ),
                 ).whenComplete(() {
                   setState(() {
@@ -123,8 +127,8 @@ class _ListAboutMedicineState extends State<ListAboutMedicine> {
                                     ),
                                     const SizedBox(height: 10.0),
                                     TextBuilder(
-                                      text:
-                                          'Paracetamol 500mg Tablet is a medicine used to relieve pain and to reduce fever. it is used to treat many conditions such as headaches, body aches, toothaches, and the common cold. Paracetamol 500mg Tablet is a medicine used to relieve pain and reducce fever.',
+                                      text: snapshot.data.data.description
+                                          .toString(),
                                       height: 1.3,
                                       textOverflow: TextOverflow.ellipsis,
                                       fontSize: 14,
@@ -137,21 +141,25 @@ class _ListAboutMedicineState extends State<ListAboutMedicine> {
                                       children: [
                                         TextBuilder(
                                           fontSize: 14,
-                                          text:
-                                              '${snapshot.data.data.timeObject.length.toString()} times | ',
+                                          text: snapshot.data.data.timeObject
+                                                      .length !=
+                                                  1
+                                              ? '${snapshot.data.data.timeObject.length.toString()} times | '
+                                              : '${snapshot.data.data.timeObject.length.toString()} time | ',
                                           color: Color(0xff5D5D5D),
                                           fontWeight: FontWeight.w500,
                                         ),
-                                        for (final time in snapshot
-                                            .data.data.timeObject
-                                            .toList())
-                                          TextBuilder(
-                                            fontSize: 14,
-                                            text:
-                                                '${DateFormat('hh:mm a').format(time.startTime).toString().splitMapJoin(', ')}, ',
-                                            color: Color(0xff5D5D5D),
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                        TextBuilder(
+                                          text: snapshot.data.data.timeObject
+                                              .map((e) => DateFormat('hh:mm a')
+                                                  .format(e.startTime))
+                                              .toList()
+                                              .join(', ')
+                                              .toString()
+                                              .replaceAll('[]', ''),
+                                          color: Color(0xff5D5D5D),
+                                          fontWeight: FontWeight.w500,
+                                        )
                                       ],
                                     ),
                                   ],

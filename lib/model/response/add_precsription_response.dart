@@ -5,14 +5,12 @@ class AddPrescriptionResponse {
   });
 
   bool success;
-  AddPrescriptionResponseData data;
+  Data data;
 
   factory AddPrescriptionResponse.fromJson(Map<String, dynamic> json) =>
       AddPrescriptionResponse(
         success: json["success"] == null ? null : json["success"],
-        data: json["data"] == null
-            ? null
-            : AddPrescriptionResponseData.fromJson(json["data"]),
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -21,8 +19,8 @@ class AddPrescriptionResponse {
       };
 }
 
-class AddPrescriptionResponseData {
-  AddPrescriptionResponseData({
+class Data {
+  Data({
     this.prescriptionImage,
     this.doctorName,
     this.clinicName,
@@ -31,6 +29,8 @@ class AddPrescriptionResponseData {
     this.doctorAdvice,
     this.patient,
     this.userId,
+    this.createdAt,
+    this.updatedAt,
     this.id,
   });
 
@@ -42,10 +42,11 @@ class AddPrescriptionResponseData {
   String doctorAdvice;
   String patient;
   String userId;
+  DateTime createdAt;
+  DateTime updatedAt;
   String id;
 
-  factory AddPrescriptionResponseData.fromJson(Map<String, dynamic> json) =>
-      AddPrescriptionResponseData(
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
         prescriptionImage: json["prescription_image"] == null
             ? null
             : List<String>.from(json["prescription_image"].map((x) => x)),
@@ -59,6 +60,12 @@ class AddPrescriptionResponseData {
             json["doctor_advice"] == null ? null : json["doctor_advice"],
         patient: json["patient"] == null ? null : json["patient"],
         userId: json["user_id"] == null ? null : json["user_id"],
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
         id: json["id"] == null ? null : json["id"],
       );
 
@@ -75,6 +82,8 @@ class AddPrescriptionResponseData {
         "doctor_advice": doctorAdvice == null ? null : doctorAdvice,
         "patient": patient == null ? null : patient,
         "user_id": userId == null ? null : userId,
+        "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
+        "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
         "id": id == null ? null : id,
       };
 }

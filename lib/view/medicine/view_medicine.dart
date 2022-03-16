@@ -16,6 +16,7 @@ class ViewMedicine extends StatefulWidget {
 
 class _ViewMedicineState extends State<ViewMedicine> {
   TextEditingController _medicineName = TextEditingController();
+  TextEditingController _medicineDescription = TextEditingController();
   TextEditingController _dosage = TextEditingController();
   TextEditingController _dose = TextEditingController();
   TextEditingController _date = TextEditingController();
@@ -114,6 +115,16 @@ class _ViewMedicineState extends State<ViewMedicine> {
                       enabled: false,
                       controller: _medicineName,
                       label: "Medicine Name",
+                      textInputType: TextInputType.name,
+                      onChanged: (val) {},
+                      onTap: () {},
+                    ),
+                    SizedBox(height: 16),
+                    CustomTextField(
+                      maxLines: 3,
+                      controller: _medicineDescription,
+                      textCapitalization: TextCapitalization.sentences,
+                      label: "Medicine Description",
                       textInputType: TextInputType.name,
                       onChanged: (val) {},
                       onTap: () {},

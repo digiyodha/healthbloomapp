@@ -11,7 +11,7 @@ class MedicineCard extends StatelessWidget {
   final double height;
   final double width;
   final EdgeInsetsGeometry padding;
-
+  final Function() edit;
   final Function() delete;
   final bool hideIcon;
   const MedicineCard({
@@ -20,11 +20,12 @@ class MedicineCard extends StatelessWidget {
     this.dosages,
     this.onTap,
     this.medicineName,
-    this.height = 220,
+    this.height = 230,
     this.width = 170,
-    this.padding = const EdgeInsets.only(right: 16),
+    this.padding = const EdgeInsets.only(right: 8),
     this.delete,
     this.hideIcon = false,
+    this.edit,
   }) : super(key: key);
 
   @override
@@ -48,15 +49,19 @@ class MedicineCard extends StatelessWidget {
                 children: [
                   Text(
                     medicineName ?? '',
+                    // maxLines: 1,
                     style: TextStyle(
-                        fontSize: 12, color: kWhite, letterSpacing: 1.5),
+                      fontSize: 12,
+                      color: kWhite,
+                      letterSpacing: 1.5,
+                    ),
                   ),
                   Spacer(),
                   Align(
                     alignment: Alignment.center,
                     child: Container(
-                      height: 100,
-                      width: 100,
+                      height: 90,
+                      width: 90,
                       child: Image.asset("assets/images/drug2.png"),
                     ),
                   ),
@@ -99,30 +104,28 @@ class MedicineCard extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 0,
+              top: 5,
               right: 0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  // hideIcon
-                  //     ? IconButton(
-                  //         alignment: Alignment.centerRight,
-                  //         padding: EdgeInsets.symmetric(horizontal: 0),
-                  //         onPressed: edit,
-                  //         icon: Icon(
-                  //           Icons.edit,
-                  //           color: Colors.white,
-                  //           size: 15,
-                  //         ),
-                  //       )
-                  //     : Container(),
+                  hideIcon
+                      ? InkWell(
+                          onTap: edit,
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                            size: 15,
+                          ),
+                        )
+                      : Container(),
                   hideIcon
                       ? IconButton(
                           onPressed: delete,
                           icon: Icon(
                             Icons.delete,
                             color: Colors.white,
-                            size: 18,
+                            size: 15,
                           ),
                         )
                       : Container()

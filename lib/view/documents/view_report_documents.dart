@@ -254,8 +254,10 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
                                               child: Container(
                                                 height: 100,
                                                 width: 100,
-                                                child: Image.asset(
-                                                    "assets/icons/prescription.png"),
+                                                child: Image.network(
+                                                  files[index],
+                                                  // fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
                                             // Positioned(

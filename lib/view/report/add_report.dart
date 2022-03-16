@@ -316,8 +316,10 @@ class _AddReportState extends State<AddReport> {
                                                     child: Container(
                                                       height: 100,
                                                       width: 100,
-                                                      child: Image.asset(
-                                                          "assets/icons/prescription.png"),
+                                                      child: Image.network(
+                                                        files[index],
+                                                        // fit: BoxFit.cover,
+                                                      ),
                                                     ),
                                                   ),
                                                   Positioned(

@@ -268,30 +268,12 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
                                               child: Container(
                                                 height: 100,
                                                 width: 100,
-                                                child: Image.asset(
-                                                    "assets/icons/prescription.png"),
+                                                child: Image.network(
+                                                  files[index],
+                                                  // fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
-                                            // Positioned(
-                                            //   top: 10,
-                                            //   right: 18,
-                                            //   child: InkWell(
-                                            //     onTap: () {
-                                            //       files.removeAt(index);
-                                            //       setState(() {});
-                                            //     },
-                                            //     child: CircleAvatar(
-                                            //       backgroundColor:
-                                            //           Color(0xffFF9B91),
-                                            //       radius: 12,
-                                            //       child: Icon(
-                                            //         Icons.close,
-                                            //         color: kWhite,
-                                            //         size: 16,
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // )
                                           ],
                                         ),
                                       )),

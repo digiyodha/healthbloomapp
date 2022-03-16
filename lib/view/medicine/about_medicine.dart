@@ -3,6 +3,7 @@ import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/get_mdecine_request.dart';
 import 'package:health_bloom/model/response/get_medicine_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
+import 'package:health_bloom/view/medicine/add_medicine.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -18,17 +19,19 @@ class _AboutMedicineState extends State<AboutMedicine> {
   bool setAlarm = false;
   String remainderTime = 'Weekly';
 
+  GetMedicineResponse _getMedicine;
   Future<GetMedicineResponse> getMedicine() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     GetMedicineResponse _response =
         await adminAPI.getMedicineAPI(GetMedicineRequest(id: widget.id));
 
-    return _response;
+    return _getMedicine = _response;
   }
 
   @override
   void initState() {
     super.initState();
+    getMedicine();
   }
 
   @override
@@ -50,6 +53,27 @@ class _AboutMedicineState extends State<AboutMedicine> {
             fontWeight: FontWeight.w800,
           ),
           centerTitle: true,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddMedicine(
+                        id: _getMedicine.data.id,
+                        getMedicine: _getMedicine.data,
+                        searchMedicine: null,
+                        getNextMedicine: null,
+                      ),
+                    ),
+                  ).whenComplete(() {
+                    setState(() {
+                      getMedicine();
+                    });
+                  });
+                },
+                icon: Icon(Icons.edit))
+          ],
         ),
         backgroundColor: Color(0xffA283F9),
         body: SafeArea(
@@ -107,8 +131,8 @@ class _AboutMedicineState extends State<AboutMedicine> {
                                       ),
                                       const SizedBox(height: 10.0),
                                       TextBuilder(
-                                        text:
-                                            'Paracetamol 500mg Tablet is a medicine used to relieve pain and to reduce fever. it is used to treat many conditions such as headaches, body aches, toothaches, and the common cold. Paracetamol 500mg Tablet is a medicine used to relieve pain and reducce fever.',
+                                        text: snapshot.data.data.description
+                                            .toString(),
                                         height: 1.3,
                                         textOverflow: TextOverflow.ellipsis,
                                         fontSize: 14,
@@ -121,21 +145,26 @@ class _AboutMedicineState extends State<AboutMedicine> {
                                         children: [
                                           TextBuilder(
                                             fontSize: 14,
-                                            text:
-                                                '${snapshot.data.data.timeObject.length.toString()} times | ',
+                                            text: snapshot.data.data.timeObject
+                                                        .length !=
+                                                    1
+                                                ? '${snapshot.data.data.timeObject.length.toString()} times | '
+                                                : '${snapshot.data.data.timeObject.length.toString()} time | ',
                                             color: Color(0xff5D5D5D),
                                             fontWeight: FontWeight.w500,
                                           ),
-                                          for (final time in snapshot
-                                              .data.data.timeObject
-                                              .toList())
-                                            TextBuilder(
-                                              fontSize: 14,
-                                              text:
-                                                  '${DateFormat('hh:mm a').format(time.startTime).toString().splitMapJoin(', ')}, ',
-                                              color: Color(0xff5D5D5D),
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                          TextBuilder(
+                                            text: snapshot.data.data.timeObject
+                                                .map((e) =>
+                                                    DateFormat('hh:mm a')
+                                                        .format(e.startTime))
+                                                .toList()
+                                                .join(', ')
+                                                .toString()
+                                                .replaceAll('[]', ''),
+                                            color: Color(0xff5D5D5D),
+                                            fontWeight: FontWeight.w500,
+                                          )
                                         ],
                                       ),
                                     ],

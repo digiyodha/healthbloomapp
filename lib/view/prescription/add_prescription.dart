@@ -423,6 +423,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
               if (widget.prescription != null) {
                 if (_drAdvice.text.isNotEmpty &&
                     _doctor.text.isNotEmpty &&
+                    _date.text.isNotEmpty &&
                     _userAilment.text.isNotEmpty &&
                     _hospital.text.isNotEmpty &&
                     files.isNotEmpty &&
@@ -436,7 +437,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
                     doctorAdvice: _drAdvice.text,
                     clinicName: _hospital.text,
                     patient: selectedPatient,
-                    doctorName: "Dr. ${_doctor.text}",
+                    doctorName: _doctor.text,
                     prescriptionImage: files,
                     userAilment: _userAilment.text,
                   );
@@ -472,6 +473,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
               } else {
                 if (_drAdvice.text.isNotEmpty &&
                     _doctor.text.isNotEmpty &&
+                    _date.text.isNotEmpty &&
                     _userAilment.text.isNotEmpty &&
                     _hospital.text.isNotEmpty &&
                     files.isNotEmpty &&
@@ -480,11 +482,11 @@ class _AddPrescriptionState extends State<AddPrescription> {
                     _loading = true;
                   });
                   AddPrescriptionRequest _request = AddPrescriptionRequest(
-                    consultationDate: _date.text,
+                    consultationDate: selectedDate,
                     doctorAdvice: _drAdvice.text,
                     clinicName: _hospital.text,
                     patient: selectedPatient,
-                    doctorName: "Dr. ${_doctor.text}",
+                    doctorName: _doctor.text,
                     prescriptionImage: files,
                     userAilment: _userAilment.text,
                   );

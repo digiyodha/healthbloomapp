@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/medicine_card.dart';
 import 'package:health_bloom/components/textbuilder.dart';
+import 'package:health_bloom/model/request/delete_mdecine_request.dart';
 import 'package:health_bloom/model/request/get_next_medicine_response.dart';
+import 'package:health_bloom/model/response/delete_medicine_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
@@ -41,6 +43,7 @@ class _HomePageState extends State<HomePage>
   bool _loading = false;
   double _fabHeight = 56.0;
   Curve _curve = Curves.ease;
+  DateTime todayTime = DateTime.now().toUtc();
   DateTime today = DateTime.now();
   DateTime _today = DateTime.now();
   int _waterInMl;
@@ -62,6 +65,14 @@ class _HomePageState extends State<HomePage>
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     GetNextMedicineResponse _response = await adminAPI.getNextMedicineAPI();
     print('length ' + _response.data.length.toString());
+    return _response;
+  }
+
+  Future<DeleteMedicineResponse> deleteMedicine(
+      DeleteMedicineRequest request) async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    DeleteMedicineResponse _response =
+        await adminAPI.deleteMedicineAPI(request);
     return _response;
   }
 
@@ -348,6 +359,86 @@ class _HomePageState extends State<HomePage>
                                         snapshot.data.data[i].medicineName,
                                     time: snapshot.data.data[i].startHour,
                                     dosages: snapshot.data.data[i].dosage,
+                                    edit: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => AddMedicine(
+                                            id: snapshot.data.data[i].id,
+                                            getNextMedicine:
+                                                snapshot.data.data[i],
+                                            getMedicine: null,
+                                          ),
+                                        ),
+                                      ).whenComplete(() {
+                                        setState(() {
+                                          getNextMedicine();
+                                        });
+                                      });
+                                    },
+                                    delete: () {
+                                      showDialog(
+                                        context: context,
+                                        useSafeArea: true,
+                                        barrierDismissible: true,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text(
+                                                'Delete ${snapshot.data.data[i].medicineName}'),
+                                            content: Text('Are you sure!'),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child:
+                                                      TextBuilder(text: 'No')),
+                                              MaterialButton(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            6)),
+                                                color: Color(0xffFF9B91),
+                                                onPressed: () async {
+                                                  DeleteMedicineRequest
+                                                      _request =
+                                                      DeleteMedicineRequest(
+                                                          id: snapshot
+                                                              .data.data[i].id);
+                                                  DeleteMedicineResponse
+                                                      _response =
+                                                      await deleteMedicine(
+                                                          _request);
+
+                                                  print(
+                                                      'Delete Medicine Request ${_request.toJson()}');
+                                                  print(
+                                                      'Delete Medicine Response ${_response.toJson()}');
+                                                  if (_response.success ==
+                                                      true) {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                      content: Text('deleted.'),
+                                                    ));
+
+                                                    Navigator.pop(
+                                                        context, true);
+                                                  }
+                                                },
+                                                child: TextBuilder(
+                                                  text: 'Yes',
+                                                  color: Colors.white,
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      ).whenComplete(() => setState(() {
+                                            getNextMedicine();
+                                          }));
+                                    },
+                                    hideIcon: true,
                                   );
                                 },
                               ),
@@ -506,7 +597,9 @@ class _HomePageState extends State<HomePage>
                                     children: [
                                       Text(
                                         snapshot.data.data.length != 0
-                                            ? "${snapshot.data.data.length.toString()} Family Members"
+                                            ? snapshot.data.data.length == 1
+                                                ? "${snapshot.data.data.length.toString()} Family Member"
+                                                : "${snapshot.data.data.length.toString()} Family Members"
                                             : 'No Family Members',
                                         style: TextStyle(
                                             fontSize: 18,
@@ -517,9 +610,13 @@ class _HomePageState extends State<HomePage>
                                       Text(
                                         snapshot.data.data.length != 0 &&
                                                 time.isNotEmpty
-                                            ? "Updated at - ${today.difference(time.first).inHours.toString() + ' hours ago'}"
-                                            : "Updated at - ${today.difference(today).inHours.toString() + ' hours ago'}",
-                                        // "Time - ${DateFormat('hh:mm a').format().toString()}",
+                                            ? today
+                                                        .difference(time.first)
+                                                        .inHours ==
+                                                    0
+                                                ? "Updated at - ${DateFormat('hh:mm a').format(time.first.toLocal())}"
+                                                : "Updated at - ${today.difference(time.first.toLocal()).inHours.toString() + ' hours ago'}"
+                                            : "Updated at - ${today.difference(time.first.toLocal()).inHours.toString() + ' hours ago'}",
                                         style: TextStyle(
                                             fontSize: 14,
                                             color: kWhite.withOpacity(0.6),

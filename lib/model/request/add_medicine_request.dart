@@ -1,5 +1,6 @@
 class AddMedicineRequest {
   AddMedicineRequest({
+    this.description,
     this.medicineName,
     this.amount,
     this.dosage,
@@ -11,7 +12,7 @@ class AddMedicineRequest {
     this.alarmTimer,
     this.patient,
   });
-
+  String description;
   String medicineName;
   int amount;
   String dosage;
@@ -25,6 +26,7 @@ class AddMedicineRequest {
 
   factory AddMedicineRequest.fromJson(Map<String, dynamic> json) =>
       AddMedicineRequest(
+        description: json["description"] == null ? null : json["description"],
         medicineName:
             json["medicine_name"] == null ? null : json["medicine_name"],
         amount: json["amount"] == null ? null : json["amount"],
@@ -44,6 +46,7 @@ class AddMedicineRequest {
       );
 
   Map<String, dynamic> toJson() => {
+        "description": description == null ? null : description,
         "medicine_name": medicineName == null ? null : medicineName,
         "amount": amount == null ? null : amount,
         "dosage": dosage == null ? null : dosage,

@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 
 class FeedbackModel {
-  final String image;
+  final String pngImage;
+  final String jpgImage;
   final String text;
 
-  FeedbackModel({@required this.image, @required this.text});
+  FeedbackModel(
+      {@required this.pngImage, @required this.jpgImage, @required this.text});
 }

@@ -162,6 +162,24 @@ class _ListMedicineState extends State<ListMedicine> {
                                           width: double.infinity,
                                           padding: EdgeInsets.zero,
                                           hideIcon: true,
+                                          edit: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AddMedicine(
+                                                  id: medicine.id,
+                                                  getNextMedicine: null,
+                                                  getMedicine: null,
+                                                  searchMedicine: medicine,
+                                                ),
+                                              ),
+                                            ).whenComplete(() {
+                                              setState(() {
+                                                searchMedicine();
+                                              });
+                                            });
+                                          },
                                           delete: () {
                                             showDialog(
                                               context: context,

@@ -11,7 +11,7 @@ class AddPrescriptionRequest {
 
   String doctorName;
   String clinicName;
-  String consultationDate;
+  DateTime consultationDate;
   String patient;
   String userAilment;
   String doctorAdvice;
@@ -23,7 +23,7 @@ class AddPrescriptionRequest {
         clinicName: json["clinic_name"] == null ? null : json["clinic_name"],
         consultationDate: json["consultation_date"] == null
             ? null
-            : json["consultation_date"],
+            : DateTime.parse(json["consultation_date"]),
         patient: json["patient"] == null ? null : json["patient"],
         userAilment: json["user_ailment"] == null ? null : json["user_ailment"],
         doctorAdvice:
@@ -36,7 +36,9 @@ class AddPrescriptionRequest {
   Map<String, dynamic> toJson() => {
         "doctor_name": doctorName == null ? null : doctorName,
         "clinic_name": clinicName == null ? null : clinicName,
-        "consultation_date": consultationDate == null ? null : consultationDate,
+        "consultation_date": consultationDate == null
+            ? null
+            : "${consultationDate.year.toString().padLeft(4, '0')}-${consultationDate.month.toString().padLeft(2, '0')}-${consultationDate.day.toString().padLeft(2, '0')}",
         "patient": patient == null ? null : patient,
         "user_ailment": userAilment == null ? null : userAilment,
         "doctor_advice": doctorAdvice == null ? null : doctorAdvice,

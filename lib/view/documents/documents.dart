@@ -118,13 +118,22 @@ class _DocumentsState extends State<Documents> {
       foundBill = _currentResponse.data.bill
           .where((e) => e.name.toLowerCase().contains(search))
           .toList();
-
+      // foundBillByName = _currentResponse.data.bill
+      //     .where((e) => e.patient.name.toLowerCase().contains(search))
+      //     .toList();
       foundReport = _currentResponse.data.report
           .where((e) => e.name.toLowerCase().contains(search))
           .toList();
+      // foundReportByName = _currentResponse.data.report
+      //     .where((e) => e.patient.name.toLowerCase().contains(search))
+      //     .toList();
       foundPrescription = _currentResponse.data.prescription
-          .where((e) => e.doctorName.toLowerCase().contains(search))
+          .where(
+              (e) => e.patient.name.toString().toLowerCase().contains(search))
           .toList();
+      // foundPrescriptionByName = _currentResponse.data.prescription
+      //     .where((e) => e.patient.name.toLowerCase().contains(search))
+      //     .toList();
     });
   }
 
@@ -334,6 +343,10 @@ class _DocumentsState extends State<Documents> {
                     DeleteBillResponse _response = await adminAPI.deleteBillAPI(
                         DeleteDocumentRequest(id: foundBill[index].id));
                     if (_response.success) {
+                      setState(() {
+                        _loading = false;
+                      });
+
                       getDocuments();
                     }
                   },
@@ -393,6 +406,10 @@ class _DocumentsState extends State<Documents> {
                         await adminAPI.deleteReportAPI(
                             DeleteDocumentRequest(id: foundReport[index].id));
                     if (_response.success) {
+                      setState(() {
+                        _loading = false;
+                      });
+
                       getDocuments();
                     }
                   },
@@ -410,7 +427,7 @@ class _DocumentsState extends State<Documents> {
               physics: ScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 return MedicalBillsCard(
-                  nameOfBill: foundPrescription[index].doctorName,
+                  nameOfBill: 'Dr. ' + foundPrescription[index].doctorName,
                   nameOfPatients: foundPrescription[index].patient != null
                       ? foundPrescription[index].patient.name
                       : "-",
@@ -451,6 +468,9 @@ class _DocumentsState extends State<Documents> {
                         .deletePrescriptionAPI(DeleteDocumentRequest(
                             id: foundPrescription[index].id));
                     if (_response.success) {
+                      setState(() {
+                        _loading = false;
+                      });
                       getDocuments();
                     }
                   },

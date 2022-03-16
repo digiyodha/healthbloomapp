@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/add_medicine_request.dart';
 import 'package:health_bloom/model/request/edit_medicine._request.dart';
+import 'package:health_bloom/model/request/get_next_medicine_response.dart';
 import 'package:health_bloom/model/response/add_medicine_response.dart';
 import 'package:health_bloom/model/response/edit_medicine_response.dart';
 import 'package:health_bloom/model/response/get_medicine_response.dart';
+import 'package:health_bloom/model/response/search_medicne_response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/drop_down/custom_dropdown.dart';
 import 'package:health_bloom/utils/loading.dart';
@@ -17,10 +19,16 @@ import '../../services/api/repository/auth_repository.dart';
 import '../../utils/text_field/custom_text_field.dart';
 
 class AddMedicine extends StatefulWidget {
-  final GetMedicineResponseData medicine;
+  final String id;
+  final GetMedicineResponseData getMedicine;
+  final GetNextMedicineResponseDatum getNextMedicine;
+  final SearchMedicineResponseDatum searchMedicine;
   const AddMedicine({
     Key key,
-    this.medicine,
+    this.getMedicine,
+    this.id,
+    this.getNextMedicine,
+    this.searchMedicine,
   }) : super(key: key);
   @override
   State<AddMedicine> createState() => _AddMedicineState();
@@ -28,6 +36,7 @@ class AddMedicine extends StatefulWidget {
 
 class _AddMedicineState extends State<AddMedicine> {
   TextEditingController _medicineName = TextEditingController();
+  TextEditingController _medicineDescription = TextEditingController();
   TextEditingController _dosage = TextEditingController();
   TextEditingController _dose = TextEditingController();
   TextEditingController _date = TextEditingController();
@@ -100,23 +109,62 @@ class _AddMedicineState extends State<AddMedicine> {
 
     print('Start date ' + startDate.toString());
     _future = getAllmember();
-    if (widget.medicine != null) {
-      _medicineName.text = widget.medicine.medicineName.toString();
+    if (widget.getMedicine != null) {
+      _medicineName.text = widget.getMedicine.medicineName.toString();
       _date.text =
-          "${widget.medicine.startDate.day}-${widget.medicine.startDate.month}-${widget.medicine.startDate.year}";
-
-      startDate = widget.medicine.startDate;
-      setAlarm = widget.medicine.alarmTimer;
-      _dosage.text = widget.medicine.dosage;
-      _dose.text = widget.medicine.doses;
-      _days.text = widget.medicine.duration;
-      _familyMember.text = widget.medicine.patient.name;
-      _memberId = widget.medicine.patient.id;
-      widget.medicine.timeObject.forEach((element) {
+          "${widget.getMedicine.startDate.day}-${widget.getMedicine.startDate.month}-${widget.getMedicine.startDate.year}";
+      _amountPill = widget.getMedicine.amount;
+      startDate = widget.getMedicine.startDate;
+      setAlarm = widget.getMedicine.alarmTimer;
+      _dosage.text = widget.getMedicine.dosage;
+      _dose.text = widget.getMedicine.doses;
+      _days.text = widget.getMedicine.duration;
+      _familyMember.text = widget.getMedicine.patient.name;
+      _memberId = widget.getMedicine.patient.id;
+      _medicineDescription.text = widget.getMedicine.description;
+      widget.getMedicine.timeObject.forEach((element) {
         _listOfTimes.add(element.startTime);
       });
 
-      remainderTime = widget.medicine.reminderTime;
+      remainderTime = widget.getMedicine.reminderTime;
+    }
+    if (widget.getNextMedicine != null) {
+      _medicineName.text = widget.getNextMedicine.medicineName.toString();
+      _date.text =
+          "${widget.getNextMedicine.startDate.day}-${widget.getNextMedicine.startDate.month}-${widget.getNextMedicine.startDate.year}";
+      _amountPill = widget.getNextMedicine.amount;
+      startDate = widget.getNextMedicine.startDate;
+      setAlarm = widget.getNextMedicine.alarmTimer;
+      _dosage.text = widget.getNextMedicine.dosage;
+      _dose.text = widget.getNextMedicine.doses;
+      _days.text = widget.getNextMedicine.duration;
+      _familyMember.text = widget.getNextMedicine.patient.name;
+      _memberId = widget.getNextMedicine.patient.id;
+      _medicineDescription.text = widget.getNextMedicine.description;
+      widget.getNextMedicine.timeObject.forEach((element) {
+        _listOfTimes.add(element.startTime);
+      });
+
+      remainderTime = widget.getNextMedicine.reminderTime;
+    }
+    if (widget.searchMedicine != null) {
+      _medicineName.text = widget.searchMedicine.medicineName.toString();
+      _date.text =
+          "${widget.searchMedicine.startDate.day}-${widget.searchMedicine.startDate.month}-${widget.searchMedicine.startDate.year}";
+      _amountPill = widget.searchMedicine.amount;
+      startDate = widget.searchMedicine.startDate;
+      setAlarm = widget.searchMedicine.alarmTimer;
+      _dosage.text = widget.searchMedicine.dosage;
+      _dose.text = widget.searchMedicine.doses;
+      _days.text = widget.searchMedicine.duration;
+      _familyMember.text = widget.searchMedicine.patient.name;
+      _memberId = widget.searchMedicine.patient.id;
+      _medicineDescription.text = widget.searchMedicine.description;
+      widget.searchMedicine.timeObject.forEach((element) {
+        _listOfTimes.add(element.startTime);
+      });
+
+      remainderTime = widget.searchMedicine.reminderTime;
     }
   }
 
@@ -135,7 +183,9 @@ class _AddMedicineState extends State<AddMedicine> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: TextBuilder(
-          text: widget.medicine != null ? "Edit Medicine" : "Add Medicine",
+          text: widget.getMedicine != null || widget.getNextMedicine != null
+              ? "Edit Medicine"
+              : "Add Medicine",
           fontSize: 22,
           fontWeight: FontWeight.w800,
         ),
@@ -185,6 +235,16 @@ class _AddMedicineState extends State<AddMedicine> {
                             controller: _medicineName,
                             textCapitalization: TextCapitalization.sentences,
                             label: "Medicine Name",
+                            textInputType: TextInputType.name,
+                            onChanged: (val) {},
+                            onTap: () {},
+                          ),
+                          SizedBox(height: 16),
+                          CustomTextField(
+                            maxLines: 3,
+                            controller: _medicineDescription,
+                            textCapitalization: TextCapitalization.sentences,
+                            label: "Medicine Description",
                             textInputType: TextInputType.name,
                             onChanged: (val) {},
                             onTap: () {},
@@ -468,10 +528,13 @@ class _AddMedicineState extends State<AddMedicine> {
             disabledColor: kGreyLite,
             text: "Submit",
             onPressed: () async {
-              if (widget.medicine != null) {
+              if (widget.getMedicine != null ||
+                  widget.getNextMedicine != null ||
+                  widget.searchMedicine != null) {
                 if (_medicineName.text.isNotEmpty &&
                     _date.text.isNotEmpty &&
                     _dosage.text.isNotEmpty &&
+                    _medicineDescription.text.isNotEmpty &&
                     _dose.text.isNotEmpty &&
                     _days.text.isNotEmpty &&
                     _familyMember.text.isNotEmpty &&
@@ -483,8 +546,9 @@ class _AddMedicineState extends State<AddMedicine> {
                     _loading = true;
                   });
                   EditMedicineRequest _request = EditMedicineRequest(
-                    id: widget.medicine.id,
+                    id: widget.id,
                     medicineName: _medicineName.text,
+                    description: _medicineDescription.text,
                     amount: _amountPill,
                     dosage: _dosage.text,
                     doses: _dose.text,
@@ -520,6 +584,7 @@ class _AddMedicineState extends State<AddMedicine> {
               } else {
                 if (_medicineName.text.isNotEmpty &&
                     _date.text.isNotEmpty &&
+                    _medicineDescription.text.isNotEmpty &&
                     _dosage.text.isNotEmpty &&
                     _dose.text.isNotEmpty &&
                     _days.text.isNotEmpty &&
@@ -533,6 +598,7 @@ class _AddMedicineState extends State<AddMedicine> {
                   });
                   AddMedicineRequest _request = AddMedicineRequest(
                     medicineName: _medicineName.text,
+                    description: _medicineDescription.text,
                     amount: _amountPill,
                     dosage: _dosage.text,
                     doses: _dose.text,

@@ -136,6 +136,7 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
                       maxLines: 1,
                       controller: _drName,
                       enabled: false,
+                      prefix: TextBuilder(text: 'Dr. '),
                       label: "Doctor Name",
                       textInputType: TextInputType.name,
                       onChanged: (val) {},

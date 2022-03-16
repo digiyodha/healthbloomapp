@@ -11,6 +11,7 @@ import 'package:health_bloom/model/response/search_medicne_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/utils/text_field/custom_text_field.dart';
+import 'package:health_bloom/view/homepage/home_page.dart';
 
 import 'package:provider/provider.dart';
 
@@ -46,13 +47,16 @@ class _FeedbackPageState extends State<FeedbackPage> {
   List<String> feedbacckIds = [];
   int selectedIndex = 0;
   String selectedExperience;
-  String selectedImage;
+  String selectedPngImage;
+  String selectedJpgImage;
   String errorMsg = '';
   final feedback = FeedbackController();
   @override
   void initState() {
     super.initState();
-    selectedImage = feedback.feedback.first.image;
+    selectedPngImage = feedback.feedback.first.pngImage;
+    selectedJpgImage = feedback.feedback.first.jpgImage;
+    selectedExperience = feedback.feedback.first.text;
     print('feedbackOption ${feedbackOption.toList()}');
     getFeedbackOptions();
     errorMsg = '';
@@ -73,7 +77,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      backgroundColor: Color(0xffA283F9),
+      backgroundColor: Color(0xff8B80F6),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -104,9 +108,13 @@ class _FeedbackPageState extends State<FeedbackPage> {
                         fontWeight: FontWeight.w700,
                       ),
                       const SizedBox(height: 40.0),
-                      Image.asset(selectedImage,
-                          height: 110, width: 110, color: Color(0xff7FE4F0)),
-
+                      Image.asset(
+                        selectedPngImage,
+                        height: 110,
+                        width: 110,
+                        // colorBlendMode: BlendMode.softLight,
+                        // color: Color(0xff7FE4F0),
+                      ),
                       const SizedBox(height: 20.0),
                       TextBuilder(
                         text: 'I am ${selectedExperience}!',
@@ -138,15 +146,20 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                       feedback.feedback[i].text);
                                   selectedExperience =
                                       feedback.feedback[i].text;
-                                  selectedImage = feedback.feedback[i].image;
+                                  selectedPngImage =
+                                      feedback.feedback[i].pngImage;
+                                  selectedJpgImage =
+                                      feedback.feedback[i].jpgImage;
                                 });
                                 feedbackOption.isNotEmpty
                                     ? showFeedbackSheet()
                                     : ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                        content: Text(
-                                            'Please wait few seconds to load data'),
-                                      ));
+                                        .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'Please wait few seconds to load data'),
+                                        ),
+                                      );
                               },
                               child: Column(
                                 children: [
@@ -154,9 +167,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Image.asset(
-                                        feedback.feedback[i].image,
+                                        feedback.feedback[i].pngImage,
                                         height: 100,
-                                        color: Colors.white,
+
+                                        // color: Colors.white,
                                         width: 100,
                                       ),
                                     ),
@@ -188,6 +202,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
   }
 
   showFeedbackSheet() {
+    errorMsg = '';
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -278,17 +293,21 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                         bgColor:
                                             feedbacckIds.contains(option.id)
                                                 ? Color(0xffAF8EFD)
-                                                : Colors.black,
+                                                : Color(0xffF4F5FA),
                                         textColor:
                                             feedbacckIds.contains(option.id)
                                                 ? Colors.white
-                                                : Colors.white,
+                                                : Color(0xffA5A4B3),
                                       ),
                                   ],
                                 ),
                               ),
-                              const SizedBox(height: 50.0),
-                              TextBuilder(text: errorMsg.toString()),
+                              const SizedBox(height: 30.0),
+                              TextBuilder(
+                                text: errorMsg.toString(),
+                                color: Colors.red,
+                              ),
+                              const SizedBox(height: 10.0),
                               CustomButtonIcon(
                                   title: 'Submit',
                                   icon: Icons.mail,
@@ -319,10 +338,15 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                         });
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
-                                          content: Text("Added successfully!"),
+                                          content: Text(
+                                              "Yor feedback has been recorded"),
                                         ));
-                                        // await Future.delayed(Duration(seconds: 1));
-                                        Navigator.pop(context);
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => HomePage()),
+                                          (Route<dynamic> route) => false,
+                                        );
                                       }
                                     } else {
                                       setState(() {
@@ -359,11 +383,9 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                 children: [
                                   ClipOval(
                                     child: Image.asset(
-                                      selectedImage,
-                                      color: Color(0xff7FE4F0),
+                                      selectedPngImage,
                                       width: 70,
                                       height: 70,
-                                      // fit: BoxFit.cover,
                                     ),
                                   ),
                                 ],

@@ -37,6 +37,7 @@ class DeleteMedicineResponseData {
     this.createdAt,
     this.updatedAt,
     this.id,
+    this.description,
   });
 
   String reminderTime;
@@ -53,6 +54,7 @@ class DeleteMedicineResponseData {
   DateTime createdAt;
   DateTime updatedAt;
   String id;
+  String description;
 
   factory DeleteMedicineResponseData.fromJson(Map<String, dynamic> json) =>
       DeleteMedicineResponseData(
@@ -80,6 +82,7 @@ class DeleteMedicineResponseData {
             ? null
             : DateTime.parse(json["updatedAt"]),
         id: json["id"] == null ? null : json["id"],
+        description: json["description"] == null ? null : json["description"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -99,5 +102,6 @@ class DeleteMedicineResponseData {
         "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
         "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
         "id": id == null ? null : id,
+        "description": description == null ? null : description,
       };
 }

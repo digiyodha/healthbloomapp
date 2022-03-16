@@ -11,6 +11,7 @@ class EditMedicineRequest {
     this.reminderTime,
     this.alarmTimer,
     this.patient,
+    this.description,
   });
 
   String id;
@@ -24,7 +25,7 @@ class EditMedicineRequest {
   String reminderTime;
   bool alarmTimer;
   String patient;
-
+  String description;
   factory EditMedicineRequest.fromJson(Map<String, dynamic> json) =>
       EditMedicineRequest(
         id: json["_id"] == null ? null : json["_id"],
@@ -44,6 +45,7 @@ class EditMedicineRequest {
             json["reminder_time"] == null ? null : json["reminder_time"],
         alarmTimer: json["alarm_timer"] == null ? null : json["alarm_timer"],
         patient: json["patient"] == null ? null : json["patient"],
+        description: json["description"] == null ? null : json["description"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -62,5 +64,6 @@ class EditMedicineRequest {
         "reminder_time": reminderTime == null ? null : reminderTime,
         "alarm_timer": alarmTimer == null ? null : alarmTimer,
         "patient": patient == null ? null : patient,
+        "description": description == null ? null : description,
       };
 }

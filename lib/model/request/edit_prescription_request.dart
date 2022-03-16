@@ -42,7 +42,7 @@ class EditPriscriptionRequest {
         "clinic_name": clinicName == null ? null : clinicName,
         "consultation_date": consultationDate == null
             ? null
-            : consultationDate.toIso8601String(),
+            : "${consultationDate.year.toString().padLeft(4, '0')}-${consultationDate.month.toString().padLeft(2, '0')}-${consultationDate.day.toString().padLeft(2, '0')}",
         "patient": patient == null ? null : patient,
         "user_ailment": userAilment == null ? null : userAilment,
         "doctor_advice": doctorAdvice == null ? null : doctorAdvice,

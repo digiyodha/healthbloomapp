@@ -10,7 +10,9 @@ class AddMedicineResponse {
   factory AddMedicineResponse.fromJson(Map<String, dynamic> json) =>
       AddMedicineResponse(
         success: json["success"] == null ? null : json["success"],
-        data: json["data"] == null ? null : AddMedicineResponseData.fromJson(json["data"]),
+        data: json["data"] == null
+            ? null
+            : AddMedicineResponseData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -20,21 +22,21 @@ class AddMedicineResponse {
 }
 
 class AddMedicineResponseData {
-  AddMedicineResponseData({
-    this.reminderTime,
-    this.alarmTimer,
-    this.medicineName,
-    this.amount,
-    this.dosage,
-    this.doses,
-    this.duration,
-    this.startDate,
-    this.patient,
-    this.userId,
-    this.createdAt,
-    this.updatedAt,
-    this.id,
-  });
+  AddMedicineResponseData(
+      {this.reminderTime,
+      this.alarmTimer,
+      this.medicineName,
+      this.amount,
+      this.dosage,
+      this.doses,
+      this.duration,
+      this.startDate,
+      this.patient,
+      this.userId,
+      this.createdAt,
+      this.updatedAt,
+      this.id,
+      this.description});
 
   String reminderTime;
   bool alarmTimer;
@@ -49,8 +51,10 @@ class AddMedicineResponseData {
   DateTime createdAt;
   DateTime updatedAt;
   String id;
+  String description;
 
-  factory AddMedicineResponseData.fromJson(Map<String, dynamic> json) => AddMedicineResponseData(
+  factory AddMedicineResponseData.fromJson(Map<String, dynamic> json) =>
+      AddMedicineResponseData(
         reminderTime:
             json["reminder_time"] == null ? null : json["reminder_time"],
         alarmTimer: json["alarm_timer"] == null ? null : json["alarm_timer"],
@@ -72,6 +76,7 @@ class AddMedicineResponseData {
             ? null
             : DateTime.parse(json["updatedAt"]),
         id: json["id"] == null ? null : json["id"],
+        description: json["description"] == null ? null : json["description"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -88,5 +93,6 @@ class AddMedicineResponseData {
         "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
         "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
         "id": id == null ? null : id,
+        "description": description == null ? null : description,
       };
 }

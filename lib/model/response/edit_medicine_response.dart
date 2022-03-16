@@ -22,20 +22,20 @@ class EditMedicineResponse {
 }
 
 class EditMedicineResponseData {
-  EditMedicineResponseData({
-    this.time,
-    this.reminderTime,
-    this.alarmTimer,
-    this.medicineName,
-    this.amount,
-    this.dosage,
-    this.doses,
-    this.duration,
-    this.startDate,
-    this.patient,
-    this.userId,
-    this.id,
-  });
+  EditMedicineResponseData(
+      {this.time,
+      this.reminderTime,
+      this.alarmTimer,
+      this.medicineName,
+      this.amount,
+      this.dosage,
+      this.doses,
+      this.duration,
+      this.startDate,
+      this.patient,
+      this.userId,
+      this.id,
+      this.description});
 
   List<DateTime> time;
   String reminderTime;
@@ -49,6 +49,7 @@ class EditMedicineResponseData {
   String patient;
   String userId;
   String id;
+  String description;
 
   factory EditMedicineResponseData.fromJson(Map<String, dynamic> json) =>
       EditMedicineResponseData(
@@ -70,6 +71,7 @@ class EditMedicineResponseData {
         patient: json["patient"] == null ? null : json["patient"],
         userId: json["user_id"] == null ? null : json["user_id"],
         id: json["id"] == null ? null : json["id"],
+        description: json["description"] == null ? null : json["description"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -87,5 +89,6 @@ class EditMedicineResponseData {
         "patient": patient == null ? null : patient,
         "user_id": userId == null ? null : userId,
         "id": id == null ? null : id,
+        "description": description == null ? null : description,
       };
 }

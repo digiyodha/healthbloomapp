@@ -39,6 +39,7 @@ class GetNextMedicineResponseDatum {
     this.patient,
     this.userId,
     this.startHour,
+    this.description,
   });
 
   String id;
@@ -54,6 +55,7 @@ class GetNextMedicineResponseDatum {
   Patient patient;
   String userId;
   DateTime startHour;
+  String description;
 
   factory GetNextMedicineResponseDatum.fromJson(Map<String, dynamic> json) =>
       GetNextMedicineResponseDatum(
@@ -80,6 +82,7 @@ class GetNextMedicineResponseDatum {
         startHour: json["start_hour"] == null
             ? null
             : DateTime.parse(json["start_hour"]),
+        description: json["description"] == null ? null : json["description"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -98,6 +101,7 @@ class GetNextMedicineResponseDatum {
         "patient": patient == null ? null : patient.toJson(),
         "user_id": userId == null ? null : userId,
         "start_hour": startHour == null ? null : startHour.toIso8601String(),
+        "description": description == null ? null : description,
       };
 }
 
