@@ -2,7 +2,7 @@ import 'package:cron/cron.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import 'package:workmanager/workmanager.dart';
 import '../../main.dart';
 import '../../utils/colors.dart';
 
@@ -15,18 +15,8 @@ class WaterSettings extends StatefulWidget {
 
 class _WaterSettingsState extends State<WaterSettings> {
   bool _notifications = false;
-  FlutterLocalNotificationsPlugin flutterNotification;
-  Cron cron = Cron();
 
-  notificationInit(){
-    var androidInitilize = new AndroidInitializationSettings('app_icon');
-    var iOSinitilize = new IOSInitializationSettings();
-    var initilizationsSettings = new InitializationSettings(
-        android: androidInitilize, iOS: iOSinitilize);
-    flutterNotification = new FlutterLocalNotificationsPlugin();
-    flutterNotification.initialize(initilizationsSettings,
-        onSelectNotification: (String payload) {});
-  }
+  Cron cron = Cron();
 
   @override
   void initState() {
@@ -42,27 +32,9 @@ class _WaterSettingsState extends State<WaterSettings> {
     if (sp.getInt("hrs") == null) {
       sp.setInt("hrs", 1);
     }
-
-    notificationInit();
   }
 
-  Future _showNotification() async {
-    var androidDetails = new AndroidNotificationDetails(
-      "Channel ID",
-      "Desi programmer",
-      importance: Importance.max,
-      channelDescription: "This is my channel",
-    );
-    var iSODetails = new IOSNotificationDetails();
-    var generalNotificationDetails =
-        new NotificationDetails(android: androidDetails, iOS: iSODetails);
 
-    await flutterNotification.show(
-        0,
-        "Health Bloom",
-        "Its time for you to drink water.",
-        generalNotificationDetails,);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -257,12 +229,19 @@ class _WaterSettingsState extends State<WaterSettings> {
                                     sp.setBool("waterNotification", v);
 
                                     if(v){
-                                      cron.schedule(Schedule.parse('*/1 * * * *'), () async {
-                                        _showNotification();
-                                        print('every set hr');
-                                      });
+
+                                      Workmanager().registerPeriodicTask(
+                                        "2",
+                                        "waterReminder",
+                                        // When no frequency is provided the default 15 minutes is set.
+                                        // Minimum frequency is 15 min. Android will automatically change your frequency to 15 min if you have configured a lower frequency.
+                                        frequency: Duration(minutes: 16),
+                                      );
+                                      
+                                      //showNotification();
                                     }else{
-                                      cron.close();
+                                      //flutterNotification.cancelAll();
+                                      Workmanager().cancelByUniqueName("2");
                                     }
 
                                     setState(() {
