@@ -248,20 +248,38 @@ class _AboutMedicineState extends State<AboutMedicine> {
                                   children: [
                                     TextBuilder(
                                       fontSize: 14,
-                                      text: 'Program  |',
+                                      text: 'Program',
                                       color: Colors.black,
                                       fontWeight: FontWeight.w700,
                                     ),
-                                    const SizedBox(width: 5.0),
-                                    TextBuilder(
-                                      fontSize: 14,
-                                      text: 'Total *',
-                                      color: Color(0xff5D5D5D),
-                                      fontWeight: FontWeight.w500,
-                                    )
                                   ],
                                 ),
-                                const SizedBox(height: 50.0),
+                                const SizedBox(height: 20.0),
+                                TextBuilder(
+                                  fontSize: 14,
+                                  text: 'Total Tablets : ' +
+                                      snapshot.data.data.totalTablets
+                                          .toString(),
+                                  color: Color(0xff5D5D5D),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                const SizedBox(height: 10.0),
+                                TextBuilder(
+                                  fontSize: 14,
+                                  text: 'Tablets Left : ' +
+                                      snapshot.data.data.tabletsLeft.toString(),
+                                  color: Color(0xff5D5D5D),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                const SizedBox(height: 10.0),
+                                TextBuilder(
+                                  fontSize: 14,
+                                  text: 'Duration Left : ' +
+                                      snapshot.data.data.durationLeft
+                                          .toString(),
+                                  color: Color(0xff5D5D5D),
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ],
                             ),
                           ),

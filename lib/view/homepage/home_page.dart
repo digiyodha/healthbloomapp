@@ -579,7 +579,7 @@ class _HomePageState extends State<HomePage>
                               child: Icon(
                                 Icons.supervised_user_circle_sharp,
                                 color: kWhite,
-                                size: 100,
+                                size: 90,
                               ),
                             ),
                             Spacer(),
@@ -607,20 +607,24 @@ class _HomePageState extends State<HomePage>
                                             fontWeight: FontWeight.w600),
                                       ),
                                       SizedBox(height: 6),
-                                      Text(
-                                        snapshot.data.data.length != 0 &&
-                                                time.isNotEmpty
-                                            ? today
-                                                        .difference(time.first)
-                                                        .inHours ==
-                                                    0
-                                                ? "Updated at - ${DateFormat('hh:mm a').format(time.first.toLocal())}"
-                                                : "Updated at - ${today.difference(time.first.toLocal()).inHours.toString() + ' hours ago'}"
-                                            : "Updated at - ${today.difference(time.first.toLocal()).inHours.toString() + ' hours ago'}",
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: kWhite.withOpacity(0.6),
-                                            fontWeight: FontWeight.w400),
+                                      FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(
+                                          snapshot.data.data.length != 0 &&
+                                                  time.isNotEmpty
+                                              ? today
+                                                          .difference(
+                                                              time.first)
+                                                          .inHours ==
+                                                      0
+                                                  ? "Updated at - ${DateFormat('hh:mm a').format(time.first.toLocal())}"
+                                                  : "Updated at - ${today.difference(time.first.toLocal()).inHours.toString() + ' hours ago'}"
+                                              : "Updated at - ${today.difference(time.first.toLocal()).inHours.toString() + ' hours ago'}",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: kWhite.withOpacity(0.6),
+                                              fontWeight: FontWeight.w400),
+                                        ),
                                       ),
                                     ],
                                   );

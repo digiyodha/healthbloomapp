@@ -177,6 +177,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 55),
                           child: SingleChildScrollView(
+                            physics: ScrollPhysics(),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

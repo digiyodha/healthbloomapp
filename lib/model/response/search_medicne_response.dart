@@ -40,6 +40,9 @@ class SearchMedicineResponseDatum {
     this.userId,
     this.startHour,
     this.description,
+    this.totalTablets,
+    this.tabletsLeft,
+    this.durationLeft,
   });
 
   String id;
@@ -56,6 +59,9 @@ class SearchMedicineResponseDatum {
   String userId;
   DateTime startHour;
   String description;
+  int totalTablets;
+  int tabletsLeft;
+  int durationLeft;
 
   factory SearchMedicineResponseDatum.fromJson(Map<String, dynamic> json) =>
       SearchMedicineResponseDatum(
@@ -83,6 +89,11 @@ class SearchMedicineResponseDatum {
             ? null
             : DateTime.parse(json["start_hour"]),
         description: json["description"] == null ? null : json["description"],
+        totalTablets:
+            json["total_tablets"] == null ? null : json["total_tablets"],
+        tabletsLeft: json["tablets_left"] == null ? null : json["tablets_left"],
+        durationLeft:
+            json["duration_left"] == null ? null : json["duration_left"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -102,6 +113,9 @@ class SearchMedicineResponseDatum {
         "user_id": userId == null ? null : userId,
         "start_hour": startHour == null ? null : startHour.toIso8601String(),
         "description": description == null ? null : description,
+        "total_tablets": totalTablets == null ? null : totalTablets,
+        "tablets_left": tabletsLeft == null ? null : tabletsLeft,
+        "duration_left": durationLeft == null ? null : durationLeft,
       };
 }
 

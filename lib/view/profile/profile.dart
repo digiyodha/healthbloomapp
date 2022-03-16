@@ -132,6 +132,7 @@ class _ProfileState extends State<Profile> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 55),
                               child: SingleChildScrollView(
+                                physics: ScrollPhysics(),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
