@@ -7,7 +7,8 @@ const { Medicine, TimeMedicine } = require("../models/medicine");
 const { Insurance } = require("../models/insurance");
 const { Prescription } = require("../models/prescription");
 const { Report } = require("../models/report");
-var fns = require('date-fns')
+var fns = require('date-fns');
+const { Console } = require("@sentry/node/dist/integrations");
 
 
 
@@ -116,6 +117,40 @@ exports.searchMedicine = asyncHandler(async (req, res, next) => {
         var patientObject = await Family.findOne({_id: medicine.patient});
         var userObject = await User.findOne({_id: medicine.user_id});
         var timeObject = await TimeMedicine.find({medicine_id: medicine._id});
+        var amount = parseInt(medicine.amount);
+        var duration = parseInt(medicine.duration);
+        var endTime = fns.addDays(new Date(medicine.start_date), duration);
+
+
+        var number_of_tablets = 0;
+        var timePromise = await timeObject.map(async function(tm){
+
+            const days = fns.eachDayOfInterval({
+                start: new Date(tm.original_time),
+                end: new Date(tm.start_time)
+            })
+
+            var number_of_days = days.length;
+
+            number_of_tablets += number_of_days;
+        });
+        await Promise.all(timePromise);
+
+        var total_tablets = timeObject.length * medicine.duration;
+
+
+        console.log(number_of_tablets);
+        console.log(total_tablets);
+
+        var durationAfterDate = duration;
+        if(fns.isBefore(Date.now(), endTime))
+        {
+            durationAfterDate = fns.differenceInDays(
+                new Date(endTime),
+                Date.now()
+            );
+        }
+
 
         var nextMedicineDose = await TimeMedicine.find({
             user_id: req.user._id,
@@ -138,7 +173,10 @@ exports.searchMedicine = asyncHandler(async (req, res, next) => {
             patient: patientObject,
             user_id: medicine.user_id,
             description: medicine.description,
-            start_hour: nextMedicineDose.length != 0 ? nextMedicineDose[0].start_time : null
+            start_hour: nextMedicineDose.length != 0 ? nextMedicineDose[0].start_time : null,
+            total_tablets: amount * total_tablets,
+            tablets_left:  amount * (total_tablets - number_of_tablets),
+            duration_left: durationAfterDate
 
         });
     });
@@ -191,7 +229,40 @@ exports.getNextMedicinesByTime = asyncHandler(async (req, res, next) => {
         console.log(tm);
         var medicine = await Medicine.findOne({_id: tm.medicine_id});
         var patientObject = await Family.findOne({_id: medicine.patient});
-        var timeObject = await TimeMedicine.find({medicine_id: tm.medicine_id});
+        var timeObject = await TimeMedicine.find({medicine_id: medicine._id});
+        var amount = parseInt(medicine.amount);
+        var duration = parseInt(medicine.duration);
+        var endTime = fns.addDays(new Date(medicine.start_date), duration);
+
+
+        var number_of_tablets = 0;
+        var timePromise = await timeObject.map(async function(tm){
+
+            const days = fns.eachDayOfInterval({
+                start: new Date(tm.original_time),
+                end: new Date(tm.start_time)
+            })
+
+            var number_of_days = days.length;
+
+            number_of_tablets += number_of_days;
+        });
+        await Promise.all(timePromise);
+
+        var total_tablets = timeObject.length * medicine.duration;
+
+
+        console.log(number_of_tablets);
+        console.log(total_tablets);
+
+        var durationAfterDate = duration;
+        if(fns.isBefore(Date.now(), endTime))
+        {
+            durationAfterDate = fns.differenceInDays(
+                new Date(endTime),
+                Date.now()
+            );
+        }
 
         medicine_object.push({
             _id: medicine._id,
@@ -207,7 +278,10 @@ exports.getNextMedicinesByTime = asyncHandler(async (req, res, next) => {
             patient: patientObject,
             user_id: medicine.user_id,
             start_hour: tm.start_time,
-            description: medicine.description
+            description: medicine.description,
+            total_tablets: amount * total_tablets,
+            tablets_left:  amount * (total_tablets - number_of_tablets),
+            duration_left: durationAfterDate
         });
     });
     await Promise.all(medicinePromise);
@@ -236,6 +310,29 @@ exports.deleteMedicine = asyncHandler(async (req, res, next) => {
 exports.getMedicine = asyncHandler(async (req, res, next) => {
 
 
+    // var timeeObject = await TimeMedicine.find({});
+
+    // var medicinePromise = await timeeObject.map(async function(tm){
+    //     var medicine = await Medicine.findOne({_id: tm.medicine_id});
+
+    //     if(medicine)
+    //     {
+    //     let reminder_date = medicine.start_date;
+    //     let reminder_time = tm.start_time;
+
+    //     console.log(reminder_date);
+    //     console.log(reminder_time);
+    //     let reminder_date_time = reminder_date.toString().substr(0, 11) + reminder_time.toString().substr(11);
+        
+    //     console.log(new Date(reminder_date_time));
+    //     console.log("-------");
+    //             await TimeMedicine.update({_id: tm._id}, {original_time: reminder_date_time});
+
+    //     }
+
+    // });
+
+    // await Promise.all(medicinePromise);
 
     var {_id} = req.body;
     const medicine = await Medicine.findOne({_id: _id});
@@ -248,53 +345,39 @@ exports.getMedicine = asyncHandler(async (req, res, next) => {
     var patientObject = await Family.findOne({_id: medicine.patient});
     var userObject = await User.findOne({_id: medicine.user_id});
     var timeObject = await TimeMedicine.find({medicine_id: medicine._id});
-    // var amount = parseInt(medicine.amount);
-    // var duration = parseInt(medicine.duration);
-    // var endTime = fns.addDays(new Date(medicine.start_date), duration);
+    var amount = parseInt(medicine.amount);
+    var duration = parseInt(medicine.duration);
+    var endTime = fns.addDays(new Date(medicine.start_date), duration);
 
 
-    // var number_of_tablets = 0;
-    // var last_date;
-    // var timePromise = await timeObject.map(async function(tm){
+    var number_of_tablets = 0;
+    var timePromise = await timeObject.map(async function(tm){
 
-    //     console.log(tm.start_time.getTime())
-    //     const days = fns.eachDayOfInterval({
-    //         start: new Date(tm.original_time),
-    //         end: new Date(tm.end_time)
-    //       })
-        
-    //     var number_of_days = days.length;
+        const days = fns.eachDayOfInterval({
+            start: new Date(tm.original_time),
+            end: new Date(tm.start_time)
+          })
 
-    //     number_of_tablets += number_of_days;
-    //     last_date = tm.end_time
-    // });
-    // await Promise.all(timePromise);
+        var number_of_days = days.length;
 
-    // var total_tablets = 0;
+        number_of_tablets += number_of_days;
+    });
+    await Promise.all(timePromise);
 
-    // var total_tablets_days = fns.eachDayOfInterval({
-    //     start: new Date(medicine.start_time),
-    //     end: new Date(last_date)
-    //   })
-
-    // total_tablets = total_tablets_days * timeObject.length;
+    var total_tablets = timeObject.length * medicine.duration;
 
 
-    // console.log(number_of_tablets);
-    // console.log(total_tablets);
+    console.log(number_of_tablets);
+    console.log(total_tablets);
 
-    // var durationTillDate = duration;
-    // if(fns.isBefore(Date.now(), endTime))
-    // {
-    //     var durationAfterDate = fns.differenceInDays(
-    //         new Date(endTime),
-    //         Date.now()
-    //     );
-        
-    //     durationTillDate = duration - durationAfterDate
-    //     console.log(duration);
-    //     console.log(durationAfterDate)
-    // }
+    var durationAfterDate = duration;
+    if(fns.isBefore(Date.now(), endTime))
+    {
+         durationAfterDate = fns.differenceInDays(
+            new Date(endTime),
+            Date.now()
+        );
+    }
 
     var nextMedicineDose = await TimeMedicine.find({
         user_id: req.user._id,
@@ -321,9 +404,9 @@ exports.getMedicine = asyncHandler(async (req, res, next) => {
         user_id: medicine.user_id,
         description: medicine.description,
         start_hour: nextMedicineDose.length != 0 ? nextMedicineDose[0].start_time : null,
-        // total_tablets: amount * duration,
-        // tablets_till_date: durationTillDate * amount,
-        // durationTillDate: durationTillDate
+        total_tablets: amount * total_tablets,
+        tablets_left:  amount * (total_tablets - number_of_tablets),
+        duration_left: durationAfterDate
 
 
     };
@@ -340,6 +423,47 @@ exports.getMedicineFamily = asyncHandler(async (req, res, next) => {
         var patientObject = await Family.findOne({_id: medicine.patient});
         var userObject = await User.findOne({_id: medicine.user_id});
         var timeObject = await TimeMedicine.find({medicine_id: medicine._id});
+        var amount = parseInt(medicine.amount);
+        var duration = parseInt(medicine.duration);
+        var endTime = fns.addDays(new Date(medicine.start_date), duration);
+
+
+        var number_of_tablets = 0;
+        var timePromise = await timeObject.map(async function(tm){
+
+            const days = fns.eachDayOfInterval({
+                start: new Date(tm.original_time),
+                end: new Date(tm.start_time)
+            })
+
+            var number_of_days = days.length;
+
+            number_of_tablets += number_of_days;
+        });
+        await Promise.all(timePromise);
+
+        var total_tablets = timeObject.length * medicine.duration;
+
+
+        console.log(number_of_tablets);
+        console.log(total_tablets);
+
+        var durationAfterDate = duration;
+        if(fns.isBefore(Date.now(), endTime))
+        {
+            durationAfterDate = fns.differenceInDays(
+                new Date(endTime),
+                Date.now()
+            );
+        }
+
+        var nextMedicineDose = await TimeMedicine.find({
+            user_id: req.user._id,
+            is_active: true,
+            medicine_id: medicine._id
+        }
+        ).sort({'start_time': 1});
+
 
         medicine_object.push({
             _id: medicine._id,
@@ -355,7 +479,11 @@ exports.getMedicineFamily = asyncHandler(async (req, res, next) => {
             patient: patientObject,
             description: medicine.description,
             // user: userObject
-            user_id: medicine.user_id
+            user_id: medicine.user_id,
+            start_hour: nextMedicineDose.length != 0 ? nextMedicineDose[0].start_time : null,
+            total_tablets: amount * total_tablets,
+            tablets_left:  amount * (total_tablets - number_of_tablets),
+            duration_left: durationAfterDate
 
         });
     });
