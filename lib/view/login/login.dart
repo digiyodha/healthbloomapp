@@ -38,7 +38,7 @@ class _LoginState extends State<Login> {
     });
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     RegisterLoginResponse _response = await adminAPI.loginAPI(request);
-    if (_response.success) {
+    if (_response.success == true) {
       sp.setString('id', _response.data.id);
       sp.setString('email', _response.data.emailId);
       sp.setString('name', _response.data.name);
@@ -50,8 +50,11 @@ class _LoginState extends State<Login> {
         (Route<dynamic> route) => false,
       );
     } else {
+      setState(() {
+        _loading = false;
+      });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Error Occurred"),
+        content: Text(_response.error.toString()),
       ));
     }
     setState(() {
@@ -301,23 +304,25 @@ class _LoginState extends State<Login> {
                                           setState(() {
                                             _loading = true;
                                           });
-                                          final UserCredential user = await _auth
-                                              .signInWithEmailAndPassword(
+                                          final UserCredential user =
+                                              await _auth
+                                                  .signInWithEmailAndPassword(
                                             email: _email.text,
                                             password: _password.text,
                                           );
 
                                           if (user.user.emailVerified) {
                                             await loginUser(RegisterLoginRequest(
-                                                name:
-                                                    _auth.currentUser.displayName ??
-                                                        "",
+                                                name: _auth.currentUser
+                                                        .displayName ??
+                                                    "",
                                                 emailId:
-                                                    _auth.currentUser.email ?? "",
-                                                uid: _auth.currentUser.uid,
-                                                avatar:
-                                                    _auth.currentUser.photoURL ??
+                                                    _auth.currentUser.email ??
                                                         "",
+                                                uid: _auth.currentUser.uid,
+                                                avatar: _auth
+                                                        .currentUser.photoURL ??
+                                                    "",
                                                 phoneNumber: null,
                                                 countryCode: null));
                                           } else {
@@ -340,7 +345,8 @@ class _LoginState extends State<Login> {
                                               content: Text(
                                                   'No user found for that email.'),
                                             ));
-                                          } else if (e.code == 'wrong-password') {
+                                          } else if (e.code ==
+                                              'wrong-password') {
                                             setState(() {
                                               _loading = false;
                                             });
@@ -357,8 +363,8 @@ class _LoginState extends State<Login> {
                                         });
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
-                                          content:
-                                              Text('Please fill all the details'),
+                                          content: Text(
+                                              'Please fill all the details'),
                                         ));
                                       }
                                     },
@@ -452,7 +458,8 @@ class _LoginState extends State<Login> {
                                 setState(() {
                                   _loading = true;
                                 });
-                                UserCredential cred = await signInWithFacebook();
+                                UserCredential cred =
+                                    await signInWithFacebook();
                                 Future.delayed(Duration(seconds: 1))
                                     .whenComplete(() async {
                                   setState(() {
