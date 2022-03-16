@@ -22,7 +22,7 @@ class MedicineCard extends StatelessWidget {
     this.medicineName,
     this.height = 230,
     this.width = 170,
-    this.padding = const EdgeInsets.only(right: 8),
+    this.padding = const EdgeInsets.only(right: 12),
     this.delete,
     this.hideIcon = false,
     this.edit,
@@ -104,10 +104,10 @@ class MedicineCard extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 5,
+              top: 12,
               right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   hideIcon
                       ? InkWell(
@@ -115,7 +115,7 @@ class MedicineCard extends StatelessWidget {
                           child: Icon(
                             Icons.edit,
                             color: Colors.white,
-                            size: 15,
+                            size: 18,
                           ),
                         )
                       : Container(),
@@ -125,7 +125,7 @@ class MedicineCard extends StatelessWidget {
                           icon: Icon(
                             Icons.delete,
                             color: Colors.white,
-                            size: 15,
+                            size: 18,
                           ),
                         )
                       : Container()
