@@ -33,6 +33,7 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
 
         var timeMedicine = await TimeMedicine.create({
             start_time: timestamp,
+            original_time: timestamp,
             end_time: fns.addDays(new Date(timestamp), parseInt(duration)),
             medicine_id: medicine._id,
             is_active: true,
@@ -76,6 +77,7 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
     var timePromise = await time.map(async function(timestamp){
 
         var timeMedicine = await TimeMedicine.create({
+            original_time: timestamp,
             start_time: timestamp,
             end_time: fns.addDays(new Date(timestamp), parseInt(duration)),
             medicine_id: _id,
@@ -232,6 +234,9 @@ exports.deleteMedicine = asyncHandler(async (req, res, next) => {
 
 //get medicine
 exports.getMedicine = asyncHandler(async (req, res, next) => {
+
+
+
     var {_id} = req.body;
     const medicine = await Medicine.findOne({_id: _id});
     if(!medicine)
@@ -243,12 +248,62 @@ exports.getMedicine = asyncHandler(async (req, res, next) => {
     var patientObject = await Family.findOne({_id: medicine.patient});
     var userObject = await User.findOne({_id: medicine.user_id});
     var timeObject = await TimeMedicine.find({medicine_id: medicine._id});
+    // var amount = parseInt(medicine.amount);
+    // var duration = parseInt(medicine.duration);
+    // var endTime = fns.addDays(new Date(medicine.start_date), duration);
+
+
+    // var number_of_tablets = 0;
+    // var last_date;
+    // var timePromise = await timeObject.map(async function(tm){
+
+    //     console.log(tm.start_time.getTime())
+    //     const days = fns.eachDayOfInterval({
+    //         start: new Date(tm.original_time),
+    //         end: new Date(tm.end_time)
+    //       })
+        
+    //     var number_of_days = days.length;
+
+    //     number_of_tablets += number_of_days;
+    //     last_date = tm.end_time
+    // });
+    // await Promise.all(timePromise);
+
+    // var total_tablets = 0;
+
+    // var total_tablets_days = fns.eachDayOfInterval({
+    //     start: new Date(medicine.start_time),
+    //     end: new Date(last_date)
+    //   })
+
+    // total_tablets = total_tablets_days * timeObject.length;
+
+
+    // console.log(number_of_tablets);
+    // console.log(total_tablets);
+
+    // var durationTillDate = duration;
+    // if(fns.isBefore(Date.now(), endTime))
+    // {
+    //     var durationAfterDate = fns.differenceInDays(
+    //         new Date(endTime),
+    //         Date.now()
+    //     );
+        
+    //     durationTillDate = duration - durationAfterDate
+    //     console.log(duration);
+    //     console.log(durationAfterDate)
+    // }
+
     var nextMedicineDose = await TimeMedicine.find({
         user_id: req.user._id,
         is_active: true,
         medicine_id: medicine._id
     }
-    ).sort({'start_time': 1}).limit(1);
+    ).sort({'start_time': 1});
+
+    console.log(nextMedicineDose.length)
 
     var medicine_object = {
         _id: medicine._id,
@@ -265,7 +320,11 @@ exports.getMedicine = asyncHandler(async (req, res, next) => {
         // user: userObject
         user_id: medicine.user_id,
         description: medicine.description,
-        start_hour: nextMedicineDose.length != 0 ? nextMedicineDose[0].start_time : null
+        start_hour: nextMedicineDose.length != 0 ? nextMedicineDose[0].start_time : null,
+        // total_tablets: amount * duration,
+        // tablets_till_date: durationTillDate * amount,
+        // durationTillDate: durationTillDate
+
 
     };
     res.status(200).json({ success: true, data: medicine_object });

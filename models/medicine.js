@@ -34,6 +34,7 @@ var MedicineSchema = new Schema({
 var TimeSchema = new Schema({
     start_time: Date,
     end_time: Date,
+    original_time: Date,
     medicine_id: {
         type: Schema.Types.ObjectId,
         ref: 'Medicine'

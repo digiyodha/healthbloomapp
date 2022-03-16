@@ -12,6 +12,7 @@ const http = require("http");
 
 
 
+
 mongoose.Promise = global.Promise;
 mongoose.plugin(toJson);
 
@@ -62,7 +63,7 @@ app.use("/v1/admin", require("./routers/adminRouter"));
 
 // app.use("/api/v1/attempts", require("./routers/attemptRouter"));
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 
 var port = process.env.PORT || 5000
@@ -73,6 +74,8 @@ app.use("*", (req, res) => {
     error: "Not a valid route",
   });
 });
+
+
 
 
 
