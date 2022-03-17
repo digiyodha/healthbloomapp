@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:health_bloom/components/custom_contained_button.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
@@ -177,7 +177,7 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
                     CustomTextField(
                       maxLines: 3,
                       enabled: false,
-                      controller: _userAilment,
+                      controller: _drAdvice,
                       label: "Dr Advice",
                       textInputType: TextInputType.name,
                       onChanged: (val) {},
@@ -190,128 +190,96 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
                           Container(
                             width: double.infinity,
                             child: Wrap(
+                              runSpacing: 20,
+                              spacing: 20,
+                              alignment: WrapAlignment.start,
+                              runAlignment: WrapAlignment.start,
                               children: List.generate(
-                                  files.length,
-                                  (index) => Container(
-                                        height: 100,
-                                        width: 100,
-                                        child: Stack(
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return AlertDialog(
-                                                        content: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text(
-                                                                  'Image',
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          20,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600),
-                                                                ),
-                                                                GestureDetector(
-                                                                  child: Icon(
-                                                                      Icons
-                                                                          .close),
-                                                                  onTap: () {
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                )
-                                                              ],
-                                                            ),
-                                                            SizedBox(
-                                                              height: 16,
-                                                            ),
-                                                            Container(
-                                                              margin: EdgeInsets
-                                                                  .all(1),
-                                                              height: 325,
-                                                              width: double
-                                                                  .infinity,
-                                                              child:
-                                                                  Image.network(
-                                                                files[index],
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 16,
-                                                            ),
-                                                            CustomContainedButton(
-                                                              text: "Download",
-                                                              textSize: 20,
-                                                              weight: FontWeight
-                                                                  .w600,
-                                                              height: 48,
-                                                              width: 328,
-                                                              onPressed:
-                                                                  () async {
-                                                                await _download(
-                                                                    '${date.day}-${date.month}-${date.year}-${date.millisecond}.jpg',
-                                                                    files[
-                                                                        index]);
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                            )
-                                                          ],
-                                                        ),
-                                                      );
-                                                    },
-                                                    barrierDismissible: false);
-                                              },
-                                              child: Container(
-                                                height: 100,
-                                                width: 100,
-                                                child: Image.asset(
-                                                    "assets/icons/prescription.png"),
+                                files.length,
+                                (index) => Container(
+                                  height: 100,
+                                  width: 100,
+                                  child: InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        'Image',
+                                                        style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                      ),
+                                                      GestureDetector(
+                                                        child:
+                                                            Icon(Icons.close),
+                                                        onTap: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      )
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 16),
+                                                  Container(
+                                                    margin: EdgeInsets.all(1),
+                                                    height: 325,
+                                                    width: double.infinity,
+                                                    child: CachedNetworkImage(
+                                                      imageUrl: files[index],
+                                                      fit: BoxFit.cover,
+                                                      progressIndicatorBuilder:
+                                                          (context, url,
+                                                                  downloadProgress) =>
+                                                              Center(
+                                                        child: CircularProgressIndicator(
+                                                            value:
+                                                                downloadProgress
+                                                                    .progress),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                            // Positioned(
-                                            //   top: 10,
-                                            //   right: 18,
-                                            //   child: InkWell(
-                                            //     onTap: () {
-                                            //       files.removeAt(index);
-                                            //       setState(() {});
-                                            //     },
-                                            //     child: CircleAvatar(
-                                            //       backgroundColor:
-                                            //           Color(0xffFF9B91),
-                                            //       radius: 12,
-                                            //       child: Icon(
-                                            //         Icons.close,
-                                            //         color: kWhite,
-                                            //         size: 16,
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // )
-                                          ],
+                                            );
+                                          },
+                                          barrierDismissible: false);
+                                    },
+                                    child: Container(
+                                      height: 90,
+                                      width: 90,
+                                      child: CachedNetworkImage(
+                                        imageUrl: files[index],
+                                        width: 90,
+                                        height: 90,
+                                        fit: BoxFit.cover,
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                Center(
+                                          child: CircularProgressIndicator(
+                                              value: downloadProgress.progress),
                                         ),
-                                      )),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                          SizedBox(
-                            height: 24,
-                          ),
+                          SizedBox(height: 24),
                         ],
                       ),
                     SizedBox(
@@ -398,8 +366,12 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
 
   Future<void> _showNotification(Map<String, dynamic> downloadStatus) async {
     final android = AndroidNotificationDetails(
-        'channel id', 'channel name',
-        priority: Priority.high, importance: Importance.max,channelDescription: 'channel description',);
+      'channel id',
+      'channel name',
+      priority: Priority.high,
+      importance: Importance.max,
+      channelDescription: 'channel description',
+    );
     final iOS = IOSNotificationDetails();
     final platform = NotificationDetails(android: android, iOS: iOS);
     final json = jsonEncode(downloadStatus);

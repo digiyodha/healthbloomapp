@@ -116,24 +116,22 @@ class _DocumentsState extends State<Documents> {
     print('Search Query $search');
     setState(() {
       foundBill = _currentResponse.data.bill
-          .where((e) => e.name.toLowerCase().contains(search))
+          .where((e) =>
+              e.name.toLowerCase().contains(search) ||
+              e.patient.name.toLowerCase().contains(search))
           .toList();
-      // foundBillByName = _currentResponse.data.bill
-      //     .where((e) => e.patient.name.toLowerCase().contains(search))
-      //     .toList();
+
       foundReport = _currentResponse.data.report
-          .where((e) => e.name.toLowerCase().contains(search))
+          .where((e) =>
+              e.name.toLowerCase().contains(search) ||
+              e.patient.name.toLowerCase().contains(search))
           .toList();
-      // foundReportByName = _currentResponse.data.report
-      //     .where((e) => e.patient.name.toLowerCase().contains(search))
-      //     .toList();
+
       foundPrescription = _currentResponse.data.prescription
-          .where(
-              (e) => e.patient.name.toString().toLowerCase().contains(search))
+          .where((e) =>
+              e.patient.name.toString().toLowerCase().contains(search) ||
+              e.doctorName.toLowerCase().contains(search))
           .toList();
-      // foundPrescriptionByName = _currentResponse.data.prescription
-      //     .where((e) => e.patient.name.toLowerCase().contains(search))
-      //     .toList();
     });
   }
 

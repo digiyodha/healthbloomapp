@@ -89,13 +89,8 @@ class _AboutMedicineState extends State<AboutMedicine> {
                         Stack(
                           alignment: Alignment.bottomCenter,
                           children: [
-                            Container(
-                              height: 375,
-                              width: double.infinity,
-                            ),
-                            SizedBox(
-                              height: 320,
-                              width: double.infinity,
+                            Padding(
+                              padding: const EdgeInsets.only(top: 50),
                               child: Card(
                                 elevation: 3,
                                 shape: RoundedRectangleBorder(
@@ -104,70 +99,74 @@ class _AboutMedicineState extends State<AboutMedicine> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 20, horizontal: 20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(height: 50.0),
-                                      Center(
-                                        child: TextBuilder(
-                                          text:
-                                              snapshot.data.data.medicineName ??
-                                                  '',
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.black,
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: 50.0),
+                                        Center(
+                                          child: TextBuilder(
+                                            text: snapshot
+                                                    .data.data.medicineName ??
+                                                '',
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 10.0),
-                                      Center(
-                                        child: TextBuilder(
-                                          text:
-                                              'Dosage : ${snapshot.data.data.dosage}mg',
-                                          fontSize: 14,
-                                          color: Color(0xff5D5D5D),
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 10.0),
-                                      TextBuilder(
-                                        text: snapshot.data.data.description
-                                            .toString(),
-                                        height: 1.3,
-                                        textOverflow: TextOverflow.ellipsis,
-                                        fontSize: 14,
-                                        maxLines: 6,
-                                        color: Color(0xff5D5D5D),
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      const SizedBox(height: 25.0),
-                                      Row(
-                                        children: [
-                                          TextBuilder(
+                                        const SizedBox(height: 10.0),
+                                        Center(
+                                          child: TextBuilder(
+                                            text:
+                                                'Dosage : ${snapshot.data.data.dosage}mg',
                                             fontSize: 14,
-                                            text: snapshot.data.data.timeObject
-                                                        .length !=
-                                                    1
-                                                ? '${snapshot.data.data.timeObject.length.toString()} times | '
-                                                : '${snapshot.data.data.timeObject.length.toString()} time | ',
                                             color: Color(0xff5D5D5D),
                                             fontWeight: FontWeight.w500,
                                           ),
-                                          TextBuilder(
-                                            text: snapshot.data.data.timeObject
-                                                .map((e) =>
-                                                    DateFormat('hh:mm a')
-                                                        .format(e.startTime))
-                                                .toList()
-                                                .join(', ')
-                                                .toString()
-                                                .replaceAll('[]', ''),
-                                            color: Color(0xff5D5D5D),
-                                            fontWeight: FontWeight.w500,
-                                          )
-                                        ],
-                                      ),
-                                    ],
+                                        ),
+                                        const SizedBox(height: 10.0),
+                                        TextBuilder(
+                                          text: snapshot.data.data.description
+                                              .toString(),
+                                          height: 1.3,
+                                          // textOverflow: TextOverflow.ellipsis,
+                                          fontSize: 14,
+                                          // maxLines: 6,
+                                          color: Color(0xff5D5D5D),
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        const SizedBox(height: 25.0),
+                                        Row(
+                                          children: [
+                                            TextBuilder(
+                                              fontSize: 14,
+                                              text: snapshot.data.data
+                                                          .timeObject.length !=
+                                                      1
+                                                  ? '${snapshot.data.data.timeObject.length.toString()} times | '
+                                                  : '${snapshot.data.data.timeObject.length.toString()} time | ',
+                                              color: Color(0xff5D5D5D),
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            TextBuilder(
+                                              text: snapshot
+                                                  .data.data.timeObject
+                                                  .map((e) =>
+                                                      DateFormat('hh:mm a')
+                                                          .format(e.startTime))
+                                                  .toList()
+                                                  .join(', ')
+                                                  .toString()
+                                                  .replaceAll('[]', ''),
+                                              color: Color(0xff5D5D5D),
+                                              fontWeight: FontWeight.w500,
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -175,33 +174,35 @@ class _AboutMedicineState extends State<AboutMedicine> {
                             Positioned(
                               top: 0,
                               width: 100,
-                              child: Card(
-                                elevation: 3,
-                                clipBehavior: Clip.antiAlias,
-                                shadowColor: Color(0xffEDE8FB),
-                                color: Color(0xffF9F9FB),
-                                margin: EdgeInsets.zero,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: ClipOval(
-                                  child: Container(
-                                    height: 100,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Color(0xffEDE8FB),
-                                          offset: Offset(15, 15),
-                                          spreadRadius: 15,
-                                          blurRadius: 20,
-                                          blurStyle: BlurStyle.outer,
-                                        ),
-                                      ],
-                                      color: Colors.white,
+                              child: Center(
+                                child: Card(
+                                  elevation: 3,
+                                  clipBehavior: Clip.antiAlias,
+                                  shadowColor: Color(0xffEDE8FB),
+                                  color: Color(0xffF9F9FB),
+                                  margin: EdgeInsets.zero,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: ClipOval(
+                                    child: Container(
+                                      height: 100,
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color(0xffEDE8FB),
+                                            offset: Offset(15, 15),
+                                            spreadRadius: 15,
+                                            blurRadius: 20,
+                                            blurStyle: BlurStyle.outer,
+                                          ),
+                                        ],
+                                        color: Colors.white,
+                                      ),
+                                      child: Image.asset(
+                                          'assets/images/drug1.png'),
                                     ),
-                                    child:
-                                        Image.asset('assets/images/drug1.png'),
                                   ),
                                 ),
                               ),
