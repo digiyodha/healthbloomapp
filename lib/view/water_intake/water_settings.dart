@@ -274,7 +274,10 @@ class _WaterSettingsState extends State<WaterSettings> {
                                           });
                                         },
                                       ),
-                                    ));
+                                    )).whenComplete(() async{
+                              await flutterNotification.cancelAll();
+                              showNotification();
+                            });
                           },
                           child: Container(
                             height: 40,
@@ -313,6 +316,8 @@ class _WaterSettingsState extends State<WaterSettings> {
                                 sp.setString("wakeTime", "${timeOfDay.hour}:${timeOfDay.minute}");
                               });
                             }
+                            await flutterNotification.cancelAll();
+                            showNotification();
                           },
                           child: Container(
                             height: 40,
@@ -351,6 +356,8 @@ class _WaterSettingsState extends State<WaterSettings> {
                                 sp.setString("sleepTime", "${timeOfDay.hour}:${timeOfDay.minute}");
                               });
                             }
+                            await flutterNotification.cancelAll();
+                            showNotification();
                           },
                           child: Container(
                             height: 40,
@@ -376,31 +383,28 @@ class _WaterSettingsState extends State<WaterSettings> {
                             ),
                           ),
                         ),
-                      if (_notifications)
-                        InkWell(
-                          onTap: () async{
-                            List<PendingNotificationRequest> notifications = await flutterNotification.pendingNotificationRequests();
-                            // notifications.forEach((element) {
-                            //   print(element.id);
-                            // });
-                            print("total scheduled notifications are ${notifications.length}");
-                          },
-                          child: Container(
-                            height: 40,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "print all notifications",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      // if (_notifications)
+                      //   InkWell(
+                      //     onTap: () async{
+                      //       List<PendingNotificationRequest> notifications = await flutterNotification.pendingNotificationRequests();
+                      //       print("total scheduled notifications are ${notifications.length}");
+                      //     },
+                      //     child: Container(
+                      //       height: 40,
+                      //       child: Row(
+                      //         mainAxisAlignment: MainAxisAlignment.start,
+                      //         children: [
+                      //           Text(
+                      //             "print all notifications",
+                      //             style: TextStyle(
+                      //               fontWeight: FontWeight.w600,
+                      //               fontSize: 16,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
                     ],
                   ),
                 ),
