@@ -32,6 +32,13 @@ class _WaterSettingsState extends State<WaterSettings> {
     if (sp.getInt("hrs") == null) {
       sp.setInt("hrs", 1);
     }
+
+    if(sp.getString("sleepTime") == null){
+      sp.setString("wakeTime", "06:00");
+      sp.setString("sleepTime", "21:00");
+    }
+
+    //TimeOfDay time = TimeOfDay(hour: s.split(":")[0], minute: s.split(":")[1]);
   }
 
 
@@ -229,19 +236,9 @@ class _WaterSettingsState extends State<WaterSettings> {
                                     sp.setBool("waterNotification", v);
 
                                     if(v){
-
-                                      Workmanager().registerPeriodicTask(
-                                        "2",
-                                        "waterReminder",
-                                        // When no frequency is provided the default 15 minutes is set.
-                                        // Minimum frequency is 15 min. Android will automatically change your frequency to 15 min if you have configured a lower frequency.
-                                        frequency: Duration(minutes: 16),
-                                      );
-                                      
-                                      //showNotification();
+                                      showNotification();
                                     }else{
-                                      //flutterNotification.cancelAll();
-                                      Workmanager().cancelByUniqueName("2");
+                                      flutterNotification.cancelAll();
                                     }
 
                                     setState(() {
@@ -295,6 +292,107 @@ class _WaterSettingsState extends State<WaterSettings> {
                                   "Every ${sp.getInt("hrs")} hr",
                                   style: TextStyle(
                                     color: kMainColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      if (_notifications)
+                        InkWell(
+                          onTap: () async{
+                            final TimeOfDay timeOfDay = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.now(),
+                              initialEntryMode: TimePickerEntryMode.dial,
+                            );
+                            if(timeOfDay != null) {
+                              setState(() {
+                                sp.setString("wakeTime", "${timeOfDay.hour}:${timeOfDay.minute}");
+                              });
+                            }
+                          },
+                          child: Container(
+                            height: 40,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Wake up time",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Text(
+                                  sp.getString("wakeTime"),
+                                  style: TextStyle(
+                                    color: kMainColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      if (_notifications)
+                        InkWell(
+                          onTap: () async{
+                            final TimeOfDay timeOfDay = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.now(),
+                              initialEntryMode: TimePickerEntryMode.dial,
+                            );
+                            if(timeOfDay != null) {
+                              setState(() {
+                                sp.setString("sleepTime", "${timeOfDay.hour}:${timeOfDay.minute}");
+                              });
+                            }
+                          },
+                          child: Container(
+                            height: 40,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "bedtime",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Text(
+                                  sp.getString("sleepTime"),
+                                  style: TextStyle(
+                                    color: kMainColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      if (_notifications)
+                        InkWell(
+                          onTap: () async{
+                            List<PendingNotificationRequest> notifications = await flutterNotification.pendingNotificationRequests();
+                            // notifications.forEach((element) {
+                            //   print(element.id);
+                            // });
+                            print("total scheduled notifications are ${notifications.length}");
+                          },
+                          child: Container(
+                            height: 40,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "print all notifications",
+                                  style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 16,
                                   ),
