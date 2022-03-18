@@ -56,21 +56,27 @@ class _AboutMedicineState extends State<AboutMedicine> {
           actions: [
             IconButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddMedicine(
-                        id: _getMedicine.data.id,
-                        getMedicine: _getMedicine.data,
-                        searchMedicine: null,
-                        getNextMedicine: null,
+                  if (_getMedicine.data.patient != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddMedicine(
+                          id: _getMedicine.data.id,
+                          getMedicine: _getMedicine.data,
+                          searchMedicine: null,
+                          getNextMedicine: null,
+                        ),
                       ),
-                    ),
-                  ).whenComplete(() {
-                    setState(() {
-                      getMedicine();
+                    ).whenComplete(() {
+                      setState(() {
+                        getMedicine();
+                      });
                     });
-                  });
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Patient not found'),
+                    ));
+                  }
                 },
                 icon: Icon(Icons.edit))
           ],

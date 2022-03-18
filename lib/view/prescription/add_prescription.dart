@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
@@ -248,7 +249,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
                             height: 24,
                           ),
                           if (files.isNotEmpty)
-                          Column(
+                            Column(
                               children: [
                                 Container(
                                   width: double.infinity,
@@ -312,10 +313,20 @@ class _AddPrescriptionState extends State<AddPrescription> {
                                                               width: double
                                                                   .infinity,
                                                               child:
-                                                                  Image.network(
-                                                                files[index],
+                                                                  CachedNetworkImage(
+                                                                imageUrl: files[
+                                                                    index],
                                                                 fit: BoxFit
                                                                     .cover,
+                                                                progressIndicatorBuilder:
+                                                                    (context,
+                                                                            url,
+                                                                            downloadProgress) =>
+                                                                        Center(
+                                                                  child: CircularProgressIndicator(
+                                                                      value: downloadProgress
+                                                                          .progress),
+                                                                ),
                                                               ),
                                                             ),
                                                           ],
@@ -327,11 +338,21 @@ class _AddPrescriptionState extends State<AddPrescription> {
                                               child: Container(
                                                 height: 90,
                                                 width: 90,
-                                                child: Image.network(
-                                                  files[index],
+                                                child: CachedNetworkImage(
+                                                  imageUrl: files[index],
                                                   width: 90,
                                                   height: 90,
                                                   fit: BoxFit.cover,
+                                                  progressIndicatorBuilder:
+                                                      (context, url,
+                                                              downloadProgress) =>
+                                                          Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                            value:
+                                                                downloadProgress
+                                                                    .progress),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -364,7 +385,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
                                 SizedBox(height: 24),
                               ],
                             ),
-                         Container(
+                          Container(
                             padding: EdgeInsets.symmetric(horizontal: 24),
                             height: 75,
                             child: Align(

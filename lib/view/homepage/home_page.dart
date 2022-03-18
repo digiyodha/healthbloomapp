@@ -342,39 +342,46 @@ class _HomePageState extends State<HomePage>
                                 itemBuilder: (BuildContext context, int i) {
                                   return MedicineCard(
                                     onTap: () {
-                                      if (snapshot.data.data[i].patient != null)
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => AboutMedicine(
-                                                id: snapshot.data.data[i].id),
-                                          ),
-                                        ).whenComplete(() {
-                                          setState(() {
-                                            getNextMedicine();
-                                          });
-                                        });
-                                    },
-                                    medicineName:
-                                        snapshot.data.data[i].medicineName,
-                                    time: snapshot.data.data[i].startHour,
-                                    dosages: snapshot.data.data[i].dosage,
-                                    edit: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => AddMedicine(
-                                            id: snapshot.data.data[i].id,
-                                            getNextMedicine:
-                                                snapshot.data.data[i],
-                                            getMedicine: null,
-                                          ),
+                                          builder: (context) => AboutMedicine(
+                                              id: snapshot.data.data[i].id),
                                         ),
                                       ).whenComplete(() {
                                         setState(() {
                                           getNextMedicine();
                                         });
                                       });
+                                    },
+                                    medicineName:
+                                        snapshot.data.data[i].medicineName,
+                                    time: snapshot.data.data[i].startHour,
+                                    dosages: snapshot.data.data[i].dosage,
+                                    edit: () {
+                                      if (snapshot.data.data[i].patient !=
+                                          null) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => AddMedicine(
+                                              id: snapshot.data.data[i].id,
+                                              getNextMedicine:
+                                                  snapshot.data.data[i],
+                                              getMedicine: null,
+                                            ),
+                                          ),
+                                        ).whenComplete(() {
+                                          setState(() {
+                                            getNextMedicine();
+                                          });
+                                        });
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text('Patient not found'),
+                                        ));
+                                      }
                                     },
                                     delete: () {
                                       showDialog(

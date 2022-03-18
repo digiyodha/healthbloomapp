@@ -69,7 +69,6 @@ class _DocumentsState extends State<Documents> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('End date should be greater than start date'),
         ));
-        // getDocuments();
       }
       _toDate.text =
           "${selectedEndDate.day}-${selectedEndDate.month}-${selectedEndDate.year}";
@@ -146,7 +145,6 @@ class _DocumentsState extends State<Documents> {
         iconTheme: IconThemeData(color: kWhite),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        // leading: Icon(icon),
         title: TextBuilder(
           text: "Documents",
           fontSize: 22,
@@ -321,16 +319,22 @@ class _DocumentsState extends State<Documents> {
                     );
                   },
                   edit: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddBill(
-                          bill: foundBill[index],
+                    if (foundBill[index].patient != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddBill(
+                            bill: foundBill[index],
+                          ),
                         ),
-                      ),
-                    ).whenComplete(() => setState(() {
-                          getDocuments();
-                        }));
+                      ).whenComplete(() => setState(() {
+                            getDocuments();
+                          }));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Patient not found'),
+                      ));
+                    }
                   },
                   delete: () async {
                     setState(() {
@@ -384,15 +388,21 @@ class _DocumentsState extends State<Documents> {
                     );
                   },
                   edit: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            AddReport(report: foundReport[index]),
-                      ),
-                    ).whenComplete(() => setState(() {
-                          getDocuments();
-                        }));
+                    if (foundReport[index].patient != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AddReport(report: foundReport[index]),
+                        ),
+                      ).whenComplete(() => setState(() {
+                            getDocuments();
+                          }));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Patient not found'),
+                      ));
+                    }
                   },
                   delete: () async {
                     setState(() {
@@ -446,15 +456,21 @@ class _DocumentsState extends State<Documents> {
                     );
                   },
                   edit: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddPrescription(
-                            prescription: foundPrescription[index]),
-                      ),
-                    ).whenComplete(() => setState(() {
-                          getDocuments();
-                        }));
+                    if (foundPrescription[index].patient != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddPrescription(
+                              prescription: foundPrescription[index]),
+                        ),
+                      ).whenComplete(() => setState(() {
+                            getDocuments();
+                          }));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Patient not found'),
+                      ));
+                    }
                   },
                   delete: () async {
                     setState(() {

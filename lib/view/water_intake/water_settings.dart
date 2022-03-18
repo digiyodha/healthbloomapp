@@ -1,8 +1,6 @@
 import 'package:cron/cron.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:workmanager/workmanager.dart';
 import '../../main.dart';
 import '../../utils/colors.dart';
 
@@ -33,15 +31,13 @@ class _WaterSettingsState extends State<WaterSettings> {
       sp.setInt("hrs", 1);
     }
 
-    if(sp.getString("sleepTime") == null){
+    if (sp.getString("sleepTime") == null) {
       sp.setString("wakeTime", "06:00");
       sp.setString("sleepTime", "21:00");
     }
 
     //TimeOfDay time = TimeOfDay(hour: s.split(":")[0], minute: s.split(":")[1]);
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -235,9 +231,9 @@ class _WaterSettingsState extends State<WaterSettings> {
                                   onChanged: (v) {
                                     sp.setBool("waterNotification", v);
 
-                                    if(v){
+                                    if (v) {
                                       showNotification();
-                                    }else{
+                                    } else {
                                       flutterNotification.cancelAll();
                                     }
 
@@ -274,7 +270,7 @@ class _WaterSettingsState extends State<WaterSettings> {
                                           });
                                         },
                                       ),
-                                    )).whenComplete(() async{
+                                    )).whenComplete(() async {
                               await flutterNotification.cancelAll();
                               showNotification();
                             });
@@ -305,15 +301,16 @@ class _WaterSettingsState extends State<WaterSettings> {
                         ),
                       if (_notifications)
                         InkWell(
-                          onTap: () async{
+                          onTap: () async {
                             final TimeOfDay timeOfDay = await showTimePicker(
                               context: context,
                               initialTime: TimeOfDay.now(),
                               initialEntryMode: TimePickerEntryMode.dial,
                             );
-                            if(timeOfDay != null) {
+                            if (timeOfDay != null) {
                               setState(() {
-                                sp.setString("wakeTime", "${timeOfDay.hour}:${timeOfDay.minute}");
+                                sp.setString("wakeTime",
+                                    "${timeOfDay.hour}:${timeOfDay.minute}");
                               });
                             }
                             await flutterNotification.cancelAll();
@@ -345,15 +342,16 @@ class _WaterSettingsState extends State<WaterSettings> {
                         ),
                       if (_notifications)
                         InkWell(
-                          onTap: () async{
+                          onTap: () async {
                             final TimeOfDay timeOfDay = await showTimePicker(
                               context: context,
                               initialTime: TimeOfDay.now(),
                               initialEntryMode: TimePickerEntryMode.dial,
                             );
-                            if(timeOfDay != null) {
+                            if (timeOfDay != null) {
                               setState(() {
-                                sp.setString("sleepTime", "${timeOfDay.hour}:${timeOfDay.minute}");
+                                sp.setString("sleepTime",
+                                    "${timeOfDay.hour}:${timeOfDay.minute}");
                               });
                             }
                             await flutterNotification.cancelAll();

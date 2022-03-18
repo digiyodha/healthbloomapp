@@ -139,20 +139,19 @@ class _ListMedicineState extends State<ListMedicine> {
                                             _currentResponse.data[i];
                                         return MedicineCard(
                                           onTap: () {
-                                            if (medicine.patient != null)
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ListAboutMedicine(
-                                                    id: medicine.id,
-                                                  ),
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ListAboutMedicine(
+                                                  id: medicine.id,
                                                 ),
-                                              ).whenComplete(() {
-                                                setState(() {
-                                                  searchMedicine();
-                                                });
+                                              ),
+                                            ).whenComplete(() {
+                                              setState(() {
+                                                searchMedicine();
                                               });
+                                            });
                                           },
                                           medicineName:
                                               medicine.medicineName ?? '',
@@ -163,22 +162,30 @@ class _ListMedicineState extends State<ListMedicine> {
                                           padding: EdgeInsets.zero,
                                           hideIcon: true,
                                           edit: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AddMedicine(
-                                                  id: medicine.id,
-                                                  getNextMedicine: null,
-                                                  getMedicine: null,
-                                                  searchMedicine: medicine,
+                                            if (medicine.patient != null) {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      AddMedicine(
+                                                    id: medicine.id,
+                                                    getNextMedicine: null,
+                                                    getMedicine: null,
+                                                    searchMedicine: medicine,
+                                                  ),
                                                 ),
-                                              ),
-                                            ).whenComplete(() {
-                                              setState(() {
-                                                searchMedicine();
+                                              ).whenComplete(() {
+                                                setState(() {
+                                                  searchMedicine();
+                                                });
                                               });
-                                            });
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                content:
+                                                    Text('Patient not found'),
+                                              ));
+                                            }
                                           },
                                           delete: () {
                                             showDialog(

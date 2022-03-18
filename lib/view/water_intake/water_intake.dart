@@ -1,4 +1,3 @@
-import 'package:cron/cron.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_bloom/utils/colors.dart';
@@ -27,21 +26,19 @@ class _WaterIntakeState extends State<WaterIntake> {
       _waterInMl = null;
     });
 
-
-    if(sp.getInt("dailyIntake") == null){
+    if (sp.getInt("dailyIntake") == null) {
       sp.setInt("dailyIntake", 1500);
       _totalIntakeDaily = 1500;
-    }else{
+    } else {
       _totalIntakeDaily = sp.getInt("dailyIntake");
     }
 
-    if(sp.getInt("glassVolume") == null){
+    if (sp.getInt("glassVolume") == null) {
       sp.setInt("glassVolume", 300);
       _glassVolume = 300;
-    }else{
+    } else {
       _glassVolume = sp.getInt("glassVolume");
     }
-
 
     if (sp.getString("${_today.day}/${_today.month}/${_today.year}") != null) {
       _waterInMl = int.parse(
@@ -51,7 +48,6 @@ class _WaterIntakeState extends State<WaterIntake> {
       sp.setString("${_today.day}/${_today.month}/${_today.year}", "0");
       _waterInMl = 0;
     }
-
 
     _percent = (_waterInMl / _totalIntakeDaily);
     setState(() {});
@@ -83,9 +79,11 @@ class _WaterIntakeState extends State<WaterIntake> {
         actions: [
           IconButton(
             onPressed: () {
-              showGeneralDialog(context: context, pageBuilder:(_,__,___){
-                return WaterSettings();
-              }).whenComplete(() {
+              showGeneralDialog(
+                  context: context,
+                  pageBuilder: (_, __, ___) {
+                    return WaterSettings();
+                  }).whenComplete(() {
                 getData();
               });
             },
