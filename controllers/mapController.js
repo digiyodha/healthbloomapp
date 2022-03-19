@@ -4,10 +4,10 @@ var axios = require('axios');
 
 
 exports.nearbyMedicalStores = asyncHandler(async (req, res, next) => {
-    var {latitude, longitude, hours, distance} = req.body;
+    var {latitude, longitude, hours, distance, rating} = req.body;
     
 
-    var lat = "18.457533", long = "73.867744", dis = "500", hour = "Any time";
+    var lat = "18.457533", long = "73.867744", dis = "500", hour = "Any time", rate = "4";
 
     if(latitude)
         lat = latitude;
@@ -17,8 +17,10 @@ exports.nearbyMedicalStores = asyncHandler(async (req, res, next) => {
         dis = distance;
     if(hours)
         hour = hours;
+    if(rating)
+        rate = rating;
 
-    var url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?hours=" + hour + "&location=" + lat + "," + long + "&radius=" + dis + "&types=pharmacy&keyword=pharmacy&key=AIzaSyBMDiwO_HOqZlM0g5glTlTMZd00ejdVYoA"
+    var url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?rating=" + rate + "&hours=" + hour + "&location=" + lat + "," + long + "&radius=" + dis + "&types=pharmacy&keyword=pharmacy&key=AIzaSyBMDiwO_HOqZlM0g5glTlTMZd00ejdVYoA"
 
 
     var config = {
@@ -43,10 +45,10 @@ exports.nearbyMedicalStores = asyncHandler(async (req, res, next) => {
 
 
 exports.nearbyMedicalLabs = asyncHandler(async (req, res, next) => {
-    var {latitude, longitude, hours, distance} = req.body;
+    var {latitude, longitude, hours, distance, rating} = req.body;
     
 
-    var lat = "18.457533", long = "73.867744", dis = "500", hour = "Any time";
+    var lat = "18.457533", long = "73.867744", dis = "500", hour = "Any time", rate = "4";
 
     if(latitude)
         lat = latitude;
@@ -56,8 +58,10 @@ exports.nearbyMedicalLabs = asyncHandler(async (req, res, next) => {
         dis = distance;
     if(hours)
         hour = hours;
+    if(rating)
+        rate = rating
 
-    var url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?hours=" + hour + "&location=" + lat + "," + long + "&radius=" + dis + "&types=medical labs&keyword=medical labs&key=AIzaSyBMDiwO_HOqZlM0g5glTlTMZd00ejdVYoA"
+    var url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?rating=" + rate + "hours=" + hour + "&location=" + lat + "," + long + "&radius=" + dis + "&types=medical labs&keyword=medical labs&key=AIzaSyBMDiwO_HOqZlM0g5glTlTMZd00ejdVYoA"
 
 
     var config = {
