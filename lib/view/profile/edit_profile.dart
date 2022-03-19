@@ -558,6 +558,7 @@ class _EditProfileState extends State<EditProfile> {
                                                   builder: (context) =>
                                                       HomePage()));
                                         } else {
+                                          sp.clear();
                                           Navigator.pushAndRemoveUntil(
                                             context,
                                             MaterialPageRoute(

@@ -8,6 +8,7 @@ import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
+import 'package:health_bloom/utils/custom_add_element_bs.dart';
 import 'package:health_bloom/view/bill/add_bill.dart';
 import 'package:health_bloom/view/medicine/about_medicine.dart';
 import 'package:health_bloom/view/medicine/add_medicine.dart';
@@ -33,21 +34,14 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
-  bool _fabOpened = false;
-  Animation<double> _translateButton;
-  Animation<Color> _buttonColor;
-  Animation<Color> _iconColor;
-  AnimationController _animationController;
+class _HomePageState extends State<HomePage>{
   bool _loading = false;
-  double _fabHeight = 56.0;
-  Curve _curve = Curves.ease;
   DateTime todayTime = DateTime.now().toUtc();
   DateTime today = DateTime.now();
   DateTime _today = DateTime.now();
   int _waterInMl;
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+
   Future<GetUserResponse> getUser() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     GetUserResponse _response = await adminAPI.getUserAPI();
@@ -95,29 +89,6 @@ class _HomePageState extends State<HomePage>
     super.initState();
     _getMembers = getAllmember();
     getData();
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300))
-          ..addListener(() {
-            if (mounted) {
-              setState(() {
-                // getLog(logId: widget.datum.id,canLoad: false);
-              });
-            }
-          });
-
-    _buttonColor = ColorTween(begin: kMainColor, end: Colors.white).animate(
-        CurvedAnimation(
-            parent: _animationController,
-            curve: Interval(0.00, 1.00, curve: Curves.linear)));
-
-    _iconColor = ColorTween(begin: kWhite, end: kGrey7).animate(CurvedAnimation(
-        parent: _animationController,
-        curve: Interval(0.00, 1.00, curve: Curves.linear)));
-
-    _translateButton = Tween<double>(begin: _fabHeight, end: -14).animate(
-        CurvedAnimation(
-            parent: _animationController,
-            curve: Interval(0.00, 0.75, curve: _curve)));
     getNextMedicine();
   }
 
@@ -665,7 +636,19 @@ class _HomePageState extends State<HomePage>
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            _settingModalBottomSheet(context);
+            showModalBottomSheet(
+              context: context,
+              builder: (BuildContext bc) {
+                return CustomAddElementBs(
+                  onChanged: (){
+                    setState(() {
+                      Navigator.pop(context);
+                      getNextMedicine();
+                    });
+                  },
+                );
+              },
+            );
           },
           child: Icon(Icons.add),
         ),
@@ -674,248 +657,6 @@ class _HomePageState extends State<HomePage>
           current: 0,
         ),
       ),
-    );
-  }
-
-  Widget addReport() {
-    return Container(
-      margin: EdgeInsets.only(right: 24.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: kGrey2,
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black26,
-                      offset: Offset(0.0, 2.0),
-                      blurRadius: 5)
-                ]),
-            child: Text(
-              'Report',
-              style: TextStyle(
-                  fontSize: 20, color: kGrey7, fontWeight: FontWeight.w600),
-            ),
-          ),
-          SizedBox(
-            width: 16,
-          ),
-          FloatingActionButton(
-            heroTag: "suggestion",
-            backgroundColor: kMainColor,
-            onPressed: () {
-              animate();
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AddReport();
-              }));
-            },
-            child: Center(
-              child: Container(
-                width: 22,
-                height: 22,
-                child: Icon(Icons.add),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget addBill() {
-    return Container(
-      margin: EdgeInsets.only(right: 24.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: kGrey2,
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black26,
-                      offset: Offset(0.0, 2.0),
-                      blurRadius: 5)
-                ]),
-            child: Text(
-              'Bill',
-              style: TextStyle(
-                  fontSize: 20, color: kGrey7, fontWeight: FontWeight.w600),
-            ),
-          ),
-          SizedBox(width: 16),
-          FloatingActionButton(
-            heroTag: "schedule",
-            backgroundColor: kMainColor,
-            onPressed: () {
-              animate();
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AddBill();
-              }));
-            },
-            child: Center(
-              child: Container(
-                width: 25,
-                height: 25,
-                child: Icon(Icons.add),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buttonFAB() {
-    return FloatingActionButton(
-      heroTag: "FAB",
-      onPressed: () {
-        animate();
-      },
-      backgroundColor: kMainColor,
-      tooltip: 'Toggle',
-      child: _fabOpened
-          ? Icon(
-              Icons.close,
-              color: kWhite,
-            )
-          : Icon(
-              Icons.add,
-              color: kWhite,
-            ),
-    );
-  }
-
-  Widget addPrescription() {
-    return Container(
-      margin: EdgeInsets.only(right: 24.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: kGrey2,
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black26,
-                      offset: Offset(0.0, 2.0),
-                      blurRadius: 5)
-                ]),
-            child: Text(
-              'Prescription',
-              style: TextStyle(
-                  fontSize: 20, color: kGrey7, fontWeight: FontWeight.w600),
-            ),
-          ),
-          SizedBox(
-            width: 16,
-          ),
-          FloatingActionButton(
-            foregroundColor: Colors.white,
-            heroTag: "event",
-            backgroundColor: kMainColor,
-            onPressed: () {
-              animate();
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AddPrescription();
-              }));
-            },
-            child: Center(
-              child: Container(
-                width: 22,
-                height: 22,
-                child: Icon(Icons.add),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  animate() {
-    if (!_fabOpened) {
-      _animationController.forward();
-    } else {
-      _animationController.reverse();
-    }
-    _fabOpened = !_fabOpened;
-  }
-
-  void _settingModalBottomSheet(context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext bc) {
-        return Container(
-          child: Wrap(
-            children: <Widget>[
-              ListTile(
-                leading: new Icon(Icons.add),
-                title: Text('Bill'),
-                onTap: () {
-                  Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => AddBill()))
-                      .whenComplete(() => Navigator.pop(context));
-                },
-              ),
-              ListTile(
-                leading: new Icon(Icons.add),
-                title: new Text('Report'),
-                onTap: () {
-                  Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => AddReport()))
-                      .whenComplete(() => Navigator.pop(context));
-                },
-              ),
-              ListTile(
-                leading: new Icon(Icons.add),
-                title: new Text('Prescription'),
-                onTap: () {
-                  Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddPrescription()))
-                      .whenComplete(() => Navigator.pop(context));
-                },
-              ),
-              ListTile(
-                leading: new Icon(Icons.add),
-                title: new Text('Medicine'),
-                onTap: () {
-                  Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddMedicine()))
-                      .whenComplete(() {
-                    setState(() {
-                      Navigator.pop(context);
-                      getNextMedicine();
-                    });
-                  });
-                },
-              ),
-              // ListTile(
-              //   leading: new Icon(Icons.add),
-              //   title: new Text('Insurance'),
-              //   onTap: () {
-              //     Navigator.push(
-              //             context,
-              //             MaterialPageRoute(
-              //                 builder: (context) => AddInsurance()))
-              //         .whenComplete(() => Navigator.pop(context));
-              //   },
-              // ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

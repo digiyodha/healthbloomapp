@@ -284,4 +284,18 @@ class NetworkRepository with ChangeNotifier {
     if (apiResult is Error) throw apiResult.error;
     return addFeedbackAPI(request);
   }
+
+  Future<MapsNearbyMedicalsResponse> getNearbyMedicalsAPI(MapsNearbyMedicalsRequest request) async {
+    Result apiResult = await apiClient.getNearbyMedicals(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return getNearbyMedicalsAPI(request);
+  }
+
+  Future<MapsNearbyMedicalsResponse> getNearbyLabsAPI(MapsNearbyMedicalsRequest request) async {
+    Result apiResult = await apiClient.getNearbyLabs(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return getNearbyMedicalsAPI(request);
+  }
 }

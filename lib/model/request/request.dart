@@ -93,3 +93,36 @@ class RegisterLoginRequest {
         "country_code": countryCode == null ? null : countryCode,
       };
 }
+
+
+class MapsNearbyMedicalsRequest {
+  MapsNearbyMedicalsRequest({
+    this.hours,
+    this.distance,
+    this.latitude,
+    this.longitude,
+    this.rating,
+  });
+
+  String hours;
+  String distance;
+  String latitude;
+  String longitude;
+  String rating;
+
+  factory MapsNearbyMedicalsRequest.fromJson(Map<String, dynamic> json) => MapsNearbyMedicalsRequest(
+    hours: json["hours"] == null ? null : json["hours"],
+    distance: json["distance"] == null ? null : json["distance"],
+    latitude: json["latitude"] == null ? null : json["latitude"],
+    longitude: json["longitude"] == null ? null : json["longitude"],
+    rating: json["rating"] == null ? null : json["rating"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "hours": hours == null ? null : hours,
+    "distance": distance == null ? null : distance,
+    "latitude": latitude == null ? null : latitude,
+    "longitude": longitude == null ? null : longitude,
+    "rating": rating == null ? null : rating,
+  };
+}

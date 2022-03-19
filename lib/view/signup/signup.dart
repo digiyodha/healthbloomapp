@@ -335,6 +335,7 @@ class _SignUpState extends State<SignUp> {
                                                     name: _auth.currentUser
                                                             .displayName ??
                                                         _name.text,
+                                                phone: false,
                                                   )),
                                           (Route<dynamic> route) => false,
                                         );

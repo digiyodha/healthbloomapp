@@ -31,6 +31,8 @@ class AuthEndpoints {
       AuthEndpoint("/v1/insurance/search/", Method.put);
   static get editMedicine => AuthEndpoint("/v1/medicine/", Method.put);
   static get getMedicine => AuthEndpoint("/v1/medicine/id/", Method.put);
+  static get getNearbyMedical => AuthEndpoint("/v1/map/store", Method.put);
+  static get getNearbyLabs => AuthEndpoint("/v1/map/lab", Method.put);
 
   // Get
   static get getMember => AuthEndpoint("/v1/family/id/", Method.put);

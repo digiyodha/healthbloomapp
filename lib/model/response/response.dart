@@ -613,3 +613,251 @@ class RegisterLoginResponseData {
         "x_auth_token": xAuthToken == null ? null : xAuthToken,
       };
 }
+
+class MapsNearbyMedicalsResponse {
+  MapsNearbyMedicalsResponse({
+    this.success,
+    this.data,
+  });
+
+  bool success;
+  MapsNearbyMedicalsResponseData data;
+
+  factory MapsNearbyMedicalsResponse.fromJson(Map<String, dynamic> json) => MapsNearbyMedicalsResponse(
+    success: json["success"] == null ? null : json["success"],
+    data: json["data"] == null ? null : MapsNearbyMedicalsResponseData.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "success": success == null ? null : success,
+    "data": data == null ? null : data.toJson(),
+  };
+}
+
+class MapsNearbyMedicalsResponseData {
+  MapsNearbyMedicalsResponseData({
+    this.htmlAttributions,
+    this.nextPageToken,
+    this.results,
+    this.status,
+  });
+
+  List<dynamic> htmlAttributions;
+  String nextPageToken;
+  List<MapsNearbyMedicalsResponseResult> results;
+  String status;
+
+  factory MapsNearbyMedicalsResponseData.fromJson(Map<String, dynamic> json) => MapsNearbyMedicalsResponseData(
+    htmlAttributions: json["html_attributions"] == null ? [] : List<dynamic>.from(json["html_attributions"].map((x) => x)),
+    nextPageToken: json["next_page_token"] == null ? null : json["next_page_token"],
+    results: json["results"] == null ? [] : List<MapsNearbyMedicalsResponseResult>.from(json["results"].map((x) => MapsNearbyMedicalsResponseResult.fromJson(x))),
+    status: json["status"] == null ? null : json["status"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "html_attributions": htmlAttributions == null ? null : List<dynamic>.from(htmlAttributions.map((x) => x)),
+    "next_page_token": nextPageToken == null ? null : nextPageToken,
+    "results": results == null ? null : List<dynamic>.from(results.map((x) => x.toJson())),
+    "status": status == null ? null : status,
+  };
+}
+
+class MapsNearbyMedicalsResponseResult {
+  MapsNearbyMedicalsResponseResult({
+    this.businessStatus,
+    this.geometry,
+    this.icon,
+    this.iconBackgroundColor,
+    this.iconMaskBaseUri,
+    this.name,
+    this.openingHours,
+    this.photos,
+    this.placeId,
+    this.plusCode,
+    this.rating,
+    this.reference,
+    this.scope,
+    this.types,
+    this.userRatingsTotal,
+    this.vicinity,
+  });
+
+  String businessStatus;
+  MapsNearbyMedicalsResponseGeometry geometry;
+  String icon;
+  String iconBackgroundColor;
+  String iconMaskBaseUri;
+  String name;
+  MapsNearbyMedicalsResponseOpeningHours openingHours;
+  List<MapsNearbyMedicalsResponsePhoto> photos;
+  String placeId;
+  MapsNearbyMedicalsResponsePlusCode plusCode;
+  double rating;
+  String reference;
+  String scope;
+  List<String> types;
+  int userRatingsTotal;
+  String vicinity;
+
+  factory MapsNearbyMedicalsResponseResult.fromJson(Map<String, dynamic> json) => MapsNearbyMedicalsResponseResult(
+    businessStatus: json["business_status"] == null ? null : json["business_status"],
+    geometry: json["geometry"] == null ? null : MapsNearbyMedicalsResponseGeometry.fromJson(json["geometry"]),
+    icon: json["icon"] == null ? null : json["icon"],
+    iconBackgroundColor: json["icon_background_color"] == null ? null : json["icon_background_color"],
+    iconMaskBaseUri: json["icon_mask_base_uri"] == null ? null : json["icon_mask_base_uri"],
+    name: json["name"] == null ? null : json["name"],
+    openingHours: json["opening_hours"] == null ? null : MapsNearbyMedicalsResponseOpeningHours.fromJson(json["opening_hours"]),
+    photos: json["photos"] == null ? [] : List<MapsNearbyMedicalsResponsePhoto>.from(json["photos"].map((x) => MapsNearbyMedicalsResponsePhoto.fromJson(x))),
+    placeId: json["place_id"] == null ? null : json["place_id"],
+    plusCode: json["plus_code"] == null ? null : MapsNearbyMedicalsResponsePlusCode.fromJson(json["plus_code"]),
+    rating: json["rating"] == null ? null : json["rating"].toDouble(),
+    reference: json["reference"] == null ? null : json["reference"],
+    scope: json["scope"] == null ? null : json["scope"],
+    types: json["types"] == null ? [] : List<String>.from(json["types"].map((x) => x)),
+    userRatingsTotal: json["user_ratings_total"] == null ? null : json["user_ratings_total"],
+    vicinity: json["vicinity"] == null ? null : json["vicinity"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "business_status": businessStatus == null ? null : businessStatus,
+    "geometry": geometry == null ? null : geometry.toJson(),
+    "icon": icon == null ? null : icon,
+    "icon_background_color": iconBackgroundColor == null ? null : iconBackgroundColor,
+    "icon_mask_base_uri": iconMaskBaseUri == null ? null : iconMaskBaseUri,
+    "name": name == null ? null : name,
+    "opening_hours": openingHours == null ? null : openingHours.toJson(),
+    "photos": photos == null ? null : List<dynamic>.from(photos.map((x) => x.toJson())),
+    "place_id": placeId == null ? null : placeId,
+    "plus_code": plusCode == null ? null : plusCode.toJson(),
+    "rating": rating == null ? null : rating,
+    "reference": reference == null ? null : reference,
+    "scope": scope == null ? null : scope,
+    "types": types == null ? null : List<dynamic>.from(types.map((x) => x)),
+    "user_ratings_total": userRatingsTotal == null ? null : userRatingsTotal,
+    "vicinity": vicinity == null ? null : vicinity,
+  };
+}
+
+class MapsNearbyMedicalsResponseGeometry {
+  MapsNearbyMedicalsResponseGeometry({
+    this.location,
+    this.viewport,
+  });
+
+  MapsNearbyMedicalsResponseLocation location;
+  MapsNearbyMedicalsResponseViewport viewport;
+
+  factory MapsNearbyMedicalsResponseGeometry.fromJson(Map<String, dynamic> json) => MapsNearbyMedicalsResponseGeometry(
+    location: json["location"] == null ? null : MapsNearbyMedicalsResponseLocation.fromJson(json["location"]),
+    viewport: json["viewport"] == null ? null : MapsNearbyMedicalsResponseViewport.fromJson(json["viewport"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "location": location == null ? null : location.toJson(),
+    "viewport": viewport == null ? null : viewport.toJson(),
+  };
+}
+
+class MapsNearbyMedicalsResponseLocation {
+  MapsNearbyMedicalsResponseLocation({
+    this.lat,
+    this.lng,
+  });
+
+  double lat;
+  double lng;
+
+  factory MapsNearbyMedicalsResponseLocation.fromJson(Map<String, dynamic> json) => MapsNearbyMedicalsResponseLocation(
+    lat: json["lat"] == null ? null : json["lat"].toDouble(),
+    lng: json["lng"] == null ? null : json["lng"].toDouble(),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "lat": lat == null ? null : lat,
+    "lng": lng == null ? null : lng,
+  };
+}
+
+class MapsNearbyMedicalsResponseViewport {
+  MapsNearbyMedicalsResponseViewport({
+    this.northeast,
+    this.southwest,
+  });
+
+  MapsNearbyMedicalsResponseLocation northeast;
+  MapsNearbyMedicalsResponseLocation southwest;
+
+  factory MapsNearbyMedicalsResponseViewport.fromJson(Map<String, dynamic> json) => MapsNearbyMedicalsResponseViewport(
+    northeast: json["northeast"] == null ? null : MapsNearbyMedicalsResponseLocation.fromJson(json["northeast"]),
+    southwest: json["southwest"] == null ? null : MapsNearbyMedicalsResponseLocation.fromJson(json["southwest"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "northeast": northeast == null ? null : northeast.toJson(),
+    "southwest": southwest == null ? null : southwest.toJson(),
+  };
+}
+
+class MapsNearbyMedicalsResponseOpeningHours {
+  MapsNearbyMedicalsResponseOpeningHours({
+    this.openNow,
+  });
+
+  bool openNow;
+
+  factory MapsNearbyMedicalsResponseOpeningHours.fromJson(Map<String, dynamic> json) => MapsNearbyMedicalsResponseOpeningHours(
+    openNow: json["open_now"] == null ? null : json["open_now"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "open_now": openNow == null ? null : openNow,
+  };
+}
+
+class MapsNearbyMedicalsResponsePhoto {
+  MapsNearbyMedicalsResponsePhoto({
+    this.height,
+    this.htmlAttributions,
+    this.photoReference,
+    this.width,
+  });
+
+  int height;
+  List<String> htmlAttributions;
+  String photoReference;
+  int width;
+
+  factory MapsNearbyMedicalsResponsePhoto.fromJson(Map<String, dynamic> json) => MapsNearbyMedicalsResponsePhoto(
+    height: json["height"] == null ? null : json["height"],
+    htmlAttributions: json["html_attributions"] == null ? [] : List<String>.from(json["html_attributions"].map((x) => x)),
+    photoReference: json["photo_reference"] == null ? null : json["photo_reference"],
+    width: json["width"] == null ? null : json["width"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "height": height == null ? null : height,
+    "html_attributions": htmlAttributions == null ? null : List<dynamic>.from(htmlAttributions.map((x) => x)),
+    "photo_reference": photoReference == null ? null : photoReference,
+    "width": width == null ? null : width,
+  };
+}
+
+class MapsNearbyMedicalsResponsePlusCode {
+  MapsNearbyMedicalsResponsePlusCode({
+    this.compoundCode,
+    this.globalCode,
+  });
+
+  String compoundCode;
+  String globalCode;
+
+  factory MapsNearbyMedicalsResponsePlusCode.fromJson(Map<String, dynamic> json) => MapsNearbyMedicalsResponsePlusCode(
+    compoundCode: json["compound_code"] == null ? null : json["compound_code"],
+    globalCode: json["global_code"] == null ? null : json["global_code"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "compound_code": compoundCode == null ? null : compoundCode,
+    "global_code": globalCode == null ? null : globalCode,
+  };
+}

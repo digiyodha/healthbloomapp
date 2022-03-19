@@ -688,4 +688,46 @@ class NetworkManager {
     }
     return result;
   }
+
+  Future<Result> getNearbyMedicals(MapsNearbyMedicalsRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.getNearbyMedical;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      MapsNearbyMedicalsResponse response =
+      MapsNearbyMedicalsResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<MapsNearbyMedicalsResponse>(response);
+    }
+    return result;
+  }
+
+  Future<Result> getNearbyLabs(MapsNearbyMedicalsRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.getNearbyLabs;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      MapsNearbyMedicalsResponse response =
+      MapsNearbyMedicalsResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<MapsNearbyMedicalsResponse>(response);
+    }
+    return result;
+  }
 }

@@ -1,4 +1,3 @@
-import 'package:cron/cron.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../main.dart';
@@ -13,8 +12,6 @@ class WaterSettings extends StatefulWidget {
 
 class _WaterSettingsState extends State<WaterSettings> {
   bool _notifications = false;
-
-  Cron cron = Cron();
 
   @override
   void initState() {
@@ -363,7 +360,7 @@ class _WaterSettingsState extends State<WaterSettings> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "bedtime",
+                                  "Bed Time",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 16,

@@ -3,6 +3,7 @@ import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/get_mdecine_request.dart';
 import 'package:health_bloom/model/response/get_medicine_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
+import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/view/medicine/add_medicine.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -81,7 +82,7 @@ class _AboutMedicineState extends State<AboutMedicine> {
                 icon: Icon(Icons.edit))
           ],
         ),
-        backgroundColor: Color(0xffA283F9),
+        backgroundColor: kMainColor,
         body: SafeArea(
           child: FutureBuilder<GetMedicineResponse>(
             future: getMedicine(),
@@ -96,11 +97,32 @@ class _AboutMedicineState extends State<AboutMedicine> {
                           alignment: Alignment.bottomCenter,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 50),
-                              child: Card(
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
+                              padding: const EdgeInsets.only(top: 50,left: 5,right: 5),
+                              child: Container(
+                                decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
+                                  color: kWhite,
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Colors.white,
+                                      kWhite,
+                                      kMainColorExtraLite.withOpacity(0.8)
+                                    ],
+                                    stops: [
+                                      0.3,
+                                      0.6,
+                                      0.9
+                                    ]
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black26,
+                                      blurRadius: 5,
+                                      offset: Offset(0.0,2.0)
+                                    )
+                                  ]
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -111,64 +133,79 @@ class _AboutMedicineState extends State<AboutMedicine> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const SizedBox(height: 50.0),
-                                        Center(
-                                          child: TextBuilder(
-                                            text: snapshot
-                                                    .data.data.medicineName ??
-                                                '',
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 10.0),
-                                        Center(
-                                          child: TextBuilder(
-                                            text:
-                                                'Dosage : ${snapshot.data.data.dosage}mg',
-                                            fontSize: 14,
-                                            color: Color(0xff5D5D5D),
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 10.0),
+                                        const SizedBox(height: 40.0),
                                         TextBuilder(
                                           text: snapshot.data.data.description
                                               .toString(),
                                           height: 1.3,
                                           // textOverflow: TextOverflow.ellipsis,
-                                          fontSize: 14,
+                                          fontSize: 12,
                                           // maxLines: 6,
-                                          color: Color(0xff5D5D5D),
-                                          fontWeight: FontWeight.w500,
+                                          color: kMainColor,
+                                          fontWeight: FontWeight.w400,
+                                          textAlign: TextAlign.center,
                                         ),
-                                        const SizedBox(height: 25.0),
-                                        Row(
+                                        const SizedBox(height: 6.0),
+                                        Center(
+                                          child: TextBuilder(
+                                            text: snapshot
+                                                    .data.data.medicineName ??
+                                                '',
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w800,
+                                            color: kMainColor,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 6.0),
+                                        Center(
+                                          child: TextBuilder(
+                                            text:
+                                                'Dosage : ${snapshot.data.data.dosage}mg',
+                                            fontSize: 12,
+                                            // maxLines: 6,
+                                            color: kMainColor,
+                                            fontWeight: FontWeight.w400,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 30.0),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             TextBuilder(
-                                              fontSize: 14,
-                                              text: snapshot.data.data
-                                                          .timeObject.length !=
-                                                      1
-                                                  ? '${snapshot.data.data.timeObject.length.toString()} times | '
-                                                  : '${snapshot.data.data.timeObject.length.toString()} time | ',
-                                              color: Color(0xff5D5D5D),
-                                              fontWeight: FontWeight.w500,
+                                              text: "Dose",
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700,
+                                              color: kMainColor,
                                             ),
-                                            TextBuilder(
-                                              text: snapshot
-                                                  .data.data.timeObject
-                                                  .map((e) =>
-                                                      DateFormat('hh:mm a')
-                                                          .format(e.startTime))
-                                                  .toList()
-                                                  .join(', ')
-                                                  .toString()
-                                                  .replaceAll('[]', ''),
-                                              color: Color(0xff5D5D5D),
-                                              fontWeight: FontWeight.w500,
-                                            )
+                                            const SizedBox(height: 4),
+                                            Row(
+                                              children: [
+                                                TextBuilder(
+                                                  fontSize: 14,
+                                                  text: snapshot.data.data
+                                                              .timeObject.length !=
+                                                          1
+                                                      ? '${snapshot.data.data.timeObject.length.toString()} times | '
+                                                      : '${snapshot.data.data.timeObject.length.toString()} time | ',
+                                                  color: kMainColor,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                TextBuilder(
+                                                  text: snapshot
+                                                      .data.data.timeObject
+                                                      .map((e) =>
+                                                          DateFormat('hh:mm a')
+                                                              .format(e.startTime))
+                                                      .toList()
+                                                      .join(', ')
+                                                      .toString()
+                                                      .replaceAll('[]', ''),
+                                                  color: kMainColor,
+                                                  fontWeight: FontWeight.w500,
+                                                )
+                                              ],
+                                            ),
                                           ],
                                         ),
                                       ],
@@ -229,63 +266,81 @@ class _AboutMedicineState extends State<AboutMedicine> {
                               children: [
                                 TextBuilder(
                                   text: 'Next Dose',
-                                  color: Color(0xff5D5D5D),
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 13,
+                                  fontSize: 12,
+                                  color: kMainColor,
+                                  fontWeight: FontWeight.w400,
+                                  textAlign: TextAlign.center,
                                 ),
                                 const SizedBox(height: 10.0),
                                 Row(
                                   children: [
                                     Icon(
                                       Icons.watch_later_outlined,
-                                      color: Colors.black,
+                                      color: kMainColor,
+                                      size: 26,
                                     ),
-                                    const SizedBox(width: 5.0),
+                                    const SizedBox(width: 8.0),
                                     TextBuilder(
                                       text:
                                           '${DateFormat('hh:mm a').format(snapshot.data.data.startHour).toString()}',
-                                      fontSize: 18,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10.0),
-                                Row(
-                                  children: [
-                                    TextBuilder(
-                                      fontSize: 14,
-                                      text: 'Program',
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w700,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w800,
+                                      color: kMainColor,
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 20.0),
-                                TextBuilder(
-                                  fontSize: 14,
-                                  text: 'Total Tablets : ' +
-                                      snapshot.data.data.totalTablets
-                                          .toString(),
-                                  color: Color(0xff5D5D5D),
-                                  fontWeight: FontWeight.w500,
+                                Wrap(
+                                  runSpacing: 5,
+                                  children: [
+                                    TextBuilder(
+                                      text: 'Program:',
+                                      fontSize: 15,
+                                      color: kMainColor,
+                                      fontWeight: FontWeight.w800,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(width: 5,),
+                                    TextBuilder(
+                                      fontSize: 14,
+                                      text: 'Total ${snapshot.data.data.duration ?? "-"} days'.toString(),
+                                      color: kMainColor,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(height: 10.0),
-                                TextBuilder(
-                                  fontSize: 14,
-                                  text: 'Tablets Left : ' +
-                                      snapshot.data.data.tabletsLeft.toString(),
-                                  color: Color(0xff5D5D5D),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                const SizedBox(height: 10.0),
-                                TextBuilder(
-                                  fontSize: 14,
-                                  text: 'Duration Left : ' +
-                                      snapshot.data.data.durationLeft
-                                          .toString(),
-                                  color: Color(0xff5D5D5D),
-                                  fontWeight: FontWeight.w500,
+                                const SizedBox(height: 16.0),
+                                Wrap(
+                                  runSpacing: 5,
+                                  children: [
+                                    TextBuilder(
+                                      text: 'Quantity:',
+                                      fontSize: 15,
+                                      color: kMainColor,
+                                      fontWeight: FontWeight.w800,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(width: 5,),
+                                    TextBuilder(
+                                      fontSize: 14,
+                                      text: '${snapshot.data.data.totalTablets
+                                          .toString()} Tablets',
+                                      color: kMainColor,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.symmetric(horizontal: 5),
+                                      width: 1,
+                                      height: 16,
+                                      color: kMainColor,
+                                    ),
+                                    TextBuilder(
+                                      fontSize: 14,
+                                      text: '${snapshot.data.data.tabletsLeft.toString()} Tablets Left',
+                                      color: kMainColor,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
