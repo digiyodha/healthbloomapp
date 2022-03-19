@@ -103,3 +103,39 @@ exports.getFeedback = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({ success: true, data: feedback_object });
 });
+
+//get feedback all users
+exports.getFeedbackUsers = asyncHandler(async (req, res, next) => {
+    
+    var feedbackForm = await FeedbackForm.find({});
+
+
+    var feedback_object = [];
+    var feedbackPromise = await feedbackForm.map(async function(feedback){
+        var userFeedback = await UserFeedback.find({feedback_id: feedback._id});
+        
+        var feedbackOptions = [];
+        var userFeedbackPromise = await userFeedback.map(async function(userFeedback){
+            var feedback_options = await FeedbackOptions.findOne({_id: userFeedback.option_id});
+
+            
+            feedbackOptions.push({
+                option_id: feedback_options._id,
+                feedback_name: feedback_options.feedback_name
+            });
+            
+        });
+        await Promise.all(userFeedbackPromise);
+
+        feedback_object.push({
+            experience: feedback.experience,
+            description: feedback.description,
+            user_id: await User.findOne({_id: feedback.user_id}),
+            feedbackOptions: feedbackOptions
+        });
+    });
+    await Promise.all(feedbackPromise);
+
+    res.status(200).json({ success: true, data: feedback_object });
+});
+
