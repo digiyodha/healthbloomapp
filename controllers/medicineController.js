@@ -43,6 +43,7 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
         });
         console.log(timeMedicine);
     });
+
     await Promise.all(timePromise);
     if(!medicine)
     {
@@ -102,6 +103,7 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
 exports.searchMedicine = asyncHandler(async (req, res, next) => {
     var {name} = req.body;
     // const bill = await Bill.find({$text: {$search: name}});
+    await updateMedicineNextDose(req.user._id);
     const medicineObject = await Medicine.find({$or: [
         {
             medicine_name: {
@@ -199,22 +201,30 @@ function dynamicSort(property) {
     }
 }
 
-//next 10 Med0icines
-exports.getNextMedicinesByTime = asyncHandler(async (req, res, next) => {
 
-    var date_time = Date.now();
+async function updateMedicineNextDose(user_id){
 
+    // var date = Date.now().toISOString();
+    var date_time = new Date()
+    console.log(date_time);
     await TimeMedicine.updateMany({
         end_time: {$lt: date_time},
-        user_id: req.user._id,
+        user_id: user_id,
         is_active: 1
     }, {$set: {is_active: 0}});
 
     await TimeMedicine.updateMany({
         start_time: {$lt: date_time},
-        user_id: req.user._id,
+        user_id: user_id,
         is_active: 1
     }, [{$set: {start_time: {$add: ['$start_time', 24*60*60000]}}}]);
+
+}
+
+//next 10 Med0icines
+exports.getNextMedicinesByTime = asyncHandler(async (req, res, next) => {
+
+    await updateMedicineNextDose(req.user._id);
 
 
     console.log(req.user._id);
@@ -252,8 +262,8 @@ exports.getNextMedicinesByTime = asyncHandler(async (req, res, next) => {
         var total_tablets = timeObject.length * medicine.duration;
 
 
-        console.log(number_of_tablets);
-        console.log(total_tablets);
+        // console.log(number_of_tablets);
+        // console.log(total_tablets);
 
         var durationAfterDate = duration;
         if(fns.isBefore(Date.now(), endTime))
