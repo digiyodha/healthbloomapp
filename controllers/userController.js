@@ -59,7 +59,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 
 //register login
 exports.registerLoginUser = asyncHandler(async (req, res, next) => {
-  var {email_id, uid, avatar, phone_number, country_code, name} = req.body;
+  var {email_id, uid, avatar, phone_number, country_code, name, fcm_token} = req.body;
 
   var new_user = false;
 
@@ -98,6 +98,11 @@ exports.registerLoginUser = asyncHandler(async (req, res, next) => {
       userDetailsObj.name = name;
     }else{
       userDetailsObj.name = null;
+    }
+    if(fcm_token){
+      userDetailsObj.fcm_token = fcm_token;
+    }else{
+      userDetailsObj.fcm_token = null;
     }
 
     userDetailsObj.google_address = null;
@@ -139,7 +144,8 @@ exports.registerLoginUser = asyncHandler(async (req, res, next) => {
     blood_group: user.blood_group,
     x_auth_token: token,
     is_active: user.is_active,
-    new_user: new_user
+    new_user: new_user,
+    fcm_token: user.fcm_token
   }
   res.status(200).json({ success: true, data: userData });
 });

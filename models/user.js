@@ -25,6 +25,19 @@ var UserSchema = new Schema({
     is_active: {
       type: Boolean,
       default: true
+    },
+    fcm_token: String,
+    push_notification: {
+      type: Boolean,
+      default: true
+    },
+    vibration_mode: {
+      type: Boolean,
+      default: true
+    },
+    silent_mode: {
+      type: Boolean,
+      default: false
     }
 
 }, {
