@@ -100,7 +100,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                       ),
                       const SizedBox(height: 10.0),
                       TextBuilder(
-                        text: 'How was your overall\nnexperience?',
+                        text: 'How was your overall\nexperience?',
                         color: Colors.white,
                         height: 1.2,
                         textAlign: TextAlign.center,

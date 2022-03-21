@@ -307,6 +307,18 @@ class _AboutMedicineState extends State<AboutMedicine> {
                                       color: kMainColor,
                                       fontWeight: FontWeight.w400,
                                     ),
+                                    Container(
+                                      margin: EdgeInsets.symmetric(horizontal: 5),
+                                      width: 1,
+                                      height: 16,
+                                      color: kMainColor,
+                                    ),
+                                    TextBuilder(
+                                      fontSize: 14,
+                                      text: '${snapshot.data.data.durationLeft ?? "-"} days left'.toString(),
+                                      color: kMainColor,
+                                      fontWeight: FontWeight.w400,
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(height: 16.0),

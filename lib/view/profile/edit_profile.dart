@@ -123,14 +123,15 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: widget.phone ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(right: 16),
-                            height: 50,
-                            alignment: Alignment.center,
-                            width: 40,
-                          ),
+                          if(widget.phone)
+                            Container(
+                              margin: EdgeInsets.only(right: 16),
+                              height: 50,
+                              alignment: Alignment.center,
+                              width: 40,
+                            ),
                           Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: TextBuilder(
@@ -140,24 +141,25 @@ class _EditProfileState extends State<EditProfile> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage()),
-                                (Route<dynamic> route) => false,
-                              );
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(right: 16, top: 8),
-                              width: 40,
-                              child: Text(
-                                "Skip",
-                                style: TextStyle(color: kWhite, fontSize: 16),
+                          if(widget.phone)
+                            InkWell(
+                              onTap: () {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePage()),
+                                  (Route<dynamic> route) => false,
+                                );
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(right: 16, top: 8),
+                                width: 40,
+                                child: Text(
+                                  "Skip",
+                                  style: TextStyle(color: kWhite, fontSize: 16),
+                                ),
                               ),
-                            ),
-                          )
+                            )
                         ],
                       ),
                       Positioned(

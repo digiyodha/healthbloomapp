@@ -66,6 +66,7 @@ class MedicineCard extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
+                  if(time != null)
                   calculateDifference(time) == 0
                       ? TextBuilder(
                           text: 'Today',
@@ -84,6 +85,7 @@ class MedicineCard extends StatelessWidget {
                               color: kWhite,
                               fontWeight: FontWeight.w600),
                   Spacer(),
+                  if(time != null)
                   Text(
                     '${DateFormat('hh:mm a').format(time).toString()}' ?? '',
                     style: TextStyle(
@@ -91,6 +93,12 @@ class MedicineCard extends StatelessWidget {
                         color: kWhite,
                         fontWeight: FontWeight.w600),
                   ),
+                  if(time == null)
+                    TextBuilder(
+                        text: 'Dose completed',
+                        fontSize: 18,
+                        color: kWhite,
+                        fontWeight: FontWeight.w600),
                   SizedBox(height: 6),
                   Text(
                     "Dosage - ${dosages.toString()} mg" ?? '',
