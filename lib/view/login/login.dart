@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -310,8 +311,10 @@ class _LoginState extends State<Login> {
                                             email: _email.text,
                                             password: _password.text,
                                           );
-
+                                          String msgToken = await FirebaseMessaging.instance.getToken();
+                                          print(msgToken);
                                           if (user.user.emailVerified) {
+
                                             await loginUser(RegisterLoginRequest(
                                                 name: _auth.currentUser
                                                         .displayName ??
@@ -324,7 +327,8 @@ class _LoginState extends State<Login> {
                                                         .currentUser.photoURL ??
                                                     "",
                                                 phoneNumber: null,
-                                                countryCode: null));
+                                                countryCode: null,
+                                            fcmToken: msgToken));
                                           } else {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
@@ -427,13 +431,16 @@ class _LoginState extends State<Login> {
                                     _loading = false;
                                   });
                                   if (cred != null) {
+                                    String msgToken = await FirebaseMessaging.instance.getToken();
+                                    print(msgToken);
                                     await loginUser(RegisterLoginRequest(
                                         name: cred.user.displayName ?? "",
                                         emailId: cred.user.email ?? "",
                                         uid: cred.user.uid,
                                         avatar: cred.user.photoURL ?? "",
                                         phoneNumber: null,
-                                        countryCode: null));
+                                        countryCode: null,
+                                    fcmToken: msgToken));
                                   } else {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
@@ -466,13 +473,15 @@ class _LoginState extends State<Login> {
                                     _loading = false;
                                   });
                                   if (cred != null) {
+                                    String msgToken = await FirebaseMessaging.instance.getToken();
+                                    print(msgToken);
                                     await loginUser(RegisterLoginRequest(
                                         name: cred.user.displayName ?? "",
                                         emailId: cred.user.email ?? "",
                                         uid: cred.user.uid,
                                         avatar: cred.user.photoURL ?? "",
                                         phoneNumber: null,
-                                        countryCode: null));
+                                        countryCode: null,fcmToken: msgToken));
                                   } else {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(

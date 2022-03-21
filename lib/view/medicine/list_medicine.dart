@@ -12,6 +12,8 @@ import 'package:health_bloom/view/medicine/add_medicine.dart';
 import 'package:health_bloom/view/medicine/list_about_medicine.dart';
 import 'package:provider/provider.dart';
 
+import 'about_medicine.dart';
+
 class ListMedicine extends StatefulWidget {
   const ListMedicine({Key key}) : super(key: key);
 
@@ -142,10 +144,8 @@ class _ListMedicineState extends State<ListMedicine> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ListAboutMedicine(
-                                                  id: medicine.id,
-                                                ),
+                                                builder: (context) => AboutMedicine(
+                                                    id: medicine.id),
                                               ),
                                             ).whenComplete(() {
                                               setState(() {

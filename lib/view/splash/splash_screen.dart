@@ -1,8 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/walkthrough/walkthrough.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+
+}
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key key}) : super(key: key);
@@ -27,10 +35,75 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
+  Future selectNotification(String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: $payload');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 2)).whenComplete(() => getData());
+
+
+
+
+    var initialzationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettings = InitializationSettings(
+        android: initialzationSettingsAndroid,
+        iOS: IOSInitializationSettings());
+
+    flutterNotification.initialize(initializationSettings,
+        onSelectNotification: selectNotification);
+
+    FirebaseMessaging.onBackgroundMessage(
+        _firebaseMessagingBackgroundHandler);
+
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage message) {
+      if (message != null) {
+        RemoteNotification notification = message.notification;
+
+        if (notification != null) {
+
+
+        }
+      }
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print(message.data);
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+      print(notification);
+      print(android);
+      if (notification != null && android != null) {
+        String encodedData = "{\"log_id\": ${message.data["log_id"]},"
+            "\"body\": \"${message.data["body"]}\","
+            "\"title\": \"${message.data["title"]}\","
+            "\"dataTitle\": \"${message.data["dataTitle"]}\","
+            "\"dataBody\": \"${message.data["dataBody"]}\"}";
+        print("SHOW NOTIICATION");
+
+        flutterNotification.show(
+            message.notification.hashCode,
+            message.data["title"],
+            message.data["body"],
+            NotificationDetails(
+                android: androidDetails,
+                iOS: IOSNotificationDetails()),
+            payload: encodedData);
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+
+
+    });
+
   }
 
   @override

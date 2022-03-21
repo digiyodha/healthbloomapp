@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/request.dart';
@@ -153,13 +154,15 @@ class _PhoneLoginState extends State<PhoneLogin> {
         }
 
         if (user != null) {
+          String msgToken = await FirebaseMessaging.instance.getToken();
+          print(msgToken);
           await loginUser(RegisterLoginRequest(
               name: "",
               emailId: "",
               uid: user.user.uid,
               avatar: "",
               phoneNumber: user.user.phoneNumber,
-              countryCode: null));
+              countryCode: null,fcmToken: msgToken));
         }
         setState(() {
           isLoading = false;

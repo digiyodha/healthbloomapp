@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -19,6 +20,13 @@ const debug = true;
 FlutterLocalNotificationsPlugin flutterNotification =
     FlutterLocalNotificationsPlugin();
 
+var androidDetails = new AndroidNotificationDetails(
+  "Channel ID",
+  "Desi programmer",
+  importance: Importance.max,
+  channelDescription: "This is my channel",
+);
+
 notificationInit() {
   var androidInitilize = new AndroidInitializationSettings('app_icon');
   var iOSinitilize = new IOSInitializationSettings();
@@ -30,12 +38,7 @@ notificationInit() {
 }
 
 Future showNotification() async {
-  var androidDetails = new AndroidNotificationDetails(
-    "Channel ID",
-    "Desi programmer",
-    importance: Importance.max,
-    channelDescription: "This is my channel",
-  );
+
   var iSODetails = new IOSNotificationDetails();
   var generalNotificationDetails =
       new NotificationDetails(android: androidDetails, iOS: iSODetails);
@@ -87,6 +90,14 @@ Future<void> main() async {
 
   Provider.debugCheckInvalidValueType = null;
   NetworkManager networkManager = await getAuthNetworkManager(baseUrl);
+
+  await FirebaseMessaging.instance
+      .setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
   runApp(MyApp(
     networkManager: networkManager,
   ));

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_bloom/view/reminder/add_reminder.dart';
 import '../view/bill/add_bill.dart';
 import '../view/medicine/add_medicine.dart';
 import '../view/prescription/add_prescription.dart';
@@ -53,6 +54,17 @@ class CustomAddElementBs extends StatelessWidget {
                   .whenComplete(() {
                 onChanged();
               });
+            },
+          ),
+          ListTile(
+            leading: new Icon(Icons.add),
+            title: new Text('Reminder'),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddReminder()))
+                  .whenComplete(() => Navigator.pop(context));
             },
           ),
           // ListTile(

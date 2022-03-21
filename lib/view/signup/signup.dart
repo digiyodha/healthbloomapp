@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -314,6 +315,8 @@ class _SignUpState extends State<SignUp> {
                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Verification link has been sent to your Email. Please verify your account!"),));
                                         });
                                         print("_auth ${_auth.toString()}");
+                                        String msgToken = await FirebaseMessaging.instance.getToken();
+                                        print(msgToken);
                                         await loginUser(RegisterLoginRequest(
                                             name:
                                                 _auth.currentUser.displayName ??
@@ -325,7 +328,8 @@ class _SignUpState extends State<SignUp> {
                                                 _auth.currentUser.photoURL ??
                                                     "",
                                             phoneNumber: null,
-                                            countryCode: "91"));
+                                            countryCode: "91",
+                                        fcmToken: msgToken));
 
                                         Navigator.pushAndRemoveUntil(
                                           context,
@@ -451,6 +455,8 @@ class _SignUpState extends State<SignUp> {
                                   _loading = false;
                                 });
                                 if (cred != null) {
+                                  String msgToken = await FirebaseMessaging.instance.getToken();
+                                  print(msgToken);
                                   await loginUser(
                                       RegisterLoginRequest(
                                           name: cred.user.displayName ?? "",
@@ -458,7 +464,7 @@ class _SignUpState extends State<SignUp> {
                                           uid: cred.user.uid,
                                           avatar: cred.user.photoURL ?? "",
                                           phoneNumber: null,
-                                          countryCode: null),
+                                          countryCode: null,fcmToken: msgToken),
                                       soc: true);
                                 } else {
                                   ScaffoldMessenger.of(context)
@@ -491,6 +497,8 @@ class _SignUpState extends State<SignUp> {
                                   _loading = false;
                                 });
                                 if (cred != null) {
+                                  String msgToken = await FirebaseMessaging.instance.getToken();
+                                  print(msgToken);
                                   await loginUser(
                                       RegisterLoginRequest(
                                           name: cred.user.displayName ?? "",
@@ -498,7 +506,8 @@ class _SignUpState extends State<SignUp> {
                                           uid: cred.user.uid,
                                           avatar: cred.user.photoURL ?? "",
                                           phoneNumber: null,
-                                          countryCode: null),
+                                          countryCode: null,
+                                      fcmToken: msgToken),
                                       soc: true);
                                 } else {
                                   ScaffoldMessenger.of(context)

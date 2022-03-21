@@ -9,6 +9,7 @@ import 'package:health_bloom/view/feedback/feedback_page.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/insurance/insurance.dart';
 import 'package:health_bloom/view/profile/profile.dart';
+import 'package:health_bloom/view/settings/settings.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 import '../../view/family_members/family_members.dart';
@@ -164,7 +165,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 DrawerContainerWidget(
                   text: "Settings",
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                          return Settings();
+                        }));
+                  },
                   selected: widget.selected == 7,
                   icon: Icons.settings,
                 ),

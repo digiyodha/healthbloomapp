@@ -65,6 +65,7 @@ class RegisterLoginRequest {
     this.avatar,
     this.phoneNumber,
     this.countryCode,
+    this.fcmToken
   });
 
   String name;
@@ -73,6 +74,7 @@ class RegisterLoginRequest {
   String avatar;
   dynamic phoneNumber;
   String countryCode;
+  String fcmToken;
 
   factory RegisterLoginRequest.fromJson(Map<String, dynamic> json) =>
       RegisterLoginRequest(
@@ -82,6 +84,7 @@ class RegisterLoginRequest {
         avatar: json["avatar"] == null ? null : json["avatar"],
         phoneNumber: json["phone_number"],
         countryCode: json["country_code"] == null ? null : json["country_code"],
+        fcmToken: json["fcm_token"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -91,6 +94,7 @@ class RegisterLoginRequest {
         "avatar": avatar == null ? null : avatar,
         "phone_number": phoneNumber,
         "country_code": countryCode == null ? null : countryCode,
+        "fcm_token" : fcmToken
       };
 }
 
