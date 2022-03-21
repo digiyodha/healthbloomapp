@@ -128,6 +128,16 @@ exports.registerLoginUser = asyncHandler(async (req, res, next) => {
     expiresIn: '12h',
   });
 
+  if(fcm_token != null)
+  {
+    await User.findOneAndUpdate({_id: user._id}, {fcm_token: fcm_token});
+  }
+
+  user = await User.findOne({_id: user._id});
+  console.log(user);
+
+
+
   const userData = {
     _id: user._id,
     name: user.name,
