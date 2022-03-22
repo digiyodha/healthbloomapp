@@ -8,7 +8,9 @@ const { Insurance } = require("../models/insurance");
 const { Prescription } = require("../models/prescription");
 const { Report } = require("../models/report");
 var fns = require('date-fns');
-const { Console } = require("@sentry/node/dist/integrations");
+var cron = require('node-cron');
+const schedule = require('node-schedule');
+const { sendNotificationToUser } = require("./notificationController");
 
 
 
@@ -42,6 +44,49 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
 
         });
         console.log(timeMedicine);
+
+        if(reminder_time == 'Daily')
+        {
+            var start = timestamp;
+            for(var i=0; i<parseInt(duration); i++)
+            {
+                var date = new Date(start);
+                console.log(date);
+                const job = schedule.scheduleJob(date, async function(){
+                    console.log('Reminder done!');
+                    await sendNotificationToUser('Medicine', medicine_name, req.user._id);
+                });
+                start = fns.addDays(date, 1);
+            }
+        }
+        else if(reminder_time == 'Weekly')
+        {
+            var start = timestamp;
+            for(var i=0; i<parseInt(duration); i+=7)
+            {
+                var date = new Date(start);
+                console.log(date);
+                const job = schedule.scheduleJob(date, async function(){
+                    console.log('Reminder done!');
+                    await sendNotificationToUser('Medicine', medicine_name, req.user._id);
+                });
+                start = fns.addDays(date, 7);
+            }
+        }
+        else if(reminder_time == 'Monthly')
+        {
+            var start = timestamp;
+            for(var i=0; i<parseInt(duration); i+=30)
+            {
+                var date = new Date(start);
+                console.log(date);
+                const job = schedule.scheduleJob(date, async function(){
+                    console.log('Reminder done!');
+                    await sendNotificationToUser('Medicine', medicine_name, req.user._id);
+                });
+                start = fns.addDays(date, 30);
+            }
+        }
     });
 
     await Promise.all(timePromise);
