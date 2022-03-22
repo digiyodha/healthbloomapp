@@ -8,13 +8,16 @@ const {
   registerLoginUser,
   addEditUserDetails,
   getUser,
-  deleteUser
+  deleteUser,
+  editSettings
   
 } = require("../controllers/userController");
 
 
 router.route("/").get(protect, getUser).put(registerLoginUser).delete(protect, deleteUser);
 router.route("/id").put(addEditUserDetails);
+router.route("/settings").put(protect, editSettings);
+
 
 
 

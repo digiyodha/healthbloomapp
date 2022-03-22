@@ -3,11 +3,14 @@ const express = require("express");
 
 const router = express.Router();
 
-const { nearbyMedicalStores, nearbyMedicalLabs} = require("../controllers/mapController");
+const { nearbyMedicalStores, nearbyMedicalLabs, placeDetails, nextResults} = require("../controllers/mapController");
 
 
 router.route("/store").put(nearbyMedicalStores);
 router.route("/lab").put(nearbyMedicalLabs);
+router.route("/details").put(placeDetails);
+router.route("/next-page").put(nextResults);
+
 
 
 

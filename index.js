@@ -56,6 +56,8 @@ app.use("/v1/medicine", require("./routers/medicineRouter"));
 app.use("/v1/feedback", require("./routers/feedbackRouter"));
 app.use("/v1/admin", require("./routers/adminRouter"));
 app.use("/v1/map", require("./routers/mapRouter"));
+app.use("/v1/reminder", require("./routers/reminderRouter"));
+
 
 
 
