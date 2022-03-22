@@ -3,6 +3,29 @@ const ErrorResponse = require("../utils/ErrorResponse");
 const {User} = require("../models/user");
 const {Family} = require("../models/family");
 const {Reminder} = require("../models/reminder");
+var cron = require('node-cron');
+const schedule = require('node-schedule');
+const { sendNotificationToUser } = require("./notificationController");
+
+
+// //schedule Reminder
+// exports.scheduleReminder = asyncHandler(async (req, res, next) => {
+    
+//     // cron.schedule('* * * * *', () => {
+//     //     console.log('running a task every minute');
+//     // });
+
+    
+//     const date = new Date("2022-03-22T10:41:26.332Z");
+
+//     console.log(new Date());
+
+//     const job = schedule.scheduleJob(date, function(){
+//     console.log('The world is going to end today.');
+//     });
+    
+//     res.status(200).json({ success: true, data: null });
+// });
 
 
 
@@ -22,6 +45,16 @@ exports.addReminder = asyncHandler(async (req, res, next) => {
         new ErrorResponse(`Reminder creation unsuccessful`, 404)
         );
     }
+
+
+    var date = new Date(date_time);
+    console.log(date);
+    const job = schedule.scheduleJob(date, async function(){
+        console.log('Reminder done!');
+        await sendNotificationToUser(reminder_type, description, req.user._id);
+    });
+
+
     res.status(200).json({ success: true, data: reminder });
 });
 
