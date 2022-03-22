@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:health_bloom/main.dart';
 import 'package:health_bloom/utils/colors.dart';
 import '../../utils/drawer/custom_drawer.dart';
+import '../homepage/home_page.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key key}) : super(key: key);
@@ -11,15 +13,34 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool _notifications = false;
-  bool _vibration = false;
-  bool _silent = false;
+  bool _notifications;
+  bool _vibration;
+  bool _silent;
+
+  getData(){
+    _notifications = sp.getBool("generalNotifications");
+    _vibration = sp.getBool("generalVibration");
+    _silent = sp.getBool("generalSilent");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async{
-        return false;
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ),
+        );
+        return true;
       },
       child: Scaffold(
         backgroundColor: kMainColor,
@@ -54,6 +75,7 @@ class _SettingsState extends State<Settings> {
                   activeColor: kMainColor,
                     value: _notifications,
                     onChanged: (v) {
+                    sp.setBool("generalNotifications", v);
                       setState(() {
                         _notifications = v;
                       });
@@ -70,6 +92,7 @@ class _SettingsState extends State<Settings> {
                   activeColor: kMainColor,
                   value: _vibration,
                   onChanged: (v) {
+                    sp.setBool("generalVibration", v);
                     setState(() {
                       _vibration = v;
                     });
@@ -86,6 +109,7 @@ class _SettingsState extends State<Settings> {
                   activeColor: kMainColor,
                   value: _silent,
                   onChanged: (v) {
+                    sp.setBool("generalSilent", v);
                     setState(() {
                       _silent = v;
                     });

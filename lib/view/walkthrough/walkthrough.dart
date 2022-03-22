@@ -218,7 +218,7 @@ class _WalkthroughState extends State<Walkthrough> {
                                 bottomLeft: Radius.circular(6))),
                         child: Center(
                           child: Text(
-                            " Skip ",
+                            currentIndex == 2 ? " Let\'s Go " :" Skip ",
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w600),
                           ),

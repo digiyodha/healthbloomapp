@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 
+import '../utils/colors.dart';
+
 class InsuranceCard extends StatelessWidget {
   final String organization;
   final String nameOfPatients;
@@ -28,7 +30,7 @@ class InsuranceCard extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: Color(0xffA283F9),
+            color: kMainColor,
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(12),
               bottomRight: Radius.circular(12),
@@ -72,7 +74,7 @@ class InsuranceCard extends StatelessWidget {
                 child: Container(
                   height: 115,
                   decoration: BoxDecoration(
-                    color: Color(0xffA283F9),
+                    color: kMainColor,
                   ),
                   padding: EdgeInsets.all(10),
                   child: Column(

@@ -119,7 +119,7 @@ class _EditProfileState extends State<EditProfile> {
                       Container(
                         height: MediaQuery.of(context).size.height,
                         width: double.infinity,
-                        color: Color(0xffA283F9),
+                        color: kMainColor,
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,

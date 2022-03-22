@@ -33,11 +33,12 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     MapsNearbyMedicalsResponse _response = await adminAPI.getNearbyMedicalsAPI(
         MapsNearbyMedicalsRequest(
-            hours: _hours,
+            //hours: _hours,
             distance: _distance,
             latitude: _lat,
             longitude: _lng,
-            rating: _rating));
+            //rating: _rating,
+        ));
     _commonResponse = _response;
     setState(() {});
   }
@@ -48,11 +49,12 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     MapsNearbyMedicalsResponse _response = await adminAPI.getNearbyLabsAPI(
         MapsNearbyMedicalsRequest(
-            hours: _hours,
+            //hours: _hours,
             distance: _distance,
             latitude: _lat,
             longitude: _lng,
-            rating: _rating));
+            //rating: _rating,
+        ));
     _commonResponse = _response;
     setState(() {});
   }
@@ -127,6 +129,60 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                           ),
                           Row(
                             children: [
+                              // Expanded(
+                              //   child: Container(
+                              //     padding: EdgeInsets.symmetric(
+                              //         horizontal: 10, vertical: 0),
+                              //     decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(6),
+                              //         color: kMainColor),
+                              //     child: Theme(
+                              //       data: Theme.of(context).copyWith(
+                              //         canvasColor: Color(0xff9D93EC),
+                              //       ),
+                              //       child: DropdownButton<String>(
+                              //         isExpanded: true,
+                              //         value: _hours,
+                              //         icon: const Icon(
+                              //           Icons.arrow_drop_down_outlined,
+                              //           color: kWhite,
+                              //         ),
+                              //         elevation: 16,
+                              //         style: const TextStyle(color: kWhite),
+                              //         underline: Container(),
+                              //         onChanged: (String newValue) {
+                              //           setState(() {
+                              //             _hours = newValue;
+                              //           });
+                              //           getNearbyMedicals();
+                              //         },
+                              //         items: <String>[
+                              //           'Any time',
+                              //           'Open now',
+                              //           'Open 24 hours',
+                              //           'Sunday',
+                              //           'Monday',
+                              //           'Tuesday',
+                              //           'Wednesday',
+                              //           'Thursday',
+                              //           'Friday',
+                              //           'Saturday',
+                              //         ].map<DropdownMenuItem<String>>(
+                              //             (String value) {
+                              //           return DropdownMenuItem<String>(
+                              //             value: value,
+                              //             child: Text(
+                              //               value,
+                              //             ),
+                              //           );
+                              //         }).toList(),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   width: 20,
+                              // ),
                               Expanded(
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
@@ -138,42 +194,47 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                     data: Theme.of(context).copyWith(
                                       canvasColor: Color(0xff9D93EC),
                                     ),
-                                    child: DropdownButton<String>(
-                                      isExpanded: true,
-                                      value: _hours,
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down_outlined,
-                                        color: kWhite,
-                                      ),
-                                      elevation: 16,
-                                      style: const TextStyle(color: kWhite),
-                                      underline: Container(),
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          _hours = newValue;
-                                        });
-                                        getNearbyMedicals();
-                                      },
-                                      items: <String>[
-                                        'Any time',
-                                        'Open now',
-                                        'Open 24 hours',
-                                        'Sunday',
-                                        'Monday',
-                                        'Tuesday',
-                                        'Wednesday',
-                                        'Thursday',
-                                        'Friday',
-                                        'Saturday',
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(
-                                            value,
+                                    child: Row(
+                                      children: [
+                                        Text("Rating:",style: TextStyle(color: kWhite),),
+                                        SizedBox(width: 6,),
+                                        Expanded(
+                                          child: DropdownButton<String>(
+                                            isExpanded: true,
+                                            value: _rating,
+                                            icon: const Icon(
+                                              Icons.arrow_drop_down_outlined,
+                                              color: kWhite,
+                                            ),
+                                            elevation: 16,
+                                            style: const TextStyle(color: kWhite),
+                                            underline: Container(),
+                                            onChanged: (String newValue) {
+                                              setState(() {
+                                                _rating = newValue;
+                                              });
+                                              getNearbyMedicals();
+                                            },
+                                            items: <String>[
+                                              'Any',
+                                              '4.5',
+                                              '4',
+                                              '3.5',
+                                              '3',
+                                              '2.5',
+                                              '2',
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(
+                                                  value,
+                                                ),
+                                              );
+                                            }).toList(),
                                           ),
-                                        );
-                                      }).toList(),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -192,83 +253,40 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                     data: Theme.of(context).copyWith(
                                       canvasColor: Color(0xff9D93EC),
                                     ),
-                                    child: DropdownButton<String>(
-                                      isExpanded: true,
-                                      value: _rating,
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down_outlined,
-                                        color: kWhite,
-                                      ),
-                                      elevation: 16,
-                                      style: const TextStyle(color: kWhite),
-                                      underline: Container(),
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          _rating = newValue;
-                                        });
-                                        getNearbyMedicals();
-                                      },
-                                      items: <String>[
-                                        'Any',
-                                        '4.5',
-                                        '4',
-                                        '3.5',
-                                        '3',
-                                        '2.5',
-                                        '2',
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(
-                                            value,
+                                    child: Row(
+                                      children: [
+                                        Text("Distance:",style: TextStyle(color: kWhite),),
+                                        SizedBox(width: 6,),
+                                        Expanded(
+                                          child: DropdownButton<String>(
+                                            isExpanded: true,
+                                            value: _distance,
+                                            icon: const Icon(
+                                              Icons.arrow_drop_down_outlined,
+                                              color: kWhite,
+                                            ),
+                                            elevation: 16,
+                                            style: const TextStyle(color: kWhite),
+                                            underline: Container(),
+                                            onChanged: (String newValue) {
+                                              setState(() {
+                                                _distance = newValue;
+                                              });
+                                              getNearbyMedicals();
+                                            },
+                                            items: <String>['500', '600', '700', '800']
+                                                .map<DropdownMenuItem<String>>(
+                                                    (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(
+                                                  value,
+                                                ),
+                                              );
+                                            }).toList(),
                                           ),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Expanded(
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 0),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      color: kMainColor),
-                                  child: Theme(
-                                    data: Theme.of(context).copyWith(
-                                      canvasColor: Color(0xff9D93EC),
-                                    ),
-                                    child: DropdownButton<String>(
-                                      isExpanded: true,
-                                      value: _distance,
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down_outlined,
-                                        color: kWhite,
-                                      ),
-                                      elevation: 16,
-                                      style: const TextStyle(color: kWhite),
-                                      underline: Container(),
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          _distance = newValue;
-                                        });
-                                        getNearbyMedicals();
-                                      },
-                                      items: <String>['500', '600', '700', '800']
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(
-                                            value,
-                                          ),
-                                        );
-                                      }).toList(),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -282,7 +300,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                   shrinkWrap: true,
                                   itemCount: _commonResponse.data.results.length,
                                   itemBuilder: (context, index) {
-                                    return InkWell(
+                                    return _rating == 'Any' ? InkWell(
                                       onTap: () {
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (context) {
@@ -413,7 +431,138 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                           ],
                                         ),
                                       ),
-                                    );
+                                    ) : double.parse(_rating) <= _commonResponse.data.results[index].rating ? InkWell(
+                                      onTap: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) {
+                                              return NearbyPlaceDetails(
+                                                  data: _commonResponse
+                                                      .data.results[index]);
+                                            }));
+                                      },
+                                      child: Container(
+                                        padding:
+                                        EdgeInsets.symmetric(vertical: 16),
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    color: kMainColorExtraLite,
+                                                    width: 1))),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    _commonResponse
+                                                        .data
+                                                        .results[index]
+                                                        .name ??
+                                                        "-",
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                        FontWeight.w500,
+                                                        color: kMainColor),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 4,
+                                                  ),
+                                                  Text(
+                                                    _commonResponse
+                                                        .data
+                                                        .results[index]
+                                                        .vicinity ??
+                                                        "-",
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                        FontWeight.w400,
+                                                        color: kGrey4),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 4,
+                                                  ),
+                                                  if (_commonResponse
+                                                      .data
+                                                      .results[index]
+                                                      .openingHours !=
+                                                      null)
+                                                    if (_commonResponse
+                                                        .data
+                                                        .results[index]
+                                                        .openingHours
+                                                        .openNow !=
+                                                        null)
+                                                      Text(
+                                                        _commonResponse
+                                                            .data
+                                                            .results[index]
+                                                            .openingHours
+                                                            .openNow
+                                                            ? "Open"
+                                                            : "Closed",
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                            FontWeight.w400,
+                                                            color: _commonResponse
+                                                                .data
+                                                                .results[
+                                                            index]
+                                                                .openingHours
+                                                                .openNow
+                                                                ? Colors.green
+                                                                : Colors
+                                                                .redAccent),
+                                                      ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Column(
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {
+                                                    MapUtils.openMap(
+                                                        _commonResponse
+                                                            .data
+                                                            .results[index]
+                                                            .geometry
+                                                            .location
+                                                            .lat,
+                                                        _commonResponse
+                                                            .data
+                                                            .results[index]
+                                                            .geometry
+                                                            .location
+                                                            .lng);
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.directions,
+                                                    size: 30,
+                                                    color: Color(0xff4285F4),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "DIRECTIONS",
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: Color(0xff4285F4),
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ) : Container();
                                   },
                                 )
                               : Container(
@@ -437,6 +586,60 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                           ),
                           Row(
                             children: [
+                              // Expanded(
+                              //   child: Container(
+                              //     padding: EdgeInsets.symmetric(
+                              //         horizontal: 10, vertical: 0),
+                              //     decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(6),
+                              //         color: kMainColor),
+                              //     child: Theme(
+                              //       data: Theme.of(context).copyWith(
+                              //         canvasColor: Color(0xff9D93EC),
+                              //       ),
+                              //       child: DropdownButton<String>(
+                              //         isExpanded: true,
+                              //         value: _hours,
+                              //         icon: const Icon(
+                              //           Icons.arrow_drop_down_outlined,
+                              //           color: kWhite,
+                              //         ),
+                              //         elevation: 16,
+                              //         style: const TextStyle(color: kWhite),
+                              //         underline: Container(),
+                              //         onChanged: (String newValue) {
+                              //           setState(() {
+                              //             _hours = newValue;
+                              //           });
+                              //           getNearbyLabs();
+                              //         },
+                              //         items: <String>[
+                              //           'Any time',
+                              //           'Open now',
+                              //           'Open 24 hours',
+                              //           'Sunday',
+                              //           'Monday',
+                              //           'Tuesday',
+                              //           'Wednesday',
+                              //           'Thursday',
+                              //           'Friday',
+                              //           'Saturday',
+                              //         ].map<DropdownMenuItem<String>>(
+                              //             (String value) {
+                              //           return DropdownMenuItem<String>(
+                              //             value: value,
+                              //             child: Text(
+                              //               value,
+                              //             ),
+                              //           );
+                              //         }).toList(),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   width: 20,
+                              // ),
                               Expanded(
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
@@ -448,42 +651,47 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                     data: Theme.of(context).copyWith(
                                       canvasColor: Color(0xff9D93EC),
                                     ),
-                                    child: DropdownButton<String>(
-                                      isExpanded: true,
-                                      value: _hours,
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down_outlined,
-                                        color: kWhite,
-                                      ),
-                                      elevation: 16,
-                                      style: const TextStyle(color: kWhite),
-                                      underline: Container(),
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          _hours = newValue;
-                                        });
-                                        getNearbyLabs();
-                                      },
-                                      items: <String>[
-                                        'Any time',
-                                        'Open now',
-                                        'Open 24 hours',
-                                        'Sunday',
-                                        'Monday',
-                                        'Tuesday',
-                                        'Wednesday',
-                                        'Thursday',
-                                        'Friday',
-                                        'Saturday',
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(
-                                            value,
+                                    child: Row(
+                                      children: [
+                                        Text("Rating:",style: TextStyle(color: kWhite),),
+                                        SizedBox(width: 6,),
+                                        Expanded(
+                                          child: DropdownButton<String>(
+                                            isExpanded: true,
+                                            value: _rating,
+                                            icon: const Icon(
+                                              Icons.arrow_drop_down_outlined,
+                                              color: kWhite,
+                                            ),
+                                            elevation: 16,
+                                            style: const TextStyle(color: kWhite),
+                                            underline: Container(),
+                                            onChanged: (String newValue) {
+                                              setState(() {
+                                                _rating = newValue;
+                                              });
+                                              getNearbyLabs();
+                                            },
+                                            items: <String>[
+                                              'Any',
+                                              '4.5',
+                                              '4',
+                                              '3.5',
+                                              '3',
+                                              '2.5',
+                                              '2',
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(
+                                                  value,
+                                                ),
+                                              );
+                                            }).toList(),
                                           ),
-                                        );
-                                      }).toList(),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -502,83 +710,40 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                     data: Theme.of(context).copyWith(
                                       canvasColor: Color(0xff9D93EC),
                                     ),
-                                    child: DropdownButton<String>(
-                                      isExpanded: true,
-                                      value: _rating,
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down_outlined,
-                                        color: kWhite,
-                                      ),
-                                      elevation: 16,
-                                      style: const TextStyle(color: kWhite),
-                                      underline: Container(),
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          _rating = newValue;
-                                        });
-                                        getNearbyLabs();
-                                      },
-                                      items: <String>[
-                                        'Any',
-                                        '4.5',
-                                        '4',
-                                        '3.5',
-                                        '3',
-                                        '2.5',
-                                        '2',
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(
-                                            value,
+                                    child: Row(
+                                      children: [
+                                        Text("Distance:",style: TextStyle(color: kWhite),),
+                                        SizedBox(width: 6,),
+                                        Expanded(
+                                          child: DropdownButton<String>(
+                                            isExpanded: true,
+                                            value: _distance,
+                                            icon: const Icon(
+                                              Icons.arrow_drop_down_outlined,
+                                              color: kWhite,
+                                            ),
+                                            elevation: 16,
+                                            style: const TextStyle(color: kWhite),
+                                            underline: Container(),
+                                            onChanged: (String newValue) {
+                                              setState(() {
+                                                _distance = newValue;
+                                              });
+                                              getNearbyLabs();
+                                            },
+                                            items: <String>['500', '600', '700', '800']
+                                                .map<DropdownMenuItem<String>>(
+                                                    (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(
+                                                  value,
+                                                ),
+                                              );
+                                            }).toList(),
                                           ),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Expanded(
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 0),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      color: kMainColor),
-                                  child: Theme(
-                                    data: Theme.of(context).copyWith(
-                                      canvasColor: Color(0xff9D93EC),
-                                    ),
-                                    child: DropdownButton<String>(
-                                      isExpanded: true,
-                                      value: _distance,
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down_outlined,
-                                        color: kWhite,
-                                      ),
-                                      elevation: 16,
-                                      style: const TextStyle(color: kWhite),
-                                      underline: Container(),
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          _distance = newValue;
-                                        });
-                                        getNearbyLabs();
-                                      },
-                                      items: <String>['500', '600', '700', '800']
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(
-                                            value,
-                                          ),
-                                        );
-                                      }).toList(),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -592,18 +757,18 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                   shrinkWrap: true,
                                   itemCount: _commonResponse.data.results.length,
                                   itemBuilder: (context, index) {
-                                    return InkWell(
+                                    return _rating == 'Any' ? InkWell(
                                       onTap: () {
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (context) {
-                                          return NearbyPlaceDetails(
-                                              data: _commonResponse
-                                                  .data.results[index]);
-                                        }));
+                                              return NearbyPlaceDetails(
+                                                  data: _commonResponse
+                                                      .data.results[index]);
+                                            }));
                                       },
                                       child: Container(
                                         padding:
-                                            EdgeInsets.symmetric(vertical: 16),
+                                        EdgeInsets.symmetric(vertical: 16),
                                         decoration: BoxDecoration(
                                             border: Border(
                                                 bottom: BorderSide(
@@ -611,23 +776,23 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     width: 1))),
                                         child: Row(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: Column(
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     _commonResponse
-                                                            .data
-                                                            .results[index]
-                                                            .name ??
+                                                        .data
+                                                        .results[index]
+                                                        .name ??
                                                         "-",
                                                     style: TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
-                                                            FontWeight.w500,
+                                                        FontWeight.w500,
                                                         color: kMainColor),
                                                   ),
                                                   SizedBox(
@@ -635,51 +800,51 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                   ),
                                                   Text(
                                                     _commonResponse
-                                                            .data
-                                                            .results[index]
-                                                            .vicinity ??
+                                                        .data
+                                                        .results[index]
+                                                        .vicinity ??
                                                         "-",
                                                     style: TextStyle(
                                                         fontSize: 14,
                                                         fontWeight:
-                                                            FontWeight.w400,
+                                                        FontWeight.w400,
                                                         color: kGrey4),
                                                   ),
                                                   SizedBox(
                                                     height: 4,
                                                   ),
                                                   if (_commonResponse
-                                                          .data
-                                                          .results[index]
-                                                          .openingHours !=
+                                                      .data
+                                                      .results[index]
+                                                      .openingHours !=
                                                       null)
                                                     if (_commonResponse
-                                                            .data
-                                                            .results[index]
-                                                            .openingHours
-                                                            .openNow !=
+                                                        .data
+                                                        .results[index]
+                                                        .openingHours
+                                                        .openNow !=
                                                         null)
                                                       Text(
                                                         _commonResponse
-                                                                .data
-                                                                .results[index]
-                                                                .openingHours
-                                                                .openNow
+                                                            .data
+                                                            .results[index]
+                                                            .openingHours
+                                                            .openNow
                                                             ? "Open"
                                                             : "Closed",
                                                         style: TextStyle(
                                                             fontSize: 14,
                                                             fontWeight:
-                                                                FontWeight.w400,
+                                                            FontWeight.w400,
                                                             color: _commonResponse
-                                                                    .data
-                                                                    .results[
-                                                                        index]
-                                                                    .openingHours
-                                                                    .openNow
+                                                                .data
+                                                                .results[
+                                                            index]
+                                                                .openingHours
+                                                                .openNow
                                                                 ? Colors.green
                                                                 : Colors
-                                                                    .redAccent),
+                                                                .redAccent),
                                                       ),
                                                 ],
                                               ),
@@ -723,7 +888,138 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                           ],
                                         ),
                                       ),
-                                    );
+                                    ) : double.parse(_rating) <= _commonResponse.data.results[index].rating ? InkWell(
+                                      onTap: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) {
+                                              return NearbyPlaceDetails(
+                                                  data: _commonResponse
+                                                      .data.results[index]);
+                                            }));
+                                      },
+                                      child: Container(
+                                        padding:
+                                        EdgeInsets.symmetric(vertical: 16),
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    color: kMainColorExtraLite,
+                                                    width: 1))),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    _commonResponse
+                                                        .data
+                                                        .results[index]
+                                                        .name ??
+                                                        "-",
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                        FontWeight.w500,
+                                                        color: kMainColor),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 4,
+                                                  ),
+                                                  Text(
+                                                    _commonResponse
+                                                        .data
+                                                        .results[index]
+                                                        .vicinity ??
+                                                        "-",
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                        FontWeight.w400,
+                                                        color: kGrey4),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 4,
+                                                  ),
+                                                  if (_commonResponse
+                                                      .data
+                                                      .results[index]
+                                                      .openingHours !=
+                                                      null)
+                                                    if (_commonResponse
+                                                        .data
+                                                        .results[index]
+                                                        .openingHours
+                                                        .openNow !=
+                                                        null)
+                                                      Text(
+                                                        _commonResponse
+                                                            .data
+                                                            .results[index]
+                                                            .openingHours
+                                                            .openNow
+                                                            ? "Open"
+                                                            : "Closed",
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                            FontWeight.w400,
+                                                            color: _commonResponse
+                                                                .data
+                                                                .results[
+                                                            index]
+                                                                .openingHours
+                                                                .openNow
+                                                                ? Colors.green
+                                                                : Colors
+                                                                .redAccent),
+                                                      ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Column(
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {
+                                                    MapUtils.openMap(
+                                                        _commonResponse
+                                                            .data
+                                                            .results[index]
+                                                            .geometry
+                                                            .location
+                                                            .lat,
+                                                        _commonResponse
+                                                            .data
+                                                            .results[index]
+                                                            .geometry
+                                                            .location
+                                                            .lng);
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.directions,
+                                                    size: 30,
+                                                    color: Color(0xff4285F4),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "DIRECTIONS",
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: Color(0xff4285F4),
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ) : Container();
                                   },
                                 )
                               : Container(

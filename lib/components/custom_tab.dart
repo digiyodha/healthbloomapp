@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 
+import '../utils/colors.dart';
+
 class CustomTab extends StatelessWidget {
   final String title;
   final String icon;
@@ -34,7 +36,7 @@ class CustomTab extends StatelessWidget {
             Container(
               height: 2,
               width: double.infinity,
-              color: isSelected ? Color(0xffA283F9) : Colors.transparent,
+              color: isSelected ? kMainColor : Colors.transparent,
             )
           ],
         ),

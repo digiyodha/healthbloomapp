@@ -15,6 +15,8 @@ import 'package:health_bloom/utils/loading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/colors.dart';
+
 class UpdateProfile extends StatefulWidget {
   final GetUserResponseData data;
   const UpdateProfile({
@@ -118,7 +120,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     Container(
                       height: MediaQuery.of(context).size.height,
                       width: double.infinity,
-                      color: Color(0xffA283F9),
+                      color: kMainColor,
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,

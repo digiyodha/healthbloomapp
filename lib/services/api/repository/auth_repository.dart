@@ -298,4 +298,53 @@ class NetworkRepository with ChangeNotifier {
     if (apiResult is Error) throw apiResult.error;
     return getNearbyMedicalsAPI(request);
   }
+
+  Future<MapsPlaceDetailsResponse> getPlaceDetailsAPI(MapsPlaceDetailsRequest request) async {
+    Result apiResult = await apiClient.getPlaceDetails(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return getPlaceDetailsAPI(request);
+  }
+
+  Future<AddEditReminderResponse> addReminderAPI(AddReminderRequest request) async {
+    Result apiResult = await apiClient.addReminder(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return addReminderAPI(request);
+  }
+
+  Future<GetReminderListResponse> getAllReminderAPI() async {
+    Result apiResult = await apiClient.getAllReminder();
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return getAllReminderAPI();
+  }
+
+  Future<GetReminderResponse> getReminderByIdAPI(GetReminderRequest request) async {
+    Result apiResult = await apiClient.getReminderById(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return getReminderByIdAPI(request);
+  }
+
+  Future<GetReminderListResponse> getReminderByFamilyAPI(GetFamilyReminderRequest request) async {
+    Result apiResult = await apiClient.getReminderByFamily(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return getReminderByFamilyAPI(request);
+  }
+
+  Future<AddEditReminderResponse> editReminderAPI(EditReminderRequest request) async {
+    Result apiResult = await apiClient.editReminder(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return editReminderAPI(request);
+  }
+
+  Future<AddEditReminderResponse> deleteReminderAPI(DeleteReminderRequest request) async {
+    Result apiResult = await apiClient.deleteReminder(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return deleteReminderAPI(request);
+  }
 }

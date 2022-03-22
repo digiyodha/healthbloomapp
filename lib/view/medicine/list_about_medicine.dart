@@ -7,6 +7,8 @@ import 'package:health_bloom/view/medicine/add_medicine.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/colors.dart';
+
 class ListAboutMedicine extends StatefulWidget {
   final String id;
 
@@ -79,7 +81,7 @@ class _ListAboutMedicineState extends State<ListAboutMedicine> {
               icon: Icon(Icons.edit))
         ],
       ),
-      backgroundColor: Color(0xffA283F9),
+      backgroundColor: kMainColor,
       body: SafeArea(
         child: FutureBuilder<GetMedicineResponse>(
           future: getMedicine(),

@@ -19,6 +19,7 @@ import '../../services/api/repository/auth_repository.dart';
 import '../../utils/drawer/custom_drawer.dart';
 import '../../utils/text_field/custom_text_field.dart';
 import '../bill/add_bill.dart';
+import '../homepage/home_page.dart';
 
 class Documents extends StatefulWidget {
   const Documents({Key key}) : super(key: key);
@@ -136,152 +137,164 @@ class _DocumentsState extends State<Documents> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: CustomDrawer(
-        selected: 3,
-      ),
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: kWhite),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: TextBuilder(
-          text: "Documents",
-          fontSize: 22,
-          fontWeight: FontWeight.w800,
+    return WillPopScope(
+      onWillPop: () async{
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ),
+        );
+        return true;
+      },
+      child: Scaffold(
+        drawer: CustomDrawer(
+          selected: 3,
         ),
-        centerTitle: true,
-      ),
-      backgroundColor: kWhite,
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 300,
-                width: double.infinity,
-                child: Image.asset(
-                  "assets/images/medical_bill.jpg",
-                  fit: BoxFit.cover,
-                  color: Colors.black45,
-                  colorBlendMode: BlendMode.hardLight,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: kWhite),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          title: TextBuilder(
+            text: "Documents",
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
+          ),
+          centerTitle: true,
+        ),
+        backgroundColor: kWhite,
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: 300,
+                  width: double.infinity,
+                  child: Image.asset(
+                    "assets/images/medical_bill.jpg",
+                    fit: BoxFit.cover,
+                    color: Colors.black45,
+                    colorBlendMode: BlendMode.hardLight,
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              left: 0,
-              top: 180,
-              child: Container(
-                padding: EdgeInsets.only(top: 40, left: 24, right: 24),
-                decoration: BoxDecoration(
-                    color: kWhite,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(30),
-                        topLeft: Radius.circular(30))),
-                child: Column(
-                  children: [
-                    CustomTextField(
-                      maxLines: 1,
-                      controller: search,
-                      label: "Search",
-                      textInputType: TextInputType.name,
-                      onChanged: (value) => onSearch(value),
-                      onTap: () {},
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomTextField(
-                            readOnly: true,
-                            maxLines: 1,
-                            controller: _fromDate,
-                            label: "Start Date",
-                            textInputType: TextInputType.text,
-                            onChanged: (val) {},
-                            onTap: () {
-                              _startDate(context);
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 20.0),
-                        Expanded(
-                          child: CustomTextField(
-                            readOnly: true,
-                            maxLines: 1,
-                            controller: _toDate,
-                            label: "End Date",
-                            textInputType: TextInputType.text,
-                            onChanged: (val) {},
-                            onTap: () {
-                              _endDate(context);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24.0),
-                    Container(
-                      color: Colors.white,
-                      child: Row(
+              Positioned(
+                bottom: 0,
+                right: 0,
+                left: 0,
+                top: 180,
+                child: Container(
+                  padding: EdgeInsets.only(top: 40, left: 24, right: 24),
+                  decoration: BoxDecoration(
+                      color: kWhite,
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(30),
+                          topLeft: Radius.circular(30))),
+                  child: Column(
+                    children: [
+                      CustomTextField(
+                        maxLines: 1,
+                        controller: search,
+                        label: "Search",
+                        textInputType: TextInputType.name,
+                        onChanged: (value) => onSearch(value),
+                        onTap: () {},
+                      ),
+                      SizedBox(height: 16),
+                      Row(
                         children: [
                           Expanded(
-                            child: CustomTab(
+                            child: CustomTextField(
+                              readOnly: true,
+                              maxLines: 1,
+                              controller: _fromDate,
+                              label: "Start Date",
+                              textInputType: TextInputType.text,
+                              onChanged: (val) {},
                               onTap: () {
-                                setState(() {
-                                  currentIndex = 0;
-                                });
+                                _startDate(context);
                               },
-                              icon: 'assets/icons/bill.png',
-                              title: 'Bills',
-                              isSelected: currentIndex == 0,
                             ),
                           ),
+                          const SizedBox(width: 20.0),
                           Expanded(
-                            child: CustomTab(
+                            child: CustomTextField(
+                              readOnly: true,
+                              maxLines: 1,
+                              controller: _toDate,
+                              label: "End Date",
+                              textInputType: TextInputType.text,
+                              onChanged: (val) {},
                               onTap: () {
-                                setState(() {
-                                  currentIndex = 1;
-                                });
+                                _endDate(context);
                               },
-                              icon: 'assets/icons/business-report.png',
-                              title: 'Reports',
-                              isSelected: currentIndex == 1,
-                            ),
-                          ),
-                          Expanded(
-                            child: CustomTab(
-                              onTap: () {
-                                setState(() {
-                                  currentIndex = 2;
-                                });
-                              },
-                              icon: 'assets/icons/medical-prescription.png',
-                              title: 'Prescriptions',
-                              isSelected: currentIndex == 2,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    Expanded(
-                      child: _currentResponse != null
-                          ? getList()
-                          : LoadingWidget(),
-                    ),
-                    SizedBox(height: 16),
-                  ],
+                      const SizedBox(height: 24.0),
+                      Container(
+                        color: Colors.white,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: CustomTab(
+                                onTap: () {
+                                  setState(() {
+                                    currentIndex = 0;
+                                  });
+                                },
+                                icon: 'assets/icons/bill.png',
+                                title: 'Bills',
+                                isSelected: currentIndex == 0,
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomTab(
+                                onTap: () {
+                                  setState(() {
+                                    currentIndex = 1;
+                                  });
+                                },
+                                icon: 'assets/icons/business-report.png',
+                                title: 'Reports',
+                                isSelected: currentIndex == 1,
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomTab(
+                                onTap: () {
+                                  setState(() {
+                                    currentIndex = 2;
+                                  });
+                                },
+                                icon: 'assets/icons/medical-prescription.png',
+                                title: 'Prescriptions',
+                                isSelected: currentIndex == 2,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: _currentResponse != null
+                            ? getList()
+                            : LoadingWidget(),
+                      ),
+                      SizedBox(height: 16),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            if (_loading) LoadingWidget()
-          ],
+              if (_loading) LoadingWidget()
+            ],
+          ),
         ),
       ),
     );

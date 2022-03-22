@@ -80,12 +80,25 @@ Future showNotification() async {
 
 }
 
+setSettings(){
+  if(sp.getBool("generalNotifications") == null){
+    sp.setBool("generalNotifications", true);
+  }
+  if(sp.getBool("generalVibration") == null){
+    sp.setBool("generalVibration", false);
+  }
+  if(sp.getBool("generalSilent") == null){
+    sp.setBool("generalSilent", false);
+  }
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   notificationInit();
   await Firebase.initializeApp();
   await FlutterDownloader.initialize(debug: debug);
   sp = await SharedPreferences.getInstance();
+  setSettings();
   String baseUrl = "https://health-bloom.herokuapp.com/";
 
   Provider.debugCheckInvalidValueType = null;

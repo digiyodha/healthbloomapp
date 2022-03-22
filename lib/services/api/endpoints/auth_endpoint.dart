@@ -19,6 +19,7 @@ class AuthEndpoints {
   static get addMedicine => AuthEndpoint("/v1/medicine/", Method.post);
   static get addInsurance => AuthEndpoint("/v1/insurance/", Method.post);
   static get addFeedback => AuthEndpoint("/v1/feedback/", Method.post);
+  static get addReminder => AuthEndpoint("/v1/reminder/", Method.post);
 
   // Edit
   static get editMember => AuthEndpoint("/v1/family/", Method.put);
@@ -33,10 +34,15 @@ class AuthEndpoints {
   static get getMedicine => AuthEndpoint("/v1/medicine/id/", Method.put);
   static get getNearbyMedical => AuthEndpoint("/v1/map/store", Method.put);
   static get getNearbyLabs => AuthEndpoint("/v1/map/lab", Method.put);
+  static get getPlaceDetails => AuthEndpoint("/v1/map/details", Method.put);
+  static get getReminderById => AuthEndpoint("/v1/reminder/id/", Method.put);
+  static get getReminderByFamily => AuthEndpoint("/v1/reminder/family/", Method.put);
+  static get editReminder => AuthEndpoint("/v1/reminder/", Method.put);
 
   // Get
   static get getMember => AuthEndpoint("/v1/family/id/", Method.put);
   static get getUser => AuthEndpoint("/v1/users/", Method.get);
+  static get getAllReminders => AuthEndpoint("/v1/reminder/", Method.get);
   static get getAllmember => AuthEndpoint("/v1/family", Method.get);
   static get getDocuments => AuthEndpoint("/v1/document/", Method.put);
   static get getNextMedicine =>
@@ -52,4 +58,5 @@ class AuthEndpoints {
   static get deleteMember => AuthEndpoint("/v1/family/id/", Method.delete);
   static get deleteInsurance => AuthEndpoint("/v1/insurance/", Method.delete);
   static get deleteMedicine => AuthEndpoint("/v1/medicine/", Method.delete);
+  static get deleteReminder => AuthEndpoint("/v1/reminder/", Method.delete);
 }

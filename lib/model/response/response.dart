@@ -861,3 +861,659 @@ class MapsNearbyMedicalsResponsePlusCode {
     "global_code": globalCode == null ? null : globalCode,
   };
 }
+
+class MapsPlaceDetailsResponse {
+  MapsPlaceDetailsResponse({
+    this.success,
+    this.data,
+  });
+
+  bool success;
+  MapsPlaceDetailsResponseData data;
+
+  factory MapsPlaceDetailsResponse.fromJson(Map<String, dynamic> json) => MapsPlaceDetailsResponse(
+    success: json["success"] == null ? null : json["success"],
+    data: json["data"] == null ? null : MapsPlaceDetailsResponseData.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "success": success == null ? null : success,
+    "data": data == null ? null : data.toJson(),
+  };
+}
+
+class MapsPlaceDetailsResponseData {
+  MapsPlaceDetailsResponseData({
+    this.htmlAttributions,
+    this.result,
+    this.status,
+  });
+
+  List<dynamic> htmlAttributions;
+  MapsPlaceDetailsResponseResult result;
+  String status;
+
+  factory MapsPlaceDetailsResponseData.fromJson(Map<String, dynamic> json) => MapsPlaceDetailsResponseData(
+    htmlAttributions: json["html_attributions"] == null ? [] : List<dynamic>.from(json["html_attributions"].map((x) => x)),
+    result: json["result"] == null ? null : MapsPlaceDetailsResponseResult.fromJson(json["result"]),
+    status: json["status"] == null ? null : json["status"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "html_attributions": htmlAttributions == null ? null : List<dynamic>.from(htmlAttributions.map((x) => x)),
+    "result": result == null ? null : result.toJson(),
+    "status": status == null ? null : status,
+  };
+}
+
+class MapsPlaceDetailsResponseResult {
+  MapsPlaceDetailsResponseResult({
+    this.addressComponents,
+    this.adrAddress,
+    this.businessStatus,
+    this.formattedAddress,
+    this.formattedPhoneNumber,
+    this.geometry,
+    this.icon,
+    this.iconBackgroundColor,
+    this.iconMaskBaseUri,
+    this.internationalPhoneNumber,
+    this.name,
+    this.openingHours,
+    this.photos,
+    this.placeId,
+    this.plusCode,
+    this.rating,
+    this.reference,
+    this.reviews,
+    this.types,
+    this.url,
+    this.userRatingsTotal,
+    this.utcOffset,
+    this.vicinity,
+    this.website,
+  });
+
+  List<MapsPlaceDetailsResponseAddressComponent> addressComponents;
+  String adrAddress;
+  String businessStatus;
+  String formattedAddress;
+  String formattedPhoneNumber;
+  MapsPlaceDetailsResponseGeometry geometry;
+  String icon;
+  String iconBackgroundColor;
+  String iconMaskBaseUri;
+  String internationalPhoneNumber;
+  String name;
+  MapsPlaceDetailsResponseOpeningHours openingHours;
+  List<MapsPlaceDetailsResponsePhoto> photos;
+  String placeId;
+  MapsPlaceDetailsResponsePlusCode plusCode;
+  double rating;
+  String reference;
+  List<MapsPlaceDetailsResponseReview> reviews;
+  List<String> types;
+  String url;
+  int userRatingsTotal;
+  int utcOffset;
+  String vicinity;
+  String website;
+
+  factory MapsPlaceDetailsResponseResult.fromJson(Map<String, dynamic> json) => MapsPlaceDetailsResponseResult(
+    addressComponents: json["address_components"] == null ? [] : List<MapsPlaceDetailsResponseAddressComponent>.from(json["address_components"].map((x) => MapsPlaceDetailsResponseAddressComponent.fromJson(x))),
+    adrAddress: json["adr_address"] == null ? null : json["adr_address"],
+    businessStatus: json["business_status"] == null ? null : json["business_status"],
+    formattedAddress: json["formatted_address"] == null ? null : json["formatted_address"],
+    formattedPhoneNumber: json["formatted_phone_number"] == null ? null : json["formatted_phone_number"],
+    geometry: json["geometry"] == null ? null : MapsPlaceDetailsResponseGeometry.fromJson(json["geometry"]),
+    icon: json["icon"] == null ? null : json["icon"],
+    iconBackgroundColor: json["icon_background_color"] == null ? null : json["icon_background_color"],
+    iconMaskBaseUri: json["icon_mask_base_uri"] == null ? null : json["icon_mask_base_uri"],
+    internationalPhoneNumber: json["international_phone_number"] == null ? null : json["international_phone_number"],
+    name: json["name"] == null ? null : json["name"],
+    openingHours: json["opening_hours"] == null ? null : MapsPlaceDetailsResponseOpeningHours.fromJson(json["opening_hours"]),
+    photos: json["photos"] == null ? [] : List<MapsPlaceDetailsResponsePhoto>.from(json["photos"].map((x) => MapsPlaceDetailsResponsePhoto.fromJson(x))),
+    placeId: json["place_id"] == null ? null : json["place_id"],
+    plusCode: json["plus_code"] == null ? null : MapsPlaceDetailsResponsePlusCode.fromJson(json["plus_code"]),
+    rating: json["rating"] == null ? null : json["rating"].toDouble(),
+    reference: json["reference"] == null ? null : json["reference"],
+    reviews: json["reviews"] == null ? [] : List<MapsPlaceDetailsResponseReview>.from(json["reviews"].map((x) => MapsPlaceDetailsResponseReview.fromJson(x))),
+    types: json["types"] == null ? [] : List<String>.from(json["types"].map((x) => x)),
+    url: json["url"] == null ? null : json["url"],
+    userRatingsTotal: json["user_ratings_total"] == null ? null : json["user_ratings_total"],
+    utcOffset: json["utc_offset"] == null ? null : json["utc_offset"],
+    vicinity: json["vicinity"] == null ? null : json["vicinity"],
+    website: json["website"] == null ? null : json["website"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "address_components": addressComponents == null ? null : List<dynamic>.from(addressComponents.map((x) => x.toJson())),
+    "adr_address": adrAddress == null ? null : adrAddress,
+    "business_status": businessStatus == null ? null : businessStatus,
+    "formatted_address": formattedAddress == null ? null : formattedAddress,
+    "formatted_phone_number": formattedPhoneNumber == null ? null : formattedPhoneNumber,
+    "geometry": geometry == null ? null : geometry.toJson(),
+    "icon": icon == null ? null : icon,
+    "icon_background_color": iconBackgroundColor == null ? null : iconBackgroundColor,
+    "icon_mask_base_uri": iconMaskBaseUri == null ? null : iconMaskBaseUri,
+    "international_phone_number": internationalPhoneNumber == null ? null : internationalPhoneNumber,
+    "name": name == null ? null : name,
+    "opening_hours": openingHours == null ? null : openingHours.toJson(),
+    "photos": photos == null ? null : List<dynamic>.from(photos.map((x) => x.toJson())),
+    "place_id": placeId == null ? null : placeId,
+    "plus_code": plusCode == null ? null : plusCode.toJson(),
+    "rating": rating == null ? null : rating,
+    "reference": reference == null ? null : reference,
+    "reviews": reviews == null ? null : List<dynamic>.from(reviews.map((x) => x.toJson())),
+    "types": types == null ? null : List<dynamic>.from(types.map((x) => x)),
+    "url": url == null ? null : url,
+    "user_ratings_total": userRatingsTotal == null ? null : userRatingsTotal,
+    "utc_offset": utcOffset == null ? null : utcOffset,
+    "vicinity": vicinity == null ? null : vicinity,
+    "website": website == null ? null : website,
+  };
+}
+
+class MapsPlaceDetailsResponseAddressComponent {
+  MapsPlaceDetailsResponseAddressComponent({
+    this.longName,
+    this.shortName,
+    this.types,
+  });
+
+  String longName;
+  String shortName;
+  List<String> types;
+
+  factory MapsPlaceDetailsResponseAddressComponent.fromJson(Map<String, dynamic> json) => MapsPlaceDetailsResponseAddressComponent(
+    longName: json["long_name"] == null ? null : json["long_name"],
+    shortName: json["short_name"] == null ? null : json["short_name"],
+    types: json["types"] == null ? [] : List<String>.from(json["types"].map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "long_name": longName == null ? null : longName,
+    "short_name": shortName == null ? null : shortName,
+    "types": types == null ? null : List<dynamic>.from(types.map((x) => x)),
+  };
+}
+
+class MapsPlaceDetailsResponseGeometry {
+  MapsPlaceDetailsResponseGeometry({
+    this.location,
+    this.viewport,
+  });
+
+  MapsPlaceDetailsResponseLocation location;
+  MapsPlaceDetailsResponseViewport viewport;
+
+  factory MapsPlaceDetailsResponseGeometry.fromJson(Map<String, dynamic> json) => MapsPlaceDetailsResponseGeometry(
+    location: json["location"] == null ? null : MapsPlaceDetailsResponseLocation.fromJson(json["location"]),
+    viewport: json["viewport"] == null ? null : MapsPlaceDetailsResponseViewport.fromJson(json["viewport"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "location": location == null ? null : location.toJson(),
+    "viewport": viewport == null ? null : viewport.toJson(),
+  };
+}
+
+class MapsPlaceDetailsResponseLocation {
+  MapsPlaceDetailsResponseLocation({
+    this.lat,
+    this.lng,
+  });
+
+  double lat;
+  double lng;
+
+  factory MapsPlaceDetailsResponseLocation.fromJson(Map<String, dynamic> json) => MapsPlaceDetailsResponseLocation(
+    lat: json["lat"] == null ? null : json["lat"].toDouble(),
+    lng: json["lng"] == null ? null : json["lng"].toDouble(),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "lat": lat == null ? null : lat,
+    "lng": lng == null ? null : lng,
+  };
+}
+
+class MapsPlaceDetailsResponseViewport {
+  MapsPlaceDetailsResponseViewport({
+    this.northeast,
+    this.southwest,
+  });
+
+  MapsPlaceDetailsResponseLocation northeast;
+  MapsPlaceDetailsResponseLocation southwest;
+
+  factory MapsPlaceDetailsResponseViewport.fromJson(Map<String, dynamic> json) => MapsPlaceDetailsResponseViewport(
+    northeast: json["northeast"] == null ? null : MapsPlaceDetailsResponseLocation.fromJson(json["northeast"]),
+    southwest: json["southwest"] == null ? null : MapsPlaceDetailsResponseLocation.fromJson(json["southwest"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "northeast": northeast == null ? null : northeast.toJson(),
+    "southwest": southwest == null ? null : southwest.toJson(),
+  };
+}
+
+class MapsPlaceDetailsResponseOpeningHours {
+  MapsPlaceDetailsResponseOpeningHours({
+    this.openNow,
+    this.periods,
+    this.weekdayText,
+  });
+
+  bool openNow;
+  List<MapsPlaceDetailsResponsePeriod> periods;
+  List<String> weekdayText;
+
+  factory MapsPlaceDetailsResponseOpeningHours.fromJson(Map<String, dynamic> json) => MapsPlaceDetailsResponseOpeningHours(
+    openNow: json["open_now"] == null ? null : json["open_now"],
+    periods: json["periods"] == null ? [] : List<MapsPlaceDetailsResponsePeriod>.from(json["periods"].map((x) => MapsPlaceDetailsResponsePeriod.fromJson(x))),
+    weekdayText: json["weekday_text"] == null ? [] : List<String>.from(json["weekday_text"].map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "open_now": openNow == null ? null : openNow,
+    "periods": periods == null ? null : List<dynamic>.from(periods.map((x) => x.toJson())),
+    "weekday_text": weekdayText == null ? null : List<dynamic>.from(weekdayText.map((x) => x)),
+  };
+}
+
+class MapsPlaceDetailsResponsePeriod {
+  MapsPlaceDetailsResponsePeriod({
+    this.close,
+    this.open,
+  });
+
+  MapsPlaceDetailsResponseClose close;
+  MapsPlaceDetailsResponseClose open;
+
+  factory MapsPlaceDetailsResponsePeriod.fromJson(Map<String, dynamic> json) => MapsPlaceDetailsResponsePeriod(
+    close: json["close"] == null ? null : MapsPlaceDetailsResponseClose.fromJson(json["close"]),
+    open: json["open"] == null ? null : MapsPlaceDetailsResponseClose.fromJson(json["open"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "close": close == null ? null : close.toJson(),
+    "open": open == null ? null : open.toJson(),
+  };
+}
+
+class MapsPlaceDetailsResponseClose {
+  MapsPlaceDetailsResponseClose({
+    this.day,
+    this.time,
+  });
+
+  int day;
+  String time;
+
+  factory MapsPlaceDetailsResponseClose.fromJson(Map<String, dynamic> json) => MapsPlaceDetailsResponseClose(
+    day: json["day"] == null ? null : json["day"],
+    time: json["time"] == null ? null : json["time"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "day": day == null ? null : day,
+    "time": time == null ? null : time,
+  };
+}
+
+class MapsPlaceDetailsResponsePhoto {
+  MapsPlaceDetailsResponsePhoto({
+    this.height,
+    this.htmlAttributions,
+    this.photoReference,
+    this.width,
+  });
+
+  int height;
+  List<String> htmlAttributions;
+  String photoReference;
+  int width;
+
+  factory MapsPlaceDetailsResponsePhoto.fromJson(Map<String, dynamic> json) => MapsPlaceDetailsResponsePhoto(
+    height: json["height"] == null ? null : json["height"],
+    htmlAttributions: json["html_attributions"] == null ? [] : List<String>.from(json["html_attributions"].map((x) => x)),
+    photoReference: json["photo_reference"] == null ? null : json["photo_reference"],
+    width: json["width"] == null ? null : json["width"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "height": height == null ? null : height,
+    "html_attributions": htmlAttributions == null ? null : List<dynamic>.from(htmlAttributions.map((x) => x)),
+    "photo_reference": photoReference == null ? null : photoReference,
+    "width": width == null ? null : width,
+  };
+}
+
+class MapsPlaceDetailsResponsePlusCode {
+  MapsPlaceDetailsResponsePlusCode({
+    this.compoundCode,
+    this.globalCode,
+  });
+
+  String compoundCode;
+  String globalCode;
+
+  factory MapsPlaceDetailsResponsePlusCode.fromJson(Map<String, dynamic> json) => MapsPlaceDetailsResponsePlusCode(
+    compoundCode: json["compound_code"] == null ? null : json["compound_code"],
+    globalCode: json["global_code"] == null ? null : json["global_code"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "compound_code": compoundCode == null ? null : compoundCode,
+    "global_code": globalCode == null ? null : globalCode,
+  };
+}
+
+class MapsPlaceDetailsResponseReview {
+  MapsPlaceDetailsResponseReview({
+    this.authorName,
+    this.authorUrl,
+    this.language,
+    this.profilePhotoUrl,
+    this.rating,
+    this.relativeTimeDescription,
+    this.text,
+    this.time,
+  });
+
+  String authorName;
+  String authorUrl;
+  String language;
+  String profilePhotoUrl;
+  int rating;
+  String relativeTimeDescription;
+  String text;
+  int time;
+
+  factory MapsPlaceDetailsResponseReview.fromJson(Map<String, dynamic> json) => MapsPlaceDetailsResponseReview(
+    authorName: json["author_name"] == null ? null : json["author_name"],
+    authorUrl: json["author_url"] == null ? null : json["author_url"],
+    language: json["language"] == null ? null : json["language"],
+    profilePhotoUrl: json["profile_photo_url"] == null ? null : json["profile_photo_url"],
+    rating: json["rating"] == null ? null : json["rating"],
+    relativeTimeDescription: json["relative_time_description"] == null ? null : json["relative_time_description"],
+    text: json["text"] == null ? null : json["text"],
+    time: json["time"] == null ? null : json["time"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "author_name": authorName == null ? null : authorName,
+    "author_url": authorUrl == null ? null : authorUrl,
+    "language": language == null ? null : language,
+    "profile_photo_url": profilePhotoUrl == null ? null : profilePhotoUrl,
+    "rating": rating == null ? null : rating,
+    "relative_time_description": relativeTimeDescription == null ? null : relativeTimeDescription,
+    "text": text == null ? null : text,
+    "time": time == null ? null : time,
+  };
+}
+
+class AddEditReminderResponse {
+  AddEditReminderResponse({
+    this.success,
+    this.data,
+  });
+
+  bool success;
+  AddEditReminderResponseData data;
+
+  factory AddEditReminderResponse.fromJson(Map<String, dynamic> json) => AddEditReminderResponse(
+    success: json["success"] == null ? null : json["success"],
+    data: json["data"] == null ? null : AddEditReminderResponseData.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "success": success == null ? null : success,
+    "data": data == null ? null : data.toJson(),
+  };
+}
+
+class AddEditReminderResponseData {
+  AddEditReminderResponseData({
+    this.reminderType,
+    this.family,
+    this.dateTime,
+    this.description,
+    this.userId,
+    this.createdAt,
+    this.updatedAt,
+    this.id,
+  });
+
+  String reminderType;
+  String family;
+  DateTime dateTime;
+  String description;
+  String userId;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String id;
+
+  factory AddEditReminderResponseData.fromJson(Map<String, dynamic> json) => AddEditReminderResponseData(
+    reminderType: json["reminder_type"] == null ? null : json["reminder_type"],
+    family: json["family"] == null ? null : json["family"],
+    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]),
+    description: json["description"] == null ? null : json["description"],
+    userId: json["user_id"] == null ? null : json["user_id"],
+    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+    id: json["id"] == null ? null : json["id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "reminder_type": reminderType == null ? null : reminderType,
+    "family": family == null ? null : family,
+    "date_time": dateTime == null ? null : dateTime.toIso8601String(),
+    "description": description == null ? null : description,
+    "user_id": userId == null ? null : userId,
+    "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
+    "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
+    "id": id == null ? null : id,
+  };
+}
+
+class GetReminderResponse {
+  GetReminderResponse({
+    this.success,
+    this.data,
+  });
+
+  bool success;
+  GetReminderResponseData data;
+
+  factory GetReminderResponse.fromJson(Map<String, dynamic> json) => GetReminderResponse(
+    success: json["success"] == null ? null : json["success"],
+    data: json["data"] == null ? null : GetReminderResponseData.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "success": success == null ? null : success,
+    "data": data == null ? null : data.toJson(),
+  };
+}
+
+class GetReminderResponseData {
+  GetReminderResponseData({
+    this.id,
+    this.reminderType,
+    this.familyObject,
+    this.description,
+    this.dateTime,
+    this.userId,
+  });
+
+  String id;
+  String reminderType;
+  GetReminderResponseFamilyObject familyObject;
+  String description;
+  DateTime dateTime;
+  String userId;
+
+  factory GetReminderResponseData.fromJson(Map<String, dynamic> json) => GetReminderResponseData(
+    id: json["_id"] == null ? null : json["_id"],
+    reminderType: json["reminder_type"] == null ? null : json["reminder_type"],
+    familyObject: json["familyObject"] == null ? null : GetReminderResponseFamilyObject.fromJson(json["familyObject"]),
+    description: json["description"] == null ? null : json["description"],
+    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]),
+    userId: json["user_id"] == null ? null : json["user_id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id == null ? null : id,
+    "reminder_type": reminderType == null ? null : reminderType,
+    "familyObject": familyObject == null ? null : familyObject.toJson(),
+    "description": description == null ? null : description,
+    "date_time": dateTime == null ? null : dateTime.toIso8601String(),
+    "user_id": userId == null ? null : userId,
+  };
+}
+
+class GetReminderResponseFamilyObject {
+  GetReminderResponseFamilyObject({
+    this.name,
+    this.relationship,
+    this.age,
+    this.avatar,
+    this.userId,
+    this.createdAt,
+    this.updatedAt,
+    this.id,
+  });
+
+  String name;
+  String relationship;
+  int age;
+  String avatar;
+  String userId;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String id;
+
+  factory GetReminderResponseFamilyObject.fromJson(Map<String, dynamic> json) => GetReminderResponseFamilyObject(
+    name: json["name"] == null ? null : json["name"],
+    relationship: json["relationship"] == null ? null : json["relationship"],
+    age: json["age"] == null ? null : json["age"],
+    avatar: json["avatar"] == null ? null : json["avatar"],
+    userId: json["user_id"] == null ? null : json["user_id"],
+    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+    id: json["id"] == null ? null : json["id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name == null ? null : name,
+    "relationship": relationship == null ? null : relationship,
+    "age": age == null ? null : age,
+    "avatar": avatar == null ? null : avatar,
+    "user_id": userId == null ? null : userId,
+    "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
+    "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
+    "id": id == null ? null : id,
+  };
+}
+
+class GetReminderListResponse {
+  GetReminderListResponse({
+    this.success,
+    this.data,
+  });
+
+  bool success;
+  List<GetReminderListResponseDatum> data;
+
+  factory GetReminderListResponse.fromJson(Map<String, dynamic> json) => GetReminderListResponse(
+    success: json["success"] == null ? null : json["success"],
+    data: json["data"] == null ? null : List<GetReminderListResponseDatum>.from(json["data"].map((x) => GetReminderListResponseDatum.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "success": success == null ? null : success,
+    "data": data == null ? null : List<dynamic>.from(data.map((x) => x.toJson())),
+  };
+}
+
+class GetReminderListResponseDatum {
+  GetReminderListResponseDatum({
+    this.id,
+    this.reminderType,
+    this.dateTime,
+    this.description,
+    this.familyObject,
+    this.userId,
+  });
+
+  String id;
+  String reminderType;
+  DateTime dateTime;
+  String description;
+  GetReminderListResponseFamilyObject familyObject;
+  String userId;
+
+  factory GetReminderListResponseDatum.fromJson(Map<String, dynamic> json) => GetReminderListResponseDatum(
+    id: json["_id"] == null ? null : json["_id"],
+    reminderType: json["reminder_type"] == null ? null : json["reminder_type"],
+    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]),
+    description: json["description"] == null ? null : json["description"],
+    familyObject: json["familyObject"] == null ? null : GetReminderListResponseFamilyObject.fromJson(json["familyObject"]),
+    userId: json["user_id"] == null ? null : json["user_id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id == null ? null : id,
+    "reminder_type": reminderType == null ? null : reminderType,
+    "date_time": dateTime == null ? null : dateTime.toIso8601String(),
+    "description": description == null ? null : description,
+    "familyObject": familyObject == null ? null : familyObject.toJson(),
+    "user_id": userId == null ? null : userId,
+  };
+}
+
+class GetReminderListResponseFamilyObject {
+  GetReminderListResponseFamilyObject({
+    this.name,
+    this.relationship,
+    this.age,
+    this.avatar,
+    this.userId,
+    this.createdAt,
+    this.updatedAt,
+    this.id,
+  });
+
+  String name;
+  String relationship;
+  int age;
+  String avatar;
+  String userId;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String id;
+
+  factory GetReminderListResponseFamilyObject.fromJson(Map<String, dynamic> json) => GetReminderListResponseFamilyObject(
+    name: json["name"] == null ? null : json["name"],
+    relationship: json["relationship"] == null ? null : json["relationship"],
+    age: json["age"] == null ? null : json["age"],
+    avatar: json["avatar"] == null ? null : json["avatar"],
+    userId: json["user_id"] == null ? null : json["user_id"],
+    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+    id: json["id"] == null ? null : json["id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name == null ? null : name,
+    "relationship": relationship == null ? null : relationship,
+    "age": age == null ? null : age,
+    "avatar": avatar == null ? null : avatar,
+    "user_id": userId == null ? null : userId,
+    "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
+    "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
+    "id": id == null ? null : id,
+  };
+}

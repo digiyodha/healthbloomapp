@@ -1,5 +1,6 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:health_bloom/view/journal/journal.dart';
 import 'package:health_bloom/view/places/nearby_places.dart';
 import 'package:health_bloom/view/profile/profile.dart';
 import '../view/homepage/home_page.dart';
@@ -30,6 +31,12 @@ class CustomBnb extends StatelessWidget {
           Navigator.pop(context);
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return HomePage();
+          }));
+        }
+        if (index == 1) {
+          Navigator.pop(context);
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return Journal();
           }));
         }
         if (index == 2) {

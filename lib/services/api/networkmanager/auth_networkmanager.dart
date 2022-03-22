@@ -730,4 +730,150 @@ class NetworkManager {
     }
     return result;
   }
+
+  Future<Result> getPlaceDetails(MapsPlaceDetailsRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.getPlaceDetails;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      MapsPlaceDetailsResponse response =
+      MapsPlaceDetailsResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<MapsPlaceDetailsResponse>(response);
+    }
+    return result;
+  }
+
+  Future<Result> addReminder(AddReminderRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.addReminder;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      AddEditReminderResponse response =
+      AddEditReminderResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<AddEditReminderResponse>(response);
+    }
+    return result;
+  }
+
+  Future<Result> getAllReminder() async {
+    AuthEndpoint endpoint = AuthEndpoints.getAllReminders;
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      GetReminderListResponse response =
+      GetReminderListResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<GetReminderListResponse>(response);
+    }
+    return result;
+  }
+
+  Future<Result> getReminderById(GetReminderRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.getReminderById;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      GetReminderResponse response =
+      GetReminderResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<GetReminderResponse>(response);
+    }
+    return result;
+  }
+
+  Future<Result> getReminderByFamily(GetFamilyReminderRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.getReminderByFamily;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      GetReminderListResponse response =
+      GetReminderListResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<GetReminderListResponse>(response);
+    }
+    return result;
+  }
+
+  Future<Result> editReminder(EditReminderRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.editReminder;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      AddEditReminderResponse response =
+      AddEditReminderResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<AddEditReminderResponse>(response);
+    }
+    return result;
+  }
+
+  Future<Result> deleteReminder(DeleteReminderRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.deleteReminder;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      AddEditReminderResponse response =
+      AddEditReminderResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<AddEditReminderResponse>(response);
+    }
+    return result;
+  }
 }

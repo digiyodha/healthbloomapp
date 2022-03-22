@@ -130,3 +130,127 @@ class MapsNearbyMedicalsRequest {
     "rating": rating == null ? null : rating,
   };
 }
+
+class MapsPlaceDetailsRequest {
+  MapsPlaceDetailsRequest({
+    this.placeId,
+  });
+
+  String placeId;
+
+  factory MapsPlaceDetailsRequest.fromJson(Map<String, dynamic> json) => MapsPlaceDetailsRequest(
+    placeId: json["place_id"] == null ? null : json["place_id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "place_id": placeId == null ? null : placeId,
+  };
+}
+
+class AddReminderRequest {
+  AddReminderRequest({
+    this.reminderType,
+    this.dateTime,
+    this.description,
+    this.family,
+  });
+
+  String reminderType;
+  DateTime dateTime;
+  String description;
+  String family;
+
+  factory AddReminderRequest.fromJson(Map<String, dynamic> json) => AddReminderRequest(
+    reminderType: json["reminder_type"] == null ? null : json["reminder_type"],
+    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]),
+    description: json["description"] == null ? null : json["description"],
+    family: json["family"] == null ? null : json["family"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "reminder_type": reminderType == null ? null : reminderType,
+    "date_time": dateTime == null ? null : dateTime.toIso8601String(),
+    "description": description == null ? null : description,
+    "family": family == null ? null : family,
+  };
+}
+
+class EditReminderRequest {
+  EditReminderRequest({
+    this.id,
+    this.reminderType,
+    this.dateTime,
+    this.description,
+    this.family,
+  });
+
+  String id;
+  String reminderType;
+  DateTime dateTime;
+  String description;
+  String family;
+
+  factory EditReminderRequest.fromJson(Map<String, dynamic> json) => EditReminderRequest(
+    id: json["_id"] == null ? null : json["_id"],
+    reminderType: json["reminder_type"] == null ? null : json["reminder_type"],
+    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]),
+    description: json["description"] == null ? null : json["description"],
+    family: json["family"] == null ? null : json["family"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id == null ? null : id,
+    "reminder_type": reminderType == null ? null : reminderType,
+    "date_time": dateTime == null ? null : dateTime.toIso8601String(),
+    "description": description == null ? null : description,
+    "family": family == null ? null : family,
+  };
+}
+
+class DeleteReminderRequest {
+  DeleteReminderRequest({
+    this.id,
+  });
+
+  String id;
+
+  factory DeleteReminderRequest.fromJson(Map<String, dynamic> json) => DeleteReminderRequest(
+    id: json["_id"] == null ? null : json["_id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id == null ? null : id,
+  };
+}
+
+class GetFamilyReminderRequest {
+  GetFamilyReminderRequest({
+    this.family,
+  });
+
+  String family;
+
+  factory GetFamilyReminderRequest.fromJson(Map<String, dynamic> json) => GetFamilyReminderRequest(
+    family: json["family"] == null ? null : json["family"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "family": family == null ? null : family,
+  };
+}
+
+class GetReminderRequest {
+  GetReminderRequest({
+    this.id,
+  });
+
+  String id;
+
+  factory GetReminderRequest.fromJson(Map<String, dynamic> json) => GetReminderRequest(
+    id: json["_id"] == null ? null : json["_id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id == null ? null : id,
+  };
+}

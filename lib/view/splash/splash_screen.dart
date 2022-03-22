@@ -75,28 +75,32 @@ class _SplashScreenState extends State<SplashScreen> {
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print(message.data);
-      RemoteNotification notification = message.notification;
-      AndroidNotification android = message.notification?.android;
-      print(notification);
-      print(android);
-      if (notification != null && android != null) {
-        String encodedData = "{\"log_id\": ${message.data["log_id"]},"
-            "\"body\": \"${message.data["body"]}\","
-            "\"title\": \"${message.data["title"]}\","
-            "\"dataTitle\": \"${message.data["dataTitle"]}\","
-            "\"dataBody\": \"${message.data["dataBody"]}\"}";
-        print("SHOW NOTIICATION");
+      print(message.data.toString());
 
-        flutterNotification.show(
-            message.notification.hashCode,
-            message.data["title"],
-            message.data["body"],
-            NotificationDetails(
-                android: androidDetails,
-                iOS: IOSNotificationDetails()),
-            payload: encodedData);
+      if(sp.getBool("generalNotifications")){
+        RemoteNotification notification = message.notification;
+        AndroidNotification android = message.notification?.android;
+        print(notification);
+        print(android);
+        if (notification != null && android != null) {
+          String encodedData = "{\"log_id\": ${message.data["log_id"]},"
+              "\"body\": \"${message.data["body"]}\","
+              "\"title\": \"${message.data["title"]}\","
+              "\"dataTitle\": \"${message.data["dataTitle"]}\","
+              "\"dataBody\": \"${message.data["dataBody"]}\"}";
+          print("SHOW NOTIICATION");
+
+          flutterNotification.show(
+              message.notification.hashCode,
+              message.data["title"],
+              message.data["body"],
+              NotificationDetails(
+                  android: androidDetails,
+                  iOS: IOSNotificationDetails()),
+              payload: encodedData);
+        }
       }
+
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -108,58 +112,63 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            height: double.infinity,
-            width: double.infinity,
-            color: kMainColor,
-          ),
-          Positioned(
-            top: 50,
-            bottom: 10,
-            left: -200,
-            right: -100,
-            child: SafeArea(
-              child: RotationTransition(
-                turns: new AlwaysStoppedAnimation(15 / 360),
-                child: ClipOval(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.9,
-                    width: (MediaQuery.of(context).size.height * 0.9) * 0.9,
-                    color: kWhite.withOpacity(0.3),
+    return WillPopScope(
+      onWillPop: () async{
+        return false;
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(
+              height: double.infinity,
+              width: double.infinity,
+              color: kMainColor,
+            ),
+            Positioned(
+              top: 50,
+              bottom: 10,
+              left: -200,
+              right: -100,
+              child: SafeArea(
+                child: RotationTransition(
+                  turns: new AlwaysStoppedAnimation(15 / 360),
+                  child: ClipOval(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.9,
+                      width: (MediaQuery.of(context).size.height * 0.9) * 0.9,
+                      color: kWhite.withOpacity(0.3),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: 40,
-            bottom: 50,
-            left: -80,
-            right: -50,
-            child: SafeArea(
-              child: RotationTransition(
-                turns: new AlwaysStoppedAnimation(20 / 360),
-                child: ClipOval(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.9,
-                    width: (MediaQuery.of(context).size.height * 0.9),
-                    color: kWhite.withOpacity(0.9),
+            Positioned(
+              top: 40,
+              bottom: 50,
+              left: -80,
+              right: -50,
+              child: SafeArea(
+                child: RotationTransition(
+                  turns: new AlwaysStoppedAnimation(20 / 360),
+                  child: ClipOval(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.9,
+                      width: (MediaQuery.of(context).size.height * 0.9),
+                      color: kWhite.withOpacity(0.9),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [Image.asset("assets/icons/logo.png")],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [Image.asset("assets/icons/logo.png")],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

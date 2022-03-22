@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
+import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/drawer/custom_drawer.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/profile/update_profile.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../../utils/custom_add_element_bs.dart';
 import '../../utils/custom_bnb.dart';
+import '../homepage/home_page.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key key}) : super(key: key);
@@ -44,7 +46,14 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async{
-        return false;
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ),
+        );
+        return true;
       },
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -64,7 +73,7 @@ class _ProfileState extends State<Profile> {
                           Container(
                             height: MediaQuery.of(context).size.height,
                             width: double.infinity,
-                            color: Color(0xffA283F9),
+                            color: kMainColor,
                           ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,

@@ -258,12 +258,20 @@ class _AboutMedicineState extends State<AboutMedicine> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: Padding(
+                          child: Container(
+                            width: double.infinity,
                             padding: const EdgeInsets.symmetric(
                                 vertical: 20, horizontal: 20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                if(snapshot.data.data.startHour == null)
+                                    TextBuilder(
+                                        text: 'Dose completed',
+                                        color: kMainColor,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w800,),
+                                if(snapshot.data.data.startHour != null)
                                 TextBuilder(
                                   text: 'Next Dose',
                                   fontSize: 12,
@@ -272,6 +280,7 @@ class _AboutMedicineState extends State<AboutMedicine> {
                                   textAlign: TextAlign.center,
                                 ),
                                 const SizedBox(height: 10.0),
+                                if(snapshot.data.data.startHour != null)
                                 Row(
                                   children: [
                                     Icon(

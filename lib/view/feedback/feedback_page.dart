@@ -9,11 +9,14 @@ import 'package:health_bloom/model/response/add_feedback_response.dart';
 import 'package:health_bloom/model/response/get_feedback_options_response.dart';
 import 'package:health_bloom/model/response/search_medicne_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
+import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/utils/text_field/custom_text_field.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
-
 import 'package:provider/provider.dart';
+
+import '../../utils/drawer/custom_drawer.dart';
+
 
 class FeedbackPage extends StatefulWidget {
   final SearchMedicineResponseDatum medicne;
@@ -65,135 +68,144 @@ class _FeedbackPageState extends State<FeedbackPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+    return WillPopScope(
+      onWillPop: () async{
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ),
+        );
+        return true;
+      },
+      child: Scaffold(
+        drawer: CustomDrawer(
+          selected: 8,
         ),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
-      backgroundColor: Color(0xff8B80F6),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 30.0),
-                      TextBuilder(
-                        text: 'USER FEEDBACK',
-                        color: Color(0xffA1C8FE),
-                        fontSize: 13,
-                        latterSpacing: 1,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      const SizedBox(height: 10.0),
-                      TextBuilder(
-                        text: 'How was your overall\nexperience?',
-                        color: Colors.white,
-                        height: 1.2,
-                        textAlign: TextAlign.center,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      const SizedBox(height: 40.0),
-                      Image.asset(
-                        selectedPngImage,
-                        height: 110,
-                        width: 110,
-                        // colorBlendMode: BlendMode.softLight,
-                        // color: Color(0xff7FE4F0),
-                      ),
-                      const SizedBox(height: 20.0),
-                      TextBuilder(
-                        text: 'I am ${selectedExperience}!',
-                        color: Colors.white,
-                        textAlign: TextAlign.center,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      // const SizedBox(height: 10.0),
-                      Icon(
-                        Icons.keyboard_arrow_down_outlined,
-                        color: Colors.white,
-                        size: 90,
-                      ),
-                      const SizedBox(height: 50.0),
-                      SizedBox(
-                        height: 120,
-                        child: ListView.builder(
-                          itemCount: feedback.feedback.length,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          physics: ScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (BuildContext context, int i) {
-                            return InkWell(
-                              onTap: () {
-                                setState(() {
-                                  print(selectedExperience =
-                                      feedback.feedback[i].text);
-                                  selectedExperience =
-                                      feedback.feedback[i].text;
-                                  selectedPngImage =
-                                      feedback.feedback[i].pngImage;
-                                  selectedJpgImage =
-                                      feedback.feedback[i].jpgImage;
-                                });
-                                feedbackOption.isNotEmpty
-                                    ? showFeedbackSheet()
-                                    : ScaffoldMessenger.of(context)
-                                        .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                              'Please wait few seconds to load data'),
-                                        ),
-                                      );
-                              },
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Image.asset(
-                                        feedback.feedback[i].pngImage,
-                                        height: 100,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+        ),
+        backgroundColor: kMainColor,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 30.0),
+                        TextBuilder(
+                          text: 'USER FEEDBACK',
+                          color: Color(0xffA1C8FE),
+                          fontSize: 13,
+                          latterSpacing: 1,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        const SizedBox(height: 10.0),
+                        TextBuilder(
+                          text: 'How was your overall\nexperience?',
+                          color: Colors.white,
+                          height: 1.2,
+                          textAlign: TextAlign.center,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        const SizedBox(height: 40.0),
+                        Image.asset(
+                          selectedPngImage,
+                          height: 110,
+                          width: 110,
+                          // colorBlendMode: BlendMode.softLight,
+                          // color: Color(0xff7FE4F0),
+                        ),
+                        const SizedBox(height: 20.0),
+                        TextBuilder(
+                          text: 'I am ${selectedExperience}!',
+                          color: Colors.white,
+                          textAlign: TextAlign.center,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        // const SizedBox(height: 10.0),
+                        Icon(
+                          Icons.keyboard_arrow_down_outlined,
+                          color: Colors.white,
+                          size: 90,
+                        ),
+                        const SizedBox(height: 50.0),
+                        SizedBox(
+                          height: 120,
+                          child: ListView.builder(
+                            itemCount: feedback.feedback.length,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            physics: ScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (BuildContext context, int i) {
+                              return InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    print(selectedExperience =
+                                        feedback.feedback[i].text);
+                                    selectedExperience =
+                                        feedback.feedback[i].text;
+                                    selectedPngImage =
+                                        feedback.feedback[i].pngImage;
+                                    selectedJpgImage =
+                                        feedback.feedback[i].jpgImage;
+                                  });
+                                  feedbackOption.isNotEmpty
+                                      ? showFeedbackSheet()
+                                      : ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                                'Please wait few seconds to load data'),
+                                          ),
+                                        );
+                                },
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Image.asset(
+                                          feedback.feedback[i].pngImage,
+                                          height: 100,
 
-                                        // color: Colors.white,
-                                        width: 100,
+                                          // color: Colors.white,
+                                          width: 100,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: TextBuilder(
-                                      text: feedback.feedback[i].text,
-                                      textAlign: TextAlign.center,
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      height: 1.3,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
-                          },
+                                    Expanded(
+                                      child: TextBuilder(
+                                        text: feedback.feedback[i].text,
+                                        textAlign: TextAlign.center,
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        height: 1.3,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -266,40 +278,37 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                   alignment: WrapAlignment.center,
                                   runSpacing: 15,
                                   spacing: 10,
-                                  children: [
-                                    for (var option in feedbackOption)
-                                      FedbackOptionCard(
-                                        isSelected:
-                                            feedbacckIds.contains(option.id),
-                                        onChanged: (val) {
-                                          isSizeSelected = val;
+                                  children: List.generate(feedbackOption.length, (index) => FedbackOptionCard(
+                                    isSelected:
+                                    feedbacckIds.contains(feedbackOption[index].id),
+                                    onChanged: (val) {
+                                      isSizeSelected = val;
+                                      setState(() {
+                                        if (isSizeSelected == true) {
+                                          print("Add ${feedbackOption[index].id}");
                                           setState(() {
-                                            if (isSizeSelected == true) {
-                                              print("Add ${option.id}");
-                                              setState(() {
-                                                feedbacckIds.add(option.id);
-                                              });
-                                            } else {
-                                              print("Remove ${option.id}");
-                                              setState(() {
-                                                feedbacckIds.remove(option.id);
-                                              });
-                                            }
+                                            feedbacckIds.add(feedbackOption[index].id);
                                           });
-                                          print(
-                                              "Total ${feedbacckIds.toList().toString()}");
-                                        },
-                                        title: option.feedbackName.toString(),
-                                        bgColor:
-                                            feedbacckIds.contains(option.id)
-                                                ? Color(0xffAF8EFD)
-                                                : Color(0xffF4F5FA),
-                                        textColor:
-                                            feedbacckIds.contains(option.id)
-                                                ? Colors.white
-                                                : Color(0xffA5A4B3),
-                                      ),
-                                  ],
+                                        } else {
+                                          print("Remove ${feedbackOption[index].id}");
+                                          setState(() {
+                                            feedbacckIds.remove(feedbackOption[index].id);
+                                          });
+                                        }
+                                      });
+                                      print(
+                                          "Total ${feedbacckIds.toList().toString()}");
+                                    },
+                                    title: feedbackOption[index].feedbackName.toString(),
+                                    bgColor:
+                                    feedbacckIds.contains(feedbackOption[index].id)
+                                        ? _colors[index]
+                                        : Color(0xffF4F5FA),
+                                    textColor:
+                                    feedbacckIds.contains(feedbackOption[index].id)
+                                        ? Colors.white
+                                        : Color(0xffA5A4B3),
+                                  )),
                                 ),
                               ),
                               const SizedBox(height: 30.0),
@@ -410,3 +419,24 @@ class _FeedbackPageState extends State<FeedbackPage> {
     );
   }
 }
+
+List<Color> _colors = [
+  Color(0xffAD8EFB),
+  Color(0xff7FE3F0),
+  Color(0xff2288FF),
+  Color(0xffFF9A92),
+  Color(0xff94AEFD),
+  Color(0xff5ED3E2),
+  Color(0xffAD8EFB),
+  Color(0xff7FE3F0),
+  Color(0xff2288FF),
+  Color(0xffFF9A92),
+  Color(0xff94AEFD),
+  Color(0xff5ED3E2),
+  Color(0xffAD8EFB),
+  Color(0xff7FE3F0),
+  Color(0xff2288FF),
+  Color(0xffFF9A92),
+  Color(0xff94AEFD),
+  Color(0xff5ED3E2),
+];
