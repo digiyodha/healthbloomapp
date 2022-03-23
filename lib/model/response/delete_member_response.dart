@@ -45,8 +45,8 @@ class DeleteMemberResponseData {
         age: json["age"] == null ? null : json["age"],
         avatar: json["avatar"] == null ? null : json["avatar"],
         userId: json["user_id"] == null ? null : json["user_id"],
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]).toLocal(),
+        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]).toLocal(),
         id: json["id"] == null ? null : json["id"],
     );
 

@@ -43,10 +43,10 @@ class GetFeedbackOptionsResponseDatum {
             json["feedback_name"] == null ? null : json["feedback_name"],
         createdAt: json["createdAt"] == null
             ? null
-            : DateTime.parse(json["createdAt"]),
+            : DateTime.parse(json["createdAt"]).toLocal(),
         updatedAt: json["updatedAt"] == null
             ? null
-            : DateTime.parse(json["updatedAt"]),
+            : DateTime.parse(json["updatedAt"]).toLocal(),
         id: json["id"] == null ? null : json["id"],
       );
 

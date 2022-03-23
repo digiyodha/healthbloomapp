@@ -23,7 +23,7 @@ class AddPrescriptionRequest {
         clinicName: json["clinic_name"] == null ? null : json["clinic_name"],
         consultationDate: json["consultation_date"] == null
             ? null
-            : DateTime.parse(json["consultation_date"]),
+            : DateTime.parse(json["consultation_date"]).toLocal(),
         patient: json["patient"] == null ? null : json["patient"],
         userAilment: json["user_ailment"] == null ? null : json["user_ailment"],
         doctorAdvice:
@@ -38,7 +38,7 @@ class AddPrescriptionRequest {
         "clinic_name": clinicName == null ? null : clinicName,
         "consultation_date": consultationDate == null
             ? null
-            : "${consultationDate.year.toString().padLeft(4, '0')}-${consultationDate.month.toString().padLeft(2, '0')}-${consultationDate.day.toString().padLeft(2, '0')}",
+            : consultationDate.toUtc().toIso8601String(),
         "patient": patient == null ? null : patient,
         "user_ailment": userAilment == null ? null : userAilment,
         "doctor_advice": doctorAdvice == null ? null : doctorAdvice,

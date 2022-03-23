@@ -49,7 +49,7 @@ class AddBillResponseData {
             : List<String>.from(json["bill_image"].map((x) => x)),
         name: json["name"] == null ? null : json["name"],
         amount: json["amount"] == null ? null : json["amount"].toDouble(),
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
         description: json["description"] == null ? null : json["description"],
         patient: json["patient"] == null ? null : json["patient"],
         userId: json["user_id"] == null ? null : json["user_id"],
@@ -161,7 +161,7 @@ class GetAllDocumentsResponseBill {
         id: json["_id"] == null ? null : json["_id"],
         name: json["name"] == null ? null : json["name"],
         amount: json["amount"] == null ? null : json["amount"].toDouble(),
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
         description: json["description"] == null ? null : json["description"],
         billImage: json["bill_image"] == null
             ? []
@@ -262,7 +262,7 @@ class GetAllDocumentsResponsePrescription {
         userAilment: json["user_ailment"] == null ? null : json["user_ailment"],
         consultationDate: json["consultation_date"] == null
             ? null
-            : DateTime.parse(json["consultation_date"]),
+            : DateTime.parse(json["consultation_date"]).toLocal(),
         doctorAdvice:
             json["doctor_advice"] == null ? null : json["doctor_advice"],
         prescriptionImage: json["prescription_image"] == null
@@ -346,7 +346,7 @@ class DeletePrescriptionResponseData {
         clinicName: json["clinic_name"] == null ? null : json["clinic_name"],
         consultationDate: json["consultation_date"] == null
             ? null
-            : DateTime.parse(json["consultation_date"]),
+            : DateTime.parse(json["consultation_date"]).toLocal(),
         userAilment: json["user_ailment"] == null ? null : json["user_ailment"],
         doctorAdvice:
             json["doctor_advice"] == null ? null : json["doctor_advice"],
@@ -420,7 +420,7 @@ class DeleteReportResponseData {
             ? null
             : List<String>.from(json["report_image"].map((x) => x)),
         name: json["name"] == null ? null : json["name"],
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
         description: json["description"] == null ? null : json["description"],
         patient: json["patient"] == null ? null : json["patient"],
         userId: json["user_id"] == null ? null : json["user_id"],
@@ -491,7 +491,7 @@ class DeleteBillResponseData {
             : List<String>.from(json["bill_image"].map((x) => x)),
         name: json["name"] == null ? null : json["name"],
         amount: json["amount"] == null ? null : json["amount"],
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
         description: json["description"] == null ? null : json["description"],
         patient: json["patient"] == null ? null : json["patient"],
         userId: json["user_id"] == null ? null : json["user_id"],
@@ -1298,11 +1298,11 @@ class AddEditReminderResponseData {
   factory AddEditReminderResponseData.fromJson(Map<String, dynamic> json) => AddEditReminderResponseData(
     reminderType: json["reminder_type"] == null ? null : json["reminder_type"],
     family: json["family"] == null ? null : json["family"],
-    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]),
+    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]).toLocal(),
     description: json["description"] == null ? null : json["description"],
     userId: json["user_id"] == null ? null : json["user_id"],
-    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]).toLocal(),
+    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]).toLocal(),
     id: json["id"] == null ? null : json["id"],
   );
 
@@ -1360,7 +1360,7 @@ class GetReminderResponseData {
     reminderType: json["reminder_type"] == null ? null : json["reminder_type"],
     familyObject: json["familyObject"] == null ? null : GetReminderResponseFamilyObject.fromJson(json["familyObject"]),
     description: json["description"] == null ? null : json["description"],
-    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]),
+    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]).toLocal(),
     userId: json["user_id"] == null ? null : json["user_id"],
   );
 
@@ -1401,8 +1401,8 @@ class GetReminderResponseFamilyObject {
     age: json["age"] == null ? null : json["age"],
     avatar: json["avatar"] == null ? null : json["avatar"],
     userId: json["user_id"] == null ? null : json["user_id"],
-    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]).toLocal(),
+    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]).toLocal(),
     id: json["id"] == null ? null : json["id"],
   );
 
@@ -1458,7 +1458,7 @@ class GetReminderListResponseDatum {
   factory GetReminderListResponseDatum.fromJson(Map<String, dynamic> json) => GetReminderListResponseDatum(
     id: json["_id"] == null ? null : json["_id"],
     reminderType: json["reminder_type"] == null ? null : json["reminder_type"],
-    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]),
+    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]).toLocal(),
     description: json["description"] == null ? null : json["description"],
     familyObject: json["familyObject"] == null ? null : GetReminderListResponseFamilyObject.fromJson(json["familyObject"]),
     userId: json["user_id"] == null ? null : json["user_id"],
@@ -1501,8 +1501,8 @@ class GetReminderListResponseFamilyObject {
     age: json["age"] == null ? null : json["age"],
     avatar: json["avatar"] == null ? null : json["avatar"],
     userId: json["user_id"] == null ? null : json["user_id"],
-    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]).toLocal(),
+    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]).toLocal(),
     id: json["id"] == null ? null : json["id"],
   );
 
@@ -1516,4 +1516,278 @@ class GetReminderListResponseFamilyObject {
     "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
     "id": id == null ? null : id,
   };
+}
+
+class GetDocumentsFamilyResponse {
+  GetDocumentsFamilyResponse({
+    this.success,
+    this.data,
+  });
+
+  bool success;
+  GetDocumentsFamilyResponseData data;
+
+  factory GetDocumentsFamilyResponse.fromJson(Map<String, dynamic> json) => GetDocumentsFamilyResponse(
+    success: json["success"] == null ? null : json["success"],
+    data: json["data"] == null ? null : GetDocumentsFamilyResponseData.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "success": success == null ? null : success,
+    "data": data == null ? null : data.toJson(),
+  };
+}
+
+class GetDocumentsFamilyResponseData {
+  GetDocumentsFamilyResponseData({
+    this.bill,
+    this.report,
+    this.prescription,
+  });
+
+  List<GetDocumentsFamilyResponseBill> bill;
+  List<GetDocumentsFamilyResponseBill> report;
+  List<GetDocumentsFamilyResponsePrescription> prescription;
+
+  factory GetDocumentsFamilyResponseData.fromJson(Map<String, dynamic> json) => GetDocumentsFamilyResponseData(
+    bill: json["bill"] == null ? [] : List<GetDocumentsFamilyResponseBill>.from(json["bill"].map((x) => GetDocumentsFamilyResponseBill.fromJson(x))),
+    report: json["report"] == null ? [] : List<GetDocumentsFamilyResponseBill>.from(json["report"].map((x) => GetDocumentsFamilyResponseBill.fromJson(x))),
+    prescription: json["prescription"] == null ? [] : List<GetDocumentsFamilyResponsePrescription>.from(json["prescription"].map((x) => GetDocumentsFamilyResponsePrescription.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "bill": bill == null ? null : List<dynamic>.from(bill.map((x) => x.toJson())),
+    "report": report == null ? null : List<dynamic>.from(report.map((x) => x.toJson())),
+    "prescription": prescription == null ? null : List<dynamic>.from(prescription.map((x) => x.toJson())),
+  };
+}
+
+class GetDocumentsFamilyResponseBill {
+  GetDocumentsFamilyResponseBill({
+    this.id,
+    this.name,
+    this.amount,
+    this.date,
+    this.description,
+    this.billImage,
+    this.patient,
+    this.userId,
+    this.reportImage,
+  });
+
+  String id;
+  String name;
+  int amount;
+  DateTime date;
+  String description;
+  List<String> billImage;
+  GetDocumentsFamilyResponsePatient patient;
+  String userId;
+  List<String> reportImage;
+
+  factory GetDocumentsFamilyResponseBill.fromJson(Map<String, dynamic> json) => GetDocumentsFamilyResponseBill(
+    id: json["_id"] == null ? null : json["_id"],
+    name: json["name"] == null ? null : json["name"],
+    amount: json["amount"] == null ? null : json["amount"],
+    date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
+    description: json["description"] == null ? null : json["description"],
+    billImage: json["bill_image"] == null ? null : List<String>.from(json["bill_image"].map((x) => x)),
+    patient: json["patient"] == null ? null : GetDocumentsFamilyResponsePatient.fromJson(json["patient"]),
+    userId: json["user_id"] == null ? null : json["user_id"],
+    reportImage: json["report_image"] == null ? null : List<String>.from(json["report_image"].map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id == null ? null : id,
+    "name": name == null ? null : name,
+    "amount": amount == null ? null : amount,
+    "date": date == null ? null : date.toUtc().toIso8601String(),
+    "description": description == null ? null : description,
+    "bill_image": billImage == null ? null : List<dynamic>.from(billImage.map((x) => x)),
+    "patient": patient == null ? null : patient.toJson(),
+    "user_id": userId == null ? null : userId,
+    "report_image": reportImage == null ? null : List<dynamic>.from(reportImage.map((x) => x)),
+  };
+}
+
+class GetDocumentsFamilyResponsePatient {
+  GetDocumentsFamilyResponsePatient({
+    this.name,
+    this.relationship,
+    this.age,
+    this.avatar,
+    this.userId,
+    this.createdAt,
+    this.updatedAt,
+    this.id,
+  });
+
+  String name;
+  String relationship;
+  int age;
+  String avatar;
+  String userId;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String id;
+
+  factory GetDocumentsFamilyResponsePatient.fromJson(Map<String, dynamic> json) => GetDocumentsFamilyResponsePatient(
+    name: json["name"] == null ? null : json["name"],
+    relationship: json["relationship"] == null ? null : json["relationship"],
+    age: json["age"] == null ? null : json["age"],
+    avatar: json["avatar"] == null ? null : json["avatar"],
+    userId: json["user_id"] == null ? null : json["user_id"],
+    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]).toLocal(),
+    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]).toLocal(),
+    id: json["id"] == null ? null : json["id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name == null ? null : name,
+    "relationship": relationship == null ? null : relationship,
+    "age": age == null ? null : age,
+    "avatar": avatar == null ? null : avatar,
+    "user_id": userId == null ? null : userId,
+    "createdAt": createdAt == null ? null : createdAt.toUtc().toIso8601String(),
+    "updatedAt": updatedAt == null ? null : updatedAt.toUtc().toIso8601String(),
+    "id": id == null ? null : id,
+  };
+}
+
+class GetDocumentsFamilyResponsePrescription {
+  GetDocumentsFamilyResponsePrescription({
+    this.id,
+    this.doctorName,
+    this.clinicName,
+    this.userAilment,
+    this.consultationDate,
+    this.doctorAdvice,
+    this.prescriptionImage,
+    this.patient,
+    this.userId,
+  });
+
+  String id;
+  String doctorName;
+  String clinicName;
+  String userAilment;
+  DateTime consultationDate;
+  String doctorAdvice;
+  List<String> prescriptionImage;
+  GetDocumentsFamilyResponsePatient patient;
+  String userId;
+
+  factory GetDocumentsFamilyResponsePrescription.fromJson(Map<String, dynamic> json) => GetDocumentsFamilyResponsePrescription(
+    id: json["_id"] == null ? null : json["_id"],
+    doctorName: json["doctor_name"] == null ? null : json["doctor_name"],
+    clinicName: json["clinic_name"] == null ? null : json["clinic_name"],
+    userAilment: json["user_ailment"] == null ? null : json["user_ailment"],
+    consultationDate: json["consultation_date"] == null ? null : DateTime.parse(json["consultation_date"]).toLocal(),
+    doctorAdvice: json["doctor_advice"] == null ? null : json["doctor_advice"],
+    prescriptionImage: json["prescription_image"] == null ? null : List<String>.from(json["prescription_image"].map((x) => x)),
+    patient: json["patient"] == null ? null : GetDocumentsFamilyResponsePatient.fromJson(json["patient"]),
+    userId: json["user_id"] == null ? null : json["user_id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id == null ? null : id,
+    "doctor_name": doctorName == null ? null : doctorName,
+    "clinic_name": clinicName == null ? null : clinicName,
+    "user_ailment": userAilment == null ? null : userAilment,
+    "consultation_date": consultationDate == null ? null : consultationDate.toUtc().toIso8601String(),
+    "doctor_advice": doctorAdvice == null ? null : doctorAdvice,
+    "prescription_image": prescriptionImage == null ? null : List<dynamic>.from(prescriptionImage.map((x) => x)),
+    "patient": patient == null ? null : patient.toJson(),
+    "user_id": userId == null ? null : userId,
+  };
+}
+
+class GetDocumentsFamilyResponseCommonObject {
+  GetDocumentsFamilyResponseCommonObject({
+    this.id,
+    this.name,
+    this.amount,
+    this.date,
+    this.description,
+    this.images,
+    this.patient,
+    this.userId,
+    this.relationship,
+    this.age,
+    this.avatar,
+    this.createdAt,
+    this.updatedAt,
+    this.doctorName,
+    this.clinicName,
+    this.userAilment,
+    this.consultationDate,
+    this.doctorAdvice,
+    this.type
+  });
+
+  String id;
+  String name;
+  int amount;
+  DateTime date;
+  String description;
+  List<String> images;
+  GetDocumentsFamilyResponsePatient patient;
+  String userId;
+  String relationship;
+  int age;
+  String avatar;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String doctorName;
+  String clinicName;
+  String userAilment;
+  DateTime consultationDate;
+  String doctorAdvice;
+  String type;
+
+  // factory GetDocumentsFamilyResponseCommonObject.fromJson(Map<String, dynamic> json) => GetDocumentsFamilyResponseCommonObject(
+  //   id: json["_id"] == null ? null : json["_id"],
+  //   name: json["name"] == null ? null : json["name"],
+  //   amount: json["amount"] == null ? null : json["amount"],
+  //   date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
+  //   description: json["description"] == null ? null : json["description"],
+  //   billImage: json["bill_image"] == null ? null : List<String>.from(json["bill_image"].map((x) => x)),
+  //   patient: json["patient"] == null ? null : GetDocumentsFamilyResponsePatient.fromJson(json["patient"]),
+  //   userId: json["user_id"] == null ? null : json["user_id"],
+  //   reportImage: json["report_image"] == null ? null : List<String>.from(json["report_image"].map((x) => x)),
+  //   relationship: json["relationship"] == null ? null : json["relationship"],
+  //   age: json["age"] == null ? null : json["age"],
+  //   avatar: json["avatar"] == null ? null : json["avatar"],
+  //   createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]).toLocal(),
+  //   updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]).toLocal(),
+  //   doctorName: json["doctor_name"] == null ? null : json["doctor_name"],
+  //   clinicName: json["clinic_name"] == null ? null : json["clinic_name"],
+  //   userAilment: json["user_ailment"] == null ? null : json["user_ailment"],
+  //   consultationDate: json["consultation_date"] == null ? null : DateTime.parse(json["consultation_date"]).toLocal(),
+  //   doctorAdvice: json["doctor_advice"] == null ? null : json["doctor_advice"],
+  //   prescriptionImage: json["prescription_image"] == null ? null : List<String>.from(json["prescription_image"].map((x) => x)),
+  // );
+  //
+  // Map<String, dynamic> toJson() => {
+  //   "_id": id == null ? null : id,
+  //   "name": name == null ? null : name,
+  //   "amount": amount == null ? null : amount,
+  //   "date": date == null ? null : date.toUtc().toIso8601String(),
+  //   "description": description == null ? null : description,
+  //   "bill_image": billImage == null ? null : List<dynamic>.from(billImage.map((x) => x)),
+  //   "patient": patient == null ? null : patient.toJson(),
+  //   "user_id": userId == null ? null : userId,
+  //   "report_image": reportImage == null ? null : List<dynamic>.from(reportImage.map((x) => x)),
+  //   "relationship": relationship == null ? null : relationship,
+  //   "age": age == null ? null : age,
+  //   "avatar": avatar == null ? null : avatar,
+  //   "createdAt": createdAt == null ? null : createdAt.toUtc().toIso8601String(),
+  //   "updatedAt": updatedAt == null ? null : updatedAt.toUtc().toIso8601String(),
+  //   "doctor_name": doctorName == null ? null : doctorName,
+  //   "clinic_name": clinicName == null ? null : clinicName,
+  //   "user_ailment": userAilment == null ? null : userAilment,
+  //   "consultation_date": consultationDate == null ? null : consultationDate.toUtc().toIso8601String(),
+  //   "doctor_advice": doctorAdvice == null ? null : doctorAdvice,
+  //   "prescription_image": prescriptionImage == null ? null : List<dynamic>.from(prescriptionImage.map((x) => x)),
+  // };
 }

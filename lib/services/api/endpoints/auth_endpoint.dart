@@ -34,10 +34,12 @@ class AuthEndpoints {
   static get getMedicine => AuthEndpoint("/v1/medicine/id/", Method.put);
   static get getNearbyMedical => AuthEndpoint("/v1/map/store", Method.put);
   static get getNearbyLabs => AuthEndpoint("/v1/map/lab", Method.put);
+  static get getNextPage => AuthEndpoint("/v1/map/next-page", Method.put);
   static get getPlaceDetails => AuthEndpoint("/v1/map/details", Method.put);
   static get getReminderById => AuthEndpoint("/v1/reminder/id/", Method.put);
   static get getReminderByFamily => AuthEndpoint("/v1/reminder/family/", Method.put);
   static get editReminder => AuthEndpoint("/v1/reminder/", Method.put);
+  static get getDocumentsFamily => AuthEndpoint("/v1/document/family/", Method.put);
 
   // Get
   static get getMember => AuthEndpoint("/v1/family/id/", Method.put);

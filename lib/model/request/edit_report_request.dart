@@ -30,7 +30,7 @@ class EditReportRequest {
   Map<String, dynamic> toJson() => {
         "_id": id == null ? null : id,
         "name": name == null ? null : name,
-        "date": date == null ? null : date.toIso8601String(),
+        "date": date == null ? null : date.toUtc().toIso8601String(),
         "description": description == null ? null : description,
         "report_image": reportImage == null
             ? null

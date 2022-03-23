@@ -876,4 +876,46 @@ class NetworkManager {
     }
     return result;
   }
+
+  Future<Result> nextPage(PlacesNextPageRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.getNextPage;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      MapsNearbyMedicalsResponse response =
+      MapsNearbyMedicalsResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<MapsNearbyMedicalsResponse>(response);
+    }
+    return result;
+  }
+
+  Future<Result> getDocumentsFamily(GetDocumentsFamilyRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.getDocumentsFamily;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      GetDocumentsFamilyResponse response =
+      GetDocumentsFamilyResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<GetDocumentsFamilyResponse>(response);
+    }
+    return result;
+  }
 }

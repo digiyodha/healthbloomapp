@@ -51,7 +51,7 @@ class InsuranceCard extends StatelessWidget {
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                  child: avatar.isNotEmpty && avatar != null
+                  child: avatar.isNotEmpty
                       ? CircleAvatar(
                           radius: 40,
                           backgroundColor: Color(0xffFABE18),

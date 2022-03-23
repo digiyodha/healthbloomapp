@@ -22,7 +22,7 @@ class EditBillRequest {
         id: json["_id"] == null ? null : json["_id"],
         name: json["name"] == null ? null : json["name"],
         amount: json["amount"] == null ? null : json["amount"],
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
         description: json["description"] == null ? null : json["description"],
         billImage: json["bill_image"] == null
             ? null
@@ -34,7 +34,7 @@ class EditBillRequest {
         "_id": id == null ? null : id,
         "name": name == null ? null : name,
         "amount": amount == null ? null : amount,
-        "date": date == null ? null : date.toIso8601String(),
+        "date": date == null ? null : date.toUtc().toIso8601String(),
         "description": description == null ? null : description,
         "bill_image": billImage == null
             ? null

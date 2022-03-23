@@ -16,7 +16,7 @@ class AddReportRequest {
   factory AddReportRequest.fromJson(Map<String, dynamic> json) =>
       AddReportRequest(
         name: json["name"] == null ? null : json["name"],
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
         description: json["description"] == null ? null : json["description"],
         reportImage: json["report_image"] == null
             ? null
@@ -28,7 +28,7 @@ class AddReportRequest {
         "name": name == null ? null : name,
         "date": date == null
             ? null
-            : "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
+            : date.toUtc().toIso8601String(),
         "description": description == null ? null : description,
         "report_image": reportImage == null
             ? null

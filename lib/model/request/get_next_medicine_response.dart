@@ -78,7 +78,7 @@ class GetNextMedicineResponseDatum {
                 json["timeObject"].map((x) => TimeObject.fromJson(x))),
         startDate: json["start_date"] == null
             ? null
-            : DateTime.parse(json["start_date"]),
+            : DateTime.parse(json["start_date"]).toLocal(),
         reminderTime:
             json["reminder_time"] == null ? null : json["reminder_time"],
         alarmTimer: json["alarm_timer"] == null ? null : json["alarm_timer"],
@@ -87,7 +87,7 @@ class GetNextMedicineResponseDatum {
         userId: json["user_id"] == null ? null : json["user_id"],
         startHour: json["start_hour"] == null
             ? null
-            : DateTime.parse(json["start_hour"]),
+            : DateTime.parse(json["start_hour"]).toLocal(),
         description: json["description"] == null ? null : json["description"],
         totalTablets:
             json["total_tablets"] == null ? null : json["total_tablets"],
@@ -106,12 +106,12 @@ class GetNextMedicineResponseDatum {
         "timeObject": timeObject == null
             ? null
             : List<dynamic>.from(timeObject.map((x) => x.toJson())),
-        "start_date": startDate == null ? null : startDate.toIso8601String(),
+        "start_date": startDate == null ? null : startDate.toUtc().toIso8601String(),
         "reminder_time": reminderTime == null ? null : reminderTime,
         "alarm_timer": alarmTimer == null ? null : alarmTimer,
         "patient": patient == null ? null : patient.toJson(),
         "user_id": userId == null ? null : userId,
-        "start_hour": startHour == null ? null : startHour.toIso8601String(),
+        "start_hour": startHour == null ? null : startHour.toUtc().toIso8601String(),
         "description": description == null ? null : description,
         "total_tablets": totalTablets == null ? null : totalTablets,
         "tablets_left": tabletsLeft == null ? null : tabletsLeft,
@@ -149,10 +149,10 @@ class Patient {
         userId: json["user_id"] == null ? null : json["user_id"],
         createdAt: json["createdAt"] == null
             ? null
-            : DateTime.parse(json["createdAt"]),
+            : DateTime.parse(json["createdAt"]).toLocal(),
         updatedAt: json["updatedAt"] == null
             ? null
-            : DateTime.parse(json["updatedAt"]),
+            : DateTime.parse(json["updatedAt"]).toLocal(),
         id: json["id"] == null ? null : json["id"],
       );
 
@@ -162,8 +162,8 @@ class Patient {
         "age": age == null ? null : age,
         "avatar": avatar == null ? null : avatar,
         "user_id": userId == null ? null : userId,
-        "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
-        "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
+        "createdAt": createdAt == null ? null : createdAt.toUtc().toIso8601String(),
+        "updatedAt": updatedAt == null ? null : updatedAt.toUtc().toIso8601String(),
         "id": id == null ? null : id,
       };
 }
@@ -192,29 +192,29 @@ class TimeObject {
   factory TimeObject.fromJson(Map<String, dynamic> json) => TimeObject(
         startTime: json["start_time"] == null
             ? null
-            : DateTime.parse(json["start_time"]),
+            : DateTime.parse(json["start_time"]).toLocal(),
         endTime:
-            json["end_time"] == null ? null : DateTime.parse(json["end_time"]),
+            json["end_time"] == null ? null : DateTime.parse(json["end_time"]).toLocal(),
         medicineId: json["medicine_id"] == null ? null : json["medicine_id"],
         isActive: json["is_active"] == null ? null : json["is_active"],
         userId: json["user_id"] == null ? null : json["user_id"],
         createdAt: json["createdAt"] == null
             ? null
-            : DateTime.parse(json["createdAt"]),
+            : DateTime.parse(json["createdAt"]).toLocal(),
         updatedAt: json["updatedAt"] == null
             ? null
-            : DateTime.parse(json["updatedAt"]),
+            : DateTime.parse(json["updatedAt"]).toLocal(),
         id: json["id"] == null ? null : json["id"],
       );
 
   Map<String, dynamic> toJson() => {
-        "start_time": startTime == null ? null : startTime.toIso8601String(),
-        "end_time": endTime == null ? null : endTime.toIso8601String(),
+        "start_time": startTime == null ? null : startTime.toUtc().toIso8601String(),
+        "end_time": endTime == null ? null : endTime.toUtc().toIso8601String(),
         "medicine_id": medicineId == null ? null : medicineId,
         "is_active": isActive == null ? null : isActive,
         "user_id": userId == null ? null : userId,
-        "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
-        "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
+        "createdAt": createdAt == null ? null : createdAt.toUtc().toIso8601String(),
+        "updatedAt": updatedAt == null ? null : updatedAt.toUtc().toIso8601String(),
         "id": id == null ? null : id,
       };
 }

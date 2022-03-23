@@ -21,10 +21,12 @@ FlutterLocalNotificationsPlugin flutterNotification =
     FlutterLocalNotificationsPlugin();
 
 var androidDetails = new AndroidNotificationDetails(
-  "Channel ID",
-  "Desi programmer",
+  "11",
+  "11th channel",
   importance: Importance.max,
   channelDescription: "This is my channel",
+  playSound: true,
+  enableVibration: true
 );
 
 notificationInit() {

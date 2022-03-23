@@ -53,7 +53,7 @@ class EditPriscriptionResponseData {
         clinicName: json["clinic_name"] == null ? null : json["clinic_name"],
         consultationDate: json["consultation_date"] == null
             ? null
-            : DateTime.parse(json["consultation_date"]),
+            : DateTime.parse(json["consultation_date"]).toLocal(),
         userAilment: json["user_ailment"] == null ? null : json["user_ailment"],
         doctorAdvice:
             json["doctor_advice"] == null ? null : json["doctor_advice"],

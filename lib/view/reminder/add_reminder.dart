@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/loading.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../components/custom_contained_button.dart';
 import '../../components/textbuilder.dart';
@@ -44,11 +45,11 @@ class _AddReminderState extends State<AddReminder> {
       initialEntryMode: TimePickerEntryMode.dial,
     );
 
-    if(timeOfDay != null && timeOfDay != selectedTime && picked != null && picked != selectedDate) {
+    if(timeOfDay != null && picked != null) {
       setState(() {
         selectedDate = DateTime(picked.year,picked.month,picked.day,timeOfDay.hour,timeOfDay.minute);
         _date.text =
-        "${selectedDate.day}-${selectedDate.month}-${selectedDate.year} - ${selectedDate.hour}:${selectedDate.minute}";
+        "${selectedDate.day}-${selectedDate.month}-${selectedDate.year} - ${DateFormat("hh:mm a").format(selectedDate)}";
       });
     }
 

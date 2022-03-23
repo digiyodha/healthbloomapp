@@ -18,7 +18,7 @@ class AddBillRequest {
   factory AddBillRequest.fromJson(Map<String, dynamic> json) => AddBillRequest(
         name: json["name"] == null ? null : json["name"],
         amount: json["amount"] == null ? null : json["amount"].toDouble(),
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
         description: json["description"] == null ? null : json["description"],
         billImage: json["bill_image"] == null
             ? null
@@ -31,7 +31,7 @@ class AddBillRequest {
         "amount": amount == null ? null : amount,
         "date": date == null
             ? null
-            : "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
+            : date.toUtc().toIso8601String(),
         "description": description == null ? null : description,
         "bill_image": billImage == null
             ? null
@@ -162,14 +162,14 @@ class AddReminderRequest {
 
   factory AddReminderRequest.fromJson(Map<String, dynamic> json) => AddReminderRequest(
     reminderType: json["reminder_type"] == null ? null : json["reminder_type"],
-    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]),
+    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]).toLocal(),
     description: json["description"] == null ? null : json["description"],
     family: json["family"] == null ? null : json["family"],
   );
 
   Map<String, dynamic> toJson() => {
     "reminder_type": reminderType == null ? null : reminderType,
-    "date_time": dateTime == null ? null : dateTime.toIso8601String(),
+    "date_time": dateTime == null ? null : dateTime.toUtc().toIso8601String(),
     "description": description == null ? null : description,
     "family": family == null ? null : family,
   };
@@ -193,7 +193,7 @@ class EditReminderRequest {
   factory EditReminderRequest.fromJson(Map<String, dynamic> json) => EditReminderRequest(
     id: json["_id"] == null ? null : json["_id"],
     reminderType: json["reminder_type"] == null ? null : json["reminder_type"],
-    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]),
+    dateTime: json["date_time"] == null ? null : DateTime.parse(json["date_time"]).toLocal(),
     description: json["description"] == null ? null : json["description"],
     family: json["family"] == null ? null : json["family"],
   );
@@ -201,7 +201,7 @@ class EditReminderRequest {
   Map<String, dynamic> toJson() => {
     "_id": id == null ? null : id,
     "reminder_type": reminderType == null ? null : reminderType,
-    "date_time": dateTime == null ? null : dateTime.toIso8601String(),
+    "date_time": dateTime == null ? null : dateTime.toUtc().toIso8601String(),
     "description": description == null ? null : description,
     "family": family == null ? null : family,
   };
@@ -252,5 +252,45 @@ class GetReminderRequest {
 
   Map<String, dynamic> toJson() => {
     "_id": id == null ? null : id,
+  };
+}
+
+class PlacesNextPageRequest {
+  PlacesNextPageRequest({
+    this.nextPageToken,
+  });
+
+  String nextPageToken;
+
+  factory PlacesNextPageRequest.fromJson(Map<String, dynamic> json) => PlacesNextPageRequest(
+    nextPageToken: json["next_page_token"] == null ? null : json["next_page_token"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "next_page_token": nextPageToken == null ? null : nextPageToken,
+  };
+}
+
+class GetDocumentsFamilyRequest {
+  GetDocumentsFamilyRequest({
+    this.fromDate,
+    this.toDate,
+    this.patient,
+  });
+
+  DateTime fromDate;
+  DateTime toDate;
+  String patient;
+
+  factory GetDocumentsFamilyRequest.fromJson(Map<String, dynamic> json) => GetDocumentsFamilyRequest(
+    fromDate: json["from_date"] == null ? null : DateTime.parse(json["from_date"]).toLocal(),
+    toDate: json["to_date"] == null ? null : DateTime.parse(json["to_date"]).toLocal(),
+    patient: json["patient"] == null ? null : json["patient"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "from_date": fromDate == null ? "" : fromDate.toUtc().toIso8601String(),
+    "to_date": toDate == null ? "" : toDate.toUtc().toIso8601String(),
+    "patient": patient == null ? null : patient,
   };
 }

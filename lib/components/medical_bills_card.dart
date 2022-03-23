@@ -11,6 +11,7 @@ class MedicalBillsCard extends StatelessWidget {
   final Function edit;
   final Function delete;
   final Function onTap;
+  final bool showIcons;
   const MedicalBillsCard({
     Key key,
     this.nameOfBill,
@@ -20,6 +21,7 @@ class MedicalBillsCard extends StatelessWidget {
     this.delete,
     this.onTap,
     this.avatar,
+    this.showIcons = true
   }) : super(key: key);
 
   @override
@@ -86,12 +88,15 @@ class MedicalBillsCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          TextBuilder(
-                            text: nameOfBill.toString() ?? '',
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
+                          Expanded(
+                            child: TextBuilder(
+                              text: nameOfBill.toString() ?? '',
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
+                          if(showIcons)
                           InkWell(
                             onTap: edit,
                             child: Icon(
@@ -131,6 +136,7 @@ class MedicalBillsCard extends StatelessWidget {
                               ),
                             ],
                           ),
+                          if(showIcons)
                           InkWell(
                             onTap: delete,
                             child: Icon(

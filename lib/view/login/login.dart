@@ -29,7 +29,7 @@ class _LoginState extends State<Login> {
   bool showPassword = true;
   GoogleSignInAccount _currentUser;
   bool _loading = false;
-
+  FocusNode myFocusNode = FocusNode();
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
 
@@ -234,6 +234,7 @@ class _LoginState extends State<Login> {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: TextFormField(
+                                      focusNode: myFocusNode,
                                       controller: _password,
                                       inputFormatters: [
                                         LengthLimitingTextInputFormatter(16),
@@ -257,6 +258,7 @@ class _LoginState extends State<Login> {
                                         contentPadding: EdgeInsets.all(10),
                                         suffixIcon: InkWell(
                                             onTap: () {
+                                              myFocusNode.requestFocus();
                                               setState(() {
                                                 showPassword = !showPassword;
                                               });

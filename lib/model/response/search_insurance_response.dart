@@ -86,7 +86,7 @@ class Patient {
         relationship:
             json["relationship"] == null ? null : json["relationship"],
         age: json["age"] == null ? null : json["age"],
-        avatar: json["avatar"] == null ? null : json["avatar"],
+        avatar: json["avatar"] == null ? "" : json["avatar"],
         userId: json["user_id"] == null ? null : json["user_id"],
         id: json["id"] == null ? null : json["id"],
       );

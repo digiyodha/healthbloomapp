@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 import '../../services/api/repository/auth_repository.dart';
 import '../../utils/drawer/custom_drawer.dart';
 import '../homepage/home_page.dart';
+import 'insurance_documents.dart';
 
 class Insurance extends StatefulWidget {
   const Insurance({Key key}) : super(key: key);
@@ -105,7 +106,7 @@ class _InsuranceState extends State<Insurance> {
                 bottom: 0,
                 right: 0,
                 left: 0,
-                top: 180,
+                top: 100,
                 child: Container(
                   padding: EdgeInsets.only(top: 40, left: 24, right: 24),
                   decoration: BoxDecoration(
@@ -115,17 +116,17 @@ class _InsuranceState extends State<Insurance> {
                           topLeft: Radius.circular(30))),
                   child: Column(
                     children: [
-                      const SizedBox(height: 5.0),
-                      CustomTextField(
-                        maxLines: 1,
-                        controller: _searchText,
-                        label: "Search",
-                        onChanged: (val) {
-                          getInsurance();
-                          _currentResponse = _searchResponse;
-                        },
-                        onTap: () {},
-                      ),
+                      // const SizedBox(height: 5.0),
+                      // CustomTextField(
+                      //   maxLines: 1,
+                      //   controller: _searchText,
+                      //   label: "Search",
+                      //   onChanged: (val) {
+                      //     getInsurance();
+                      //     _currentResponse = _searchResponse;
+                      //   },
+                      //   onTap: () {},
+                      // ),
                       const SizedBox(height: 20.0),
                       Expanded(
                         child: _currentResponse != null
@@ -145,7 +146,7 @@ class _InsuranceState extends State<Insurance> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => ViewInsurance(
+                                          builder: (context) => InsuranceDocuments(
                                             insurance:
                                                 _currentResponse.data[index],
                                           ),
@@ -194,6 +195,15 @@ class _InsuranceState extends State<Insurance> {
               if (_loading) LoadingWidget()
             ],
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: kMainColor,
+          child: Icon(Icons.add),
+          onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context){
+              return AddInsurance();
+            }));
+          },
         ),
       ),
     );

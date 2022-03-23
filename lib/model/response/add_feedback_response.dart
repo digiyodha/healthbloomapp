@@ -45,10 +45,10 @@ class AddFeedbackResponseData {
         userId: json["user_id"] == null ? null : json["user_id"],
         createdAt: json["createdAt"] == null
             ? null
-            : DateTime.parse(json["createdAt"]),
+            : DateTime.parse(json["createdAt"]).toLocal(),
         updatedAt: json["updatedAt"] == null
             ? null
-            : DateTime.parse(json["updatedAt"]),
+            : DateTime.parse(json["updatedAt"]).toLocal(),
         id: json["id"] == null ? null : json["id"],
       );
 

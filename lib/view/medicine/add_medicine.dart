@@ -60,6 +60,7 @@ class _AddMedicineState extends State<AddMedicine> {
     if (picked != null && picked != startDate) {
       setState(() {
         startDate = picked;
+        _listOfTimes.clear();
       });
 
       _date.text = "${startDate.day}-${startDate.month}-${startDate.year}";
@@ -123,7 +124,7 @@ class _AddMedicineState extends State<AddMedicine> {
       _memberId = widget.getMedicine.patient.id;
       _medicineDescription.text = widget.getMedicine.description;
       widget.getMedicine.timeObject.forEach((element) {
-        _listOfTimes.add(element.startTime);
+        _listOfTimes.add(DateTime(widget.getMedicine.startDate.year,widget.getMedicine.startDate.month,widget.getMedicine.startDate.day,element.startTime.hour,element.startTime.minute));
       });
 
       remainderTime = widget.getMedicine.reminderTime;
@@ -142,7 +143,7 @@ class _AddMedicineState extends State<AddMedicine> {
       _memberId = widget.getNextMedicine.patient.id;
       _medicineDescription.text = widget.getNextMedicine.description;
       widget.getNextMedicine.timeObject.forEach((element) {
-        _listOfTimes.add(element.startTime);
+        _listOfTimes.add(DateTime(widget.getNextMedicine.startDate.year,widget.getNextMedicine.startDate.month,widget.getNextMedicine.startDate.day,element.startTime.hour,element.startTime.minute));
       });
 
       remainderTime = widget.getNextMedicine.reminderTime;
@@ -160,8 +161,9 @@ class _AddMedicineState extends State<AddMedicine> {
       _familyMember.text = widget.searchMedicine.patient.name;
       _memberId = widget.searchMedicine.patient.id;
       _medicineDescription.text = widget.searchMedicine.description;
+      print(widget.searchMedicine.startDate.toIso8601String());
       widget.searchMedicine.timeObject.forEach((element) {
-        _listOfTimes.add(element.startTime);
+        _listOfTimes.add(DateTime(widget.searchMedicine.startDate.year,widget.searchMedicine.startDate.month,widget.searchMedicine.startDate.day,element.startTime.hour,element.startTime.minute));
       });
 
       remainderTime = widget.searchMedicine.reminderTime;
@@ -545,6 +547,10 @@ class _AddMedicineState extends State<AddMedicine> {
                   setState(() {
                     _loading = true;
                   });
+                  print("StartDate = ${startDate.toIso8601String()}");
+                  _listOfTimes.forEach((element) {
+                    print(element.toIso8601String());
+                  });
                   EditMedicineRequest _request = EditMedicineRequest(
                     id: widget.id,
                     medicineName: _medicineName.text,
@@ -559,9 +565,10 @@ class _AddMedicineState extends State<AddMedicine> {
                     patient: _memberId,
                     time: List.generate(
                       _listOfTimes.length,
-                      (index) => _listOfTimes[index],
+                          (index) => _listOfTimes[index],
                     ),
                   );
+
                   print("Edit Medicine Request ${_request.toJson()}");
                   EditMedicineResponse _response = await editMedicine(_request);
                   print("Edit Medicine Response ${_response.toJson()}");
@@ -595,6 +602,10 @@ class _AddMedicineState extends State<AddMedicine> {
                     _listOfTimes.isNotEmpty) {
                   setState(() {
                     _loading = true;
+                  });
+                  print("StartDate = ${startDate.toIso8601String()}");
+                  _listOfTimes.forEach((element) {
+                    print(element.toIso8601String());
                   });
                   AddMedicineRequest _request = AddMedicineRequest(
                     medicineName: _medicineName.text,

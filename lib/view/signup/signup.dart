@@ -44,6 +44,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _name = TextEditingController();
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
+  FocusNode myFocusNode = FocusNode();
 
   Future loginUser(RegisterLoginRequest request, {bool soc = false}) async {
     setState(() {
@@ -256,6 +257,7 @@ class _SignUpState extends State<SignUp> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: TextFormField(
+                                  focusNode: myFocusNode,
                                   controller: _password,
                                   obscureText: showPassword,
                                   inputFormatters: [
@@ -269,6 +271,7 @@ class _SignUpState extends State<SignUp> {
                                     contentPadding: EdgeInsets.all(10),
                                     suffixIcon: InkWell(
                                         onTap: () {
+                                          myFocusNode.requestFocus();
                                           setState(() {
                                             showPassword = !showPassword;
                                           });

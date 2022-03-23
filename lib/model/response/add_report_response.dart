@@ -46,7 +46,7 @@ class AddReportResponseData {
             ? null
             : List<String>.from(json["report_image"].map((x) => x)),
         name: json["name"] == null ? null : json["name"],
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
         description: json["description"] == null ? null : json["description"],
         patient: json["patient"] == null ? null : json["patient"],
         userId: json["user_id"] == null ? null : json["user_id"],

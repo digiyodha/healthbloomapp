@@ -54,7 +54,7 @@ class Data {
         clinicName: json["clinic_name"] == null ? null : json["clinic_name"],
         consultationDate: json["consultation_date"] == null
             ? null
-            : DateTime.parse(json["consultation_date"]),
+            : DateTime.parse(json["consultation_date"]).toLocal(),
         userAilment: json["user_ailment"] == null ? null : json["user_ailment"],
         doctorAdvice:
             json["doctor_advice"] == null ? null : json["doctor_advice"],
@@ -62,10 +62,10 @@ class Data {
         userId: json["user_id"] == null ? null : json["user_id"],
         createdAt: json["createdAt"] == null
             ? null
-            : DateTime.parse(json["createdAt"]),
+            : DateTime.parse(json["createdAt"]).toLocal(),
         updatedAt: json["updatedAt"] == null
             ? null
-            : DateTime.parse(json["updatedAt"]),
+            : DateTime.parse(json["updatedAt"]).toLocal(),
         id: json["id"] == null ? null : json["id"],
       );
 

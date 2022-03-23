@@ -37,10 +37,10 @@ class EditMedicineRequest {
         duration: json["duration"] == null ? null : json["duration"],
         time: json["time"] == null
             ? null
-            : List<DateTime>.from(json["time"].map((x) => DateTime.parse(x))),
+            : List<DateTime>.from(json["time"].map((x) => DateTime.parse(x).toLocal())),
         startDate: json["start_date"] == null
             ? null
-            : DateTime.parse(json["start_date"]),
+            : DateTime.parse(json["start_date"]).toLocal(),
         reminderTime:
             json["reminder_time"] == null ? null : json["reminder_time"],
         alarmTimer: json["alarm_timer"] == null ? null : json["alarm_timer"],
@@ -57,10 +57,10 @@ class EditMedicineRequest {
         "duration": duration == null ? null : duration,
         "time": time == null
             ? null
-            : List<dynamic>.from(time.map((x) => x.toIso8601String())),
+            : List<dynamic>.from(time.map((x) => x.toUtc().toIso8601String())),
         "start_date": startDate == null
             ? null
-            : "${startDate.year.toString().padLeft(4, '0')}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}",
+            : startDate.toUtc().toIso8601String(),
         "reminder_time": reminderTime == null ? null : reminderTime,
         "alarm_timer": alarmTimer == null ? null : alarmTimer,
         "patient": patient == null ? null : patient,

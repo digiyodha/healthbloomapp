@@ -63,7 +63,7 @@ class DeleteMedicineResponseData {
         alarmTimer: json["alarm_timer"] == null ? null : json["alarm_timer"],
         time: json["time"] == null
             ? null
-            : List<DateTime>.from(json["time"].map((x) => DateTime.parse(x))),
+            : List<DateTime>.from(json["time"].map((x) => DateTime.parse(x).toLocal())),
         medicineName:
             json["medicine_name"] == null ? null : json["medicine_name"],
         amount: json["amount"] == null ? null : json["amount"],
@@ -72,15 +72,15 @@ class DeleteMedicineResponseData {
         duration: json["duration"] == null ? null : json["duration"],
         startDate: json["start_date"] == null
             ? null
-            : DateTime.parse(json["start_date"]),
+            : DateTime.parse(json["start_date"]).toLocal(),
         patient: json["patient"] == null ? null : json["patient"],
         userId: json["user_id"] == null ? null : json["user_id"],
         createdAt: json["createdAt"] == null
             ? null
-            : DateTime.parse(json["createdAt"]),
+            : DateTime.parse(json["createdAt"]).toLocal(),
         updatedAt: json["updatedAt"] == null
             ? null
-            : DateTime.parse(json["updatedAt"]),
+            : DateTime.parse(json["updatedAt"]).toLocal(),
         id: json["id"] == null ? null : json["id"],
         description: json["description"] == null ? null : json["description"],
       );

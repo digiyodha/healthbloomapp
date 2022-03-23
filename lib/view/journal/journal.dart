@@ -5,6 +5,7 @@ import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/reminder/add_reminder.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../services/api/repository/auth_repository.dart';
 import '../../utils/custom_add_element_bs.dart';
@@ -696,139 +697,139 @@ class _JournalState extends State<Journal> {
                                 )
                               ],
                             ),
-                            ListView.builder(
-                              padding:
-                              EdgeInsets.only(top: 16, bottom: 16),
-                              shrinkWrap: true,
-                              itemCount: _currentResponse.data.length,
-                              itemBuilder: (context, index) {
-                                if (_selectedDate.day ==
-                                    _currentResponse.data[index].dateTime
-                                        .day &&
-                                    _selectedDate.month ==
-                                        _currentResponse.data[index].dateTime
-                                            .month &&
-                                    _selectedDate.year ==
-                                        _currentResponse.data[index].dateTime
-                                            .year)
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: Color(0xff8B80F8),
-                                        borderRadius:
-                                        BorderRadius.circular(16)),
-                                    margin: EdgeInsets.only(bottom: 14),
-                                    height: 120,
-                                    padding: EdgeInsets.only(
-                                        left: 8,
-                                        right: 8,
-                                        top: 8,
-                                        bottom: 8),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 80,
-                                          child: Image.asset(
-                                              "assets/images/drug1.png"),
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .spaceEvenly,
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                            Expanded(
+                              child: ListView.builder(
+                                padding:
+                                EdgeInsets.only(top: 16, bottom: 16),
+                                itemCount: _currentResponse.data.length,
+                                itemBuilder: (context, index) {
+                                  if (_selectedDate.day ==
+                                      _currentResponse.data[index].dateTime
+                                          .day &&
+                                      _selectedDate.month ==
+                                          _currentResponse.data[index].dateTime
+                                              .month &&
+                                      _selectedDate.year ==
+                                          _currentResponse.data[index].dateTime
+                                              .year)
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                          color: Color(0xff8B80F8),
+                                          borderRadius:
+                                          BorderRadius.circular(16)),
+                                      margin: EdgeInsets.only(bottom: 14),
+                                      height: 120,
+                                      padding: EdgeInsets.only(
+                                          left: 8,
+                                          right: 8,
+                                          top: 8,
+                                          bottom: 8),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 80,
+                                            child: Image.asset(
+                                                "assets/images/drug1.png"),
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .spaceEvenly,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  _currentResponse.data[index]
+                                                      .reminderType,
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                      FontWeight.w700,
+                                                      color: kWhite),
+                                                  maxLines: 1,
+                                                ),
+                                                Text(
+                                                  _currentResponse.data[index]
+                                                      .description,
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                      FontWeight.w300,
+                                                      color: kWhite),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                  TextOverflow.ellipsis,
+                                                ),
+                                                Text('${DateFormat('hh:mm a').format(_currentResponse.data[index].dateTime).toString()}',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                      FontWeight.w600,
+                                                      color: kWhite),
+                                                  maxLines: 1,
+                                                ),
+                                                Text(
+                                                  "${_currentResponse.data[index].familyObject.name}",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                      FontWeight.w300,
+                                                      color: kWhite),
+                                                  maxLines: 1,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              Text(
-                                                _currentResponse.data[index]
-                                                    .reminderType,
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                    FontWeight.w700,
-                                                    color: kWhite),
-                                                maxLines: 1,
+                                              InkWell(
+                                                onTap: () async{
+                                                  setState(() {
+                                                    _loading = true;
+                                                  });
+                                                  final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+                                                  AddEditReminderResponse _response = await adminAPI.deleteReminderAPI(DeleteReminderRequest(
+                                                      id: _currentResponse.data[index].id
+                                                  ));
+                                                  if(_response.success){
+                                                    _currentResponse.data.removeWhere((element) => element.id == _currentResponse.data[index].id);
+                                                  }
+                                                  setState(() {
+                                                    _loading = false;
+                                                  });
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  color: kWhite,
+                                                ),
                                               ),
-                                              Text(
-                                                _currentResponse.data[index]
-                                                    .description,
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                    FontWeight.w300,
-                                                    color: kWhite),
-                                                maxLines: 2,
-                                                overflow:
-                                                TextOverflow.ellipsis,
-                                              ),
-                                              Text(
-                                                "${_currentResponse.data[index].dateTime.hour}:${_currentResponse.data[index].dateTime.minute}",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                    FontWeight.w600,
-                                                    color: kWhite),
-                                                maxLines: 1,
-                                              ),
-                                              Text(
-                                                "${_currentResponse.data[index].familyObject.name}",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                    FontWeight.w300,
-                                                    color: kWhite),
-                                                maxLines: 1,
+                                              SizedBox(height: 50,),
+                                              InkWell(
+                                                onTap: () {
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                                                    return AddReminder(
+                                                      edit: true,
+                                                      data: _currentResponse.data[index],
+                                                    );
+                                                  })).whenComplete(() {
+                                                    getAllReminder();
+                                                  });
+                                                },
+                                                child: Icon(
+                                                  Icons.edit,
+                                                  color: kWhite,
+                                                ),
                                               ),
                                             ],
-                                          ),
-                                        ),
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            InkWell(
-                                              onTap: () async{
-                                                setState(() {
-                                                  _loading = true;
-                                                });
-                                                final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-                                                AddEditReminderResponse _response = await adminAPI.deleteReminderAPI(DeleteReminderRequest(
-                                                    id: _currentResponse.data[index].id
-                                                ));
-                                                if(_response.success){
-                                                  _currentResponse.data.removeWhere((element) => element.id == _currentResponse.data[index].id);
-                                                }
-                                                setState(() {
-                                                  _loading = false;
-                                                });
-                                              },
-                                              child: Icon(
-                                                Icons.delete,
-                                                color: kWhite,
-                                              ),
-                                            ),
-                                            SizedBox(height: 50,),
-                                            InkWell(
-                                              onTap: () {
-                                                Navigator.push(context, MaterialPageRoute(builder: (context){
-                                                  return AddReminder(
-                                                    edit: true,
-                                                    data: _currentResponse.data[index],
-                                                  );
-                                                })).whenComplete(() {
-                                                  getAllReminder();
-                                                });
-                                              },
-                                              child: Icon(
-                                                Icons.edit,
-                                                color: kWhite,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                return Container();
-                              },
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  return Container();
+                                },
+                              ),
                             )
                           ],
                         ),

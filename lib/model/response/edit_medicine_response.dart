@@ -55,7 +55,7 @@ class EditMedicineResponseData {
       EditMedicineResponseData(
         time: json["time"] == null
             ? null
-            : List<DateTime>.from(json["time"].map((x) => DateTime.parse(x))),
+            : List<DateTime>.from(json["time"].map((x) => DateTime.parse(x).toLocal())),
         reminderTime:
             json["reminder_time"] == null ? null : json["reminder_time"],
         alarmTimer: json["alarm_timer"] == null ? null : json["alarm_timer"],
@@ -67,7 +67,7 @@ class EditMedicineResponseData {
         duration: json["duration"] == null ? null : json["duration"],
         startDate: json["start_date"] == null
             ? null
-            : DateTime.parse(json["start_date"]),
+            : DateTime.parse(json["start_date"]).toLocal(),
         patient: json["patient"] == null ? null : json["patient"],
         userId: json["user_id"] == null ? null : json["user_id"],
         id: json["id"] == null ? null : json["id"],
