@@ -461,7 +461,7 @@ exports.getNextMedicinesByTime = asyncHandler(async (req, res, next) => {
     });
     await Promise.all(medicinePromise);
 
-    medicine_object.sort(dynamicSort("start_hour"));
+    medicine_object.sort(this.dynamicSort("start_hour"));
 
     res.status(200).json({ success: true, data: medicine_object});
 });
