@@ -6,6 +6,9 @@ const {Reminder} = require("../models/reminder");
 var cron = require('node-cron');
 const schedule = require('node-schedule');
 const { sendNotificationToUser } = require("./notificationController");
+const { Medicine, TimeMedicine } = require("../models/medicine");
+var fns = require('date-fns');
+const { dynamicSort } = require("./medicineController");
 
 
 // //schedule Reminder
@@ -49,7 +52,7 @@ exports.addReminder = asyncHandler(async (req, res, next) => {
 
     var date = new Date(date_time);
     console.log(date);
-    const job = schedule.scheduleJob(date, async function(){
+    const job = schedule.scheduleJob(reminder._id.toString(), date, async function(){
         console.log('Reminder done!');
         await sendNotificationToUser(reminder_type, description, req.user._id);
     });
@@ -61,6 +64,13 @@ exports.addReminder = asyncHandler(async (req, res, next) => {
 //edit Reminder
 exports.editReminder = asyncHandler(async (req, res, next) => {
     var {reminder_type, family, date_time, description, _id} = req.body;
+
+    const cancelJob = schedule.scheduledJobs[_id.toString()];
+    if (cancelJob == null) {
+      console.log("Job not found!");
+    }
+    cancelJob.cancel();
+
     const reminder = await Reminder.findOneAndUpdate({_id: _id},{
         reminder_type: reminder_type,
         family: family,
@@ -74,6 +84,14 @@ exports.editReminder = asyncHandler(async (req, res, next) => {
         new ErrorResponse(`Reminder updation unsuccessful`, 404)
         );
     }
+
+    var date = new Date(date_time);
+    console.log(date);
+    const job = schedule.scheduleJob(_id.toString(), date, async function(){
+        console.log('Reminder done!');
+        await sendNotificationToUser(reminder_type, description, req.user._id);
+    });
+
     res.status(200).json({ success: true, data: reminder });
 });
 
@@ -93,10 +111,84 @@ exports.getAllReminder = asyncHandler(async (req, res, next) => {
             date_time: reminder.date_time,
             description: reminder.description,
             familyObject: familyObject,
-            user_id: reminder.user_id
+            user_id: reminder.user_id,
+            type: 'Reminder'
         });
     });
     await Promise.all(reminderPromise);
+
+
+    var medicineObject = await Medicine.find({user_id: req.user._id});
+    var medicinePromise = await medicineObject.map(async function(medicine){
+        var timeObject = await TimeMedicine.find({medicine_id: medicine._id});
+        var familyObject = await Family.findOne({_id: medicine.patient});
+
+        var timeMedicinePromise = await timeObject.map(async function(timeMedicine){
+
+            if(medicine.reminder_time == 'Daily')
+            {
+                var start = timeMedicine.original_time;
+                for(var i=0; i<parseInt(medicine.duration); i++)
+                {
+                    var date = new Date(start);
+                    console.log(date);
+                    reminder_object.push({
+                        _id: timeMedicine._id,
+                        reminder_type: 'Medicine',
+                        date_time: start,
+                        description: medicine.medicine_name,
+                        familyObject: familyObject,
+                        user_id: medicine.user_id,
+                        type: 'Medicine'
+                    });
+                    start = fns.addDays(date, 1);
+                }
+            }
+            else if(medicine.reminder_time == 'Weekly')
+            {
+                var start = timeMedicine.original_time;
+                for(var i=0; i<parseInt(medicine.duration); i+=7)
+                {
+                    var date = new Date(start);
+                    console.log(date);
+                    reminder_object.push({
+                        _id: timeMedicine._id,
+                        reminder_type: 'Medicine',
+                        date_time: start,
+                        description: medicine.medicine_name,
+                        familyObject: familyObject,
+                        user_id: medicine.user_id,
+                        type: 'Medicine'
+                    });
+                    start = fns.addDays(date, 7);
+                }
+            }
+            else if(medicine.reminder_time == 'Monthly')
+            {
+                var start =  timeMedicine.original_time;
+                for(var i=0; i<parseInt(medicine.duration); i+=30)
+                {
+                    var date = new Date(start);
+                    console.log(date);
+                    reminder_object.push({
+                        _id: timeMedicine._id,
+                        reminder_type: 'Medicine',
+                        date_time: start,
+                        description: medicine.medicine_name,
+                        familyObject: familyObject,
+                        user_id: medicine.user_id,
+                        type: 'Medicine'
+                    });
+                    start = fns.addDays(date, 30);
+                }
+            }
+        });
+        await Promise.all(timeMedicinePromise);
+    });
+    await Promise.all(medicinePromise);
+
+    reminder_object.sort(dynamicSort("date_time"));
+
     res.status(200).json({ success: true, data: reminder_object });
 });
 
@@ -104,6 +196,13 @@ exports.getAllReminder = asyncHandler(async (req, res, next) => {
 //delete reminder
 exports.deleteReminder = asyncHandler(async (req, res, next) => {
     var {_id} = req.body;
+
+    const cancelJob = schedule.scheduledJobs[_id.toString()];
+    if (cancelJob == null) {
+      console.log("Job not found!");
+    }
+    cancelJob.cancel();
+    
     const reminder = await Reminder.findOneAndDelete({_id: _id});
     if(!reminder)
     {

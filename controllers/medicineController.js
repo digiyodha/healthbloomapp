@@ -52,12 +52,28 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
             {
                 var date = new Date(start);
                 console.log(date);
-                const job = schedule.scheduleJob(date, async function(){
+                var job_id = timeMedicine._id.toString() + "-" + date.toISOString();
+                const job = schedule.scheduleJob(job_id, date, async function(){
                     console.log('Reminder done!');
                     await sendNotificationToUser('Medicine', medicine_name, req.user._id);
                 });
                 start = fns.addDays(date, 1);
             }
+
+
+            // var start = timestamp;
+            // var date = new Date(timestamp);
+            // var rule = new schedule.RecurrenceRule();
+            // rule.second = date.getUTCSeconds();
+            // rule.minute = date.getUTCMinutes();
+            // rule.hour = date.getUTCHours();
+            // console.log(rule);
+            // var job_id = timeMedicine._id.toString();
+            // const job = schedule.scheduleJob(job_id, {start: new Date(timeMedicine.original_time), end: new Date(timeMedicine.end_time), rule: rule}, async function(){
+            //     console.log('Reminder done!');
+            //     await sendNotificationToUser('Medicine', medicine_name, req.user._id);
+            // });
+            // console.log(job);
         }
         else if(reminder_time == 'Weekly')
         {
@@ -66,7 +82,8 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
             {
                 var date = new Date(start);
                 console.log(date);
-                const job = schedule.scheduleJob(date, async function(){
+                var job_id = timeMedicine._id.toString()  + "-" + date.toISOString();
+                const job = schedule.scheduleJob(job_id, date, async function(){
                     console.log('Reminder done!');
                     await sendNotificationToUser('Medicine', medicine_name, req.user._id);
                 });
@@ -80,7 +97,8 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
             {
                 var date = new Date(start);
                 console.log(date);
-                const job = schedule.scheduleJob(date, async function(){
+                var job_id = timeMedicine._id.toString() + "-" + date.toISOString();
+                const job = schedule.scheduleJob(job_id, date, async function(){
                     console.log('Reminder done!');
                     await sendNotificationToUser('Medicine', medicine_name, req.user._id);
                 });
@@ -119,6 +137,62 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
         description: description
     });
 
+    var timeObject = await TimeMedicine.find({medicine_id: _id});
+
+
+
+    var timeMedicinePromise = await timeObject.map(async function(timeMedicine){
+        // var job_id = timeMedicine._id.toString() + "-" + date.toISOString();
+
+            if(medicine.reminder_time == 'Daily')
+            {
+                var start = timeMedicine.original_time;
+                for(var i=0; i<parseInt(medicine.duration); i++)
+                {
+                    var date = new Date(start);
+                    console.log(date);
+                    var job_id = timeMedicine._id.toString() + "-" + date.toISOString();
+                    const cancelJob = schedule.scheduledJobs[job_id];
+                    if (cancelJob != null) {
+                        cancelJob.cancel();
+                    }
+                    start = fns.addDays(date, 1);
+                }
+    
+            }
+            else if(medicine.reminder_time == 'Weekly')
+            {
+                var start = timeMedicine.original_time;
+                for(var i=0; i<parseInt(medicine.duration); i+=7)
+                {
+                    var date = new Date(start);
+                    console.log(date);
+                    var job_id = timeMedicine._id.toString()  + "-" + date.toISOString();
+                    const cancelJob = schedule.scheduledJobs[job_id];
+                    if (cancelJob != null) {
+                        cancelJob.cancel();
+                    }
+                    start = fns.addDays(date, 7);
+                }
+            }
+            else if(medicine.reminder_time == 'Monthly')
+            {
+                var start = timeMedicine.original_time;
+                for(var i=0; i<parseInt(medicine.duration); i+=30)
+                {
+                    var date = new Date(start);
+                    console.log(date);
+                    var job_id = timeMedicine._id.toString() + "-" + date.toISOString();
+                    const cancelJob = schedule.scheduledJobs[job_id];
+                    if (cancelJob != null) {
+                        cancelJob.cancel();
+                    }
+                    start = fns.addDays(date, 30);
+                }
+            }
+    });
+    await Promise.all(timeMedicinePromise);
+
     await TimeMedicine.deleteMany({medicine_id: _id});
 
     var timePromise = await time.map(async function(timestamp){
@@ -132,6 +206,52 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
             user_id: req.user._id
         });
         console.log(timeMedicine);
+
+        if(medicine.reminder_time == 'Daily')
+        {
+            var start = timestamp;
+            for(var i=0; i<parseInt(duration); i++)
+            {
+                var date = new Date(start);
+                console.log(date);
+                var job_id = timeMedicine._id.toString();
+                const job = schedule.scheduleJob(job_id, date, async function(){
+                    console.log('Reminder done!');
+                    await sendNotificationToUser('Medicine', medicine_name, req.user._id);
+                });
+                start = fns.addDays(date, 1);
+            }
+        }
+        else if(medicine.reminder_time == 'Weekly')
+        {
+            var start = timestamp;
+            for(var i=0; i<parseInt(duration); i+=7)
+            {
+                var date = new Date(start);
+                console.log(date);
+                var job_id = timeMedicine._id.toString();
+                const job = schedule.scheduleJob(job_id, date, async function(){
+                    console.log('Reminder done!');
+                    await sendNotificationToUser('Medicine', medicine_name, req.user._id);
+                });
+                start = fns.addDays(date, 7);
+            }
+        }
+        else if(medicine.reminder_time == 'Monthly')
+        {
+            var start = timestamp;
+            for(var i=0; i<parseInt(duration); i+=30)
+            {
+                var date = new Date(start);
+                console.log(date);
+                var job_id = timeMedicine._id.toString();
+                const job = schedule.scheduleJob(job_id, date, async function(){
+                    console.log('Reminder done!');
+                    await sendNotificationToUser('Medicine', medicine_name, req.user._id);
+                });
+                start = fns.addDays(date, 30);
+            }
+        }
     });
     await Promise.all(timePromise);
 
@@ -231,7 +351,7 @@ exports.searchMedicine = asyncHandler(async (req, res, next) => {
     res.status(200).json({ success: true, data: medicine_object });
 });
 
-function dynamicSort(property) {
+exports.dynamicSort = function(property) {
     var sortOrder = 1;
     if(property[0] === "-") {
         sortOrder = -1;
@@ -351,6 +471,61 @@ exports.getNextMedicinesByTime = asyncHandler(async (req, res, next) => {
 exports.deleteMedicine = asyncHandler(async (req, res, next) => {
     var {_id} = req.body;
     const medicine = await Medicine.findOneAndDelete({_id: _id});
+
+    var timeObject = await TimeMedicine.find({medicine_id: _id});
+
+    var timeMedicinePromise = await timeObject.map(async function(timeMedicine){
+        // var job_id = timeMedicine._id.toString() + "-" + date.toISOString();
+
+            if(medicine.reminder_time == 'Daily')
+            {
+                var start = timeMedicine.original_time;
+                for(var i=0; i<parseInt(medicine.duration); i++)
+                {
+                    var date = new Date(start);
+                    console.log(date);
+                    var job_id = timeMedicine._id.toString() + "-" + date.toISOString();
+                    const cancelJob = schedule.scheduledJobs[job_id];
+                    if (cancelJob != null) {
+                        cancelJob.cancel();
+                    }
+                    start = fns.addDays(date, 1);
+                }
+    
+            }
+            else if(medicine.reminder_time == 'Weekly')
+            {
+                var start = timeMedicine.original_time;
+                for(var i=0; i<parseInt(medicine.duration); i+=7)
+                {
+                    var date = new Date(start);
+                    console.log(date);
+                    var job_id = timeMedicine._id.toString()  + "-" + date.toISOString();
+                    const cancelJob = schedule.scheduledJobs[job_id];
+                    if (cancelJob != null) {
+                        cancelJob.cancel();
+                    }
+                    start = fns.addDays(date, 7);
+                }
+            }
+            else if(medicine.reminder_time == 'Monthly')
+            {
+                var start = timeMedicine.original_time;
+                for(var i=0; i<parseInt(medicine.duration); i+=30)
+                {
+                    var date = new Date(start);
+                    console.log(date);
+                    var job_id = timeMedicine._id.toString() + "-" + date.toISOString();
+                    const cancelJob = schedule.scheduledJobs[job_id];
+                    if (cancelJob != null) {
+                        cancelJob.cancel();
+                    }
+                    start = fns.addDays(date, 30);
+                }
+            }
+    });
+    await Promise.all(timeMedicinePromise);
+    
     await TimeMedicine.deleteMany({medicine_id: _id});
     if(!medicine)
     {
