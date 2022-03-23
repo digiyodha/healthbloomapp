@@ -142,6 +142,8 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
     var {medicine_name, amount, dosage, doses, duration, time, start_date,
         reminder_time, alarm_timer, patient, _id, description} = req.body;
 
+    console.log(time);
+
 
     const medicine = await Medicine.findOneAndUpdate({_id: _id},{
         medicine_name: medicine_name,
