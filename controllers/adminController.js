@@ -68,9 +68,7 @@ exports.loginAdmin = asyncHandler(async (req, res, next) => {
             else
             {
 
-            var token = jwt.sign({ data: userExists._id }, dbConfig.JWT_SECRET, {
-                expiresIn: '12h',
-              });
+            var token = jwt.sign({ data: userExists._id }, dbConfig.JWT_SECRET);
               userObject = {
                 email_id,
                 x_auth_token: token,

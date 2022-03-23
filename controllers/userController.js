@@ -86,9 +86,7 @@ exports.registerLoginUser = asyncHandler(async (req, res, next) => {
       );
     }
   }
-  var token = jwt.sign({ data: user._id }, dbConfig.JWT_SECRET, {
-    expiresIn: '12h',
-  });
+  var token = jwt.sign({ data: user._id }, dbConfig.JWT_SECRET);
 
   if(fcm_token != null)
   {
