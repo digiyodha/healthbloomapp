@@ -13,6 +13,26 @@ const schedule = require('node-schedule');
 const { sendNotificationToUser } = require("./notificationController");
 
 
+exports.scheduleMedicine = asyncHandler(async (req, res, next) => {
+    
+var date = new Date("2022-03-23T07:05:05.143Z");
+// var rule = new schedule.RecurrenceRule();
+var second = date.getUTCSeconds();
+var minute = date.getUTCMinutes();
+var hour = date.getUTCHours();
+var rule = "* " + minute + " " + hour + " * *"
+rule = "* * 7 * * *";
+console.log(rule);
+
+console.log(rule);
+var job2 = schedule.scheduleJob({start: new Date("2022-03-22T14:48:00.000Z"), end: new Date("2022-03-24T14:48:00.000Z"), rule:rule  }, async function(){
+    console.log('Reminder done!');
+});
+console.log(job2);
+       
+    res.status(200).json({ success: true, data: null });
+});
+
 
 //add Medicine
 exports.addMedicine = asyncHandler(async (req, res, next) => {

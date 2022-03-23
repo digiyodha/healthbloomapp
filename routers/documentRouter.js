@@ -5,12 +5,14 @@ const { protect } = require("../middlewares/auth");
 const router = express.Router();
 
 const {
-    getDocument
+    getDocument, getDocumentFamily
   
 } = require("../controllers/documentController");
 
 
 router.route("/").put(protect, getDocument)
+router.route("/family").put(protect, getDocumentFamily)
+
 
 
 
