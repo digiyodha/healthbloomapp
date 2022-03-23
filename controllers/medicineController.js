@@ -221,6 +221,8 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
 
     var timePromise = await time.map(async function(timestamp){
 
+        console.log(timestamp);
+
         var timeMedicine = await TimeMedicine.create({
             original_time: timestamp,
             start_time: timestamp,
