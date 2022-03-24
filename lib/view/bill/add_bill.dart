@@ -37,7 +37,7 @@ class _AddBillState extends State<AddBill> {
   File _file;
   UploadTask task;
   bool _loading = false;
-  List<String> files = [];
+  List<ImageListRequest> files = [];
   Future _future;
   String _memberId;
 
@@ -69,7 +69,15 @@ class _AddBillState extends State<AddBill> {
       final snapshot = await task.whenComplete(() {});
       final url = await snapshot.ref.getDownloadURL();
       debugPrint(url);
-      files.add(url);
+      files.add(
+          ImageListRequest(
+              assetName: path.basename(_file.path),
+              assetUrl: url,
+              assetSize: 1,
+              assetType: "Image",
+              thumbnailUrl: url
+          ),
+      );
       setState(() {
         _loading = false;
       });
@@ -293,7 +301,7 @@ class _AddBillState extends State<AddBill> {
                                                               child:
                                                                   CachedNetworkImage(
                                                                 imageUrl: files[
-                                                                    index],
+                                                                    index].assetUrl,
                                                                 fit: BoxFit
                                                                     .cover,
                                                                 progressIndicatorBuilder:
@@ -317,7 +325,7 @@ class _AddBillState extends State<AddBill> {
                                                 height: 90,
                                                 width: 90,
                                                 child: CachedNetworkImage(
-                                                  imageUrl: files[index],
+                                                  imageUrl: files[index].assetUrl,
                                                   width: 90,
                                                   height: 90,
                                                   fit: BoxFit.cover,

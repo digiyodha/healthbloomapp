@@ -1,13 +1,9 @@
-import 'dart:convert';
-
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:health_bloom/components/textbuilder.dart';
-import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/request/add_prescription_request.dart';
 import 'package:health_bloom/model/request/edit_prescription_request.dart';
 import 'package:health_bloom/model/response/add_precsription_response.dart';
@@ -15,18 +11,16 @@ import 'package:health_bloom/model/response/edit_prescription_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
+import 'package:health_bloom/utils/downloader.dart';
 import 'package:health_bloom/utils/drop_down/custom_dropdown.dart';
 import 'package:health_bloom/utils/loading.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import '../../components/custom_contained_button.dart';
+import '../../model/request/request.dart';
 import '../../model/response/response.dart';
 import '../../utils/text_field/custom_text_field.dart';
-import 'dart:io';
-import 'package:file_picker/file_picker.dart';
-import 'package:path/path.dart' as path;
 
 class AddPrescription extends StatefulWidget {
   final GetAllDocumentsResponsePrescription prescription;
@@ -49,7 +43,8 @@ class _AddPrescriptionState extends State<AddPrescription> {
   File _file;
   UploadTask task;
   bool _loading = false;
-  List<String> files = [];
+  List<ImageListRequest> files = [];
+
   Future<AddPrescriptionResponse> addPrescription(
       AddPrescriptionRequest request) async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
@@ -96,12 +91,20 @@ class _AddPrescriptionState extends State<AddPrescription> {
     if (_attachmentFile != null) {
       _file = File(_attachmentFile.files.single.path);
       final ref =
-          FirebaseStorage.instance.ref('files/${path.basename(_file.path)}');
+      FirebaseStorage.instance.ref('files/${path.basename(_file.path)}');
       task = ref.putFile(_file);
       final snapshot = await task.whenComplete(() {});
       final url = await snapshot.ref.getDownloadURL();
       debugPrint(url);
-      files.add(url);
+      files.add(
+        ImageListRequest(
+            assetName: path.basename(_file.path),
+            assetUrl: url,
+            assetSize: 1,
+            assetType: "Image",
+            thumbnailUrl: url
+        ),
+      );
       setState(() {
         _loading = false;
       });
@@ -324,7 +327,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
                                                               child:
                                                                   CachedNetworkImage(
                                                                 imageUrl: files[
-                                                                    index],
+                                                                    index].assetUrl,
                                                                 fit: BoxFit
                                                                     .cover,
                                                                 progressIndicatorBuilder:
@@ -338,26 +341,27 @@ class _AddPrescriptionState extends State<AddPrescription> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            // CustomContainedButton(
-                                                            //   text:
-                                                            //   "Download",
-                                                            //   textSize:
-                                                            //   20,
-                                                            //   weight:
-                                                            //   FontWeight
-                                                            //       .w600,
-                                                            //   height: 48,
-                                                            //   width: 328,
-                                                            //   onPressed:
-                                                            //       () async {
-                                                            //     await _download(
-                                                            //         'sgfdg.jpg',
-                                                            //         files[
-                                                            //         index]);
-                                                            //     Navigator.pop(
-                                                            //         context);
-                                                            //   },
-                                                            // )
+                                                            CustomContainedButton(
+                                                              text:
+                                                              "Download",
+                                                              textSize:
+                                                              20,
+                                                              weight:
+                                                              FontWeight
+                                                                  .w600,
+                                                              height: 48,
+                                                              width: 328,
+                                                              onPressed:
+                                                                  () async {
+                                                                String path = await FileDownloader().download("abc.jpg", files[index].assetUrl);
+                                                                print("**************************");
+                                                                print(path);
+                                                                print("**************************");
+                                                                Navigator.pop(
+                                                                    context);
+                                                                Share.shareFiles([path], text: 'Great picture');
+                                                              },
+                                                            )
                                                           ],
                                                         ),
                                                       );
@@ -368,7 +372,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
                                                 height: 90,
                                                 width: 90,
                                                 child: CachedNetworkImage(
-                                                  imageUrl: files[index],
+                                                  imageUrl: files[index].assetUrl,
                                                   width: 90,
                                                   height: 90,
                                                   fit: BoxFit.cover,
@@ -569,109 +573,6 @@ class _AddPrescriptionState extends State<AddPrescription> {
     );
   }
 
-  final Dio _dio = Dio();
 
-  fileShare(String url) {
-    Share.share(
-      url,
-      subject: 'Insurence Claim Attachments',
-    );
-  }
-
-  Future<void> _download(String fileName, String fileUrl) async {
-    print('Download started');
-    final dir = await _getDownloadDirectory();
-    print(dir);
-    final isPermissionStatusGranted = await _requestPermissions();
-
-    print('Permition granted ${isPermissionStatusGranted}');
-
-    if (isPermissionStatusGranted || Platform.isAndroid) {
-      final savePath = path.join(dir.path, fileName);
-      await _startDownload(savePath, fileUrl);
-    } else {
-      // handle the scenario when user declines the permissions
-    }
-  }
-
-  Future<bool> _requestPermissions() async {
-    print('Permition dialog');
-    var permission = await Permission.storage.status;
-    var permission2 = await Permission.manageExternalStorage.status;
-
-    if (permission != PermissionStatus.granted) {
-      await Permission.storage.request();
-      permission = await Permission.storage.status;
-    }
-
-    if (permission2 != PermissionStatus.granted) {
-      await Permission.manageExternalStorage.request();
-      permission = await Permission.manageExternalStorage.status;
-    }
-
-    return permission == PermissionStatus.granted &&
-        permission2 == PermissionStatus.granted;
-  }
-
-  Future<Directory> _getDownloadDirectory() async {
-    if (Platform.isAndroid) {
-      return await DownloadsPathProvider.downloadsDirectory;
-    }
-
-    // in this example we are using only Android and iOS so I can assume
-    // that you are not trying it for other platforms and the if statement
-    // for iOS is unnecessary
-
-    // iOS directory visible to user
-    return await getApplicationDocumentsDirectory();
-  }
-
-  Future<void> _startDownload(String savePath, String fileUrl) async {
-    Map<String, dynamic> result = {
-      'isSuccess': false,
-      'filePath': null,
-      'error': null,
-    };
-
-    try {
-      final response = await _dio.download(fileUrl, savePath,
-          onReceiveProgress: _onReceiveProgress);
-      result['isSuccess'] = response.statusCode == 200;
-      result['filePath'] = savePath;
-      print('Result ' + result.toString());
-    } catch (ex) {
-      result['error'] = ex.toString();
-      print('Result ' + result.toString());
-    } finally {
-      await _showNotification(result);
-    }
-  }
-
-  Future<void> _showNotification(Map<String, dynamic> downloadStatus) async {
-    final android = AndroidNotificationDetails(
-      'channel id', 'channel name',
-      priority: Priority.high, importance: Importance.max,channelDescription: 'channel description',);
-    final iOS = IOSNotificationDetails();
-    final platform = NotificationDetails(android: android, iOS: iOS);
-    final json = jsonEncode(downloadStatus);
-    final isSuccess = downloadStatus['isSuccess'];
-
-    await flutterNotification.show(
-        0, // notification id
-        isSuccess ? 'Success' : 'Failure',
-        isSuccess
-            ? 'File has been downloaded successfully!'
-            : 'There was an error while downloading the file.',
-        platform,
-        payload: json);
-  }
-
-  void _onReceiveProgress(int received, int total) {
-    if (total != -1) {
-      setState(() {
-        //progress = (received / total * 100).toStringAsFixed(0) + "%";
-      });
-    }
-  }
 }
 

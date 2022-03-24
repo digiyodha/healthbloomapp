@@ -13,6 +13,7 @@ import 'package:health_bloom/utils/drop_down/custom_dropdown.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:provider/provider.dart';
 import '../../components/custom_contained_button.dart';
+import '../../model/request/request.dart';
 import '../../model/response/response.dart';
 import '../../utils/text_field/custom_text_field.dart';
 import 'dart:io';
@@ -39,7 +40,7 @@ class _AddReportState extends State<AddReport> {
   File _file;
   UploadTask task;
   bool _loading = false;
-  List<String> files = [];
+  List<ImageListRequest> files = [];
   Future _futureMembers;
   Future<GetAllMemberResponse> getAllmember() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
@@ -82,12 +83,20 @@ class _AddReportState extends State<AddReport> {
     if (_attachmentFile != null) {
       _file = File(_attachmentFile.files.single.path);
       final ref =
-          FirebaseStorage.instance.ref('files/${path.basename(_file.path)}');
+      FirebaseStorage.instance.ref('files/${path.basename(_file.path)}');
       task = ref.putFile(_file);
       final snapshot = await task.whenComplete(() {});
       final url = await snapshot.ref.getDownloadURL();
       debugPrint(url);
-      files.add(url);
+      files.add(
+        ImageListRequest(
+            assetName: path.basename(_file.path),
+            assetUrl: url,
+            assetSize: 1,
+            assetType: "Image",
+            thumbnailUrl: url
+        ),
+      );
       setState(() {
         _loading = false;
       });
@@ -290,7 +299,7 @@ class _AddReportState extends State<AddReport> {
                                                               child:
                                                                   CachedNetworkImage(
                                                                 imageUrl: files[
-                                                                    index],
+                                                                    index].assetUrl,
                                                                 fit: BoxFit
                                                                     .cover,
                                                                 progressIndicatorBuilder:
@@ -314,7 +323,7 @@ class _AddReportState extends State<AddReport> {
                                                 height: 90,
                                                 width: 90,
                                                 child: CachedNetworkImage(
-                                                  imageUrl: files[index],
+                                                  imageUrl: files[index].assetUrl,
                                                   width: 90,
                                                   height: 90,
                                                   fit: BoxFit.cover,

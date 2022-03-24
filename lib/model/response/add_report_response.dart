@@ -1,3 +1,5 @@
+import '../request/request.dart';
+
 class AddReportResponse {
   AddReportResponse({
     this.success,
@@ -32,7 +34,7 @@ class AddReportResponseData {
     this.id,
   });
 
-  List<String> reportImage;
+  List<ImageListRequest> reportImage;
   String name;
   DateTime date;
   String description;
@@ -42,9 +44,7 @@ class AddReportResponseData {
 
   factory AddReportResponseData.fromJson(Map<String, dynamic> json) =>
       AddReportResponseData(
-        reportImage: json["report_image"] == null
-            ? null
-            : List<String>.from(json["report_image"].map((x) => x)),
+        reportImage: json["report_image"] == null ? null : List<ImageListRequest>.from(json["report_image"].map((x) => ImageListRequest.fromJson(x))),
         name: json["name"] == null ? null : json["name"],
         date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
         description: json["description"] == null ? null : json["description"],
@@ -54,9 +54,7 @@ class AddReportResponseData {
       );
 
   Map<String, dynamic> toJson() => {
-        "report_image": reportImage == null
-            ? null
-            : List<dynamic>.from(reportImage.map((x) => x)),
+        "report_image": reportImage == null ? null : List<dynamic>.from(reportImage.map((x) => x.toJson())),
         "name": name == null ? null : name,
         "date": date == null ? null : date.toIso8601String(),
         "description": description == null ? null : description,

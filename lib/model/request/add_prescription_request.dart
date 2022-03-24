@@ -1,3 +1,5 @@
+import 'package:health_bloom/model/request/request.dart';
+
 class AddPrescriptionRequest {
   AddPrescriptionRequest({
     this.doctorName,
@@ -15,7 +17,7 @@ class AddPrescriptionRequest {
   String patient;
   String userAilment;
   String doctorAdvice;
-  List<String> prescriptionImage;
+  List<ImageListRequest> prescriptionImage;
 
   factory AddPrescriptionRequest.fromJson(Map<String, dynamic> json) =>
       AddPrescriptionRequest(
@@ -28,9 +30,7 @@ class AddPrescriptionRequest {
         userAilment: json["user_ailment"] == null ? null : json["user_ailment"],
         doctorAdvice:
             json["doctor_advice"] == null ? null : json["doctor_advice"],
-        prescriptionImage: json["prescription_image"] == null
-            ? null
-            : List<String>.from(json["prescription_image"].map((x) => x)),
+        prescriptionImage: json["prescription_image"] == null ? null : List<ImageListRequest>.from(json["prescription_image"].map((x) => ImageListRequest.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -42,8 +42,6 @@ class AddPrescriptionRequest {
         "patient": patient == null ? null : patient,
         "user_ailment": userAilment == null ? null : userAilment,
         "doctor_advice": doctorAdvice == null ? null : doctorAdvice,
-        "prescription_image": prescriptionImage == null
-            ? null
-            : List<dynamic>.from(prescriptionImage.map((x) => x)),
+        "prescription_image": prescriptionImage == null ? null : List<dynamic>.from(prescriptionImage.map((x) => x.toJson())),
       };
 }

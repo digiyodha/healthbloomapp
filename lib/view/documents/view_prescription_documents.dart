@@ -13,6 +13,7 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as path;
+import '../../model/request/request.dart';
 import '../../utils/text_field/custom_text_field.dart';
 
 class ViewPrescriptionDocuments extends StatefulWidget {
@@ -32,7 +33,7 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
   TextEditingController _userAilment = TextEditingController();
   TextEditingController _drAdvice = TextEditingController();
 
-  List<String> files = [];
+  List<ImageListRequest> files = [];
 
   String progress = "-";
 
@@ -239,7 +240,7 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
                                                     height: 325,
                                                     width: double.infinity,
                                                     child: CachedNetworkImage(
-                                                      imageUrl: files[index],
+                                                      imageUrl: files[index].assetUrl,
                                                       fit: BoxFit.cover,
                                                       progressIndicatorBuilder:
                                                           (context, url,
@@ -262,7 +263,7 @@ class _ViewPrescriptionDocumentsState extends State<ViewPrescriptionDocuments> {
                                       height: 90,
                                       width: 90,
                                       child: CachedNetworkImage(
-                                        imageUrl: files[index],
+                                        imageUrl: files[index].assetUrl,
                                         width: 90,
                                         height: 90,
                                         fit: BoxFit.cover,

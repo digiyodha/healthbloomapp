@@ -3,7 +3,6 @@ import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/view/insurance/widgets/insaurance_card.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
-
 import '../../components/textbuilder.dart';
 import '../../model/response/response.dart';
 import '../../model/response/search_insurance_response.dart';

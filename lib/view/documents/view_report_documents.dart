@@ -13,6 +13,7 @@ import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../../model/request/request.dart';
 import '../../utils/text_field/custom_text_field.dart';
 
 class ViewReportDocuments extends StatefulWidget {
@@ -28,7 +29,7 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
   TextEditingController _date = TextEditingController();
   TextEditingController _description = TextEditingController();
 
-  List<String> files = [];
+  List<ImageListRequest> files = [];
 
   String progress = "-";
 
@@ -219,7 +220,7 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
                                                           child:
                                                               CachedNetworkImage(
                                                             imageUrl:
-                                                                files[index],
+                                                                files[index].assetUrl,
                                                             fit: BoxFit.cover,
                                                             progressIndicatorBuilder:
                                                                 (context, url,
@@ -241,7 +242,7 @@ class _ViewReportDocumentsState extends State<ViewReportDocuments> {
                                             height: 90,
                                             width: 90,
                                             child: CachedNetworkImage(
-                                              imageUrl: files[index],
+                                              imageUrl: files[index].assetUrl,
                                               width: 90,
                                               height: 90,
                                               fit: BoxFit.cover,

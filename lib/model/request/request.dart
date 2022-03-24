@@ -12,7 +12,7 @@ class AddBillRequest {
   double amount;
   DateTime date;
   String description;
-  List<String> billImage;
+  List<ImageListRequest> billImage;
   String patient;
 
   factory AddBillRequest.fromJson(Map<String, dynamic> json) => AddBillRequest(
@@ -20,9 +20,7 @@ class AddBillRequest {
         amount: json["amount"] == null ? null : json["amount"].toDouble(),
         date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
         description: json["description"] == null ? null : json["description"],
-        billImage: json["bill_image"] == null
-            ? null
-            : List<String>.from(json["bill_image"].map((x) => x)),
+        billImage: json["bill_image"] == null ? null : List<ImageListRequest>.from(json["bill_image"].map((x) => ImageListRequest.fromJson(x))),
         patient: json["patient"] == null ? null : json["patient"],
       );
 
@@ -33,9 +31,7 @@ class AddBillRequest {
             ? null
             : date.toUtc().toIso8601String(),
         "description": description == null ? null : description,
-        "bill_image": billImage == null
-            ? null
-            : List<dynamic>.from(billImage.map((x) => x)),
+        "bill_image": billImage == null ? null : List<dynamic>.from(billImage.map((x) => x.toJson())),
         "patient": patient == null ? null : patient,
       };
 }
@@ -292,5 +288,37 @@ class GetDocumentsFamilyRequest {
     "from_date": fromDate == null ? "" : fromDate.toUtc().toIso8601String(),
     "to_date": toDate == null ? "" : toDate.toUtc().toIso8601String(),
     "patient": patient == null ? null : patient,
+  };
+}
+
+class ImageListRequest {
+  ImageListRequest({
+    this.assetUrl,
+    this.assetSize,
+    this.assetName,
+    this.assetType,
+    this.thumbnailUrl,
+  });
+
+  String assetUrl;
+  int assetSize;
+  String assetName;
+  String assetType;
+  String thumbnailUrl;
+
+  factory ImageListRequest.fromJson(Map<String, dynamic> json) => ImageListRequest(
+    assetUrl: json["asset_url"] == null ? null : json["asset_url"],
+    assetSize: json["asset_size"] == null ? null : json["asset_size"],
+    assetName: json["asset_name"] == null ? null : json["asset_name"],
+    assetType: json["asset_type"] == null ? null : json["asset_type"],
+    thumbnailUrl: json["thumbnail_url"] == null ? null : json["thumbnail_url"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "asset_url": assetUrl == null ? null : assetUrl,
+    "asset_size": assetSize == null ? null : assetSize,
+    "asset_name": assetName == null ? null : assetName,
+    "asset_type": assetType == null ? null : assetType,
+    "thumbnail_url": thumbnailUrl == null ? null : thumbnailUrl,
   };
 }

@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:health_bloom/services/api/networking.dart';
@@ -98,7 +97,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   notificationInit();
   await Firebase.initializeApp();
-  await FlutterDownloader.initialize(debug: debug);
   sp = await SharedPreferences.getInstance();
   setSettings();
   String baseUrl = "https://health-bloom.herokuapp.com/";

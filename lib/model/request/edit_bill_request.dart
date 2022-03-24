@@ -1,3 +1,5 @@
+import 'package:health_bloom/model/request/request.dart';
+
 class EditBillRequest {
   EditBillRequest({
     this.id,
@@ -14,7 +16,7 @@ class EditBillRequest {
   dynamic amount;
   DateTime date;
   String description;
-  List<String> billImage;
+  List<ImageListRequest> billImage;
   String patient;
 
   factory EditBillRequest.fromJson(Map<String, dynamic> json) =>
@@ -24,9 +26,7 @@ class EditBillRequest {
         amount: json["amount"] == null ? null : json["amount"],
         date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
         description: json["description"] == null ? null : json["description"],
-        billImage: json["bill_image"] == null
-            ? null
-            : List<String>.from(json["bill_image"].map((x) => x)),
+        billImage: json["bill_image"] == null ? null : List<ImageListRequest>.from(json["bill_image"].map((x) => ImageListRequest.fromJson(x))),
         patient: json["patient"] == null ? null : json["patient"],
       );
 
@@ -36,9 +36,7 @@ class EditBillRequest {
         "amount": amount == null ? null : amount,
         "date": date == null ? null : date.toUtc().toIso8601String(),
         "description": description == null ? null : description,
-        "bill_image": billImage == null
-            ? null
-            : List<dynamic>.from(billImage.map((x) => x)),
+        "bill_image": billImage == null ? null : List<dynamic>.from(billImage.map((x) => x.toJson())),
         "patient": patient == null ? null : patient,
       };
 }

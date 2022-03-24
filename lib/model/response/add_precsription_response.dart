@@ -1,3 +1,5 @@
+import '../request/request.dart';
+
 class AddPrescriptionResponse {
   AddPrescriptionResponse({
     this.success,
@@ -34,7 +36,7 @@ class Data {
     this.id,
   });
 
-  List<String> prescriptionImage;
+  List<ImageListRequest> prescriptionImage;
   String doctorName;
   String clinicName;
   DateTime consultationDate;
@@ -47,9 +49,7 @@ class Data {
   String id;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        prescriptionImage: json["prescription_image"] == null
-            ? null
-            : List<String>.from(json["prescription_image"].map((x) => x)),
+        prescriptionImage: json["prescription_image"] == null ? null : List<ImageListRequest>.from(json["prescription_image"].map((x) => ImageListRequest.fromJson(x))),
         doctorName: json["doctor_name"] == null ? null : json["doctor_name"],
         clinicName: json["clinic_name"] == null ? null : json["clinic_name"],
         consultationDate: json["consultation_date"] == null
@@ -70,9 +70,7 @@ class Data {
       );
 
   Map<String, dynamic> toJson() => {
-        "prescription_image": prescriptionImage == null
-            ? null
-            : List<dynamic>.from(prescriptionImage.map((x) => x)),
+        "prescription_image": prescriptionImage == null ? null : List<dynamic>.from(prescriptionImage.map((x) => x.toJson())),
         "doctor_name": doctorName == null ? null : doctorName,
         "clinic_name": clinicName == null ? null : clinicName,
         "consultation_date": consultationDate == null

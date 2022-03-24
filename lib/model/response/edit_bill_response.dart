@@ -1,3 +1,5 @@
+import '../request/request.dart';
+
 class EditBillResponse {
   EditBillResponse({
     this.success,
@@ -33,7 +35,7 @@ class EditBillResponseData {
     this.id,
   });
 
-  List<String> billImage;
+  List<ImageListRequest> billImage;
   String name;
   int amount;
   DateTime date;
@@ -44,9 +46,7 @@ class EditBillResponseData {
 
   factory EditBillResponseData.fromJson(Map<String, dynamic> json) =>
       EditBillResponseData(
-        billImage: json["bill_image"] == null
-            ? null
-            : List<String>.from(json["bill_image"].map((x) => x)),
+        billImage: json["bill_image"] == null ? null : List<ImageListRequest>.from(json["bill_image"].map((x) => ImageListRequest.fromJson(x))),
         name: json["name"] == null ? null : json["name"],
         amount: json["amount"] == null ? null : json["amount"],
         date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
@@ -57,9 +57,7 @@ class EditBillResponseData {
       );
 
   Map<String, dynamic> toJson() => {
-        "bill_image": billImage == null
-            ? null
-            : List<dynamic>.from(billImage.map((x) => x)),
+        "bill_image": billImage == null ? null : List<dynamic>.from(billImage.map((x) => x.toJson())),
         "name": name == null ? null : name,
         "amount": amount == null ? null : amount,
         "date": date == null ? null : date.toIso8601String(),

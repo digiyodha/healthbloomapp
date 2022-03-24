@@ -10,6 +10,7 @@ import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:open_file/open_file.dart';
+import '../../model/request/request.dart';
 import '../../utils/text_field/custom_text_field.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
@@ -32,7 +33,7 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
   TextEditingController _description = TextEditingController();
 
   bool isloading = false;
-  List<String> files = [];
+  List<ImageListRequest> files = [];
 
   String progress = "-";
 
@@ -229,7 +230,7 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
                                                     height: 325,
                                                     width: double.infinity,
                                                     child: CachedNetworkImage(
-                                                      imageUrl: files[index],
+                                                      imageUrl: files[index].assetUrl,
                                                       fit: BoxFit.cover,
                                                       progressIndicatorBuilder:
                                                           (context, url,
@@ -252,7 +253,7 @@ class _ViewBillDocumentsState extends State<ViewBillDocuments> {
                                       height: 90,
                                       width: 90,
                                       child: CachedNetworkImage(
-                                        imageUrl: files[index],
+                                        imageUrl: files[index].assetUrl,
                                         width: 90,
                                         height: 90,
                                         fit: BoxFit.cover,

@@ -1,3 +1,5 @@
+import 'package:health_bloom/model/request/request.dart';
+
 class AddReportRequest {
   AddReportRequest({
     this.name,
@@ -10,7 +12,7 @@ class AddReportRequest {
   String name;
   DateTime date;
   String description;
-  List<String> reportImage;
+  List<ImageListRequest> reportImage;
   String patient;
 
   factory AddReportRequest.fromJson(Map<String, dynamic> json) =>
@@ -18,10 +20,7 @@ class AddReportRequest {
         name: json["name"] == null ? null : json["name"],
         date: json["date"] == null ? null : DateTime.parse(json["date"]).toLocal(),
         description: json["description"] == null ? null : json["description"],
-        reportImage: json["report_image"] == null
-            ? null
-            : List<String>.from(json["report_image"].map((x) => x)),
-        patient: json["patient"] == null ? null : json["patient"],
+        reportImage: json["report_image"] == null ? null : List<ImageListRequest>.from(json["report_image"].map((x) => ImageListRequest.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -30,9 +29,7 @@ class AddReportRequest {
             ? null
             : date.toUtc().toIso8601String(),
         "description": description == null ? null : description,
-        "report_image": reportImage == null
-            ? null
-            : List<dynamic>.from(reportImage.map((x) => x)),
+        "report_image": reportImage == null ? null : List<dynamic>.from(reportImage.map((x) => x.toJson())),
         "patient": patient == null ? null : patient,
       };
 }
