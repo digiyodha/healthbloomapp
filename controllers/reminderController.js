@@ -66,10 +66,9 @@ exports.editReminder = asyncHandler(async (req, res, next) => {
     var {reminder_type, family, date_time, description, _id} = req.body;
 
     const cancelJob = schedule.scheduledJobs[_id.toString()];
-    if (cancelJob == null) {
-      console.log("Job not found!");
+    if (cancelJob != null) {
+        cancelJob.cancel();
     }
-    cancelJob.cancel();
 
     const reminder = await Reminder.findOneAndUpdate({_id: _id},{
         reminder_type: reminder_type,
@@ -198,10 +197,9 @@ exports.deleteReminder = asyncHandler(async (req, res, next) => {
     var {_id} = req.body;
 
     const cancelJob = schedule.scheduledJobs[_id.toString()];
-    if (cancelJob == null) {
-      console.log("Job not found!");
+    if (cancelJob != null) {
+        cancelJob.cancel();
     }
-    cancelJob.cancel();
     
     const reminder = await Reminder.findOneAndDelete({_id: _id});
     if(!reminder)
