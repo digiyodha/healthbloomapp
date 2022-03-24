@@ -2,7 +2,7 @@ const asyncHandler = require("../middlewares/asyncHandler");
 const ErrorResponse = require("../utils/ErrorResponse");
 const {User} = require("../models/user");
 const {Family} = require("../models/family");
-const {Prescription} = require("../models/prescription");
+const {Prescription, PrescriptionAsset} = require("../models/prescription");
 
 
 
@@ -15,7 +15,6 @@ exports.addPrescription = asyncHandler(async (req, res, next) => {
         consultation_date: consultation_date,
         user_ailment: user_ailment,
         doctor_advice: doctor_advice,
-        prescription_image: prescription_image,
         patient: patient, 
         user_id: req.user._id
     });
@@ -25,6 +24,17 @@ exports.addPrescription = asyncHandler(async (req, res, next) => {
         new ErrorResponse(`Prescription creation unsuccessful`, 404)
         );
     }
+    var assetPromise = await prescription_image.map(async function(image){
+        await PrescriptionAsset.create({
+            prescription_id: prescription._id,
+            asset_url: image.asset_url,
+            asset_name: image.asset_name,
+            asset_type: image.asset_type,
+            asset_size: image.asset_size,
+            thumbnail_url: image.thumbnail_url
+        });
+    });
+    await Promise.all(assetPromise);
     res.status(200).json({ success: true, data: prescription });
 });
 
@@ -37,7 +47,6 @@ exports.editPrescription = asyncHandler(async (req, res, next) => {
         consultation_date: consultation_date,
         user_ailment: user_ailment,
         doctor_advice: doctor_advice,
-        prescription_image: prescription_image,
         patient: patient, 
     }, {new: true});
     console.log(prescription);
@@ -47,6 +56,20 @@ exports.editPrescription = asyncHandler(async (req, res, next) => {
         new ErrorResponse(`Prescription updation unsuccessful`, 404)
         );
     }
+
+    await PrescriptionAsset.deleteMany({prescription_id: _id});
+
+    var assetPromise = await prescription_image.map(async function(image){
+        await PrescriptionAsset.create({
+            prescription_id: prescription._id,
+            asset_url: image.asset_url,
+            asset_name: image.asset_name,
+            asset_type: image.asset_type,
+            asset_size: image.asset_size,
+            thumbnail_url: image.thumbnail_url
+        });
+    });
+    await Promise.all(assetPromise);
     res.status(200).json({ success: true, data: prescription });
 });
 
@@ -74,6 +97,8 @@ exports.searchPrescription = asyncHandler(async (req, res, next) => {
     var prescriptionPromise = await prescriptionObject.map(async function(prescription){
         var patientObject = await Family.findOne({_id: prescription.patient});
         var userObject = await User.findOne({_id: prescription.user_id});
+        var assetObject = await PrescriptionAsset.find({prescription_id: prescription._id});
+
 
         prescription_object.push({
             _id: prescription._id,
@@ -82,7 +107,7 @@ exports.searchPrescription = asyncHandler(async (req, res, next) => {
             user_ailment: prescription.user_ailment,
             consultation_date: prescription.consultation_date,
             doctor_advice: prescription.doctor_advice,
-            prescription_image: prescription.prescription_image,
+            prescription_image: assetObject,
             patient: patientObject,
             // user: userObject
             user_id: prescription.user_id
@@ -97,7 +122,10 @@ exports.searchPrescription = asyncHandler(async (req, res, next) => {
 //delete prescription
 exports.deletePrescription = asyncHandler(async (req, res, next) => {
     var {_id} = req.body;
+
+    await PrescriptionAsset.deleteMany({prescription_id: _id});
     const prescription = await Prescription.findOneAndDelete({_id: _id});
+
     if(!prescription)
     {
         return next(
@@ -120,6 +148,8 @@ exports.getPrescription = asyncHandler(async (req, res, next) => {
 
     var patientObject = await Family.findOne({_id: prescription.patient});
     var userObject = await User.findOne({_id: prescription.user_id});
+    var assetObject = await PrescriptionAsset.find({prescription_id: prescription._id});
+
 
     var prescription_object = {
         _id: prescription._id,
@@ -128,7 +158,7 @@ exports.getPrescription = asyncHandler(async (req, res, next) => {
         user_ailment: prescription.user_ailment,
         consultation_date: prescription.consultation_date,
         doctor_advice: prescription.doctor_advice,
-        prescription_image: prescription.prescription_image,
+        prescription_image: assetObject,
         patient: patientObject,
         // user: userObject
         user_id: prescription.user_id
@@ -148,6 +178,8 @@ exports.getPrescriptionFamily = asyncHandler(async (req, res, next) => {
     var prescriptionPromise = await prescriptionObject.map(async function(prescription){
         var patientObject = await Family.findOne({_id: prescription.patient});
         var userObject = await User.findOne({_id: prescription.user_id});
+        var assetObject = await PrescriptionAsset.find({prescription_id: prescription._id});
+
 
         prescription_object.push({
             _id: prescription._id,
@@ -156,7 +188,7 @@ exports.getPrescriptionFamily = asyncHandler(async (req, res, next) => {
             user_ailment: prescription.user_ailment,
             consultation_date: prescription.consultation_date,
             doctor_advice: prescription.doctor_advice,
-            prescription_image: prescription.prescription_image,
+            prescription_image: assetObject,
             patient: patientObject,
             // user: userObject
             user_id: prescription.user_id

@@ -2,7 +2,7 @@ const asyncHandler = require("../middlewares/asyncHandler");
 const ErrorResponse = require("../utils/ErrorResponse");
 const {User} = require("../models/user");
 const {Family} = require("../models/family");
-const {Report} = require("../models/report");
+const {Report, ReportAsset} = require("../models/report");
 
 
 
@@ -13,7 +13,6 @@ exports.addReport = asyncHandler(async (req, res, next) => {
         name: name,
         date: date,
         description: description,
-        report_image: report_image,
         patient: patient, 
         user_id: req.user._id
     });
@@ -23,6 +22,18 @@ exports.addReport = asyncHandler(async (req, res, next) => {
         new ErrorResponse(`Report creation unsuccessful`, 404)
         );
     }
+
+    var assetPromise = await report_image.map(async function(image){
+        await ReportAsset.create({
+            report_id: report._id,
+            asset_url: image.asset_url,
+            asset_name: image.asset_name,
+            asset_type: image.asset_type,
+            asset_size: image.asset_size,
+            thumbnail_url: image.thumbnail_url
+        });
+    });
+    await Promise.all(assetPromise);
     res.status(200).json({ success: true, data: report });
 });
 
@@ -33,7 +44,6 @@ exports.editReport = asyncHandler(async (req, res, next) => {
         name: name,
         date: date,
         description: description,
-        report_image: report_image,
         patient: patient, 
     }, {new: true});
     console.log(report);
@@ -43,6 +53,21 @@ exports.editReport = asyncHandler(async (req, res, next) => {
         new ErrorResponse(`Report updation unsuccessful`, 404)
         );
     }
+
+    await ReportAsset.deleteMany({report_id: _id});
+
+
+    var assetPromise = await report_image.map(async function(image){
+        await ReportAsset.create({
+            report_id: report._id,
+            asset_url: image.asset_url,
+            asset_name: image.asset_name,
+            asset_type: image.asset_type,
+            asset_size: image.asset_size,
+            thumbnail_url: image.thumbnail_url
+        });
+    });
+    await Promise.all(assetPromise);
     res.status(200).json({ success: true, data: report });
 });
 
@@ -59,13 +84,15 @@ exports.searchReport = asyncHandler(async (req, res, next) => {
     var reportPromise = await reportObject.map(async function(report){
         var patientObject = await Family.findOne({_id: report.patient});
         var userObject = await User.findOne({_id: report.user_id});
+        var assetObject = await ReportAsset.find({report_id: report._id});
+
 
         report_object.push({
             _id: report._id,
             name: report.name,
             date: report.date,
             description: report.description,
-            report_image: report.report_image,
+            report_image: assetObject,
             patient: patientObject,
             // user: userObject
             user_id: report.user_id
@@ -81,6 +108,8 @@ exports.searchReport = asyncHandler(async (req, res, next) => {
 //delete report
 exports.deleteReport = asyncHandler(async (req, res, next) => {
     var {_id} = req.body;
+
+    await ReportAsset.deleteMany({report_id: _id});
     const report = await Report.findOneAndDelete({_id: _id});
     if(!report)
     {
@@ -104,13 +133,15 @@ exports.getReport = asyncHandler(async (req, res, next) => {
 
     var patientObject = await Family.findOne({_id: report.patient});
     var userObject = await User.findOne({_id: report.user_id});
+    var assetObject = await ReportAsset.find({report_id: report._id});
+
 
     var report_object = {
         _id: report._id,
         name: report.name,
         date: report.date,
         description: report.description,
-        report_image: report.report_image,
+        report_image: assetObject,
         patient: patientObject,
         // user: userObject
         user_id: report.user_id
@@ -129,13 +160,15 @@ exports.getReportFamily = asyncHandler(async (req, res, next) => {
     var reportPromise = await reportObject.map(async function(report){
         var patientObject = await Family.findOne({_id: report.patient});
         var userObject = await User.findOne({_id: report.user_id});
+        var assetObject = await ReportAsset.find({report_id: report._id});
+
 
         report_object.push({
             _id: report._id,
             name: report.name,
             date: report.date,
             description: report.description,
-            report_image: report.report_image,
+            report_image: assetObject,
             patient: patientObject,
             // user: userObject
             user_id: report.user_id

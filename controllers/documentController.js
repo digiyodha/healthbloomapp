@@ -2,9 +2,9 @@ const asyncHandler = require("../middlewares/asyncHandler");
 const ErrorResponse = require("../utils/ErrorResponse");
 const {User} = require("../models/user");
 const {Family} = require("../models/family");
-const {Bill} = require("../models/bill");
-const { Prescription } = require("../models/prescription");
-const { Report } = require("../models/report");
+const {Bill, BillAsset} = require("../models/bill");
+const { Prescription, PrescriptionAsset } = require("../models/prescription");
+const { Report, ReportAsset } = require("../models/report");
 
 
 
@@ -93,6 +93,8 @@ exports.getDocument = asyncHandler(async (req, res, next) => {
     var billPromise = await billObject.map(async function(bill){
         var patientObject = await Family.findOne({_id: bill.patient});
         var userObject = await User.findOne({_id: bill.user_id});
+        var assetObject = await BillAsset.find({bill_id: bill._id});
+
 
         bill_object.push({
             _id: bill._id,
@@ -100,7 +102,7 @@ exports.getDocument = asyncHandler(async (req, res, next) => {
             amount: bill.amount,
             date: bill.date,
             description: bill.description,
-            bill_image: bill.bill_image,
+            bill_image: assetObject,
             patient: patientObject,
             // user: userObject
             user_id: bill.user_id
@@ -113,13 +115,14 @@ exports.getDocument = asyncHandler(async (req, res, next) => {
     var reportPromise = await reportObject.map(async function(report){
         var patientObject = await Family.findOne({_id: report.patient});
         var userObject = await User.findOne({_id: report.user_id});
+        var assetObject = await ReportAsset.find({report_id: report._id});
 
         report_object.push({
             _id: report._id,
             name: report.name,
             date: report.date,
             description: report.description,
-            report_image: report.report_image,
+            report_image: assetObject,
             patient: patientObject,
             // user: userObject
             user_id: report.user_id
@@ -131,6 +134,7 @@ exports.getDocument = asyncHandler(async (req, res, next) => {
     var prescriptionPromise = await prescriptionObject.map(async function(prescription){
         var patientObject = await Family.findOne({_id: prescription.patient});
         var userObject = await User.findOne({_id: prescription.user_id});
+        var assetObject = await PrescriptionAsset.find({prescription_id: prescription._id});
 
         prescription_object.push({
             _id: prescription._id,
@@ -139,7 +143,7 @@ exports.getDocument = asyncHandler(async (req, res, next) => {
             user_ailment: prescription.user_ailment,
             consultation_date: prescription.consultation_date,
             doctor_advice: prescription.doctor_advice,
-            prescription_image: prescription.prescription_image,
+            prescription_image: assetObject,
             patient: patientObject,
             // user: userObject
             user_id: prescription.user_id
@@ -250,6 +254,7 @@ exports.getDocumentFamily = asyncHandler(async (req, res, next) => {
     var billPromise = await billObject.map(async function(bill){
         var patientObject = await Family.findOne({_id: bill.patient});
         var userObject = await User.findOne({_id: bill.user_id});
+        var assetObject = await BillAsset.find({bill_id: bill._id});
 
         bill_object.push({
             _id: bill._id,
@@ -257,7 +262,7 @@ exports.getDocumentFamily = asyncHandler(async (req, res, next) => {
             amount: bill.amount,
             date: bill.date,
             description: bill.description,
-            bill_image: bill.bill_image,
+            bill_image: assetObject,
             patient: patientObject,
             // user: userObject
             user_id: bill.user_id
@@ -270,13 +275,14 @@ exports.getDocumentFamily = asyncHandler(async (req, res, next) => {
     var reportPromise = await reportObject.map(async function(report){
         var patientObject = await Family.findOne({_id: report.patient});
         var userObject = await User.findOne({_id: report.user_id});
+        var assetObject = await ReportAsset.find({report_id: report._id});
 
         report_object.push({
             _id: report._id,
             name: report.name,
             date: report.date,
             description: report.description,
-            report_image: report.report_image,
+            report_image: assetObject,
             patient: patientObject,
             // user: userObject
             user_id: report.user_id
@@ -288,6 +294,7 @@ exports.getDocumentFamily = asyncHandler(async (req, res, next) => {
     var prescriptionPromise = await prescriptionObject.map(async function(prescription){
         var patientObject = await Family.findOne({_id: prescription.patient});
         var userObject = await User.findOne({_id: prescription.user_id});
+        var assetObject = await PrescriptionAsset.find({prescription_id: prescription._id});
 
         prescription_object.push({
             _id: prescription._id,
@@ -296,7 +303,7 @@ exports.getDocumentFamily = asyncHandler(async (req, res, next) => {
             user_ailment: prescription.user_ailment,
             consultation_date: prescription.consultation_date,
             doctor_advice: prescription.doctor_advice,
-            prescription_image: prescription.prescription_image,
+            prescription_image: assetObject,
             patient: patientObject,
             // user: userObject
             user_id: prescription.user_id

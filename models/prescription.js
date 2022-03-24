@@ -8,9 +8,6 @@ var PrescriptionSchema = new Schema({
     consultation_date: Date,
     user_ailment: String,
     doctor_advice: String,
-    prescription_image: [{
-        type: String
-    }],
     patient: {
         type: Schema.Types.ObjectId,
         ref: 'Family'
@@ -23,9 +20,31 @@ var PrescriptionSchema = new Schema({
     timestamps: true
 });
 
+var PrescriptionAssetSchema = new Schema({
+    prescription_id:{
+        type: Schema.Types.ObjectId,
+        ref: 'Prescription'
+    },
+    asset_url:String,
+    asset_type: {
+        type: String,
+        enum : ['Image', 'Video', 'Document'],
+        default: 'Image'
+    },
+    asset_name: String,
+    asset_size: Number,
+    thumbnail_url: String,
+},  {
+    timestamps: true
+});
+
+
 prescription = mongoose.model("Prescription", PrescriptionSchema);
+prescriptionAsset = mongoose.model("PrescriptionAsset", PrescriptionAssetSchema);
+
 
 
 module.exports = {
     Prescription: prescription,
+    PrescriptionAsset: prescriptionAsset
 }
