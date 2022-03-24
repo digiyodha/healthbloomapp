@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,8 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   String id;
+
+
 
   getData() {
     id = sp.getString("id");
@@ -44,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 2)).whenComplete(() => getData());
-
+    setSettings();
     var initialzationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettings = InitializationSettings(
@@ -110,14 +114,26 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   AndroidNotificationDetails getDetails(bool sound,bool vibration){
-    if(sound && vibration){
+    if(!sound && vibration){
       return androidDetailsWithSoundVibration;
-    }else if(sound){
+    }else if(!sound){
       return androidDetailsWithSound;
     }else if(vibration){
       return androidDetailsWithVibration;
     }else{
       return androidDetailsWithoutSoundVibration;
+    }
+  }
+
+  setSettings() {
+    if (sp.getBool("generalNotifications") == null) {
+      sp.setBool("generalNotifications", true);
+    }
+    if (sp.getBool("generalVibration") == null) {
+      sp.setBool("generalVibration", true);
+    }
+    if (sp.getBool("generalSilent") == null) {
+      sp.setBool("generalSilent", false);
     }
   }
 

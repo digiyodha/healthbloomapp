@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +15,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+final Int64List vibrationPattern = Int64List(4);
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   notificationInit();
   await Firebase.initializeApp();
   sp = await SharedPreferences.getInstance();
-  setSettings();
   String baseUrl = "https://health-bloom.herokuapp.com/";
 
   Provider.debugCheckInvalidValueType = null;
@@ -29,6 +32,11 @@ Future<void> main() async {
     badge: true,
     sound: true,
   );
+
+  vibrationPattern[0] = 0;
+  vibrationPattern[1] = 1000;
+  vibrationPattern[2] = 5000;
+  vibrationPattern[3] = 2000;
 
   runApp(MyApp(
     networkManager: networkManager,
@@ -73,6 +81,7 @@ var androidDetailsWithSoundVibration = new AndroidNotificationDetails(
   channelDescription: "This is my channel",
   playSound: true,
   enableVibration: true,
+  vibrationPattern: vibrationPattern,
 );
 
 var androidDetailsWithoutSoundVibration = new AndroidNotificationDetails(
@@ -103,6 +112,7 @@ var androidDetailsWithVibration = new AndroidNotificationDetails(
   channelDescription: "This is my channel",
   playSound: false,
   enableVibration: true,
+  vibrationPattern: vibrationPattern,
 );
 
 notificationInit() {
@@ -157,17 +167,5 @@ Future showNotification() async {
 
     _notificationId++;
     _currentHr = _currentHr + _interval;
-  }
-}
-
-setSettings() {
-  if (sp.getBool("generalNotifications") == null) {
-    sp.setBool("generalNotifications", true);
-  }
-  if (sp.getBool("generalVibration") == null) {
-    sp.setBool("generalVibration", false);
-  }
-  if (sp.getBool("generalSilent") == null) {
-    sp.setBool("generalSilent", false);
   }
 }

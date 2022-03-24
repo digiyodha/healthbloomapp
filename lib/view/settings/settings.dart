@@ -96,6 +96,7 @@ class _SettingsState extends State<Settings> {
                     setState(() {
                       _vibration = v;
                     });
+
                   },
                 ),
               ),
