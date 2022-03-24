@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/view/insurance/widgets/insaurance_card.dart';
+import 'package:http/http.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+import 'dart:io';
 import '../../components/textbuilder.dart';
 import '../../model/response/response.dart';
 import '../../model/response/search_insurance_response.dart';
@@ -272,27 +275,36 @@ class _InsuranceDocumentsState extends State<InsuranceDocuments> {
           _shareIds.forEach((element) async{
             List<GetDocumentsFamilyResponseCommonObject> _tempList = _sortedDocs.where((e) => element == e.id).toList();
 
-            String path = await FileDownloader().download(_tempList[0].images[0].assetName, _tempList[0].images[0].assetUrl);
-            print("**************************");
-            print(path);
-            print("**************************");
-            Share.shareFiles([path], text: 'Great picture');
+            // var response = await get(Uri.parse(_tempList[0].images[0].assetUrl));
+            // final documentDirectory = (await getExternalStorageDirectory()).path;
+            // File imgFile = new File('$documentDirectory/${_tempList[0].images[0].assetName}');
+            // imgFile.writeAsBytesSync(response.bodyBytes);
+            //
+            // Share.shareFiles(['$documentDirectory/${_tempList[0].images[0].assetName}'],
+            //     subject: 'URL conversion + Share',
+            //     text: 'Hey! Checkout the Share Files repo');
+            //
+            // // String path = await FileDownloader().download(_tempList[0].images[0].assetName, _tempList[0].images[0].assetUrl);
+            // // print("**************************");
+            // // print(path);
+            // // print("**************************");
+            // // Share.shareFiles([path], text: 'Great picture');
 
-            // _temp = _temp + _tempList[0].name;
-            // _temp = _temp + "\n";
-            // _temp = _temp + _tempList[0].patient.name;
-            // _temp = _temp + "\n";
-            // _temp = _temp + _tempList[0].description;
-            // _temp = _temp + "\n";
-            // if(_tempList[0].images.isNotEmpty){
-            //   _temp = _temp + "Files : ${_tempList[0].images[0].assetUrl}";
-            //   _temp = _temp + "\n";
-            // }
-            // _temp = _temp + "\n";
-            // _temp = _temp + "\n";
+            _temp = _temp + _tempList[0].name;
+            _temp = _temp + "\n";
+            _temp = _temp + _tempList[0].patient.name;
+            _temp = _temp + "\n";
+            _temp = _temp + _tempList[0].description;
+            _temp = _temp + "\n";
+            if(_tempList[0].images.isNotEmpty){
+              _temp = _temp + "Files : ${_tempList[0].images.map((e) => e.assetUrl).toList()}";
+              _temp = _temp + "\n";
+            }
+            _temp = _temp + "\n";
+            _temp = _temp + "\n";
           });
 
-          // Share.share(_temp);
+          Share.share(_temp);
         },
       ) : null,
     );
