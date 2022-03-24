@@ -91,7 +91,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
     if (_attachmentFile != null) {
       _file = File(_attachmentFile.files.single.path);
       final ref =
-      FirebaseStorage.instance.ref('files/${path.basename(_file.path)}');
+          FirebaseStorage.instance.ref('files/${path.basename(_file.path)}');
       task = ref.putFile(_file);
       final snapshot = await task.whenComplete(() {});
       final url = await snapshot.ref.getDownloadURL();
@@ -102,8 +102,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
             assetUrl: url,
             assetSize: 1,
             assetType: "Image",
-            thumbnailUrl: url
-        ),
+            thumbnailUrl: url),
       );
       setState(() {
         _loading = false;
@@ -266,15 +265,17 @@ class _AddPrescriptionState extends State<AddPrescription> {
                                 Container(
                                   width: double.infinity,
                                   child: Wrap(
-                                    runSpacing: 20,
-                                    spacing: 20,
+                                    runSpacing: 15,
+                                    spacing: 15,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.start,
                                     alignment: WrapAlignment.start,
                                     runAlignment: WrapAlignment.start,
                                     children: List.generate(
                                       files.length,
                                       (index) => Container(
-                                        height: 100,
-                                        width: 100,
+                                        height: 90,
+                                        width: 90,
                                         child: Stack(
                                           alignment: Alignment.bottomCenter,
                                           children: [
@@ -327,7 +328,8 @@ class _AddPrescriptionState extends State<AddPrescription> {
                                                               child:
                                                                   CachedNetworkImage(
                                                                 imageUrl: files[
-                                                                    index].assetUrl,
+                                                                        index]
+                                                                    .assetUrl,
                                                                 fit: BoxFit
                                                                     .cover,
                                                                 progressIndicatorBuilder:
@@ -348,12 +350,13 @@ class _AddPrescriptionState extends State<AddPrescription> {
                                                     barrierDismissible: false);
                                               },
                                               child: Container(
-                                                height: 90,
-                                                width: 90,
+                                                height: 80,
+                                                width: 80,
                                                 child: CachedNetworkImage(
-                                                  imageUrl: files[index].assetUrl,
-                                                  width: 90,
-                                                  height: 90,
+                                                  imageUrl:
+                                                      files[index].assetUrl,
+                                                  width: 80,
+                                                  height: 80,
                                                   fit: BoxFit.cover,
                                                   progressIndicatorBuilder:
                                                       (context, url,
@@ -551,7 +554,4 @@ class _AddPrescriptionState extends State<AddPrescription> {
       ),
     );
   }
-
-
 }
-

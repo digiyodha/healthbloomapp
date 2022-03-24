@@ -56,7 +56,7 @@ class _InsuranceState extends State<Insurance> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.pop(context);
         Navigator.push(
           context,
@@ -140,13 +140,14 @@ class _InsuranceState extends State<Insurance> {
                                         .data[index].organisationName,
                                     avatar: _currentResponse
                                         .data[index].patient.avatar,
-                                    nameOfPatients:
-                                        _currentResponse.data[index].patient.name,
+                                    nameOfPatients: _currentResponse
+                                        .data[index].patient.name,
                                     onTap: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => InsuranceDocuments(
+                                          builder: (context) =>
+                                              InsuranceDocuments(
                                             insurance:
                                                 _currentResponse.data[index],
                                           ),
@@ -171,7 +172,8 @@ class _InsuranceState extends State<Insurance> {
                                         _loading = true;
                                       });
                                       final adminAPI =
-                                          Provider.of<NetworkRepository>(context,
+                                          Provider.of<NetworkRepository>(
+                                              context,
                                               listen: false);
                                       DeleteInsuranceResponse _response =
                                           await adminAPI.deleteInsuranceAPI(
@@ -179,6 +181,9 @@ class _InsuranceState extends State<Insurance> {
                                                   id: _currentResponse
                                                       .data[index].id));
                                       if (_response.success) {
+                                        setState(() {
+                                          _loading = false;
+                                        });
                                         getInsurance();
                                       }
                                     },
@@ -199,10 +204,14 @@ class _InsuranceState extends State<Insurance> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: kMainColor,
           child: Icon(Icons.add),
-          onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context){
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
               return AddInsurance();
-            }));
+            })).whenComplete(() {
+              setState(() {
+                getInsurance();
+              });
+            });
           },
         ),
       ),

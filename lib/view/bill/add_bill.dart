@@ -70,13 +70,12 @@ class _AddBillState extends State<AddBill> {
       final url = await snapshot.ref.getDownloadURL();
       debugPrint(url);
       files.add(
-          ImageListRequest(
-              assetName: path.basename(_file.path),
-              assetUrl: url,
-              assetSize: 1,
-              assetType: "Image",
-              thumbnailUrl: url
-          ),
+        ImageListRequest(
+            assetName: path.basename(_file.path),
+            assetUrl: url,
+            assetSize: 1,
+            assetType: "Image",
+            thumbnailUrl: url),
       );
       setState(() {
         _loading = false;
@@ -240,15 +239,17 @@ class _AddBillState extends State<AddBill> {
                                 Container(
                                   width: double.infinity,
                                   child: Wrap(
-                                    runSpacing: 20,
-                                    spacing: 20,
+                                    runSpacing: 15,
+                                    spacing: 15,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.start,
                                     alignment: WrapAlignment.start,
                                     runAlignment: WrapAlignment.start,
                                     children: List.generate(
                                       files.length,
                                       (index) => Container(
-                                        height: 100,
-                                        width: 100,
+                                        height: 90,
+                                        width: 90,
                                         child: Stack(
                                           alignment: Alignment.bottomCenter,
                                           children: [
@@ -301,7 +302,8 @@ class _AddBillState extends State<AddBill> {
                                                               child:
                                                                   CachedNetworkImage(
                                                                 imageUrl: files[
-                                                                    index].assetUrl,
+                                                                        index]
+                                                                    .assetUrl,
                                                                 fit: BoxFit
                                                                     .cover,
                                                                 progressIndicatorBuilder:
@@ -322,12 +324,13 @@ class _AddBillState extends State<AddBill> {
                                                     barrierDismissible: false);
                                               },
                                               child: Container(
-                                                height: 90,
-                                                width: 90,
+                                                height: 80,
+                                                width: 80,
                                                 child: CachedNetworkImage(
-                                                  imageUrl: files[index].assetUrl,
-                                                  width: 90,
-                                                  height: 90,
+                                                  imageUrl:
+                                                      files[index].assetUrl,
+                                                  width: 80,
+                                                  height: 80,
                                                   fit: BoxFit.cover,
                                                   progressIndicatorBuilder:
                                                       (context, url,

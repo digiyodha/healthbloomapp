@@ -236,7 +236,6 @@ class _AddReportState extends State<AddReport> {
                               children: [
                                 Container(
                                   width: double.infinity,
-                                  color: Colors.lightGreen,
                                   child: Wrap(
                                     runSpacing: 15,
                                     spacing: 15,
@@ -247,8 +246,8 @@ class _AddReportState extends State<AddReport> {
                                     children: List.generate(
                                       files.length,
                                       (index) => Container(
-                                        height: 100,
-                                        width: 100,
+                                        height: 90,
+                                        width: 90,
                                         child: Stack(
                                           alignment: Alignment.bottomCenter,
                                           children: [
@@ -323,13 +322,13 @@ class _AddReportState extends State<AddReport> {
                                                     barrierDismissible: false);
                                               },
                                               child: Container(
-                                                height: 90,
-                                                width: 90,
+                                                height: 80,
+                                                width: 80,
                                                 child: CachedNetworkImage(
                                                   imageUrl:
                                                       files[index].assetUrl,
-                                                  width: 90,
-                                                  height: 90,
+                                                  width: 80,
+                                                  height: 80,
                                                   fit: BoxFit.cover,
                                                   progressIndicatorBuilder:
                                                       (context, url,

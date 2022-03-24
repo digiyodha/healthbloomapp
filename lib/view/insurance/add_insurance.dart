@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
@@ -177,15 +178,17 @@ class _AddInsuranceState extends State<AddInsurance> {
                                 Container(
                                   width: double.infinity,
                                   child: Wrap(
-                                    runSpacing: 20,
-                                    spacing: 20,
+                                    runSpacing: 15,
+                                    spacing: 15,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.start,
                                     alignment: WrapAlignment.start,
                                     runAlignment: WrapAlignment.start,
                                     children: List.generate(
                                       files.length,
                                       (index) => Container(
-                                        height: 100,
-                                        width: 100,
+                                        height: 90,
+                                        width: 90,
                                         child: Stack(
                                           alignment: Alignment.bottomCenter,
                                           children: [
@@ -236,10 +239,20 @@ class _AddInsuranceState extends State<AddInsurance> {
                                                               width: double
                                                                   .infinity,
                                                               child:
-                                                                  Image.network(
-                                                                files[index],
+                                                                  CachedNetworkImage(
+                                                                imageUrl: files[
+                                                                    index],
                                                                 fit: BoxFit
                                                                     .cover,
+                                                                progressIndicatorBuilder:
+                                                                    (context,
+                                                                            url,
+                                                                            downloadProgress) =>
+                                                                        Center(
+                                                                  child: CircularProgressIndicator(
+                                                                      value: downloadProgress
+                                                                          .progress),
+                                                                ),
                                                               ),
                                                             ),
                                                           ],
@@ -249,13 +262,23 @@ class _AddInsuranceState extends State<AddInsurance> {
                                                     barrierDismissible: false);
                                               },
                                               child: Container(
-                                                height: 90,
-                                                width: 90,
-                                                child: Image.network(
-                                                  files[index],
-                                                  width: 90,
-                                                  height: 90,
+                                                height: 80,
+                                                width: 80,
+                                                child: CachedNetworkImage(
+                                                  imageUrl: files[index],
+                                                  width: 80,
+                                                  height: 80,
                                                   fit: BoxFit.cover,
+                                                  progressIndicatorBuilder:
+                                                      (context, url,
+                                                              downloadProgress) =>
+                                                          Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                            value:
+                                                                downloadProgress
+                                                                    .progress),
+                                                  ),
                                                 ),
                                               ),
                                             ),
