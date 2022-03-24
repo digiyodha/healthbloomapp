@@ -83,7 +83,7 @@ class _AddReportState extends State<AddReport> {
     if (_attachmentFile != null) {
       _file = File(_attachmentFile.files.single.path);
       final ref =
-      FirebaseStorage.instance.ref('files/${path.basename(_file.path)}');
+          FirebaseStorage.instance.ref('files/${path.basename(_file.path)}');
       task = ref.putFile(_file);
       final snapshot = await task.whenComplete(() {});
       final url = await snapshot.ref.getDownloadURL();
@@ -94,8 +94,7 @@ class _AddReportState extends State<AddReport> {
             assetUrl: url,
             assetSize: 1,
             assetType: "Image",
-            thumbnailUrl: url
-        ),
+            thumbnailUrl: url),
       );
       setState(() {
         _loading = false;
@@ -237,9 +236,12 @@ class _AddReportState extends State<AddReport> {
                               children: [
                                 Container(
                                   width: double.infinity,
+                                  color: Colors.lightGreen,
                                   child: Wrap(
-                                    runSpacing: 20,
-                                    spacing: 20,
+                                    runSpacing: 15,
+                                    spacing: 15,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.start,
                                     alignment: WrapAlignment.start,
                                     runAlignment: WrapAlignment.start,
                                     children: List.generate(
@@ -299,7 +301,8 @@ class _AddReportState extends State<AddReport> {
                                                               child:
                                                                   CachedNetworkImage(
                                                                 imageUrl: files[
-                                                                    index].assetUrl,
+                                                                        index]
+                                                                    .assetUrl,
                                                                 fit: BoxFit
                                                                     .cover,
                                                                 progressIndicatorBuilder:
@@ -323,7 +326,8 @@ class _AddReportState extends State<AddReport> {
                                                 height: 90,
                                                 width: 90,
                                                 child: CachedNetworkImage(
-                                                  imageUrl: files[index].assetUrl,
+                                                  imageUrl:
+                                                      files[index].assetUrl,
                                                   width: 90,
                                                   height: 90,
                                                   fit: BoxFit.cover,

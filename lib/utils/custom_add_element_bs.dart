@@ -7,7 +7,7 @@ import '../view/report/add_report.dart';
 
 class CustomAddElementBs extends StatelessWidget {
   final Function onChanged;
-  const CustomAddElementBs({Key key,this.onChanged}) : super(key: key);
+  const CustomAddElementBs({Key key, this.onChanged}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class CustomAddElementBs extends StatelessWidget {
             title: Text('Bill'),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddBill()))
+                      MaterialPageRoute(builder: (context) => AddBill()))
                   .whenComplete(() => Navigator.pop(context));
             },
           ),
@@ -28,7 +28,7 @@ class CustomAddElementBs extends StatelessWidget {
             title: new Text('Report'),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddReport()))
+                      MaterialPageRoute(builder: (context) => AddReport()))
                   .whenComplete(() => Navigator.pop(context));
             },
           ),
@@ -37,9 +37,9 @@ class CustomAddElementBs extends StatelessWidget {
             title: new Text('Prescription'),
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddPrescription()))
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddPrescription()))
                   .whenComplete(() => Navigator.pop(context));
             },
           ),
@@ -47,10 +47,8 @@ class CustomAddElementBs extends StatelessWidget {
             leading: new Icon(Icons.add),
             title: new Text('Medicine'),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddMedicine()))
+              Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddMedicine()))
                   .whenComplete(() {
                 onChanged();
               });
@@ -60,10 +58,8 @@ class CustomAddElementBs extends StatelessWidget {
             leading: new Icon(Icons.add),
             title: new Text('Reminder'),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddReminder()))
+              Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddReminder()))
                   .whenComplete(() => Navigator.pop(context));
             },
           ),
