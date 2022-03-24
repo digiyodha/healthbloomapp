@@ -13,86 +13,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-SharedPreferences sp;
-const debug = true;
-
-FlutterLocalNotificationsPlugin flutterNotification =
-    FlutterLocalNotificationsPlugin();
-
-var androidDetails = new AndroidNotificationDetails(
-  "11",
-  "11th channel",
-  importance: Importance.max,
-  channelDescription: "This is my channel",
-  playSound: true,
-  enableVibration: true
-);
-
-notificationInit() {
-  var androidInitilize = new AndroidInitializationSettings('app_icon');
-  var iOSinitilize = new IOSInitializationSettings();
-  var initilizationsSettings =
-      new InitializationSettings(android: androidInitilize, iOS: iOSinitilize);
-
-  flutterNotification.initialize(initilizationsSettings,
-      onSelectNotification: (String payload) {});
-}
-
-Future showNotification() async {
-
-  var iSODetails = new IOSNotificationDetails();
-  var generalNotificationDetails =
-      new NotificationDetails(android: androidDetails, iOS: iSODetails);
-
-  //time zone
-  tz.initializeTimeZones();
-  String dtz = await FlutterNativeTimezone.getLocalTimezone();
-  if (dtz == "Asia/Calcutta") {
-    dtz = "Asia/Kolkata";
-  }
-  final localTimeZone = tz.getLocation(dtz);
-  tz.setLocalLocation(localTimeZone);
-
-  TimeOfDay _wakeTime = TimeOfDay(hour: int.parse(sp.getString("wakeTime").split(":")[0]), minute: int.parse(sp.getString("wakeTime").split(":")[1]));
-  TimeOfDay _sleepTime = TimeOfDay(hour: int.parse(sp.getString("sleepTime").split(":")[0]), minute: int.parse(sp.getString("sleepTime").split(":")[1]));
-  int _interval = sp.getInt("hrs");
-  int _currentHr = _wakeTime.hour;
-  int _notificationId = 0;
-
-    while(_currentHr <= _sleepTime.hour){
-
-      tz.TZDateTime _t = tz.TZDateTime(tz.local,DateTime.now().year,DateTime.now().month,DateTime.now().day,_currentHr,1);
-      print("${_t.day}/${_t.month}/${_t.year}/${_t.hour}/${_t.minute}/");
-      await flutterNotification.zonedSchedule(
-        _notificationId,
-        "Health Bloom",
-        "Its time for you to drink water.",
-        _t,
-        generalNotificationDetails,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-        androidAllowWhileIdle: true,
-        matchDateTimeComponents: DateTimeComponents.time,
-      );
-
-      _notificationId++;
-      _currentHr = _currentHr + _interval;
-
-    }
-
-}
-
-setSettings(){
-  if(sp.getBool("generalNotifications") == null){
-    sp.setBool("generalNotifications", true);
-  }
-  if(sp.getBool("generalVibration") == null){
-    sp.setBool("generalVibration", false);
-  }
-  if(sp.getBool("generalSilent") == null){
-    sp.setBool("generalSilent", false);
-  }
-}
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   notificationInit();
@@ -104,8 +24,7 @@ Future<void> main() async {
   Provider.debugCheckInvalidValueType = null;
   NetworkManager networkManager = await getAuthNetworkManager(baseUrl);
 
-  await FirebaseMessaging.instance
-      .setForegroundNotificationPresentationOptions(
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
     sound: true,
@@ -137,5 +56,118 @@ class MyApp extends StatelessWidget {
         home: SplashScreen(),
       ),
     );
+  }
+}
+
+SharedPreferences sp;
+const debug = true;
+
+FlutterLocalNotificationsPlugin flutterNotification =
+    FlutterLocalNotificationsPlugin();
+
+var androidDetailsWithSoundVibration = new AndroidNotificationDetails(
+  "sound and vibration channel",
+  "sound and vibration channel",
+  importance: Importance.max,
+  priority: Priority.high,
+  channelDescription: "This is my channel",
+  playSound: true,
+  enableVibration: true,
+);
+
+var androidDetailsWithoutSoundVibration = new AndroidNotificationDetails(
+  "no sound and vibration channel",
+  "no sound and vibration channel",
+  importance: Importance.max,
+  priority: Priority.high,
+  channelDescription: "This is my channel",
+  playSound: false,
+  enableVibration: false,
+);
+
+var androidDetailsWithSound = new AndroidNotificationDetails(
+  "sound channel",
+  "sound channel",
+  importance: Importance.max,
+  priority: Priority.high,
+  channelDescription: "This is my channel",
+  playSound: true,
+  enableVibration: false,
+);
+
+var androidDetailsWithVibration = new AndroidNotificationDetails(
+  "vibration channel",
+  "vibration channel",
+  importance: Importance.max,
+  priority: Priority.high,
+  channelDescription: "This is my channel",
+  playSound: false,
+  enableVibration: true,
+);
+
+notificationInit() {
+  var androidInitilize = new AndroidInitializationSettings('app_icon');
+  var iOSinitilize = new IOSInitializationSettings();
+  var initilizationsSettings =
+      new InitializationSettings(android: androidInitilize, iOS: iOSinitilize);
+
+  flutterNotification.initialize(initilizationsSettings,
+      onSelectNotification: (String payload) {});
+}
+
+Future showNotification() async {
+  var iSODetails = new IOSNotificationDetails();
+  var generalNotificationDetails = new NotificationDetails(
+      android: androidDetailsWithSoundVibration, iOS: iSODetails);
+
+  //time zone
+  tz.initializeTimeZones();
+  String dtz = await FlutterNativeTimezone.getLocalTimezone();
+  if (dtz == "Asia/Calcutta") {
+    dtz = "Asia/Kolkata";
+  }
+  final localTimeZone = tz.getLocation(dtz);
+  tz.setLocalLocation(localTimeZone);
+
+  TimeOfDay _wakeTime = TimeOfDay(
+      hour: int.parse(sp.getString("wakeTime").split(":")[0]),
+      minute: int.parse(sp.getString("wakeTime").split(":")[1]));
+  TimeOfDay _sleepTime = TimeOfDay(
+      hour: int.parse(sp.getString("sleepTime").split(":")[0]),
+      minute: int.parse(sp.getString("sleepTime").split(":")[1]));
+  int _interval = sp.getInt("hrs");
+  int _currentHr = _wakeTime.hour;
+  int _notificationId = 0;
+
+  while (_currentHr <= _sleepTime.hour) {
+    tz.TZDateTime _t = tz.TZDateTime(tz.local, DateTime.now().year,
+        DateTime.now().month, DateTime.now().day, _currentHr, 1);
+    print("${_t.day}/${_t.month}/${_t.year}/${_t.hour}/${_t.minute}/");
+    await flutterNotification.zonedSchedule(
+      _notificationId,
+      "Health Bloom",
+      "Its time for you to drink water.",
+      _t,
+      generalNotificationDetails,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      androidAllowWhileIdle: true,
+      matchDateTimeComponents: DateTimeComponents.time,
+    );
+
+    _notificationId++;
+    _currentHr = _currentHr + _interval;
+  }
+}
+
+setSettings() {
+  if (sp.getBool("generalNotifications") == null) {
+    sp.setBool("generalNotifications", true);
+  }
+  if (sp.getBool("generalVibration") == null) {
+    sp.setBool("generalVibration", false);
+  }
+  if (sp.getBool("generalSilent") == null) {
+    sp.setBool("generalSilent", false);
   }
 }

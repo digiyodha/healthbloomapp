@@ -9,7 +9,6 @@ import 'package:health_bloom/view/walkthrough/walkthrough.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-
 }
 
 class SplashScreen extends StatefulWidget {
@@ -46,11 +45,8 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(Duration(seconds: 2)).whenComplete(() => getData());
 
-
-
-
     var initialzationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettings = InitializationSettings(
         android: initialzationSettingsAndroid,
         iOS: IOSInitializationSettings());
@@ -58,8 +54,17 @@ class _SplashScreenState extends State<SplashScreen> {
     flutterNotification.initialize(initializationSettings,
         onSelectNotification: selectNotification);
 
-    FirebaseMessaging.onBackgroundMessage(
-        _firebaseMessagingBackgroundHandler);
+    FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.instance
         .getInitialMessage()
@@ -67,17 +72,17 @@ class _SplashScreenState extends State<SplashScreen> {
       if (message != null) {
         RemoteNotification notification = message.notification;
 
-        if (notification != null) {
-
-
-        }
+        if (notification != null) {}
       }
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print(message.data.toString());
 
-      if(sp.getBool("generalNotifications")){
+      if (sp.getBool("generalNotifications")) {
+        bool _sound = sp.getBool("generalSilent");
+        bool _vibration = sp.getBool("generalVibration");
+
         RemoteNotification notification = message.notification;
         AndroidNotification android = message.notification?.android;
         print(notification);
@@ -95,25 +100,32 @@ class _SplashScreenState extends State<SplashScreen> {
               message.data["title"],
               message.data["body"],
               NotificationDetails(
-                  android: androidDetails,
-                  iOS: IOSNotificationDetails()),
+                  android: getDetails(_sound,_vibration), iOS: IOSNotificationDetails()),
               payload: encodedData);
         }
       }
-
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-
-
-    });
-
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
   }
+
+  AndroidNotificationDetails getDetails(bool sound,bool vibration){
+    if(sound && vibration){
+      return androidDetailsWithSoundVibration;
+    }else if(sound){
+      return androidDetailsWithSound;
+    }else if(vibration){
+      return androidDetailsWithVibration;
+    }else{
+      return androidDetailsWithoutSoundVibration;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         return false;
       },
       child: Scaffold(

@@ -341,27 +341,6 @@ class _AddPrescriptionState extends State<AddPrescription> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            CustomContainedButton(
-                                                              text:
-                                                              "Download",
-                                                              textSize:
-                                                              20,
-                                                              weight:
-                                                              FontWeight
-                                                                  .w600,
-                                                              height: 48,
-                                                              width: 328,
-                                                              onPressed:
-                                                                  () async {
-                                                                String path = await FileDownloader().download("abc.jpg", files[index].assetUrl);
-                                                                print("**************************");
-                                                                print(path);
-                                                                print("**************************");
-                                                                Navigator.pop(
-                                                                    context);
-                                                                Share.shareFiles([path], text: 'Great picture');
-                                                              },
-                                                            )
                                                           ],
                                                         ),
                                                       );

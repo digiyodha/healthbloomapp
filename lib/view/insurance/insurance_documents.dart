@@ -8,6 +8,7 @@ import '../../model/response/response.dart';
 import '../../model/response/search_insurance_response.dart';
 import '../../services/api/repository/auth_repository.dart';
 import '../../utils/colors.dart';
+import '../../utils/downloader.dart';
 import '../../utils/loading.dart';
 import '../../utils/text_field/custom_text_field.dart';
 
@@ -265,26 +266,33 @@ class _InsuranceDocumentsState extends State<InsuranceDocuments> {
       floatingActionButton: _shareIds.isNotEmpty ? FloatingActionButton(
         backgroundColor: kGrey7,
         child: Icon(Icons.share,color: kWhite,size: 26,),
-        onPressed: (){
+        onPressed: () async{
           String _temp = "";
 
-          _shareIds.forEach((element) {
+          _shareIds.forEach((element) async{
             List<GetDocumentsFamilyResponseCommonObject> _tempList = _sortedDocs.where((e) => element == e.id).toList();
-            _temp = _temp + _tempList[0].name;
-            _temp = _temp + "\n";
-            _temp = _temp + _tempList[0].patient.name;
-            _temp = _temp + "\n";
-            _temp = _temp + _tempList[0].description;
-            _temp = _temp + "\n";
-            if(_tempList[0].images.isNotEmpty){
-              _temp = _temp + "Files : ${_tempList[0].images}";
-              _temp = _temp + "\n";
-            }
-            _temp = _temp + "\n";
-            _temp = _temp + "\n";
+
+            String path = await FileDownloader().download(_tempList[0].images[0].assetName, _tempList[0].images[0].assetUrl);
+            print("**************************");
+            print(path);
+            print("**************************");
+            Share.shareFiles([path], text: 'Great picture');
+
+            // _temp = _temp + _tempList[0].name;
+            // _temp = _temp + "\n";
+            // _temp = _temp + _tempList[0].patient.name;
+            // _temp = _temp + "\n";
+            // _temp = _temp + _tempList[0].description;
+            // _temp = _temp + "\n";
+            // if(_tempList[0].images.isNotEmpty){
+            //   _temp = _temp + "Files : ${_tempList[0].images[0].assetUrl}";
+            //   _temp = _temp + "\n";
+            // }
+            // _temp = _temp + "\n";
+            // _temp = _temp + "\n";
           });
 
-          Share.share(_temp);
+          // Share.share(_temp);
         },
       ) : null,
     );
