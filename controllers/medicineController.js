@@ -331,10 +331,6 @@ exports.searchMedicine = asyncHandler(async (req, res, next) => {
 
         var total_tablets = timeObject.length * medicine.duration;
 
-
-        console.log(number_of_tablets);
-        console.log(total_tablets);
-
         var durationAfterDate = duration;
         if(fns.isBefore(Date.now(), endTime))
         {
@@ -374,6 +370,7 @@ exports.searchMedicine = asyncHandler(async (req, res, next) => {
         });
     });
     await Promise.all(medicinePromise);
+  
     res.status(200).json({ success: true, data: medicine_object });
 });
 
@@ -395,7 +392,7 @@ exports.dynamicSort = function(property) {
 
 async function updateMedicineNextDose(user_id){
 
-    // var date = Date.now().toISOString();
+
     var date_time = new Date()
     console.log(date_time);
     await TimeMedicine.updateMany({
@@ -404,11 +401,47 @@ async function updateMedicineNextDose(user_id){
         is_active: 1
     }, {$set: {is_active: 0}});
 
+    console.log(date_time.toISOString().substring(0,11));
+    console.log(date_time.toISOString().substring(11))
+
+
+var timeObject1 = await TimeMedicine.find({
+    start_time: {$lt: date_time},
+    user_id: user_id,
+    is_active: 1,
+});
+
+    var timePromise1 = await timeObject1.map(async function(timeObject){
+
+        var new_start_time;
+        
+        if(timeObject.end_time > date_time)
+        {
+            new_start_time = new Date(date_time.toISOString().substring(0,11) + timeObject.start_time.toISOString().substring(11));
+        }
+        else
+        {
+            new_start_time = new Date(timeObject.end_time.toISOString().substring(0,11) + timeObject.start_time.toISOString().substring(11));
+        }
+        console.log(new_start_time);
+
+        await TimeMedicine.findOneAndUpdate({
+            _id: timeObject._id
+        }, {$set: {start_time: new_start_time}});
+    });
+    await Promise.all(timePromise1);
+
     await TimeMedicine.updateMany({
         start_time: {$lt: date_time},
         user_id: user_id,
         is_active: 1
     }, [{$set: {start_time: {$add: ['$start_time', 24*60*60000]}}}]);
+
+    await TimeMedicine.updateMany({
+        end_time: {$lt: date_time},
+        user_id: user_id,
+        is_active: 1
+    }, {$set: {is_active: 0}});
 
 }
 
