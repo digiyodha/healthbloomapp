@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/utils/expanded_section.dart';
 import 'package:health_bloom/utils/loading.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+
 import '../../model/response/response.dart';
 import '../../services/api/repository/auth_repository.dart';
 import '../../utils/colors.dart';
-import '../../utils/map_utils.dart';
 
 class NearbyPlaceDetails extends StatefulWidget {
   final MapsNearbyMedicalsResponseResult data;
@@ -191,7 +192,7 @@ class _NearbyPlaceDetailsState extends State<NearbyPlaceDetails> {
                                 children: [
                                   IconButton(
                                     onPressed: () {
-                                      MapUtils.openMap(
+                                      MapsLauncher.launchCoordinates(
                                           data.data.data.result.geometry
                                               .location.lat,
                                           data.data.data.result.geometry

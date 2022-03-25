@@ -9,6 +9,7 @@ import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/custom_add_element_bs.dart';
+import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/bill/add_bill.dart';
 import 'package:health_bloom/view/medicine/about_medicine.dart';
 import 'package:health_bloom/view/medicine/add_medicine.dart';
@@ -41,6 +42,7 @@ class _HomePageState extends State<HomePage> {
   DateTime _today = DateTime.now();
   int _waterInMl;
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+  GetNextMedicineResponse _currentResponse;
 
   Future<GetUserResponse> getUser() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
@@ -55,10 +57,14 @@ class _HomePageState extends State<HomePage> {
     return _response;
   }
 
-  Future<GetNextMedicineResponse> getNextMedicine() async {
+  Future getNextMedicine() async {
+    setState(() {
+      _currentResponse = null;
+    });
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     GetNextMedicineResponse _response = await adminAPI.getNextMedicineAPI();
-    return _response;
+    _currentResponse = _response;
+    setState(() {});
   }
 
   Future<DeleteMedicineResponse> deleteMedicine(
@@ -281,9 +287,7 @@ class _HomePageState extends State<HomePage> {
                             builder: (context) => ListMedicine(),
                           ),
                         ).whenComplete(() {
-                          setState(() {
-                            getNextMedicine();
-                          });
+                          getNextMedicine();
                         });
                       },
                       child: Icon(
@@ -295,147 +299,135 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 SizedBox(height: 14),
-                FutureBuilder<GetNextMedicineResponse>(
-                  future: getNextMedicine(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      // snapshot.data.data
-                      //     .sort((a, b) => a.startHour.compareTo(b.startHour));
-                      return snapshot.data.data.isNotEmpty
-                          ? Container(
-                              width: double.infinity,
-                              height: snapshot.data.data.length == 0 ? 40 : 220,
-                              child: ListView.builder(
-                                itemCount: snapshot.data.data.length,
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                physics: ScrollPhysics(),
-                                padding: EdgeInsets.zero,
-                                itemBuilder: (BuildContext context, int i) {
-                                  return MedicineCard(
-                                    onTap: () {
+                _currentResponse != null
+                    ? _currentResponse.data.isEmpty
+                        ? Row(
+                            children: [
+                              TextBuilder(
+                                text: 'No Medicine Found',
+                                color: Colors.black,
+                              ),
+                            ],
+                          )
+                        : Container(
+                            width: double.infinity,
+                            height:
+                                _currentResponse.data.length == 0 ? 40 : 220,
+                            child: ListView.builder(
+                              itemCount: _currentResponse.data.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              physics: ScrollPhysics(),
+                              padding: EdgeInsets.zero,
+                              itemBuilder: (BuildContext context, int i) {
+                                return MedicineCard(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AboutMedicine(
+                                            id: _currentResponse.data[i].id),
+                                      ),
+                                    ).whenComplete(() {
+                                      setState(() {
+                                        getNextMedicine();
+                                      });
+                                    });
+                                  },
+                                  medicineName:
+                                      _currentResponse.data[i].medicineName,
+                                  time: _currentResponse.data[i].startHour,
+                                  dosages: _currentResponse.data[i].dosage,
+                                  edit: () {
+                                    if (_currentResponse.data[i].patient !=
+                                        null) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => AboutMedicine(
-                                              id: snapshot.data.data[i].id),
+                                          builder: (context) => AddMedicine(
+                                            id: _currentResponse.data[i].id,
+                                            getNextMedicine:
+                                                _currentResponse.data[i],
+                                            getMedicine: null,
+                                          ),
                                         ),
                                       ).whenComplete(() {
                                         setState(() {
                                           getNextMedicine();
                                         });
                                       });
-                                    },
-                                    medicineName:
-                                        snapshot.data.data[i].medicineName,
-                                    time: snapshot.data.data[i].startHour,
-                                    dosages: snapshot.data.data[i].dosage,
-                                    edit: () {
-                                      if (snapshot.data.data[i].patient !=
-                                          null) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => AddMedicine(
-                                              id: snapshot.data.data[i].id,
-                                              getNextMedicine:
-                                                  snapshot.data.data[i],
-                                              getMedicine: null,
-                                            ),
-                                          ),
-                                        ).whenComplete(() {
-                                          setState(() {
-                                            getNextMedicine();
-                                          });
-                                        });
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text('Patient not found'),
-                                        ));
-                                      }
-                                    },
-                                    delete: () {
-                                      showDialog(
-                                        context: context,
-                                        useSafeArea: true,
-                                        barrierDismissible: true,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title: Text(
-                                                'Delete ${snapshot.data.data[i].medicineName}'),
-                                            content: Text('Are you sure!'),
-                                            actions: [
-                                              TextButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child:
-                                                      TextBuilder(text: 'No')),
-                                              MaterialButton(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            6)),
-                                                color: Color(0xffFF9B91),
-                                                onPressed: () async {
-                                                  DeleteMedicineRequest
-                                                      _request =
-                                                      DeleteMedicineRequest(
-                                                          id: snapshot
-                                                              .data.data[i].id);
-                                                  DeleteMedicineResponse
-                                                      _response =
-                                                      await deleteMedicine(
-                                                          _request);
-
-                                                  print(
-                                                      'Delete Medicine Request ${_request.toJson()}');
-                                                  print(
-                                                      'Delete Medicine Response ${_response.toJson()}');
-                                                  if (_response.success ==
-                                                      true) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(SnackBar(
-                                                      content: Text('deleted.'),
-                                                    ));
-
-                                                    Navigator.pop(
-                                                        context, true);
-                                                  }
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text('Patient not found'),
+                                      ));
+                                    }
+                                  },
+                                  delete: () {
+                                    showDialog(
+                                      context: context,
+                                      useSafeArea: true,
+                                      barrierDismissible: true,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                              'Delete ${_currentResponse.data[i].medicineName}'),
+                                          content: Text('Are you sure!'),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
                                                 },
-                                                child: TextBuilder(
-                                                  text: 'Yes',
-                                                  color: Colors.white,
-                                                ),
-                                              )
-                                            ],
-                                          );
-                                        },
-                                      ).whenComplete(() => setState(() {
-                                            getNextMedicine();
-                                          }));
-                                    },
-                                    hideIcon: true,
-                                  );
-                                },
-                              ),
-                            )
-                          : Row(
-                              children: [
-                                TextBuilder(
-                                  text: 'No Medicine Found',
-                                  color: Colors.black,
-                                ),
-                              ],
-                            );
-                    } else if (snapshot.hasError) {
-                      return Text("${snapshot.error}");
-                    }
-                    return Center(child: CircularProgressIndicator());
-                  },
-                ),
+                                                child: TextBuilder(text: 'No')),
+                                            MaterialButton(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(6)),
+                                              color: Color(0xffFF9B91),
+                                              onPressed: () async {
+                                                DeleteMedicineRequest _request =
+                                                    DeleteMedicineRequest(
+                                                        id: _currentResponse
+                                                            .data[i].id);
+                                                DeleteMedicineResponse
+                                                    _response =
+                                                    await deleteMedicine(
+                                                        _request);
+
+                                                print(
+                                                    'Delete Medicine Request ${_request.toJson()}');
+                                                print(
+                                                    'Delete Medicine Response ${_response.toJson()}');
+                                                if (_response.success == true) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                    content: Text('deleted.'),
+                                                  ));
+
+                                                  Navigator.pop(context, true);
+                                                }
+                                              },
+                                              child: TextBuilder(
+                                                text: 'Yes',
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          ],
+                                        );
+                                      },
+                                    ).whenComplete(() => setState(() {
+                                          getNextMedicine();
+                                        }));
+                                  },
+                                  hideIcon: true,
+                                );
+                              },
+                            ),
+                          )
+                    : Container(
+                        height: 200,
+                        child: LoadingWidget(),
+                      ),
                 SizedBox(height: 14),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,

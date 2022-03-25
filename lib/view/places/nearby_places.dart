@@ -414,7 +414,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     children: [
                                                       IconButton(
                                                         onPressed: () {
-                                                          MapUtils.openMap(
+                                                          MapsLauncher.launchCoordinates(
                                                               _commonResponse
                                                                   .data
                                                                   .results[index]
@@ -545,7 +545,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     children: [
                                                       IconButton(
                                                         onPressed: () {
-                                                          MapUtils.openMap(
+                                                          MapsLauncher.launchCoordinates(
                                                               _commonResponse
                                                                   .data
                                                                   .results[index]
@@ -871,7 +871,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     children: [
                                                       IconButton(
                                                         onPressed: () {
-                                                          MapUtils.openMap(
+                                                          MapsLauncher.launchCoordinates(
                                                               _commonResponse
                                                                   .data
                                                                   .results[index]
@@ -1002,7 +1002,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     children: [
                                                       IconButton(
                                                         onPressed: () {
-                                                          MapUtils.openMap(
+                                                          MapsLauncher.launchCoordinates(
                                                               _commonResponse
                                                                   .data
                                                                   .results[index]
