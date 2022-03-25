@@ -34,7 +34,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>{
+class _HomePageState extends State<HomePage> {
   bool _loading = false;
   DateTime todayTime = DateTime.now().toUtc();
   DateTime today = DateTime.now();
@@ -58,7 +58,6 @@ class _HomePageState extends State<HomePage>{
   Future<GetNextMedicineResponse> getNextMedicine() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     GetNextMedicineResponse _response = await adminAPI.getNextMedicineAPI();
-    print('length ' + _response.data.length.toString());
     return _response;
   }
 
@@ -300,6 +299,8 @@ class _HomePageState extends State<HomePage>{
                   future: getNextMedicine(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
+                      // snapshot.data.data
+                      //     .sort((a, b) => a.startHour.compareTo(b.startHour));
                       return snapshot.data.data.isNotEmpty
                           ? Container(
                               width: double.infinity,
@@ -640,7 +641,7 @@ class _HomePageState extends State<HomePage>{
               context: context,
               builder: (BuildContext bc) {
                 return CustomAddElementBs(
-                  onChanged: (){
+                  onChanged: () {
                     setState(() {
                       Navigator.pop(context);
                       getNextMedicine();

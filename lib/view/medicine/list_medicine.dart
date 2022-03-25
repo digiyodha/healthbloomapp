@@ -137,6 +137,8 @@ class _ListMedicineState extends State<ListMedicine> {
                                               mainAxisSpacing: 16),
                                       itemBuilder:
                                           (BuildContext context, int i) {
+                                        // _currentResponse.data.sort((a, b) =>
+                                        //     a.startHour.compareTo(b.startHour));
                                         final medicine =
                                             _currentResponse.data[i];
                                         return MedicineCard(
@@ -144,8 +146,9 @@ class _ListMedicineState extends State<ListMedicine> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) => AboutMedicine(
-                                                    id: medicine.id),
+                                                builder: (context) =>
+                                                    AboutMedicine(
+                                                        id: medicine.id),
                                               ),
                                             ).whenComplete(() {
                                               setState(() {

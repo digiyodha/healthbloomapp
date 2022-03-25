@@ -193,8 +193,9 @@ class TimeObject {
         startTime: json["start_time"] == null
             ? null
             : DateTime.parse(json["start_time"]).toLocal(),
-        endTime:
-            json["end_time"] == null ? null : DateTime.parse(json["end_time"]).toLocal(),
+        endTime: json["end_time"] == null
+            ? null
+            : DateTime.parse(json["end_time"]).toLocal(),
         medicineId: json["medicine_id"] == null ? null : json["medicine_id"],
         isActive: json["is_active"] == null ? null : json["is_active"],
         userId: json["user_id"] == null ? null : json["user_id"],
@@ -208,13 +209,16 @@ class TimeObject {
       );
 
   Map<String, dynamic> toJson() => {
-        "start_time": startTime == null ? null : startTime.toUtc().toIso8601String(),
+        "start_time":
+            startTime == null ? null : startTime.toUtc().toIso8601String(),
         "end_time": endTime == null ? null : endTime.toUtc().toIso8601String(),
         "medicine_id": medicineId == null ? null : medicineId,
         "is_active": isActive == null ? null : isActive,
         "user_id": userId == null ? null : userId,
-        "createdAt": createdAt == null ? null : createdAt.toUtc().toIso8601String(),
-        "updatedAt": updatedAt == null ? null : updatedAt.toUtc().toIso8601String(),
+        "createdAt":
+            createdAt == null ? null : createdAt.toUtc().toIso8601String(),
+        "updatedAt":
+            updatedAt == null ? null : updatedAt.toUtc().toIso8601String(),
         "id": id == null ? null : id,
       };
 }
