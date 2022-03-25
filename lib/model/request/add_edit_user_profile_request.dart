@@ -6,11 +6,12 @@ class AddEditUserProfileRequest {
     this.phoneNumber,
     this.googleAddress,
     this.userAddress,
-    this.name,
     this.city,
     this.state,
     this.bloodGroup,
     this.avatar,
+    this.email,
+    this.name,
   });
 
   String id;
@@ -19,11 +20,12 @@ class AddEditUserProfileRequest {
   String phoneNumber;
   String googleAddress;
   String userAddress;
-  String name;
   String city;
   String state;
   String bloodGroup;
   String avatar;
+  String email;
+  String name;
 
   factory AddEditUserProfileRequest.fromJson(Map<String, dynamic> json) =>
       AddEditUserProfileRequest(
@@ -34,11 +36,12 @@ class AddEditUserProfileRequest {
         googleAddress:
             json["google_address"] == null ? null : json["google_address"],
         userAddress: json["user_address"] == null ? null : json["user_address"],
-        name: json["name"] == null ? null : json["name"],
         city: json["city"] == null ? null : json["city"],
         state: json["state"] == null ? null : json["state"],
         bloodGroup: json["blood_group"] == null ? null : json["blood_group"],
         avatar: json["avatar"] == null ? null : json["avatar"],
+        email: json["email"] == null ? null : json["email"],
+        name: json["name"] == null ? null : json["name"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,10 +51,11 @@ class AddEditUserProfileRequest {
         "phone_number": phoneNumber == null ? null : phoneNumber,
         "google_address": googleAddress == null ? null : googleAddress,
         "user_address": userAddress == null ? null : userAddress,
-        "name": name == null ? null : name,
         "city": city == null ? null : city,
         "state": state == null ? null : state,
         "blood_group": bloodGroup == null ? null : bloodGroup,
         "avatar": avatar == null ? null : avatar,
+        "email": email == null ? null : email,
+        "name": name == null ? null : name,
       };
 }

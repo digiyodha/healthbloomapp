@@ -34,6 +34,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   bool _loading = false;
   TextEditingController _name = TextEditingController();
+  TextEditingController _email = TextEditingController();
   TextEditingController _phone = TextEditingController();
   TextEditingController _city = TextEditingController();
   TextEditingController _state = TextEditingController();
@@ -123,9 +124,11 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: widget.phone ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                        mainAxisAlignment: widget.phone
+                            ? MainAxisAlignment.spaceBetween
+                            : MainAxisAlignment.center,
                         children: [
-                          if(widget.phone)
+                          if (widget.phone)
                             Container(
                               margin: EdgeInsets.only(right: 16),
                               height: 50,
@@ -141,7 +144,7 @@ class _EditProfileState extends State<EditProfile> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          if(widget.phone)
+                          if (widget.phone)
                             InkWell(
                               onTap: () {
                                 Navigator.pushAndRemoveUntil(
@@ -219,6 +222,41 @@ class _EditProfileState extends State<EditProfile> {
                                           EdgeInsets.symmetric(horizontal: 15),
                                       suffixIcon: Icon(
                                         Icons.people,
+                                        color: Color(0xff9884DF),
+                                      ),
+                                      border: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          width: 1,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20.0),
+                                  TextFormField(
+                                    controller: _email,
+                                    keyboardType: TextInputType.emailAddress,
+                                    enabled: _email.text.isEmpty ? true : false,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "* Required";
+                                      } else
+                                        return null;
+                                    },
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff9884DF),
+                                    ),
+                                    decoration: InputDecoration(
+                                      labelStyle: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xff9884DF),
+                                      ),
+                                      label: TextBuilder(text: 'Email'),
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 15),
+                                      suffixIcon: Icon(
+                                        Icons.email,
                                         color: Color(0xff9884DF),
                                       ),
                                       border: UnderlineInputBorder(
@@ -373,38 +411,6 @@ class _EditProfileState extends State<EditProfile> {
                                       ),
                                     ),
                                   ),
-                                  // const SizedBox(height: 20.0),
-                                  // TextFormField(
-                                  //   controller: _city,
-                                  //   validator: (value) {
-                                  //     if (value == null || value.isEmpty) {
-                                  //       return "* Required";
-                                  //     } else
-                                  //       return null;
-                                  //   },
-                                  //   style: TextStyle(
-                                  //     color: Color(0xff9884DF),
-                                  //   ),
-                                  //   decoration: InputDecoration(
-                                  //     labelStyle: TextStyle(
-                                  //       fontWeight: FontWeight.w500,
-                                  //       color: Color(0xff9884DF),
-                                  //     ),
-                                  //     label: TextBuilder(text: 'Address'),
-                                  //     contentPadding:
-                                  //         EdgeInsets.symmetric(horizontal: 15),
-                                  //     suffixIcon: Icon(
-                                  //       Icons.gps_fixed,
-                                  //       color: Color(0xff9884DF),
-                                  //     ),
-                                  //     border: UnderlineInputBorder(
-                                  //       borderSide: BorderSide(
-                                  //         width: 1,
-                                  //         color: Colors.grey,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
                                   const SizedBox(height: 20.0),
                                   TextFormField(
                                     controller: _city,
@@ -477,38 +483,6 @@ class _EditProfileState extends State<EditProfile> {
                                       ),
                                     ),
                                   ),
-                                  // const SizedBox(height: 20.0),
-                                  // TextFormField(
-                                  //   validator: (value) {
-                                  //     if (value == null || value.isEmpty) {
-                                  //       return "* Required";
-                                  //     } else
-                                  //       return null;
-                                  //   },
-                                  //   style: TextStyle(
-                                  //     color: Color(0xff9884DF),
-                                  //   ),
-                                  //   decoration: InputDecoration(
-                                  //     labelStyle: TextStyle(
-                                  //       fontWeight: FontWeight.w500,
-                                  //       color: Color(0xff9884DF),
-                                  //     ),
-                                  //     label: TextBuilder(text: 'Blood Group'),
-                                  //     contentPadding:
-                                  //         EdgeInsets.symmetric(horizontal: 15),
-                                  //     suffixIcon: Icon(
-                                  //       Icons.opacity,
-                                  //       color: Color(0xff9884DF),
-                                  //     ),
-                                  //     border: UnderlineInputBorder(
-                                  //       borderSide: BorderSide(
-                                  //         width: 1,
-                                  //         color: Colors.grey,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // const SizedBox(height: 20.0),
                                   const SizedBox(height: 50.0),
                                   MaterialButton(
                                     minWidth: double.infinity,
@@ -529,6 +503,7 @@ class _EditProfileState extends State<EditProfile> {
                                         bloodGroup: selectedBloodGroup,
                                         name: _name.text,
                                         city: _city.text,
+                                        email: _email.text,
                                         countryCode: '+91',
                                         gender: selectedGender,
                                         avatar: _uploadAvatarUrl ?? "",

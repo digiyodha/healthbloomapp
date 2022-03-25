@@ -309,16 +309,25 @@ class _SignUpState extends State<SignUp> {
                                         setState(() {
                                           _loading = true;
                                         });
+
                                         final UserCredential user = await _auth
                                             .createUserWithEmailAndPassword(
                                           email: _email.text,
                                           password: _password.text,
                                         );
-                                        await user.user.sendEmailVerification().whenComplete(() {
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Verification link has been sent to your Email. Please verify your account!"),));
+                                        await user.user
+                                            .sendEmailVerification()
+                                            .whenComplete(() {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "Verification link has been sent to your Email. Please verify your account!"),
+                                          ));
                                         });
                                         print("_auth ${_auth.toString()}");
-                                        String msgToken = await FirebaseMessaging.instance.getToken();
+                                        String msgToken =
+                                            await FirebaseMessaging.instance
+                                                .getToken();
                                         print(msgToken);
                                         await loginUser(RegisterLoginRequest(
                                             name:
@@ -332,7 +341,7 @@ class _SignUpState extends State<SignUp> {
                                                     "",
                                             phoneNumber: null,
                                             countryCode: "91",
-                                        fcmToken: msgToken));
+                                            fcmToken: msgToken));
 
                                         Navigator.pushAndRemoveUntil(
                                           context,
@@ -342,7 +351,7 @@ class _SignUpState extends State<SignUp> {
                                                     name: _auth.currentUser
                                                             .displayName ??
                                                         _name.text,
-                                                phone: false,
+                                                    phone: false,
                                                   )),
                                           (Route<dynamic> route) => false,
                                         );
@@ -458,7 +467,9 @@ class _SignUpState extends State<SignUp> {
                                   _loading = false;
                                 });
                                 if (cred != null) {
-                                  String msgToken = await FirebaseMessaging.instance.getToken();
+                                  String msgToken = await FirebaseMessaging
+                                      .instance
+                                      .getToken();
                                   print(msgToken);
                                   await loginUser(
                                       RegisterLoginRequest(
@@ -467,7 +478,8 @@ class _SignUpState extends State<SignUp> {
                                           uid: cred.user.uid,
                                           avatar: cred.user.photoURL ?? "",
                                           phoneNumber: null,
-                                          countryCode: null,fcmToken: msgToken),
+                                          countryCode: null,
+                                          fcmToken: msgToken),
                                       soc: true);
                                 } else {
                                   ScaffoldMessenger.of(context)
@@ -500,7 +512,9 @@ class _SignUpState extends State<SignUp> {
                                   _loading = false;
                                 });
                                 if (cred != null) {
-                                  String msgToken = await FirebaseMessaging.instance.getToken();
+                                  String msgToken = await FirebaseMessaging
+                                      .instance
+                                      .getToken();
                                   print(msgToken);
                                   await loginUser(
                                       RegisterLoginRequest(
@@ -510,7 +524,7 @@ class _SignUpState extends State<SignUp> {
                                           avatar: cred.user.photoURL ?? "",
                                           phoneNumber: null,
                                           countryCode: null,
-                                      fcmToken: msgToken),
+                                          fcmToken: msgToken),
                                       soc: true);
                                 } else {
                                   ScaffoldMessenger.of(context)

@@ -1,11 +1,12 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:health_bloom/components/textbuilder.dart';
-// ignore: unused_import
+
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/request/add_edit_user_profile_request.dart';
 import 'package:health_bloom/model/response/add_edit-user_profile_response.dart';
@@ -31,6 +32,7 @@ class UpdateProfile extends StatefulWidget {
 class _UpdateProfileState extends State<UpdateProfile> {
   bool _loading = false;
   TextEditingController _name = TextEditingController();
+  TextEditingController _email = TextEditingController();
   TextEditingController _phone = TextEditingController();
   TextEditingController _city = TextEditingController();
   TextEditingController _state = TextEditingController();
@@ -87,6 +89,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   void initState() {
     super.initState();
     if (widget.data != null) {
+      _email.text = widget.data.emailId;
       _phone.text = widget.data.phoneNumber;
       _name.text = widget.data.name;
       _city.text = widget.data.city;
@@ -97,6 +100,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
     }
   }
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   void dispose() {
     super.dispose();
@@ -206,6 +210,41 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                         EdgeInsets.symmetric(horizontal: 15),
                                     suffixIcon: Icon(
                                       Icons.people,
+                                      color: Color(0xff9884DF),
+                                    ),
+                                    border: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 20.0),
+                                TextFormField(
+                                  controller: _email,
+                                  keyboardType: TextInputType.emailAddress,
+                                  enabled: _email.text.isEmpty ? true : false,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "* Required";
+                                    } else
+                                      return null;
+                                  },
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xff9884DF),
+                                  ),
+                                  decoration: InputDecoration(
+                                    labelStyle: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff9884DF),
+                                    ),
+                                    label: TextBuilder(text: 'Email'),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 15),
+                                    suffixIcon: Icon(
+                                      Icons.email,
                                       color: Color(0xff9884DF),
                                     ),
                                     border: UnderlineInputBorder(
@@ -463,41 +502,70 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     setState(() {
                                       _loading = true;
                                     });
+                                    try {
+                                      AddEditUserProfileRequest _request =
+                                          AddEditUserProfileRequest(
+                                        userAddress: '',
+                                        googleAddress: '',
+                                        email: _email.text,
+                                        bloodGroup: selectedBloodGroup,
+                                        name: _name.text,
+                                        city: _city.text,
+                                        countryCode: '+91',
+                                        gender: selectedGender,
+                                        avatar: _uploadAvatarUrl ?? "",
+                                        phoneNumber: _phone.text,
+                                        state: _state.text,
+                                        id: widget.data.id,
+                                      );
+                                      AddEditUserProfileResponse _response =
+                                          await addEditProfile(_request);
+                                      print(
+                                          'Add Edit Profile Request ${_request.toJson()}');
+                                      print(
+                                          'Add Edit Profile Response ${_response.toJson()}');
+                                      // final user =
+                                      //     FirebaseAuth.instance.currentUser;
 
-                                    AddEditUserProfileRequest _request =
-                                        AddEditUserProfileRequest(
-                                      userAddress: '',
-                                      googleAddress: '',
-                                      bloodGroup: selectedBloodGroup,
-                                      name: _name.text,
-                                      city: _city.text,
-                                      countryCode: '+91',
-                                      gender: selectedGender,
-                                      avatar: _uploadAvatarUrl ?? "",
-                                      phoneNumber: _phone.text,
-                                      state: _state.text,
-                                      id: widget.data.id,
-                                    );
-                                    AddEditUserProfileResponse _response =
-                                        await addEditProfile(_request);
-                                    print(
-                                        'Add Edit Profile Request ${_request.toJson()}');
-                                    print(
-                                        'Add Edit Profile Response ${_response.toJson()}');
-                                    if (_response.success == true) {
-                                      // sp.setString(
-                                      //     'name', _response.data.name);
-                                      // sp.setString('profileImage',
-                                      //     _response.data.avatar);
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text('Profile updated.'),
-                                      ));
+                                      if (_response.success == true) {
+                                        setState(() {
+                                          _loading = false;
+                                        });
+
+                                        // sp.setString(
+                                        //     'name', _response.data.name);
+                                        // sp.setString('profileImage',
+                                        //     _response.data.avatar);
+
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text('Profile updated.'),
+                                        ));
+
+                                        Navigator.pop(context);
+                                        // final UserCredential user = await _auth
+                                        //     .createUserWithEmailAndPassword(
+                                        //   email: _email.text,
+                                        //   password: null,
+                                        // );
+                                        // await user.user
+                                        //     .sendEmailVerification()
+                                        //     .whenComplete(() {
+                                        //   ScaffoldMessenger.of(context)
+                                        //       .showSnackBar(SnackBar(
+                                        //     content: Text(
+                                        //         "Verification link has been sent to your Email. Please verify your account!"),
+                                        //   ));
+                                        // });
+                                      }
+                                    } on FirebaseAuthException catch (e) {
                                       setState(() {
                                         _loading = false;
                                       });
-
-                                      Navigator.pop(context);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(e.toString()),
+                                      ));
                                     }
                                   },
                                   child: TextBuilder(
