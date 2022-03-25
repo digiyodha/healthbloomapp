@@ -17,7 +17,7 @@ class _SettingsState extends State<Settings> {
   bool _vibration;
   bool _silent;
 
-  getData(){
+  getData() {
     _notifications = sp.getBool("generalNotifications");
     _vibration = sp.getBool("generalVibration");
     _silent = sp.getBool("generalSilent");
@@ -32,7 +32,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.pop(context);
         Navigator.push(
           context,
@@ -54,62 +54,82 @@ class _SettingsState extends State<Settings> {
           centerTitle: true,
         ),
         body: Container(
-          margin: EdgeInsets.only(left: 16,top: 16,right: 16),
-          padding: EdgeInsets.only(left: 8,top: 4,right: 8),
+          margin: EdgeInsets.only(left: 16, top: 16, right: 16),
+          padding: EdgeInsets.only(left: 8, top: 4, right: 8),
           decoration: BoxDecoration(
-            color: kWhite,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16)
-            )
-          ),
+              color: kWhite,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16), topRight: Radius.circular(16))),
           child: Column(
             children: [
-              SizedBox(height: 14,),
+              SizedBox(
+                height: 14,
+              ),
               ListTile(
-                title: Text("Push Notifications",
-                style: TextStyle(
-                  fontSize: 16,
-                ),),
+                title: Text(
+                  "Push Notifications",
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
                 trailing: CupertinoSwitch(
                   activeColor: kMainColor,
-                    value: _notifications,
-                    onChanged: (v) {
+                  value: _notifications,
+                  onChanged: (v) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          "New settings will be effective after app restart."),
+                    ));
                     sp.setBool("generalNotifications", v);
-                      setState(() {
-                        _notifications = v;
-                      });
-                    },
+                    setState(() {
+                      _notifications = v;
+                    });
+                  },
                 ),
               ),
-              SizedBox(height: 0,),
+              SizedBox(
+                height: 0,
+              ),
               ListTile(
-                title: Text("Vibration mode",
+                title: Text(
+                  "Vibration mode",
                   style: TextStyle(
-                      fontSize: 16,
-                  ),),
+                    fontSize: 16,
+                  ),
+                ),
                 trailing: CupertinoSwitch(
                   activeColor: kMainColor,
                   value: _vibration,
                   onChanged: (v) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          "New settings will be effective after app restart."),
+                    ));
                     sp.setBool("generalVibration", v);
                     setState(() {
                       _vibration = v;
                     });
-
                   },
                 ),
               ),
-              SizedBox(height: 0,),
+              SizedBox(
+                height: 0,
+              ),
               ListTile(
-                title: Text("Silent mode",
+                title: Text(
+                  "Silent mode",
                   style: TextStyle(
-                      fontSize: 16,
-                  ),),
+                    fontSize: 16,
+                  ),
+                ),
                 trailing: CupertinoSwitch(
                   activeColor: kMainColor,
                   value: _silent,
                   onChanged: (v) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          "New settings will be effective after app restart."),
+                    ));
                     sp.setBool("generalSilent", v);
                     setState(() {
                       _silent = v;
