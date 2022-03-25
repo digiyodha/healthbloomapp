@@ -26,6 +26,7 @@ class _JournalState extends State<Journal> {
   bool _loading = false;
   bool _popLoading = false;
   GetReminderListResponse _currentResponse;
+  TextEditingController _searchController = TextEditingController();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -640,6 +641,10 @@ class _JournalState extends State<Journal> {
                                 ),
                                 Expanded(
                                   child: TextField(
+                                    onChanged: (v){
+                                      setState(() {});
+                                    },
+                                    controller: _searchController,
                                     decoration: InputDecoration(
                                         border: UnderlineInputBorder(
                                             borderSide: BorderSide.none),
@@ -683,7 +688,7 @@ class _JournalState extends State<Journal> {
                                               MaterialPageRoute(
                                                   builder: (context) {
                                             return AddReminder();
-                                          }));
+                                          })).whenComplete(() => getAllReminder());
                                         },
                                         child: Container(
                                           height: 30,
@@ -717,6 +722,11 @@ class _JournalState extends State<Journal> {
                                             _selectedDate.year ==
                                                 _currentResponse
                                                     .data[index].dateTime.year)
+                                          if(_currentResponse
+                                              .data[index]
+                                              .reminderType.toLowerCase().contains(_searchController.text) || _currentResponse
+                                              .data[index]
+                                              .familyObject.name.toLowerCase().contains(_searchController.text))
                                           return Container(
                                             decoration: BoxDecoration(
                                                 color: Color(0xff8B80F8),
@@ -790,6 +800,9 @@ class _JournalState extends State<Journal> {
                                                     ],
                                                   ),
                                                 ),
+                                                if(_currentResponse
+                                                    .data[index]
+                                                    .reminderType != "Medicine")
                                                 Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
@@ -938,6 +951,7 @@ class _JournalState extends State<Journal> {
                     setState(() {
                       Navigator.pop(context);
                     });
+                    getAllReminder();
                   },
                 );
               },

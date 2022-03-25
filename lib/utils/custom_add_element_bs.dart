@@ -59,8 +59,9 @@ class CustomAddElementBs extends StatelessWidget {
             title: new Text('Reminder'),
             onTap: () {
               Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddReminder()))
-                  .whenComplete(() => Navigator.pop(context));
+                      MaterialPageRoute(builder: (context) => AddReminder())).whenComplete(() {
+                onChanged();
+              });
             },
           ),
           // ListTile(

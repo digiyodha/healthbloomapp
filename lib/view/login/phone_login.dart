@@ -94,6 +94,8 @@ class _PhoneLoginState extends State<PhoneLogin> {
         UserCredential credential =
             await user.linkWithCredential(authCredential);
       } on FirebaseAuthException catch (e) {
+        print(e.code);
+
         if (e.code == 'provider-already-linked') {
           await _auth.signInWithCredential(authCredential);
         }
@@ -113,6 +115,10 @@ class _PhoneLoginState extends State<PhoneLogin> {
     if (exception.code == 'invalid-phone-number') {
       showMessage("The phone number entered is invalid!");
     }
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("This phone number has been temporarily blocked due to suspicious activity, Please try later.")));
+    setState(() {
+      isLoading = false;
+    });
   }
 
   _onCodeSent(String verificationId, int forceResendingToken) async {

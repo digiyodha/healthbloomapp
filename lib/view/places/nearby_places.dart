@@ -10,6 +10,7 @@ import '../../services/api/repository/auth_repository.dart';
 import '../../utils/custom_add_element_bs.dart';
 import '../../utils/custom_bnb.dart';
 import '../../utils/drawer/custom_drawer.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 
 class NearbyPlaces extends StatefulWidget {
   const NearbyPlaces({Key key}) : super(key: key);
