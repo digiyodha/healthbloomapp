@@ -23,8 +23,14 @@ class EditProfile extends StatefulWidget {
   final bool phone;
   final String name;
   final String phoneNumber;
+  final String email;
   const EditProfile(
-      {Key key, this.id, this.phone = false, this.name, this.phoneNumber})
+      {Key key,
+      this.id,
+      this.phone = false,
+      this.name,
+      this.phoneNumber,
+      this.email})
       : super(key: key);
 
   @override
@@ -85,11 +91,15 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
+    print('_email.text ${widget.email}');
     if (widget.name != null) {
       _name.text = widget.name;
     }
     if (widget.phoneNumber != null) {
       _phone.text = widget.phoneNumber;
+    }
+    if (widget.email != null) {
+      _email.text = widget.email;
     }
   }
 
@@ -97,6 +107,7 @@ class _EditProfileState extends State<EditProfile> {
   void dispose() {
     super.dispose();
     _phone.dispose();
+    _email.dispose();
     _city.dispose();
     _state.dispose();
   }
