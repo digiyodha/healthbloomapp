@@ -734,264 +734,271 @@ class _JournalState extends State<Journal> {
                                               .reminderType.toLowerCase().contains(_searchController.text.toLowerCase()) || _currentResponse
                                               .data[index]
                                               .familyObject.name.toLowerCase().contains(_searchController.text.toLowerCase()))
-                                          return Slidable(
-                                            startActionPane: ActionPane(
-                                              extentRatio: 0.3,
-                                              motion: const BehindMotion(),
-                                              children: [
-                                                if(_currentResponse
-                                                    .data[index]
-                                                    .reminderType == "Medicine")
-                                                  SlidableAction(
-                                                    onPressed: (c) async{
-                                                      setState(() {
-                                                        _loading = true;
-                                                      });
-                                                      MedicineCheckUncheckRequest _request = MedicineCheckUncheckRequest(
-                                                          id: _currentResponse
-                                                              .data[index].id
-                                                      );
-                                                      print(_request.toJson().toString());
-                                                      await checkUncheckTask(_request);
-                                                      setState(() {
-                                                        _loading = false;
-                                                      });
-                                                      getAllReminder();
-                                                    },
-                                                    backgroundColor: Colors.transparent,
-                                                    foregroundColor: kGrey7,
-                                                    icon: _currentResponse
-                                                        .data[index].check ? Icons.close : Icons.done,
-                                                    label: _currentResponse
-                                                        .data[index].check ? "Uncheck" : 'Check',
-                                                  ),
-                                              ],
-                                            ),
-                                            endActionPane: ActionPane(
-                                              extentRatio: 0.3,
-                                              motion: const BehindMotion(),
-                                              children: [
-                                                if(_currentResponse
-                                                    .data[index]
-                                                    .reminderType == "Medicine")
-                                                  SlidableAction(
-                                                    onPressed: (c) async{
-                                                      setState(() {
-                                                        _loading = true;
-                                                      });
-                                                      MedicineCheckUncheckRequest _request = MedicineCheckUncheckRequest(
-                                                          id: _currentResponse
-                                                              .data[index].id
-                                                      );
-                                                      print(_request.toJson().toString());
-                                                      await checkUncheckTask(_request);
-                                                      setState(() {
-                                                        _loading = false;
-                                                      });
-                                                      getAllReminder();
-                                                    },
-                                                    backgroundColor: Colors.transparent,
-                                                    foregroundColor: kGrey7,
-                                                    icon: _currentResponse
-                                                        .data[index].check ? Icons.close : Icons.done,
-                                                    label: _currentResponse
-                                                        .data[index].check ? "Uncheck" : 'Check',
-                                                  ),
-                                              ],
-                                            ),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xff8B80F8),
-                                                  borderRadius:
-                                                      BorderRadius.circular(16)),
-                                              height: 120,
-                                              padding: EdgeInsets.only(
-                                                  left: 8,
-                                                  right: 8,
-                                                  top: 8,
-                                                  bottom: 8),
-                                              child: Row(
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                                color: Color(0xffE1E1E1),
+                                                borderRadius:
+                                                BorderRadius.circular(16)),
+                                            height: 120,
+                                            child: Slidable(
+                                              startActionPane: ActionPane(
+                                                extentRatio: 0.3,
+                                                motion: const BehindMotion(),
                                                 children: [
-                                                  Container(
-                                                    width: 80,
-                                                    child: Image.asset(
-                                                        "assets/images/drug1.png"),
-                                                  ),
-                                                  Expanded(
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceEvenly,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          _currentResponse
-                                                              .data[index]
-                                                              .reminderType,
-                                                          style: TextStyle(
-                                                              fontSize: 18,
-                                                              fontWeight:
-                                                                  FontWeight.w700,
-                                                              color: kWhite),
-                                                          maxLines: 1,
-                                                        ),
-                                                        Text(
-                                                          _currentResponse
-                                                              .data[index]
-                                                              .description,
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight.w300,
-                                                              color: kWhite),
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                        Text(
-                                                          '${DateFormat('hh:mm a').format(_currentResponse.data[index].dateTime).toString()}',
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight.w600,
-                                                              color: kWhite),
-                                                          maxLines: 1,
-                                                        ),
-                                                        Text(
-                                                          "${_currentResponse.data[index].familyObject.name}",
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight.w300,
-                                                              color: kWhite),
-                                                          maxLines: 1,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
                                                   if(_currentResponse
                                                       .data[index]
-                                                      .reminderType != "Medicine")
-                                                  Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.center,
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          showDialog(
-                                                            context: context,
-                                                            useSafeArea: true,
-                                                            barrierDismissible:
-                                                                true,
-                                                            builder: (context) {
-                                                              return AlertDialog(
-                                                                title: Text(
-                                                                    'Delete'),
-                                                                content: Text(
-                                                                    'Are you sure!'),
-                                                                actions: [
-                                                                  TextButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                      child: TextBuilder(
-                                                                          text:
-                                                                              'No')),
-                                                                  MaterialButton(
-                                                                    shape: RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(
-                                                                                6)),
-                                                                    color: Color(
-                                                                        0xffFF9B91),
-                                                                    onPressed:
-                                                                        () async {
-                                                                      // setState(() {
-                                                                      //   _popLoading = true;
-                                                                      // });
-                                                                      final adminAPI = Provider.of<
-                                                                              NetworkRepository>(
-                                                                          context,
-                                                                          listen:
-                                                                              false);
-                                                                      AddEditReminderResponse
-                                                                          _response =
-                                                                          await adminAPI
-                                                                              .deleteReminderAPI(DeleteReminderRequest(id: _currentResponse.data[index].id));
-                                                                      if (_response
-                                                                          .success) {
-                                                                        _currentResponse.data.removeWhere((element) =>
-                                                                            element
-                                                                                .id ==
-                                                                            _currentResponse
-                                                                                .data[index]
-                                                                                .id);
-                                                                        ScaffoldMessenger.of(
-                                                                                context)
-                                                                            .showSnackBar(
-                                                                                SnackBar(
-                                                                          content:
-                                                                              Text('Your reminder has been deleted successfully'),
-                                                                        ));
-
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      }
-                                                                      // setState(() {
-                                                                      //   _popLoading = false;
-                                                                      // });
-                                                                    },
-                                                                    child:
-                                                                        TextBuilder(
-                                                                      text: 'Yes',
-                                                                      color: Colors
-                                                                          .white,
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              );
-                                                              ;
-                                                            },
-                                                          ).whenComplete(
-                                                              () => setState(() {
-                                                                    // getNextMedicine();
-                                                                  }));
-                                                        },
-                                                        child: Icon(
-                                                          Icons.delete,
-                                                          color: kWhite,
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 50),
-                                                      InkWell(
-                                                        onTap: () {
-                                                          Navigator.push(context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) {
-                                                            return AddReminder(
-                                                              edit: true,
-                                                              data:
-                                                                  _currentResponse
-                                                                          .data[
-                                                                      index],
-                                                            );
-                                                          })).whenComplete(() {
-                                                            getAllReminder();
-                                                          });
-                                                        },
-                                                        child: Icon(
-                                                          Icons.edit,
-                                                          color: kWhite,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
+                                                      .reminderType == "Medicine")
+                                                    SlidableAction(
+                                                      onPressed: (c) async{
+                                                        setState(() {
+                                                          _loading = true;
+                                                        });
+                                                        MedicineCheckUncheckRequest _request = MedicineCheckUncheckRequest(
+                                                            id: _currentResponse
+                                                                .data[index].id
+                                                        );
+                                                        print(_request.toJson().toString());
+                                                        await checkUncheckTask(_request);
+                                                        setState(() {
+                                                          _loading = false;
+                                                        });
+                                                        getAllReminder();
+                                                      },
+                                                      backgroundColor: Colors.transparent,
+                                                      foregroundColor: Color(0xff8B80F8),
+                                                      icon: _currentResponse
+                                                          .data[index].check ? Icons.close : Icons.done,
+                                                      label: _currentResponse
+                                                          .data[index].check ? "Uncheck" : 'Check',
+                                                    ),
                                                 ],
+                                              ),
+                                              endActionPane: ActionPane(
+                                                extentRatio: 0.3,
+                                                motion: const BehindMotion(),
+                                                children: [
+                                                  if(_currentResponse
+                                                      .data[index]
+                                                      .reminderType == "Medicine")
+                                                    SlidableAction(
+                                                      onPressed: (c) async{
+                                                        setState(() {
+                                                          _loading = true;
+                                                        });
+                                                        MedicineCheckUncheckRequest _request = MedicineCheckUncheckRequest(
+                                                            id: _currentResponse
+                                                                .data[index].id
+                                                        );
+                                                        print(_request.toJson().toString());
+                                                        await checkUncheckTask(_request);
+                                                        setState(() {
+                                                          _loading = false;
+                                                        });
+                                                        getAllReminder();
+                                                      },
+                                                      backgroundColor: Colors.transparent,
+                                                      foregroundColor: Color(0xff8B80F8),
+                                                      icon: _currentResponse
+                                                          .data[index].check ? Icons.close : Icons.done,
+                                                      label: _currentResponse
+                                                          .data[index].check ? "Uncheck" : 'Check',
+                                                    ),
+                                                ],
+                                              ),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    color: Color(0xff8B80F8),
+                                                    borderRadius:
+                                                        BorderRadius.circular(16)),
+                                                height: 120,
+                                                padding: EdgeInsets.only(
+                                                    left: 8,
+                                                    right: 8,
+                                                    top: 8,
+                                                    bottom: 8),
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      width: 80,
+                                                      child: Image.asset(
+                                                          "assets/images/drug1.png"),
+                                                    ),
+                                                    Expanded(
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            _currentResponse
+                                                                .data[index]
+                                                                .reminderType,
+                                                            style: TextStyle(
+                                                                fontSize: 18,
+                                                                fontWeight:
+                                                                    FontWeight.w700,
+                                                                color: kWhite),
+                                                            maxLines: 1,
+                                                          ),
+                                                          Text(
+                                                            _currentResponse
+                                                                .data[index]
+                                                                .description,
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight.w300,
+                                                                color: kWhite),
+                                                            maxLines: 2,
+                                                            overflow: TextOverflow
+                                                                .ellipsis,
+                                                          ),
+                                                          Text(
+                                                            '${DateFormat('hh:mm a').format(_currentResponse.data[index].dateTime).toString()}',
+                                                            style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight.w600,
+                                                                color: kWhite),
+                                                            maxLines: 1,
+                                                          ),
+                                                          Text(
+                                                            "${_currentResponse.data[index].familyObject.name}",
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight.w300,
+                                                                color: kWhite),
+                                                            maxLines: 1,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    if(_currentResponse
+                                                        .data[index]
+                                                        .reminderType != "Medicine")
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.center,
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            showDialog(
+                                                              context: context,
+                                                              useSafeArea: true,
+                                                              barrierDismissible:
+                                                                  true,
+                                                              builder: (context) {
+                                                                return AlertDialog(
+                                                                  title: Text(
+                                                                      'Delete'),
+                                                                  content: Text(
+                                                                      'Are you sure!'),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                        child: TextBuilder(
+                                                                            text:
+                                                                                'No')),
+                                                                    MaterialButton(
+                                                                      shape: RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(
+                                                                                  6)),
+                                                                      color: Color(
+                                                                          0xffFF9B91),
+                                                                      onPressed:
+                                                                          () async {
+                                                                        // setState(() {
+                                                                        //   _popLoading = true;
+                                                                        // });
+                                                                        final adminAPI = Provider.of<
+                                                                                NetworkRepository>(
+                                                                            context,
+                                                                            listen:
+                                                                                false);
+                                                                        AddEditReminderResponse
+                                                                            _response =
+                                                                            await adminAPI
+                                                                                .deleteReminderAPI(DeleteReminderRequest(id: _currentResponse.data[index].id));
+                                                                        if (_response
+                                                                            .success) {
+                                                                          _currentResponse.data.removeWhere((element) =>
+                                                                              element
+                                                                                  .id ==
+                                                                              _currentResponse
+                                                                                  .data[index]
+                                                                                  .id);
+                                                                          ScaffoldMessenger.of(
+                                                                                  context)
+                                                                              .showSnackBar(
+                                                                                  SnackBar(
+                                                                            content:
+                                                                                Text('Your reminder has been deleted successfully'),
+                                                                          ));
+
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        }
+                                                                        // setState(() {
+                                                                        //   _popLoading = false;
+                                                                        // });
+                                                                      },
+                                                                      child:
+                                                                          TextBuilder(
+                                                                        text: 'Yes',
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                );
+                                                                ;
+                                                              },
+                                                            ).whenComplete(
+                                                                () => setState(() {
+                                                                      // getNextMedicine();
+                                                                    }));
+                                                          },
+                                                          child: Icon(
+                                                            Icons.delete,
+                                                            color: kWhite,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 50),
+                                                        InkWell(
+                                                          onTap: () {
+                                                            Navigator.push(context,
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) {
+                                                              return AddReminder(
+                                                                edit: true,
+                                                                data:
+                                                                    _currentResponse
+                                                                            .data[
+                                                                        index],
+                                                              );
+                                                            })).whenComplete(() {
+                                                              getAllReminder();
+                                                            });
+                                                          },
+                                                          child: Icon(
+                                                            Icons.edit,
+                                                            color: kWhite,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           );
