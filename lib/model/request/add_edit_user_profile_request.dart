@@ -10,7 +10,7 @@ class AddEditUserProfileRequest {
     this.state,
     this.bloodGroup,
     this.avatar,
-    this.email,
+    this.emailId,
     this.name,
   });
 
@@ -24,7 +24,7 @@ class AddEditUserProfileRequest {
   String state;
   String bloodGroup;
   String avatar;
-  String email;
+  String emailId;
   String name;
 
   factory AddEditUserProfileRequest.fromJson(Map<String, dynamic> json) =>
@@ -40,7 +40,7 @@ class AddEditUserProfileRequest {
         state: json["state"] == null ? null : json["state"],
         bloodGroup: json["blood_group"] == null ? null : json["blood_group"],
         avatar: json["avatar"] == null ? null : json["avatar"],
-        email: json["email"] == null ? null : json["email"],
+        emailId: json["email_id"] == null ? null : json["email_id"],
         name: json["name"] == null ? null : json["name"],
       );
 
@@ -55,7 +55,7 @@ class AddEditUserProfileRequest {
         "state": state == null ? null : state,
         "blood_group": bloodGroup == null ? null : bloodGroup,
         "avatar": avatar == null ? null : avatar,
-        "email": email == null ? null : email,
+        "email_id": emailId == null ? null : emailId,
         "name": name == null ? null : name,
       };
 }

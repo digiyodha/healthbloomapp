@@ -507,7 +507,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                           AddEditUserProfileRequest(
                                         userAddress: '',
                                         googleAddress: '',
-                                        email: _email.text,
+                                        emailId: _email.text,
                                         bloodGroup: selectedBloodGroup,
                                         name: _name.text,
                                         city: _city.text,

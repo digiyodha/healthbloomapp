@@ -514,7 +514,7 @@ class _EditProfileState extends State<EditProfile> {
                                         bloodGroup: selectedBloodGroup,
                                         name: _name.text,
                                         city: _city.text,
-                                        email: _email.text,
+                                        emailId: _email.text,
                                         countryCode: '+91',
                                         gender: selectedGender,
                                         avatar: _uploadAvatarUrl ?? "",

@@ -401,7 +401,8 @@ class _HomePageState extends State<HomePage> {
                                                 if (_response.success == true) {
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(SnackBar(
-                                                    content: Text('deleted.'),
+                                                    content: Text(
+                                                        'Your medicine has been deleted successfully'),
                                                   ));
 
                                                   Navigator.pop(context, true);
@@ -594,7 +595,14 @@ class _HomePageState extends State<HomePage> {
                                                             .inHours ==
                                                         0
                                                     ? "Updated at - ${DateFormat('hh:mm a').format(time.first.toLocal())}"
-                                                    : "Updated at - ${today.difference(time.first.toLocal()).inHours.toString() + ' hours ago'}",
+                                                    : today
+                                                                .difference(time
+                                                                    .first
+                                                                    .toLocal())
+                                                                .inHours >=
+                                                            24
+                                                        ? "Updated at - ${today.difference(time.first.toLocal()).inDays.toString() + ' days ago'}"
+                                                        : "Updated at - ${today.difference(time.first.toLocal()).inHours.toString() + ' hours ago'}",
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     color:
