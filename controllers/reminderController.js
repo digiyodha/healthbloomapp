@@ -9,6 +9,8 @@ const { sendNotificationToUser } = require("./notificationController");
 const { Medicine, TimeMedicine } = require("../models/medicine");
 var fns = require('date-fns');
 const { dynamicSort } = require("./medicineController");
+const { MedicineCheck } = require("../models/check");
+
 
 
 // //schedule Reminder
@@ -111,7 +113,8 @@ exports.getAllReminder = asyncHandler(async (req, res, next) => {
             description: reminder.description,
             familyObject: familyObject,
             user_id: reminder.user_id,
-            type: 'Reminder'
+            type: 'Reminder',
+            check: false
         });
     });
     await Promise.all(reminderPromise);
@@ -119,70 +122,89 @@ exports.getAllReminder = asyncHandler(async (req, res, next) => {
 
     var medicineObject = await Medicine.find({user_id: req.user._id});
     var medicinePromise = await medicineObject.map(async function(medicine){
-        var timeObject = await TimeMedicine.find({medicine_id: medicine._id});
+
+        var medicineCheckObject = await MedicineCheck.find({medicine_id: medicine._id});
+        // var timeObject = await TimeMedicine.find({medicine_id: medicine._id});
         var familyObject = await Family.findOne({_id: medicine.patient});
 
-        var timeMedicinePromise = await timeObject.map(async function(timeMedicine){
 
-            if(medicine.reminder_time == 'Daily')
-            {
-                var start = timeMedicine.original_time;
-                for(var i=0; i<parseInt(medicine.duration); i++)
-                {
-                    var date = new Date(start);
-                    console.log(date);
-                    reminder_object.push({
-                        _id: timeMedicine._id,
-                        reminder_type: 'Medicine',
-                        date_time: start,
-                        description: medicine.medicine_name,
-                        familyObject: familyObject,
-                        user_id: medicine.user_id,
-                        type: 'Medicine'
-                    });
-                    start = fns.addDays(date, 1);
-                }
-            }
-            else if(medicine.reminder_time == 'Weekly')
-            {
-                var start = timeMedicine.original_time;
-                for(var i=0; i<parseInt(medicine.duration); i+=7)
-                {
-                    var date = new Date(start);
-                    console.log(date);
-                    reminder_object.push({
-                        _id: timeMedicine._id,
-                        reminder_type: 'Medicine',
-                        date_time: start,
-                        description: medicine.medicine_name,
-                        familyObject: familyObject,
-                        user_id: medicine.user_id,
-                        type: 'Medicine'
-                    });
-                    start = fns.addDays(date, 7);
-                }
-            }
-            else if(medicine.reminder_time == 'Monthly')
-            {
-                var start =  timeMedicine.original_time;
-                for(var i=0; i<parseInt(medicine.duration); i+=30)
-                {
-                    var date = new Date(start);
-                    console.log(date);
-                    reminder_object.push({
-                        _id: timeMedicine._id,
-                        reminder_type: 'Medicine',
-                        date_time: start,
-                        description: medicine.medicine_name,
-                        familyObject: familyObject,
-                        user_id: medicine.user_id,
-                        type: 'Medicine'
-                    });
-                    start = fns.addDays(date, 30);
-                }
-            }
+        var medicineCheckPromise = await medicineCheckObject.map(async function(medicineCheck){
+            reminder_object.push({
+                _id: medicineCheck._id,
+                reminder_type: 'Medicine',
+                date_time: medicineCheck.medicine_time,
+                description: medicine.medicine_name,
+                familyObject: familyObject,
+                user_id: medicine.user_id,
+                type: 'Medicine',
+                check: medicineCheck.check
+            });
         });
-        await Promise.all(timeMedicinePromise);
+        await Promise.all(medicineCheckPromise);
+
+
+        // var timeMedicinePromise = await timeObject.map(async function(timeMedicine){
+
+        //     if(medicine.reminder_time == 'Daily')
+        //     {
+        //         var start = timeMedicine.original_time;
+        //         for(var i=0; i<parseInt(medicine.duration); i++)
+        //         {
+        //             var date = new Date(start);
+        //             console.log(date);
+        //             reminder_object.push({
+        //                 _id: timeMedicine._id,
+        //                 reminder_type: 'Medicine',
+        //                 date_time: start,
+        //                 description: medicine.medicine_name,
+        //                 familyObject: familyObject,
+        //                 user_id: medicine.user_id,
+        //                 type: 'Medicine'
+        //             });
+        //             start = fns.addDays(date, 1);
+        //         }
+        //     }
+        //     else if(medicine.reminder_time == 'Weekly')
+        //     {
+        //         var start = timeMedicine.original_time;
+        //         for(var i=0; i<parseInt(medicine.duration); i+=7)
+        //         {
+        //             var date = new Date(start);
+        //             console.log(date);
+        //             reminder_object.push({
+        //                 _id: timeMedicine._id,
+        //                 reminder_type: 'Medicine',
+        //                 date_time: start,
+        //                 description: medicine.medicine_name,
+        //                 familyObject: familyObject,
+        //                 user_id: medicine.user_id,
+        //                 type: 'Medicine'
+        //             });
+        //             start = fns.addDays(date, 7);
+        //         }
+        //     }
+        //     else if(medicine.reminder_time == 'Monthly')
+        //     {
+        //         var start =  timeMedicine.original_time;
+        //         for(var i=0; i<parseInt(medicine.duration); i+=30)
+        //         {
+        //             var date = new Date(start);
+        //             console.log(date);
+        //             reminder_object.push({
+        //                 _id: timeMedicine._id,
+        //                 reminder_type: 'Medicine',
+        //                 date_time: start,
+        //                 description: medicine.medicine_name,
+        //                 familyObject: familyObject,
+        //                 user_id: medicine.user_id,
+        //                 type: 'Medicine'
+        //             });
+        //             start = fns.addDays(date, 30);
+        //         }
+        //     }
+        // });
+        // await Promise.all(timeMedicinePromise);
+   
     });
     await Promise.all(medicinePromise);
 

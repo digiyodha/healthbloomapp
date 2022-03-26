@@ -57,6 +57,8 @@ app.use("/v1/feedback", require("./routers/feedbackRouter"));
 app.use("/v1/admin", require("./routers/adminRouter"));
 app.use("/v1/map", require("./routers/mapRouter"));
 app.use("/v1/reminder", require("./routers/reminderRouter"));
+app.use("/v1/check", require("./routers/checkRouter"));
+
 
 
 

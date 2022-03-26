@@ -11,6 +11,7 @@ var fns = require('date-fns');
 var cron = require('node-cron');
 const schedule = require('node-schedule');
 const { sendNotificationToUser } = require("./notificationController");
+const { MedicineCheck } = require("../models/check");
 
 
 exports.scheduleMedicine = asyncHandler(async (req, res, next) => {
@@ -78,6 +79,12 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
                     await sendNotificationToUser('Medicine', medicine_name, req.user._id);
                 });
                 start = fns.addDays(date, 1);
+                await MedicineCheck.create({
+                    medicine_time: date,
+                    check: false,
+                    user_id: req.user._id,
+                    medicine_id: medicine._id
+                });
             }
 
 
@@ -108,6 +115,12 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
                     await sendNotificationToUser('Medicine', medicine_name, req.user._id);
                 });
                 start = fns.addDays(date, 7);
+                await MedicineCheck.create({
+                    medicine_time: date,
+                    check: false,
+                    user_id: req.user._id,
+                    medicine_id: medicine._id
+                });
             }
         }
         else if(reminder_time == 'Monthly')
@@ -123,6 +136,12 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
                     await sendNotificationToUser('Medicine', medicine_name, req.user._id);
                 });
                 start = fns.addDays(date, 30);
+                await MedicineCheck.create({
+                    medicine_time: date,
+                    check: false,
+                    user_id: req.user._id,
+                    medicine_id: medicine._id
+                });
             }
         }
     });
@@ -217,6 +236,8 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
     });
     await Promise.all(timeMedicinePromise);
 
+    await MedicineCheck.deleteMany({medicine_id: _id});
+
     await TimeMedicine.deleteMany({medicine_id: _id});
 
     var timePromise = await time.map(async function(timestamp){
@@ -246,6 +267,12 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
                     await sendNotificationToUser('Medicine', medicine_name, req.user._id);
                 });
                 start = fns.addDays(date, 1);
+                await MedicineCheck.create({
+                    medicine_time: date,
+                    check: false,
+                    user_id: req.user._id,
+                    medicine_id: medicine._id
+                });
             }
         }
         else if(medicine.reminder_time == 'Weekly')
@@ -261,6 +288,12 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
                     await sendNotificationToUser('Medicine', medicine_name, req.user._id);
                 });
                 start = fns.addDays(date, 7);
+                await MedicineCheck.create({
+                    medicine_time: date,
+                    check: false,
+                    user_id: req.user._id,
+                    medicine_id: medicine._id
+                });
             }
         }
         else if(medicine.reminder_time == 'Monthly')
@@ -276,6 +309,12 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
                     await sendNotificationToUser('Medicine', medicine_name, req.user._id);
                 });
                 start = fns.addDays(date, 30);
+                await MedicineCheck.create({
+                    medicine_time: date,
+                    check: false,
+                    user_id: req.user._id,
+                    medicine_id: medicine._id
+                });
             }
         }
     });
@@ -584,6 +623,8 @@ exports.deleteMedicine = asyncHandler(async (req, res, next) => {
             }
     });
     await Promise.all(timeMedicinePromise);
+
+    await MedicineCheck.deleteMany({medicine_id: _id});
     
     await TimeMedicine.deleteMany({medicine_id: _id});
     if(!medicine)
