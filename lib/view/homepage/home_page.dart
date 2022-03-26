@@ -6,6 +6,7 @@ import 'package:health_bloom/model/request/get_next_medicine_response.dart';
 import 'package:health_bloom/model/response/delete_medicine_response.dart';
 import 'package:health_bloom/model/response/get_all_member_response.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
+import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/custom_add_element_bs.dart';
@@ -47,6 +48,12 @@ class _HomePageState extends State<HomePage> {
   Future<GetUserResponse> getUser() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     GetUserResponse _response = await adminAPI.getUserAPI();
+    return _response;
+  }
+
+  Future<GetHealthScoreResponse> getHealthScore() async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    GetHealthScoreResponse _response = await adminAPI.getHealthScoreAPI();
     return _response;
   }
 
@@ -214,58 +221,67 @@ class _HomePageState extends State<HomePage> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       color: Color(0xffF5F6FA)),
-                  child: Row(
-                    children: [
-                      HexagonWidget.pointy(
-                        width: 80,
-                        height: 80,
-                        elevation: 5,
-                        cornerRadius: 16,
-                        color: kMainColor,
-                        padding: 0,
-                        child: Center(
-                          child: Text(
-                            "40",
-                            style: TextStyle(fontSize: 30, color: kWhite),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 14,
-                      ),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                  child: FutureBuilder<GetHealthScoreResponse>(
+                    future: getHealthScore(),
+                    builder: (context,data){
+                      if(data.hasData){
+                        return Row(
                           children: [
-                            Text(
-                              "Health Score",
-                              style: TextStyle(
-                                  color: kBlack,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500),
+                            HexagonWidget.pointy(
+                              width: 80,
+                              height: 80,
+                              elevation: 5,
+                              cornerRadius: 16,
+                              color: kMainColor,
+                              padding: 0,
+                              child: Center(
+                                child: Text(
+                                  data.data.data.score.round().toString(),
+                                  style: TextStyle(fontSize: 30, color: kWhite),
+                                ),
+                              ),
                             ),
                             SizedBox(
-                              height: 8,
+                              width: 14,
                             ),
-                            Text(
-                              "Check your progress of medicine completion for today",
-                              style: TextStyle(color: kGrey6, fontSize: 14),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              "Read more",
-                              style: TextStyle(
-                                  color: kMainColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
-                            ),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Health Score",
+                                    style: TextStyle(
+                                        color: kBlack,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Text(
+                                    "Check your progress of medicine completion for today",
+                                    style: TextStyle(color: kGrey6, fontSize: 14),
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Text(
+                                    "Read more",
+                                    style: TextStyle(
+                                        color: kMainColor,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                              ),
+                            )
                           ],
-                        ),
-                      )
-                    ],
+                        );
+                      }else{
+                        return LoadingWidget();
+                      }
+                    },
                   ),
                 ),
                 SizedBox(height: 24),

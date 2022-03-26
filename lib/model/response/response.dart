@@ -1432,6 +1432,7 @@ class GetReminderListResponseDatum {
     this.description,
     this.familyObject,
     this.userId,
+    this.check
   });
 
   String id;
@@ -1440,6 +1441,7 @@ class GetReminderListResponseDatum {
   String description;
   GetReminderListResponseFamilyObject familyObject;
   String userId;
+  bool check;
 
   factory GetReminderListResponseDatum.fromJson(Map<String, dynamic> json) => GetReminderListResponseDatum(
     id: json["_id"] == null ? null : json["_id"],
@@ -1448,6 +1450,7 @@ class GetReminderListResponseDatum {
     description: json["description"] == null ? null : json["description"],
     familyObject: json["familyObject"] == null ? null : GetReminderListResponseFamilyObject.fromJson(json["familyObject"]),
     userId: json["user_id"] == null ? null : json["user_id"],
+    check: json["check"] == null ? null : json["check"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -1730,4 +1733,160 @@ class GetDocumentsFamilyResponseCommonObject {
   DateTime consultationDate;
   String doctorAdvice;
   String type;
+}
+
+class GetHealthScoreResponse {
+  GetHealthScoreResponse({
+    this.success,
+    this.data,
+  });
+
+  bool success;
+  GetHealthScoreResponseData data;
+
+  factory GetHealthScoreResponse.fromJson(Map<String, dynamic> json) => GetHealthScoreResponse(
+    success: json["success"] == null ? null : json["success"],
+    data: json["data"] == null ? null : GetHealthScoreResponseData.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "success": success == null ? null : success,
+    "data": data == null ? null : data.toJson(),
+  };
+}
+
+class GetHealthScoreResponseData {
+  GetHealthScoreResponseData({
+    this.score,
+  });
+
+  double score;
+
+  factory GetHealthScoreResponseData.fromJson(Map<String, dynamic> json) => GetHealthScoreResponseData(
+    score: json["score"] == null ? null : json["score"].toDouble(),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "score": score == null ? null : score,
+  };
+}
+
+class WaterCheckResponse {
+  WaterCheckResponse({
+    this.success,
+    this.data,
+  });
+
+  bool success;
+  WaterCheckResponseData data;
+
+  factory WaterCheckResponse.fromJson(Map<String, dynamic> json) => WaterCheckResponse(
+    success: json["success"] == null ? null : json["success"],
+    data: json["data"] == null ? null : WaterCheckResponseData.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "success": success == null ? null : success,
+    "data": data == null ? null : data.toJson(),
+  };
+}
+
+class WaterCheckResponseData {
+  WaterCheckResponseData({
+    this.targetAmount,
+    this.dailyWaterConsumed,
+    this.date,
+    this.userId,
+    this.createdAt,
+    this.updatedAt,
+    this.id,
+  });
+
+  int targetAmount;
+  int dailyWaterConsumed;
+  DateTime date;
+  String userId;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String id;
+
+  factory WaterCheckResponseData.fromJson(Map<String, dynamic> json) => WaterCheckResponseData(
+    targetAmount: json["target_amount"] == null ? null : json["target_amount"],
+    dailyWaterConsumed: json["daily_water_consumed"] == null ? null : json["daily_water_consumed"],
+    date: json["date"] == null ? null : DateTime.parse(json["date"]),
+    userId: json["user_id"] == null ? null : json["user_id"],
+    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+    id: json["id"] == null ? null : json["id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "target_amount": targetAmount == null ? null : targetAmount,
+    "daily_water_consumed": dailyWaterConsumed == null ? null : dailyWaterConsumed,
+    "date": date == null ? null : date.toIso8601String(),
+    "user_id": userId == null ? null : userId,
+    "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
+    "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
+    "id": id == null ? null : id,
+  };
+}
+
+class MedicineCheckUncheckResponse {
+  MedicineCheckUncheckResponse({
+    this.success,
+    this.data,
+  });
+
+  bool success;
+  MedicineCheckUncheckResponseData data;
+
+  factory MedicineCheckUncheckResponse.fromJson(Map<String, dynamic> json) => MedicineCheckUncheckResponse(
+    success: json["success"] == null ? null : json["success"],
+    data: json["data"] == null ? null : MedicineCheckUncheckResponseData.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "success": success == null ? null : success,
+    "data": data == null ? null : data.toJson(),
+  };
+}
+
+class MedicineCheckUncheckResponseData {
+  MedicineCheckUncheckResponseData({
+    this.check,
+    this.medicineTime,
+    this.userId,
+    this.medicineId,
+    this.createdAt,
+    this.updatedAt,
+    this.id,
+  });
+
+  bool check;
+  DateTime medicineTime;
+  String userId;
+  String medicineId;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String id;
+
+  factory MedicineCheckUncheckResponseData.fromJson(Map<String, dynamic> json) => MedicineCheckUncheckResponseData(
+    check: json["check"] == null ? null : json["check"],
+    medicineTime: json["medicine_time"] == null ? null : DateTime.parse(json["medicine_time"]),
+    userId: json["user_id"] == null ? null : json["user_id"],
+    medicineId: json["medicine_id"] == null ? null : json["medicine_id"],
+    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+    id: json["id"] == null ? null : json["id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "check": check == null ? null : check,
+    "medicine_time": medicineTime == null ? null : medicineTime.toIso8601String(),
+    "user_id": userId == null ? null : userId,
+    "medicine_id": medicineId == null ? null : medicineId,
+    "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
+    "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
+    "id": id == null ? null : id,
+  };
 }

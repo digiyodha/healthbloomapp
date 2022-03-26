@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:health_bloom/model/request/request.dart';
+import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/view/water_intake/water_settings.dart';
+import 'package:provider/provider.dart';
 import '../../components/custom_contained_button.dart';
+import '../../services/api/repository/auth_repository.dart';
 import '../../utils/drawer/custom_drawer.dart';
 import '../homepage/home_page.dart';
 
@@ -22,14 +26,25 @@ class _WaterIntakeState extends State<WaterIntake> {
   int _totalIntakeDaily;
   int _glassVolume;
 
+  Future<WaterCheckResponse> waterCheck() async {
+    final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
+    WaterCheckResponse _response = await adminAPI.waterCheckAPI(
+      WaterCheckRequest(
+        targetAmount: sp.getInt("dailyIntake"),
+        dailyWaterConsumed: int.parse(sp.getString("${_today.day}/${_today.month}/${_today.year}"))
+      )
+    );
+    return _response;
+  }
+
   getData() {
     setState(() {
       _waterInMl = null;
     });
 
     if (sp.getInt("dailyIntake") == null) {
-      sp.setInt("dailyIntake", 1500);
-      _totalIntakeDaily = 1500;
+      sp.setInt("dailyIntake", 1200);
+      _totalIntakeDaily = 1200;
     } else {
       _totalIntakeDaily = sp.getInt("dailyIntake");
     }
@@ -97,6 +112,7 @@ class _WaterIntakeState extends State<WaterIntake> {
                       return WaterSettings();
                     }).whenComplete(() {
                   getData();
+                  waterCheck();
                 });
               },
               icon: Icon(Icons.settings_outlined),
@@ -428,6 +444,7 @@ class _WaterIntakeState extends State<WaterIntake> {
                           _glassCount = 0;
                           addData();
                           getData();
+                          waterCheck();
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text("Please add the water quantity first!"),

@@ -74,7 +74,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
   @override
   void initState() {
     super.initState();
-    MapUtils.determinePosition().then((value) {
+    UtilFunctions.determinePosition().then((value) {
       _lat = value.latitude.toString();
       _lng = value.longitude.toString();
       getNearbyLabs();

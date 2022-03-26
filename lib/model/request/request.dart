@@ -322,3 +322,39 @@ class ImageListRequest {
     "thumbnail_url": thumbnailUrl == null ? null : thumbnailUrl,
   };
 }
+
+class WaterCheckRequest {
+  WaterCheckRequest({
+    this.targetAmount,
+    this.dailyWaterConsumed,
+  });
+
+  int targetAmount;
+  int dailyWaterConsumed;
+
+  factory WaterCheckRequest.fromJson(Map<String, dynamic> json) => WaterCheckRequest(
+    targetAmount: json["target_amount"] == null ? null : json["target_amount"],
+    dailyWaterConsumed: json["daily_water_consumed"] == null ? null : json["daily_water_consumed"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "target_amount": targetAmount == null ? null : targetAmount,
+    "daily_water_consumed": dailyWaterConsumed == null ? null : dailyWaterConsumed,
+  };
+}
+
+class MedicineCheckUncheckRequest {
+  MedicineCheckUncheckRequest({
+    this.id,
+  });
+
+  String id;
+
+  factory MedicineCheckUncheckRequest.fromJson(Map<String, dynamic> json) => MedicineCheckUncheckRequest(
+    id: json["_id"] == null ? null : json["_id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id == null ? null : id,
+  };
+}

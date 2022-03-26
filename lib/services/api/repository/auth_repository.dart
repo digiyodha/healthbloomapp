@@ -361,4 +361,25 @@ class NetworkRepository with ChangeNotifier {
     if (apiResult is Error) throw apiResult.error;
     return getDocumentsFamilyAPI(request);
   }
+
+  Future<GetHealthScoreResponse> getHealthScoreAPI() async {
+    Result apiResult = await apiClient.getHealthScore();
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return getHealthScoreAPI();
+  }
+
+  Future<WaterCheckResponse> waterCheckAPI(WaterCheckRequest request) async {
+    Result apiResult = await apiClient.waterCheck(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return waterCheckAPI(request);
+  }
+
+  Future<MedicineCheckUncheckResponse> medicineCheckUncheckAPI(MedicineCheckUncheckRequest request) async {
+    Result apiResult = await apiClient.medicineCheckUncheck(request);
+    if (apiResult is Success) return apiResult.data;
+    if (apiResult is Error) throw apiResult.error;
+    return medicineCheckUncheckAPI(request);
+  }
 }

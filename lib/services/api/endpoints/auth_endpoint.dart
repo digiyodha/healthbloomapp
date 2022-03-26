@@ -40,11 +40,14 @@ class AuthEndpoints {
   static get getReminderByFamily => AuthEndpoint("/v1/reminder/family/", Method.put);
   static get editReminder => AuthEndpoint("/v1/reminder/", Method.put);
   static get getDocumentsFamily => AuthEndpoint("/v1/document/family/", Method.put);
+  static get waterCheck => AuthEndpoint("/v1/check/water/", Method.put);
+  static get medicineCheckUncheck => AuthEndpoint("/v1/check/medicine/", Method.put);
 
   // Get
   static get getMember => AuthEndpoint("/v1/family/id/", Method.put);
   static get getUser => AuthEndpoint("/v1/users/", Method.get);
   static get getAllReminders => AuthEndpoint("/v1/reminder/", Method.get);
+  static get getHealthScore => AuthEndpoint("/v1/check/health/", Method.get);
   static get getAllmember => AuthEndpoint("/v1/family", Method.get);
   static get getDocuments => AuthEndpoint("/v1/document/", Method.put);
   static get getNextMedicine =>

@@ -1,9 +1,8 @@
 import 'package:geolocator/geolocator.dart';
 
-class MapUtils {
+class UtilFunctions {
 
-  MapUtils._();
-
+  UtilFunctions._();
 
   static Future<Position> determinePosition() async {
     bool serviceEnabled;
@@ -40,5 +39,15 @@ class MapUtils {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
+  }
+
+  String getDouble2Digit(double value){
+    if(value==null){
+      return "";
+    }
+    return double.parse((value)
+        .toStringAsFixed(
+        1))
+        .toString();
   }
 }

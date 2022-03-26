@@ -918,4 +918,66 @@ class NetworkManager {
     }
     return result;
   }
+
+  Future<Result> getHealthScore() async {
+    AuthEndpoint endpoint = AuthEndpoints.getHealthScore;
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      GetHealthScoreResponse response =
+      GetHealthScoreResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<GetHealthScoreResponse>(response);
+    }
+    return result;
+  }
+
+  Future<Result> waterCheck(WaterCheckRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.waterCheck;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      WaterCheckResponse response =
+      WaterCheckResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<WaterCheckResponse>(response);
+    }
+    return result;
+  }
+
+  Future<Result> medicineCheckUncheck(MedicineCheckUncheckRequest request) async {
+    AuthEndpoint endpoint = AuthEndpoints.medicineCheckUncheck;
+    endpoint.addBody(request);
+    String xAuthToken = sp.getString('xAuthToken');
+    print("xAuthToken:  ${xAuthToken.toString()}");
+    endpoint.addHeaders({"x-auth-token": xAuthToken});
+    Result result = await _client.call(
+      endpoint,
+    );
+
+    if (result is Success) {
+      MedicineCheckUncheckResponse response =
+      MedicineCheckUncheckResponse.fromJson(json.decode(result.data.toString()));
+
+      print(response);
+
+      return Success<MedicineCheckUncheckResponse>(response);
+    }
+    return result;
+  }
 }
