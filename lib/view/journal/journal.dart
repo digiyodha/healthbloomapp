@@ -724,9 +724,9 @@ class _JournalState extends State<Journal> {
                                                     .data[index].dateTime.year)
                                           if(_currentResponse
                                               .data[index]
-                                              .reminderType.toLowerCase().contains(_searchController.text) || _currentResponse
+                                              .reminderType.toLowerCase().contains(_searchController.text.toLowerCase()) || _currentResponse
                                               .data[index]
-                                              .familyObject.name.toLowerCase().contains(_searchController.text))
+                                              .familyObject.name.toLowerCase().contains(_searchController.text.toLowerCase()))
                                           return Container(
                                             decoration: BoxDecoration(
                                                 color: Color(0xff8B80F8),
@@ -864,7 +864,7 @@ class _JournalState extends State<Journal> {
                                                                           .showSnackBar(
                                                                               SnackBar(
                                                                         content:
-                                                                            Text('deleted.'),
+                                                                            Text('Your reminder has been deleted successfully'),
                                                                       ));
 
                                                                       Navigator.pop(

@@ -295,7 +295,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     return DropdownMenuItem<String>(
                                                       value: value,
                                                       child: Text(
-                                                        value,
+                                                        value + " m",
                                                       ),
                                                     );
                                                   }).toList(),
@@ -752,7 +752,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     return DropdownMenuItem<String>(
                                                       value: value,
                                                       child: Text(
-                                                        value,
+                                                        value + " m",
                                                       ),
                                                     );
                                                   }).toList(),

@@ -64,7 +64,7 @@ class _AddReminderState extends State<AddReminder> {
   Future<AddEditReminderResponse> addReminder() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     AddEditReminderResponse _response = await adminAPI.addReminderAPI(AddReminderRequest(
-      reminderType: _type.text,
+      reminderType: getType(_type.text),
       dateTime: selectedDate,
       description: _description.text,
       family: _memberId
@@ -75,13 +75,23 @@ class _AddReminderState extends State<AddReminder> {
   Future<AddEditReminderResponse> editReminder() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     AddEditReminderResponse _response = await adminAPI.editReminderAPI(EditReminderRequest(
-        reminderType: _type.text,
+        reminderType: getType(_type.text),
         dateTime: selectedDate,
         description: _description.text,
         family: _memberId,
         id: widget.data.id
     ));
     return _response;
+  }
+
+  String getType(String text){
+    if(text == "Medical Check Up"){
+      return "CheckUp";
+    }
+    if(text == "Medical Test"){
+      return "Test";
+    }
+    return text;
   }
 
   @override
@@ -161,9 +171,9 @@ class _AddReminderState extends State<AddReminder> {
                             title: "Reminder type",
                             controller: _type,
                             dropDownData: [
-                              "CheckUp",
+                              "Medical Check Up",
                               "Doctor Appointment",
-                              "Test",
+                              "Medical Test",
                               "Task",
                               "Medical Refilling"
                             ],

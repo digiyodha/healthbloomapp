@@ -300,7 +300,12 @@ class _InsuranceDocumentsState extends State<InsuranceDocuments> {
 
                 }
 
-                await Share.files('Files', _files, '*/*', text: _temp);
+                if(_files.isNotEmpty){
+                  await Share.files('Files', _files, '*/*', text: _temp);
+                }else{
+                  Share.text('Files', _temp, 'text/plain');
+                }
+
                 setState(() {
                   _loading = false;
                 });

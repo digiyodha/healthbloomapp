@@ -453,7 +453,6 @@ class _AddPrescriptionState extends State<AddPrescription> {
                     _date.text.isNotEmpty &&
                     _userAilment.text.isNotEmpty &&
                     _hospital.text.isNotEmpty &&
-                    files.isNotEmpty &&
                     _patient.text.isNotEmpty) {
                   setState(() {
                     _loading = true;
@@ -503,7 +502,6 @@ class _AddPrescriptionState extends State<AddPrescription> {
                     _date.text.isNotEmpty &&
                     _userAilment.text.isNotEmpty &&
                     _hospital.text.isNotEmpty &&
-                    files.isNotEmpty &&
                     _patient.text.isNotEmpty) {
                   setState(() {
                     _loading = true;

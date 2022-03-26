@@ -423,7 +423,6 @@ class _AddReportState extends State<AddReport> {
                 if (_nameOfReport.text.isNotEmpty &&
                     _date.text.isNotEmpty &&
                     _description.text.isNotEmpty &&
-                    files.isNotEmpty &&
                     _date.text.isNotEmpty) {
                   setState(() {
                     _loading = true;
@@ -455,7 +454,6 @@ class _AddReportState extends State<AddReport> {
                 if (_nameOfReport.text.isNotEmpty &&
                     _date.text.isNotEmpty &&
                     _description.text.isNotEmpty &&
-                    files.isNotEmpty &&
                     _date.text.isNotEmpty) {
                   setState(() {
                     _loading = true;

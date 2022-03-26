@@ -306,7 +306,7 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                                                             ScaffoldMessenger.of(context)
                                                                                 .showSnackBar(SnackBar(
                                                                               content:
-                                                                                  Text('deleted.'),
+                                                                                  Text('Family member has been deleted successfully'),
                                                                             ));
                                                                             setState(
                                                                                 () {

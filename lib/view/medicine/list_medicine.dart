@@ -239,7 +239,7 @@ class _ListMedicineState extends State<ListMedicine> {
                                                               .showSnackBar(
                                                                   SnackBar(
                                                             content: Text(
-                                                                'deleted.'),
+                                                                'deleted'),
                                                           ));
 
                                                           Navigator.pop(

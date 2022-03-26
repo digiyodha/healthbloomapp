@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/add_medicine_request.dart';
@@ -319,12 +320,22 @@ class _AddMedicineState extends State<AddMedicine> {
                             onTap: () {},
                           ),
                           SizedBox(height: 16),
-                          CustomTextField(
-                            maxLines: 1,
-                            controller: _dose,
-                            label: "Dose",
-                            onChanged: (val) {},
-                            onTap: () {},
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomTextField(
+                                maxLines: 1,
+                                controller: _dose,
+                                label: "Dose",
+                                onChanged: (val) {},
+                                onTap: () {},
+                              ),
+                              SizedBox(height: 4),
+                              Text("How many times a day you will be taking medicine?",style: TextStyle(
+                                fontSize: 10,
+                                color: kGrey6
+                              ),)
+                            ],
                           ),
                           SizedBox(height: 16),
                           CustomTextField(
@@ -347,11 +358,23 @@ class _AddMedicineState extends State<AddMedicine> {
                             },
                           ),
                           SizedBox(height: 16),
-                          TextBuilder(
-                              text: 'Time',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: kGrey7),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextBuilder(
+                                  text: 'Time',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: kGrey7),
+                              Flexible(
+                                child: Text("What time would you like to take this medicine?",style: TextStyle(
+                                    fontSize: 10,
+                                    color: kGrey6
+                                ),),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 16),
                           _listOfTimes.isNotEmpty
                               ? ListView.builder(
                                   itemCount: _listOfTimes.length,
