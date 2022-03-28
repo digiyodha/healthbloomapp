@@ -99,7 +99,9 @@ exports.healthScore = asyncHandler(async (req, res, next) => {
     var tomorrowDay = tomorrow.getUTCDate();
     var tomorrowYear = tomorrow.getUTCFullYear();
 
+    console.log(dateObj);
     console.log(new Date(year, month, day));
+    console.log(tomorrow);
     console.log(new Date(tomorrowYear, tomorrowMonth, tomorrowDay))
 
 
