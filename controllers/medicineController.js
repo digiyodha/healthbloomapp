@@ -66,6 +66,22 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
         });
         console.log(timeMedicine);
 
+
+        var start_rem = timestamp;
+        for(var i=0; i<parseInt(duration); i++)
+        {
+            var date = new Date(start_rem);
+            console.log(date);
+            await MedicineCheck.create({
+                medicine_time: date,
+                check: false,
+                user_id: req.user._id,
+                medicine_id: medicine._id
+            });
+            start_rem = fns.addDays(date, 1);
+        }
+
+
         if(reminder_time == 'Daily')
         {
             var start = timestamp;
@@ -79,12 +95,6 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
                     await sendNotificationToUser('Medicine', medicine_name, req.user._id);
                 });
                 start = fns.addDays(date, 1);
-                await MedicineCheck.create({
-                    medicine_time: date,
-                    check: false,
-                    user_id: req.user._id,
-                    medicine_id: medicine._id
-                });
             }
 
 
@@ -115,12 +125,6 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
                     await sendNotificationToUser('Medicine', medicine_name, req.user._id);
                 });
                 start = fns.addDays(date, 7);
-                await MedicineCheck.create({
-                    medicine_time: date,
-                    check: false,
-                    user_id: req.user._id,
-                    medicine_id: medicine._id
-                });
             }
         }
         else if(reminder_time == 'Monthly')
@@ -136,12 +140,6 @@ exports.addMedicine = asyncHandler(async (req, res, next) => {
                     await sendNotificationToUser('Medicine', medicine_name, req.user._id);
                 });
                 start = fns.addDays(date, 30);
-                await MedicineCheck.create({
-                    medicine_time: date,
-                    check: false,
-                    user_id: req.user._id,
-                    medicine_id: medicine._id
-                });
             }
         }
     });
@@ -178,7 +176,7 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
         patient: patient, 
         user_id: req.user._id,
         description: description
-    });
+    }, {new: true});
 
     var timeObject = await TimeMedicine.find({medicine_id: _id});
 
@@ -247,74 +245,69 @@ exports.editMedicine = asyncHandler(async (req, res, next) => {
         var timeMedicine = await TimeMedicine.create({
             original_time: timestamp,
             start_time: timestamp,
-            end_time: fns.addDays(new Date(timestamp), parseInt(duration)),
+            end_time: fns.addDays(new Date(timestamp), parseInt(medicine.duration)),
             medicine_id: _id,
             is_active: true,
             user_id: req.user._id
         });
         console.log(timeMedicine);
 
+        var start_rem = timestamp;
+        for(var i=0; i<parseInt(medicine.duration); i++)
+        {
+            var date = new Date(start_rem);
+            console.log(date);
+            await MedicineCheck.create({
+                medicine_time: date,
+                check: false,
+                user_id: req.user._id,
+                medicine_id: medicine._id
+            });
+            start_rem = fns.addDays(date, 1);
+        }
+
         if(medicine.reminder_time == 'Daily')
         {
             var start = timestamp;
-            for(var i=0; i<parseInt(duration); i++)
+            for(var i=0; i<parseInt(medicine.duration); i++)
             {
                 var date = new Date(start);
                 console.log(date);
                 var job_id = timeMedicine._id.toString();
                 const job = schedule.scheduleJob(job_id, date, async function(){
                     console.log('Reminder done!');
-                    await sendNotificationToUser('Medicine', medicine_name, req.user._id);
+                    await sendNotificationToUser('Medicine', medicine.medicine_name, req.user._id);
                 });
                 start = fns.addDays(date, 1);
-                await MedicineCheck.create({
-                    medicine_time: date,
-                    check: false,
-                    user_id: req.user._id,
-                    medicine_id: medicine._id
-                });
             }
         }
         else if(medicine.reminder_time == 'Weekly')
         {
             var start = timestamp;
-            for(var i=0; i<parseInt(duration); i+=7)
+            for(var i=0; i<parseInt(medicine.duration); i+=7)
             {
                 var date = new Date(start);
                 console.log(date);
                 var job_id = timeMedicine._id.toString();
                 const job = schedule.scheduleJob(job_id, date, async function(){
                     console.log('Reminder done!');
-                    await sendNotificationToUser('Medicine', medicine_name, req.user._id);
-                });
-                start = fns.addDays(date, 7);
-                await MedicineCheck.create({
-                    medicine_time: date,
-                    check: false,
-                    user_id: req.user._id,
-                    medicine_id: medicine._id
+                    await sendNotificationToUser('Medicine', medicine.medicine_name, req.user._id);
                 });
             }
         }
         else if(medicine.reminder_time == 'Monthly')
         {
             var start = timestamp;
-            for(var i=0; i<parseInt(duration); i+=30)
+            for(var i=0; i<parseInt(medicine.duration); i+=30)
             {
                 var date = new Date(start);
                 console.log(date);
                 var job_id = timeMedicine._id.toString();
                 const job = schedule.scheduleJob(job_id, date, async function(){
                     console.log('Reminder done!');
-                    await sendNotificationToUser('Medicine', medicine_name, req.user._id);
+                    await sendNotificationToUser('Medicine', medicine.medicine_name, req.user._id);
                 });
                 start = fns.addDays(date, 30);
-                await MedicineCheck.create({
-                    medicine_time: date,
-                    check: false,
-                    user_id: req.user._id,
-                    medicine_id: medicine._id
-                });
             }
         }
     });
