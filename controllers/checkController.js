@@ -11,23 +11,18 @@ exports.waterCheck = asyncHandler(async (req, res, next) => {
     const {target_amount, daily_water_consumed} = req.body;
 
     var dateObj = new Date();
-    var month = dateObj.getUTCMonth(); //months from 1-12
-    var day = dateObj.getUTCDate();
-    var year = dateObj.getUTCFullYear();
+    var start_date = dateObj.setHours(0,0,0,0);
+    var end_date = dateObj.setHours(24, 0, 0, 0);
 
-    var tomorrow = new Date(dateObj.getTime() + (24 * 60 * 60 * 1000));
-    var tomorrowMonth = tomorrow.getUTCMonth();
-    var tomorrowDay = tomorrow.getUTCDate();
-    var tomorrowYear = tomorrow.getUTCFullYear();
-
-    console.log(new Date(year, month, day));
-    console.log(new Date(tomorrowYear, tomorrowMonth, tomorrowDay))
+    console.log(dateObj);
+    console.log(new Date(start_date));
+    console.log(new Date(end_date));
 
 
     var waterObject = await WaterCheck.findOne({ 
         date: {
-            $gte: new Date(year, month, day), 
-            $lt: new Date(tomorrowYear, tomorrowMonth, tomorrowDay)
+            $gte: new Date(start_date), 
+            $lt: new Date(end_date)
         },
         user_id: req.user._id
     });
@@ -90,25 +85,19 @@ res.status(200).json({ success: true, data: medicineObject });
 exports.healthScore = asyncHandler(async (req, res, next) => {
     
     var dateObj = new Date();
-    var month = dateObj.getUTCMonth(); //months from 1-12
-    var day = dateObj.getUTCDate();
-    var year = dateObj.getUTCFullYear();
 
-    var tomorrow = new Date(dateObj.getTime() + (24 * 60 * 60 * 1000));
-    var tomorrowMonth = tomorrow.getUTCMonth();
-    var tomorrowDay = tomorrow.getUTCDate();
-    var tomorrowYear = tomorrow.getUTCFullYear();
+    var start_date = dateObj.setHours(0,0,0,0);
+    var end_date = dateObj.setHours(24, 0, 0, 0);
 
     console.log(dateObj);
-    console.log(new Date(year, month, day));
-    console.log(tomorrow);
-    console.log(new Date(tomorrowYear, tomorrowMonth, tomorrowDay))
+    console.log(new Date(start_date));
+    console.log(new Date(end_date));
 
 
     var medicineObject = await MedicineCheck.find({ 
         medicine_time: {
-            $gte: new Date(year, month, day), 
-            $lt: new Date(tomorrowYear, tomorrowMonth, tomorrowDay)
+            $gte: new Date(start_date), 
+            $lt: new Date(end_date)
         },
         user_id: req.user._id
     });
@@ -133,8 +122,8 @@ exports.healthScore = asyncHandler(async (req, res, next) => {
 
     var waterObject = await WaterCheck.findOne({ 
         date: {
-            $gte: new Date(year, month, day), 
-            $lt: new Date(tomorrowYear, tomorrowMonth, tomorrowDay)
+            $gte: new Date(start_date), 
+            $lt: new Date(end_date)
         },
         user_id: req.user._id
     });
