@@ -67,8 +67,9 @@ exports.registerLoginUser = asyncHandler(async (req, res, next) => {
       userDetailsObj.fcm_token = null;
     }
 
-    userDetailsObj.google_address = null;
-    userDetailsObj.user_address = null;
+    userDetailsObj.latitude = null;
+    userDetailsObj.longitude = null;
+    userDetailsObj.age = null;
     userDetailsObj.city = null;
     userDetailsObj.state = null;
     userDetailsObj.gender = null;
@@ -107,8 +108,9 @@ exports.registerLoginUser = asyncHandler(async (req, res, next) => {
     avatar: user.avatar,
     country_code: user.country_code,
     phone_number: user.phone_number,
-    google_address: user.google_address,
-    user_address: user.user_address,
+    latitude: user.latitude,
+    longitude: user.longitude,
+    age: user.age,
     city: user.city,
     state: user.state,
     blood_group: user.blood_group,
@@ -125,14 +127,15 @@ exports.registerLoginUser = asyncHandler(async (req, res, next) => {
 //add edit user details
 exports.addEditUserDetails = asyncHandler(async (req, res, next) => {
     var {gender, country_code, phone_number, avatar, name, 
-      google_address, user_address, city, state, blood_group, _id, email_id} = req.body;
+      latitude, longitude, age, city, state, blood_group, _id, email_id} = req.body;
   const user = await User.findOneAndUpdate({ _id: _id },  {
     gender: gender,
     avatar: avatar,
     country_code: country_code,
     phone_number: phone_number,
-    google_address: google_address,
-    user_address: user_address,
+    latitude: latitude,
+    longitude: longitude,
+    age: age,
     city: city,
     state: state,
     blood_group: blood_group,

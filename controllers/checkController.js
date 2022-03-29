@@ -63,15 +63,12 @@ exports.waterCheck = asyncHandler(async (req, res, next) => {
     res.status(200).json({ success: true, data: water_object });
   });
 
-exports.medicineCheckUncheck = asyncHandler(async (req, res, next) => {
+exports.medicineCheck = asyncHandler(async (req, res, next) => {
 const {_id} = req.body;
-
-var medicine_object = await MedicineCheck.findOne({_id: _id});
-
 
 var medicineObject = await MedicineCheck.findOneAndUpdate({_id: _id}, 
 {
-    check: !medicine_object.check
+    check: true
 },  {new: true});
 
 if (!medicineObject) {

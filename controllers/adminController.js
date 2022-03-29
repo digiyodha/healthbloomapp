@@ -104,25 +104,59 @@ exports.getUserList = asyncHandler(async (req, res, next) => {
 
     const userObject = await User.find({});
     var user_object = [];
+
+    var date = Date.now();
+    date = subDays(date, 1);
+    console.log(date);
     var userPromise = await userObject.map(async function(user){
         var familyObject = await Family.find({user_id: user._id});
-        user_object.push({
-            avatar: user.avatar,
-            _id: user._id,
-            email_id: user.email_id,
-            phone_number: user.phone_number,
-            is_active: user.is_active,
-            familyObject: familyObject,
-            name: user.name,
-            gender: user.gender,
-            country_code: user.country_code,
-            google_address: user.google_address,
-            user_address: user.user_address,
-            city: user.city,
-            state: user.state,
-            blood_group: user.blood_group,
-            uid: user.uid
-        });
+        
+
+        if(user.createdAt > date)
+        {
+            console.log("New");
+            user_object.push({
+                avatar: user.avatar,
+                _id: user._id,
+                email_id: user.email_id,
+                phone_number: user.phone_number,
+                is_active: user.is_active,
+                familyObject: familyObject,
+                name: user.name,
+                gender: user.gender,
+                country_code: user.country_code,
+                latitude: user.latitude,
+                longitude: user.longitude,
+                age: user.age,
+                city: user.city,
+                state: user.state,
+                blood_group: user.blood_group,
+                uid: user.uid,
+                new_user: true
+            });
+        }
+        else
+        {
+            user_object.push({
+                avatar: user.avatar,
+                _id: user._id,
+                email_id: user.email_id,
+                phone_number: user.phone_number,
+                is_active: user.is_active,
+                familyObject: familyObject,
+                name: user.name,
+                gender: user.gender,
+                country_code: user.country_code,
+                latitude: user.latitude,
+                longitude: user.longitude,
+                age: user.age,
+                city: user.city,
+                state: user.state,
+                blood_group: user.blood_group,
+                uid: user.uid,
+                new_user: false
+            });
+        }
 
     });
     await Promise.all(userPromise);

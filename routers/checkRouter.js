@@ -4,11 +4,11 @@ const { protect } = require("../middlewares/auth");
 
 const router = express.Router();
 
-const { waterCheck, medicineCheckUncheck, healthScore } = require("../controllers/checkController");
+const { waterCheck, healthScore, medicineCheck } = require("../controllers/checkController");
 
 
 router.route("/water").put(protect, waterCheck);
-router.route("/medicine").put(protect, medicineCheckUncheck);
+router.route("/medicine").put(protect, medicineCheck);
 router.route("/health").get(protect, healthScore);
 
 
