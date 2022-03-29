@@ -9,7 +9,6 @@ import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/medicine/add_medicine.dart';
-import 'package:health_bloom/view/medicine/list_about_medicine.dart';
 import 'package:provider/provider.dart';
 
 import 'about_medicine.dart';
@@ -238,8 +237,8 @@ class _ListMedicineState extends State<ListMedicine> {
                                                                   context)
                                                               .showSnackBar(
                                                                   SnackBar(
-                                                            content: Text(
-                                                                'deleted'),
+                                                            content:
+                                                                Text('deleted'),
                                                           ));
 
                                                           Navigator.pop(

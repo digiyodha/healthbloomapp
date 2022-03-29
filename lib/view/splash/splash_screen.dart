@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +20,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   String id;
-
-
 
   getData() {
     id = sp.getString("id");
@@ -104,7 +100,8 @@ class _SplashScreenState extends State<SplashScreen> {
               message.data["title"],
               message.data["body"],
               NotificationDetails(
-                  android: getDetails(_sound,_vibration), iOS: IOSNotificationDetails()),
+                  android: getDetails(_sound, _vibration),
+                  iOS: IOSNotificationDetails()),
               payload: encodedData);
         }
       }
@@ -113,14 +110,14 @@ class _SplashScreenState extends State<SplashScreen> {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
   }
 
-  AndroidNotificationDetails getDetails(bool sound,bool vibration){
-    if(!sound && vibration){
+  AndroidNotificationDetails getDetails(bool sound, bool vibration) {
+    if (!sound && vibration) {
       return androidDetailsWithSoundVibration;
-    }else if(!sound){
+    } else if (!sound) {
       return androidDetailsWithSound;
-    }else if(vibration){
+    } else if (vibration) {
       return androidDetailsWithVibration;
-    }else{
+    } else {
       return androidDetailsWithoutSoundVibration;
     }
   }
@@ -136,7 +133,6 @@ class _SplashScreenState extends State<SplashScreen> {
       sp.setBool("generalSilent", false);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:health_bloom/components/textbuilder.dart';
+import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
@@ -24,16 +27,18 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   bool _loading = false;
   Future _futureUser;
+
   Future<GetUserResponse> getUsers() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     GetUserResponse _response = await adminAPI.getUserAPI();
-    print('User Response: ${_response.toJson()}');
+
     return _response;
   }
 
   @override
   void initState() {
     super.initState();
+    // updatePosition();
     _futureUser = getUsers();
   }
 
@@ -42,10 +47,51 @@ class _ProfileState extends State<Profile> {
     super.dispose();
   }
 
+  String location = '';
+  var latitude;
+  var longitude;
+  Future<void> updatePosition() async {
+    Position pos = await _determinePosition();
+    List pm = await placemarkFromCoordinates(pos.latitude, pos.longitude);
+    setState(() {
+      latitude = pos.latitude.toString();
+      longitude = pos.longitude.toString();
+
+      location =
+          '${pm[0].street.toString()}, ${pm[0].locality.toString()}, ${pm[0].subLocality.toString()}, ${pm[0].country.toString()} - ${pm[0].postalCode.toString()}';
+      sp.setString('location', location);
+    });
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      //
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.pop(context);
         Navigator.push(
           context,
@@ -102,8 +148,8 @@ class _ProfileState extends State<Profile> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          UpdateProfile(data: snapshot.data.data),
+                                      builder: (context) => UpdateProfile(
+                                          data: snapshot.data.data),
                                     ),
                                   ).whenComplete(() => setState(() {
                                         _futureUser = getUsers();
@@ -148,7 +194,8 @@ class _ProfileState extends State<Profile> {
                                 child: SingleChildScrollView(
                                   physics: ScrollPhysics(),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       const SizedBox(height: 80.0),
@@ -185,6 +232,22 @@ class _ProfileState extends State<Profile> {
                                       ),
                                       const SizedBox(height: 24.0),
                                       Text(
+                                        'Age',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xff9884DF),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10.0),
+                                      Text(
+                                        snapshot.data.data.age.toString() ?? '',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 24.0),
+                                      Text(
                                         'Blood Group',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w500,
@@ -210,6 +273,22 @@ class _ProfileState extends State<Profile> {
                                       const SizedBox(height: 10.0),
                                       Text(
                                         snapshot.data.data.phoneNumber ?? '',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 24.0),
+                                      Text(
+                                        'Location',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xff9884DF),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10.0),
+                                      Text(
+                                        sp.getString('location'),
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           color: Colors.black,
@@ -287,7 +366,8 @@ class _ProfileState extends State<Profile> {
                                   child: snapshot.data.data.avatar != null &&
                                           snapshot.data.data.avatar.isNotEmpty
                                       ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                           child: Image.network(
                                             snapshot.data.data.avatar,
                                             height: 80,

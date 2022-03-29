@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
@@ -20,26 +21,25 @@ class NearbyPlaces extends StatefulWidget {
 }
 
 class _NearbyPlacesState extends State<NearbyPlaces> {
-  String _hours = 'Any time';
   String _rating = 'Any';
   String _distance = '500';
   bool _isMedical = false;
-  String _lat = "18.457533";
-  String _lng = "73.867744";
+  // String _lat = "18.457533";
+  // String _lng = "73.867744";
   MapsNearbyMedicalsResponse _commonResponse;
 
   Future getNearbyMedicals() async {
     _commonResponse = null;
     setState(() {});
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    MapsNearbyMedicalsResponse _response = await adminAPI.getNearbyMedicalsAPI(
-        MapsNearbyMedicalsRequest(
-            //hours: _hours,
-            distance: _distance,
-            latitude: _lat,
-            longitude: _lng,
-            //rating: _rating,
-        ));
+    MapsNearbyMedicalsResponse _response =
+        await adminAPI.getNearbyMedicalsAPI(MapsNearbyMedicalsRequest(
+      //hours: _hours,
+      distance: _distance,
+      latitude: sp.getString('currentLatitude'),
+      longitude: sp.getString('currentLongitude'),
+      //rating: _rating,
+    ));
     _commonResponse = _response;
     setState(() {});
   }
@@ -49,8 +49,8 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
     _commonResponse = null;
     setState(() {});
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    MapsNearbyMedicalsResponse _response = await adminAPI.nextPageAPI(
-        PlacesNextPageRequest(nextPageToken: _temp));
+    MapsNearbyMedicalsResponse _response =
+        await adminAPI.nextPageAPI(PlacesNextPageRequest(nextPageToken: _temp));
     _commonResponse = _response;
     setState(() {});
   }
@@ -59,14 +59,14 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
     _commonResponse = null;
     setState(() {});
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    MapsNearbyMedicalsResponse _response = await adminAPI.getNearbyLabsAPI(
-        MapsNearbyMedicalsRequest(
-            //hours: _hours,
-            distance: _distance,
-            latitude: _lat,
-            longitude: _lng,
-            //rating: _rating,
-        ));
+    MapsNearbyMedicalsResponse _response =
+        await adminAPI.getNearbyLabsAPI(MapsNearbyMedicalsRequest(
+      //hours: _hours,
+      distance: _distance,
+      latitude: sp.getString('currentLatitude'),
+      longitude: sp.getString('currentLongitude'),
+      //rating: _rating,
+    ));
     _commonResponse = _response;
     setState(() {});
   }
@@ -75,8 +75,8 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
   void initState() {
     super.initState();
     UtilFunctions.determinePosition().then((value) {
-      _lat = value.latitude.toString();
-      _lng = value.longitude.toString();
+      print('currentLatitude ${sp.getString('currentLatitude')}');
+      print('currentLongitude ${sp.getString('currentLongitude')}');
       getNearbyLabs();
     });
   }
@@ -84,7 +84,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         return false;
       },
       child: Scaffold(
@@ -203,7 +203,8 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 10, vertical: 0),
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(6),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
                                             color: kMainColor),
                                         child: Theme(
                                           data: Theme.of(context).copyWith(
@@ -211,18 +212,25 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                           ),
                                           child: Row(
                                             children: [
-                                              Text("Rating:",style: TextStyle(color: kWhite),),
-                                              SizedBox(width: 6,),
+                                              Text(
+                                                "Rating:",
+                                                style: TextStyle(color: kWhite),
+                                              ),
+                                              SizedBox(
+                                                width: 6,
+                                              ),
                                               Expanded(
                                                 child: DropdownButton<String>(
                                                   isExpanded: true,
                                                   value: _rating,
                                                   icon: const Icon(
-                                                    Icons.arrow_drop_down_outlined,
+                                                    Icons
+                                                        .arrow_drop_down_outlined,
                                                     color: kWhite,
                                                   ),
                                                   elevation: 16,
-                                                  style: const TextStyle(color: kWhite),
+                                                  style: const TextStyle(
+                                                      color: kWhite),
                                                   underline: Container(),
                                                   onChanged: (String newValue) {
                                                     setState(() {
@@ -238,9 +246,12 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     '3',
                                                     '2.5',
                                                     '2',
-                                                  ].map<DropdownMenuItem<String>>(
+                                                  ].map<
+                                                          DropdownMenuItem<
+                                                              String>>(
                                                       (String value) {
-                                                    return DropdownMenuItem<String>(
+                                                    return DropdownMenuItem<
+                                                        String>(
                                                       value: value,
                                                       child: Text(
                                                         value,
@@ -262,7 +273,8 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 10, vertical: 0),
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(6),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
                                             color: kMainColor),
                                         child: Theme(
                                           data: Theme.of(context).copyWith(
@@ -270,18 +282,25 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                           ),
                                           child: Row(
                                             children: [
-                                              Text("Distance:",style: TextStyle(color: kWhite),),
-                                              SizedBox(width: 6,),
+                                              Text(
+                                                "Distance:",
+                                                style: TextStyle(color: kWhite),
+                                              ),
+                                              SizedBox(
+                                                width: 6,
+                                              ),
                                               Expanded(
                                                 child: DropdownButton<String>(
                                                   isExpanded: true,
                                                   value: _distance,
                                                   icon: const Icon(
-                                                    Icons.arrow_drop_down_outlined,
+                                                    Icons
+                                                        .arrow_drop_down_outlined,
                                                     color: kWhite,
                                                   ),
                                                   elevation: 16,
-                                                  style: const TextStyle(color: kWhite),
+                                                  style: const TextStyle(
+                                                      color: kWhite),
                                                   underline: Container(),
                                                   onChanged: (String newValue) {
                                                     setState(() {
@@ -289,10 +308,17 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     });
                                                     getNearbyMedicals();
                                                   },
-                                                  items: <String>['500', '600', '700', '800']
-                                                      .map<DropdownMenuItem<String>>(
-                                                          (String value) {
-                                                    return DropdownMenuItem<String>(
+                                                  items: <String>[
+                                                    '500',
+                                                    '600',
+                                                    '700',
+                                                    '800'
+                                                  ].map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
                                                       value: value,
                                                       child: Text(
                                                         value + " m",
@@ -310,274 +336,312 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                 ),
                                 _commonResponse != null
                                     ? ListView.builder(
-                                      padding: EdgeInsets.only(top: 8,bottom: 24),
+                                        padding:
+                                            EdgeInsets.only(top: 8, bottom: 24),
                                         physics: NeverScrollableScrollPhysics(),
                                         shrinkWrap: true,
-                                        itemCount: _commonResponse.data.results.length,
+                                        itemCount:
+                                            _commonResponse.data.results.length,
                                         itemBuilder: (context, index) {
-                                          return _rating == 'Any' ? InkWell(
-                                            onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(builder: (context) {
-                                                return NearbyPlaceDetails(
-                                                    data: _commonResponse
-                                                        .data.results[index]);
-                                              }));
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  EdgeInsets.symmetric(vertical: 16),
-                                              decoration: BoxDecoration(
-                                                  border: Border(
-                                                      bottom: BorderSide(
-                                                          color: kMainColorExtraLite,
-                                                          width: 1))),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Expanded(
-                                                    child: Column(
+                                          return _rating == 'Any'
+                                              ? InkWell(
+                                                  onTap: () {
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return NearbyPlaceDetails(
+                                                          data: _commonResponse
+                                                              .data
+                                                              .results[index]);
+                                                    }));
+                                                  },
+                                                  child: Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 16),
+                                                    decoration: BoxDecoration(
+                                                        border: Border(
+                                                            bottom: BorderSide(
+                                                                color:
+                                                                    kMainColorExtraLite,
+                                                                width: 1))),
+                                                    child: Row(
                                                       crossAxisAlignment:
-                                                          CrossAxisAlignment.start,
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
-                                                        Text(
-                                                          _commonResponse
-                                                                  .data
-                                                                  .results[index]
-                                                                  .name ??
-                                                              "-",
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight.w500,
-                                                              color: kMainColor),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 4,
-                                                        ),
-                                                        Text(
-                                                          _commonResponse
-                                                                  .data
-                                                                  .results[index]
-                                                                  .vicinity ??
-                                                              "-",
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight.w400,
-                                                              color: kGrey4),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 4,
-                                                        ),
-                                                        if (_commonResponse
-                                                                .data
-                                                                .results[index]
-                                                                .openingHours !=
-                                                            null)
-                                                          if (_commonResponse
-                                                                  .data
-                                                                  .results[index]
-                                                                  .openingHours
-                                                                  .openNow !=
-                                                              null)
-                                                            Text(
-                                                              _commonResponse
+                                                        Expanded(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                _commonResponse
+                                                                        .data
+                                                                        .results[
+                                                                            index]
+                                                                        .name ??
+                                                                    "-",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color:
+                                                                        kMainColor),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 4,
+                                                              ),
+                                                              Text(
+                                                                _commonResponse
+                                                                        .data
+                                                                        .results[
+                                                                            index]
+                                                                        .vicinity ??
+                                                                    "-",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    color:
+                                                                        kGrey4),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 4,
+                                                              ),
+                                                              if (_commonResponse
                                                                       .data
-                                                                      .results[index]
-                                                                      .openingHours
-                                                                      .openNow
-                                                                  ? "Open"
-                                                                  : "Closed",
+                                                                      .results[
+                                                                          index]
+                                                                      .openingHours !=
+                                                                  null)
+                                                                if (_commonResponse
+                                                                        .data
+                                                                        .results[
+                                                                            index]
+                                                                        .openingHours
+                                                                        .openNow !=
+                                                                    null)
+                                                                  Text(
+                                                                    _commonResponse
+                                                                            .data
+                                                                            .results[index]
+                                                                            .openingHours
+                                                                            .openNow
+                                                                        ? "Open"
+                                                                        : "Closed",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w400,
+                                                                        color: _commonResponse.data.results[index].openingHours.openNow
+                                                                            ? Colors.green
+                                                                            : Colors.redAccent),
+                                                                  ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Column(
+                                                          children: [
+                                                            IconButton(
+                                                              onPressed: () {
+                                                                MapsLauncher.launchCoordinates(
+                                                                    _commonResponse
+                                                                        .data
+                                                                        .results[
+                                                                            index]
+                                                                        .geometry
+                                                                        .location
+                                                                        .lat,
+                                                                    _commonResponse
+                                                                        .data
+                                                                        .results[
+                                                                            index]
+                                                                        .geometry
+                                                                        .location
+                                                                        .lng);
+                                                              },
+                                                              icon: Icon(
+                                                                Icons
+                                                                    .directions,
+                                                                size: 30,
+                                                                color: Color(
+                                                                    0xff4285F4),
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              "DIRECTIONS",
                                                               style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight.w400,
-                                                                  color: _commonResponse
+                                                                fontSize: 10,
+                                                                color: Color(
+                                                                    0xff4285F4),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                )
+                                              : double.parse(_rating) <=
+                                                      _commonResponse.data
+                                                          .results[index].rating
+                                                  ? InkWell(
+                                                      onTap: () {
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                          return NearbyPlaceDetails(
+                                                              data: _commonResponse
+                                                                      .data
+                                                                      .results[
+                                                                  index]);
+                                                        }));
+                                                      },
+                                                      child: Container(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                vertical: 16),
+                                                        decoration: BoxDecoration(
+                                                            border: Border(
+                                                                bottom: BorderSide(
+                                                                    color:
+                                                                        kMainColorExtraLite,
+                                                                    width: 1))),
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Expanded(
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                    _commonResponse
+                                                                            .data
+                                                                            .results[index]
+                                                                            .name ??
+                                                                        "-",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            16,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w500,
+                                                                        color:
+                                                                            kMainColor),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 4,
+                                                                  ),
+                                                                  Text(
+                                                                    _commonResponse
+                                                                            .data
+                                                                            .results[index]
+                                                                            .vicinity ??
+                                                                        "-",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w400,
+                                                                        color:
+                                                                            kGrey4),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 4,
+                                                                  ),
+                                                                  if (_commonResponse
                                                                           .data
                                                                           .results[
                                                                               index]
-                                                                          .openingHours
-                                                                          .openNow
-                                                                      ? Colors.green
-                                                                      : Colors
-                                                                          .redAccent),
+                                                                          .openingHours !=
+                                                                      null)
+                                                                    if (_commonResponse
+                                                                            .data
+                                                                            .results[index]
+                                                                            .openingHours
+                                                                            .openNow !=
+                                                                        null)
+                                                                      Text(
+                                                                        _commonResponse.data.results[index].openingHours.openNow
+                                                                            ? "Open"
+                                                                            : "Closed",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                14,
+                                                                            fontWeight: FontWeight
+                                                                                .w400,
+                                                                            color: _commonResponse.data.results[index].openingHours.openNow
+                                                                                ? Colors.green
+                                                                                : Colors.redAccent),
+                                                                      ),
+                                                                ],
+                                                              ),
                                                             ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      IconButton(
-                                                        onPressed: () {
-                                                          MapsLauncher.launchCoordinates(
-                                                              _commonResponse
-                                                                  .data
-                                                                  .results[index]
-                                                                  .geometry
-                                                                  .location
-                                                                  .lat,
-                                                              _commonResponse
-                                                                  .data
-                                                                  .results[index]
-                                                                  .geometry
-                                                                  .location
-                                                                  .lng);
-                                                        },
-                                                        icon: Icon(
-                                                          Icons.directions,
-                                                          size: 30,
-                                                          color: Color(0xff4285F4),
+                                                            SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            Column(
+                                                              children: [
+                                                                IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    MapsLauncher.launchCoordinates(
+                                                                        _commonResponse
+                                                                            .data
+                                                                            .results[
+                                                                                index]
+                                                                            .geometry
+                                                                            .location
+                                                                            .lat,
+                                                                        _commonResponse
+                                                                            .data
+                                                                            .results[index]
+                                                                            .geometry
+                                                                            .location
+                                                                            .lng);
+                                                                  },
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .directions,
+                                                                    size: 30,
+                                                                    color: Color(
+                                                                        0xff4285F4),
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  "DIRECTIONS",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        10,
+                                                                    color: Color(
+                                                                        0xff4285F4),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            )
+                                                          ],
                                                         ),
                                                       ),
-                                                      Text(
-                                                        "DIRECTIONS",
-                                                        style: TextStyle(
-                                                          fontSize: 10,
-                                                          color: Color(0xff4285F4),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ) : double.parse(_rating) <= _commonResponse.data.results[index].rating ? InkWell(
-                                            onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(builder: (context) {
-                                                    return NearbyPlaceDetails(
-                                                        data: _commonResponse
-                                                            .data.results[index]);
-                                                  }));
-                                            },
-                                            child: Container(
-                                              padding:
-                                              EdgeInsets.symmetric(vertical: 16),
-                                              decoration: BoxDecoration(
-                                                  border: Border(
-                                                      bottom: BorderSide(
-                                                          color: kMainColorExtraLite,
-                                                          width: 1))),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                children: [
-                                                  Expanded(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                      children: [
-                                                        Text(
-                                                          _commonResponse
-                                                              .data
-                                                              .results[index]
-                                                              .name ??
-                                                              "-",
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                              FontWeight.w500,
-                                                              color: kMainColor),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 4,
-                                                        ),
-                                                        Text(
-                                                          _commonResponse
-                                                              .data
-                                                              .results[index]
-                                                              .vicinity ??
-                                                              "-",
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                              FontWeight.w400,
-                                                              color: kGrey4),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 4,
-                                                        ),
-                                                        if (_commonResponse
-                                                            .data
-                                                            .results[index]
-                                                            .openingHours !=
-                                                            null)
-                                                          if (_commonResponse
-                                                              .data
-                                                              .results[index]
-                                                              .openingHours
-                                                              .openNow !=
-                                                              null)
-                                                            Text(
-                                                              _commonResponse
-                                                                  .data
-                                                                  .results[index]
-                                                                  .openingHours
-                                                                  .openNow
-                                                                  ? "Open"
-                                                                  : "Closed",
-                                                              style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                  FontWeight.w400,
-                                                                  color: _commonResponse
-                                                                      .data
-                                                                      .results[
-                                                                  index]
-                                                                      .openingHours
-                                                                      .openNow
-                                                                      ? Colors.green
-                                                                      : Colors
-                                                                      .redAccent),
-                                                            ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      IconButton(
-                                                        onPressed: () {
-                                                          MapsLauncher.launchCoordinates(
-                                                              _commonResponse
-                                                                  .data
-                                                                  .results[index]
-                                                                  .geometry
-                                                                  .location
-                                                                  .lat,
-                                                              _commonResponse
-                                                                  .data
-                                                                  .results[index]
-                                                                  .geometry
-                                                                  .location
-                                                                  .lng);
-                                                        },
-                                                        icon: Icon(
-                                                          Icons.directions,
-                                                          size: 30,
-                                                          color: Color(0xff4285F4),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        "DIRECTIONS",
-                                                        style: TextStyle(
-                                                          fontSize: 10,
-                                                          color: Color(0xff4285F4),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ) : Container();
+                                                    )
+                                                  : Container();
                                         },
                                       )
                                     : Container(
@@ -660,7 +724,8 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 10, vertical: 0),
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(6),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
                                             color: kMainColor),
                                         child: Theme(
                                           data: Theme.of(context).copyWith(
@@ -668,18 +733,25 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                           ),
                                           child: Row(
                                             children: [
-                                              Text("Rating:",style: TextStyle(color: kWhite),),
-                                              SizedBox(width: 6,),
+                                              Text(
+                                                "Rating:",
+                                                style: TextStyle(color: kWhite),
+                                              ),
+                                              SizedBox(
+                                                width: 6,
+                                              ),
                                               Expanded(
                                                 child: DropdownButton<String>(
                                                   isExpanded: true,
                                                   value: _rating,
                                                   icon: const Icon(
-                                                    Icons.arrow_drop_down_outlined,
+                                                    Icons
+                                                        .arrow_drop_down_outlined,
                                                     color: kWhite,
                                                   ),
                                                   elevation: 16,
-                                                  style: const TextStyle(color: kWhite),
+                                                  style: const TextStyle(
+                                                      color: kWhite),
                                                   underline: Container(),
                                                   onChanged: (String newValue) {
                                                     setState(() {
@@ -695,9 +767,12 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     '3',
                                                     '2.5',
                                                     '2',
-                                                  ].map<DropdownMenuItem<String>>(
+                                                  ].map<
+                                                          DropdownMenuItem<
+                                                              String>>(
                                                       (String value) {
-                                                    return DropdownMenuItem<String>(
+                                                    return DropdownMenuItem<
+                                                        String>(
                                                       value: value,
                                                       child: Text(
                                                         value,
@@ -719,7 +794,8 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 10, vertical: 0),
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(6),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
                                             color: kMainColor),
                                         child: Theme(
                                           data: Theme.of(context).copyWith(
@@ -727,18 +803,25 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                           ),
                                           child: Row(
                                             children: [
-                                              Text("Distance:",style: TextStyle(color: kWhite),),
-                                              SizedBox(width: 6,),
+                                              Text(
+                                                "Distance:",
+                                                style: TextStyle(color: kWhite),
+                                              ),
+                                              SizedBox(
+                                                width: 6,
+                                              ),
                                               Expanded(
                                                 child: DropdownButton<String>(
                                                   isExpanded: true,
                                                   value: _distance,
                                                   icon: const Icon(
-                                                    Icons.arrow_drop_down_outlined,
+                                                    Icons
+                                                        .arrow_drop_down_outlined,
                                                     color: kWhite,
                                                   ),
                                                   elevation: 16,
-                                                  style: const TextStyle(color: kWhite),
+                                                  style: const TextStyle(
+                                                      color: kWhite),
                                                   underline: Container(),
                                                   onChanged: (String newValue) {
                                                     setState(() {
@@ -746,10 +829,17 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     });
                                                     getNearbyLabs();
                                                   },
-                                                  items: <String>['500', '600', '700', '800']
-                                                      .map<DropdownMenuItem<String>>(
-                                                          (String value) {
-                                                    return DropdownMenuItem<String>(
+                                                  items: <String>[
+                                                    '500',
+                                                    '600',
+                                                    '700',
+                                                    '800'
+                                                  ].map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
                                                       value: value,
                                                       child: Text(
                                                         value + " m",
@@ -767,274 +857,312 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                 ),
                                 _commonResponse != null
                                     ? ListView.builder(
-                                  padding: EdgeInsets.only(top: 8,bottom: 24),
+                                        padding:
+                                            EdgeInsets.only(top: 8, bottom: 24),
                                         physics: NeverScrollableScrollPhysics(),
                                         shrinkWrap: true,
-                                        itemCount: _commonResponse.data.results.length,
+                                        itemCount:
+                                            _commonResponse.data.results.length,
                                         itemBuilder: (context, index) {
-                                          return _rating == 'Any' ? InkWell(
-                                            onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(builder: (context) {
-                                                    return NearbyPlaceDetails(
-                                                        data: _commonResponse
-                                                            .data.results[index]);
-                                                  }));
-                                            },
-                                            child: Container(
-                                              padding:
-                                              EdgeInsets.symmetric(vertical: 16),
-                                              decoration: BoxDecoration(
-                                                  border: Border(
-                                                      bottom: BorderSide(
-                                                          color: kMainColorExtraLite,
-                                                          width: 1))),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                children: [
-                                                  Expanded(
-                                                    child: Column(
+                                          return _rating == 'Any'
+                                              ? InkWell(
+                                                  onTap: () {
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return NearbyPlaceDetails(
+                                                          data: _commonResponse
+                                                              .data
+                                                              .results[index]);
+                                                    }));
+                                                  },
+                                                  child: Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 16),
+                                                    decoration: BoxDecoration(
+                                                        border: Border(
+                                                            bottom: BorderSide(
+                                                                color:
+                                                                    kMainColorExtraLite,
+                                                                width: 1))),
+                                                    child: Row(
                                                       crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
-                                                        Text(
-                                                          _commonResponse
-                                                              .data
-                                                              .results[index]
-                                                              .name ??
-                                                              "-",
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                              FontWeight.w500,
-                                                              color: kMainColor),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 4,
-                                                        ),
-                                                        Text(
-                                                          _commonResponse
-                                                              .data
-                                                              .results[index]
-                                                              .vicinity ??
-                                                              "-",
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                              FontWeight.w400,
-                                                              color: kGrey4),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 4,
-                                                        ),
-                                                        if (_commonResponse
-                                                            .data
-                                                            .results[index]
-                                                            .openingHours !=
-                                                            null)
-                                                          if (_commonResponse
-                                                              .data
-                                                              .results[index]
-                                                              .openingHours
-                                                              .openNow !=
-                                                              null)
-                                                            Text(
-                                                              _commonResponse
-                                                                  .data
-                                                                  .results[index]
-                                                                  .openingHours
-                                                                  .openNow
-                                                                  ? "Open"
-                                                                  : "Closed",
-                                                              style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                  FontWeight.w400,
-                                                                  color: _commonResponse
+                                                        Expanded(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                _commonResponse
+                                                                        .data
+                                                                        .results[
+                                                                            index]
+                                                                        .name ??
+                                                                    "-",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color:
+                                                                        kMainColor),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 4,
+                                                              ),
+                                                              Text(
+                                                                _commonResponse
+                                                                        .data
+                                                                        .results[
+                                                                            index]
+                                                                        .vicinity ??
+                                                                    "-",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    color:
+                                                                        kGrey4),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 4,
+                                                              ),
+                                                              if (_commonResponse
                                                                       .data
                                                                       .results[
-                                                                  index]
-                                                                      .openingHours
-                                                                      .openNow
-                                                                      ? Colors.green
-                                                                      : Colors
-                                                                      .redAccent),
+                                                                          index]
+                                                                      .openingHours !=
+                                                                  null)
+                                                                if (_commonResponse
+                                                                        .data
+                                                                        .results[
+                                                                            index]
+                                                                        .openingHours
+                                                                        .openNow !=
+                                                                    null)
+                                                                  Text(
+                                                                    _commonResponse
+                                                                            .data
+                                                                            .results[index]
+                                                                            .openingHours
+                                                                            .openNow
+                                                                        ? "Open"
+                                                                        : "Closed",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w400,
+                                                                        color: _commonResponse.data.results[index].openingHours.openNow
+                                                                            ? Colors.green
+                                                                            : Colors.redAccent),
+                                                                  ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Column(
+                                                          children: [
+                                                            IconButton(
+                                                              onPressed: () {
+                                                                MapsLauncher.launchCoordinates(
+                                                                    _commonResponse
+                                                                        .data
+                                                                        .results[
+                                                                            index]
+                                                                        .geometry
+                                                                        .location
+                                                                        .lat,
+                                                                    _commonResponse
+                                                                        .data
+                                                                        .results[
+                                                                            index]
+                                                                        .geometry
+                                                                        .location
+                                                                        .lng);
+                                                              },
+                                                              icon: Icon(
+                                                                Icons
+                                                                    .directions,
+                                                                size: 30,
+                                                                color: Color(
+                                                                    0xff4285F4),
+                                                              ),
                                                             ),
+                                                            Text(
+                                                              "DIRECTIONS",
+                                                              style: TextStyle(
+                                                                fontSize: 10,
+                                                                color: Color(
+                                                                    0xff4285F4),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        )
                                                       ],
                                                     ),
                                                   ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      IconButton(
-                                                        onPressed: () {
-                                                          MapsLauncher.launchCoordinates(
-                                                              _commonResponse
-                                                                  .data
-                                                                  .results[index]
-                                                                  .geometry
-                                                                  .location
-                                                                  .lat,
-                                                              _commonResponse
-                                                                  .data
-                                                                  .results[index]
-                                                                  .geometry
-                                                                  .location
-                                                                  .lng);
-                                                        },
-                                                        icon: Icon(
-                                                          Icons.directions,
-                                                          size: 30,
-                                                          color: Color(0xff4285F4),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        "DIRECTIONS",
-                                                        style: TextStyle(
-                                                          fontSize: 10,
-                                                          color: Color(0xff4285F4),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ) : double.parse(_rating) <= _commonResponse.data.results[index].rating ? InkWell(
-                                            onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(builder: (context) {
-                                                    return NearbyPlaceDetails(
-                                                        data: _commonResponse
-                                                            .data.results[index]);
-                                                  }));
-                                            },
-                                            child: Container(
-                                              padding:
-                                              EdgeInsets.symmetric(vertical: 16),
-                                              decoration: BoxDecoration(
-                                                  border: Border(
-                                                      bottom: BorderSide(
-                                                          color: kMainColorExtraLite,
-                                                          width: 1))),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                children: [
-                                                  Expanded(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                      children: [
-                                                        Text(
-                                                          _commonResponse
-                                                              .data
-                                                              .results[index]
-                                                              .name ??
-                                                              "-",
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                              FontWeight.w500,
-                                                              color: kMainColor),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 4,
-                                                        ),
-                                                        Text(
-                                                          _commonResponse
-                                                              .data
-                                                              .results[index]
-                                                              .vicinity ??
-                                                              "-",
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                              FontWeight.w400,
-                                                              color: kGrey4),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 4,
-                                                        ),
-                                                        if (_commonResponse
-                                                            .data
-                                                            .results[index]
-                                                            .openingHours !=
-                                                            null)
-                                                          if (_commonResponse
-                                                              .data
-                                                              .results[index]
-                                                              .openingHours
-                                                              .openNow !=
-                                                              null)
-                                                            Text(
-                                                              _commonResponse
-                                                                  .data
-                                                                  .results[index]
-                                                                  .openingHours
-                                                                  .openNow
-                                                                  ? "Open"
-                                                                  : "Closed",
-                                                              style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                  FontWeight.w400,
-                                                                  color: _commonResponse
+                                                )
+                                              : double.parse(_rating) <=
+                                                      _commonResponse.data
+                                                          .results[index].rating
+                                                  ? InkWell(
+                                                      onTap: () {
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                          return NearbyPlaceDetails(
+                                                              data: _commonResponse
                                                                       .data
                                                                       .results[
-                                                                  index]
-                                                                      .openingHours
-                                                                      .openNow
-                                                                      ? Colors.green
-                                                                      : Colors
-                                                                      .redAccent),
+                                                                  index]);
+                                                        }));
+                                                      },
+                                                      child: Container(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                vertical: 16),
+                                                        decoration: BoxDecoration(
+                                                            border: Border(
+                                                                bottom: BorderSide(
+                                                                    color:
+                                                                        kMainColorExtraLite,
+                                                                    width: 1))),
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Expanded(
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                    _commonResponse
+                                                                            .data
+                                                                            .results[index]
+                                                                            .name ??
+                                                                        "-",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            16,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w500,
+                                                                        color:
+                                                                            kMainColor),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 4,
+                                                                  ),
+                                                                  Text(
+                                                                    _commonResponse
+                                                                            .data
+                                                                            .results[index]
+                                                                            .vicinity ??
+                                                                        "-",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w400,
+                                                                        color:
+                                                                            kGrey4),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 4,
+                                                                  ),
+                                                                  if (_commonResponse
+                                                                          .data
+                                                                          .results[
+                                                                              index]
+                                                                          .openingHours !=
+                                                                      null)
+                                                                    if (_commonResponse
+                                                                            .data
+                                                                            .results[index]
+                                                                            .openingHours
+                                                                            .openNow !=
+                                                                        null)
+                                                                      Text(
+                                                                        _commonResponse.data.results[index].openingHours.openNow
+                                                                            ? "Open"
+                                                                            : "Closed",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                14,
+                                                                            fontWeight: FontWeight
+                                                                                .w400,
+                                                                            color: _commonResponse.data.results[index].openingHours.openNow
+                                                                                ? Colors.green
+                                                                                : Colors.redAccent),
+                                                                      ),
+                                                                ],
+                                                              ),
                                                             ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      IconButton(
-                                                        onPressed: () {
-                                                          MapsLauncher.launchCoordinates(
-                                                              _commonResponse
-                                                                  .data
-                                                                  .results[index]
-                                                                  .geometry
-                                                                  .location
-                                                                  .lat,
-                                                              _commonResponse
-                                                                  .data
-                                                                  .results[index]
-                                                                  .geometry
-                                                                  .location
-                                                                  .lng);
-                                                        },
-                                                        icon: Icon(
-                                                          Icons.directions,
-                                                          size: 30,
-                                                          color: Color(0xff4285F4),
+                                                            SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            Column(
+                                                              children: [
+                                                                IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    MapsLauncher.launchCoordinates(
+                                                                        _commonResponse
+                                                                            .data
+                                                                            .results[
+                                                                                index]
+                                                                            .geometry
+                                                                            .location
+                                                                            .lat,
+                                                                        _commonResponse
+                                                                            .data
+                                                                            .results[index]
+                                                                            .geometry
+                                                                            .location
+                                                                            .lng);
+                                                                  },
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .directions,
+                                                                    size: 30,
+                                                                    color: Color(
+                                                                        0xff4285F4),
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  "DIRECTIONS",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        10,
+                                                                    color: Color(
+                                                                        0xff4285F4),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            )
+                                                          ],
                                                         ),
                                                       ),
-                                                      Text(
-                                                        "DIRECTIONS",
-                                                        style: TextStyle(
-                                                          fontSize: 10,
-                                                          color: Color(0xff4285F4),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ) : Container();
+                                                    )
+                                                  : Container();
                                         },
                                       )
                                     : Container(
@@ -1051,14 +1179,14 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                 ],
               ),
             ),
-            if(_commonResponse != null)
-              if(_commonResponse.data.nextPageToken != null)
+            if (_commonResponse != null)
+              if (_commonResponse.data.nextPageToken != null)
                 Positioned(
                   bottom: 20,
                   right: 16,
                   child: FloatingActionButton(
                     child: Icon(Icons.arrow_forward_ios),
-                    onPressed: (){
+                    onPressed: () {
                       nextPage();
                     },
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:health_bloom/components/medicine_card.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/delete_mdecine_request.dart';
@@ -11,13 +12,11 @@ import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/custom_add_element_bs.dart';
 import 'package:health_bloom/utils/loading.dart';
-import 'package:health_bloom/view/bill/add_bill.dart';
 import 'package:health_bloom/view/medicine/about_medicine.dart';
 import 'package:health_bloom/view/medicine/add_medicine.dart';
 import 'package:health_bloom/view/medicine/list_medicine.dart';
 
 import 'package:health_bloom/view/profile/profile.dart';
-import 'package:health_bloom/view/report/add_report.dart';
 import 'package:hexagon/hexagon.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +25,6 @@ import '../../main.dart';
 import '../../utils/custom_bnb.dart';
 import '../../utils/drawer/custom_drawer.dart';
 import '../family_members/family_members.dart';
-import '../prescription/add_prescription.dart';
 import '../water_intake/water_intake.dart';
 
 class HomePage extends StatefulWidget {
@@ -37,7 +35,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _loading = false;
   DateTime todayTime = DateTime.now().toUtc();
   DateTime today = DateTime.now();
   DateTime _today = DateTime.now();
@@ -102,6 +99,45 @@ class _HomePageState extends State<HomePage> {
     _getMembers = getAllmember();
     getData();
     getNextMedicine();
+    updatePosition();
+  }
+
+  var latitude;
+  var longitude;
+  Future<void> updatePosition() async {
+    Position pos = await _determinePosition();
+
+    setState(() {
+      latitude = pos.latitude.toString();
+      sp.setString('currentLatitude', latitude);
+      print('currentLatitude ${sp.getString('currentLatitude')}');
+      longitude = pos.longitude.toString();
+      sp.setString('currentLongitude', longitude);
+      print('currentLongitude ${sp.getString('currentLongitude')}');
+    });
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {}
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition();
   }
 
   @override
@@ -223,8 +259,8 @@ class _HomePageState extends State<HomePage> {
                       color: Color(0xffF5F6FA)),
                   child: FutureBuilder<GetHealthScoreResponse>(
                     future: getHealthScore(),
-                    builder: (context,data){
-                      if(data.hasData){
+                    builder: (context, data) {
+                      if (data.hasData) {
                         return Row(
                           children: [
                             HexagonWidget.pointy(
@@ -261,7 +297,8 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Text(
                                     "Check your progress of medicine completion for today",
-                                    style: TextStyle(color: kGrey6, fontSize: 14),
+                                    style:
+                                        TextStyle(color: kGrey6, fontSize: 14),
                                   ),
                                   SizedBox(
                                     height: 8,
@@ -278,7 +315,7 @@ class _HomePageState extends State<HomePage> {
                             )
                           ],
                         );
-                      }else{
+                      } else {
                         return LoadingWidget();
                       }
                     },

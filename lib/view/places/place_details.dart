@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/utils/expanded_section.dart';
@@ -129,9 +128,7 @@ class _NearbyPlaceDetailsState extends State<NearbyPlaceDetails> {
                                           fontWeight: FontWeight.w500,
                                           color: kGrey6),
                                     ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
+                                    SizedBox(height: 10),
                                     if (data.data.data.result.rating != null)
                                       Row(
                                         children: [
@@ -151,19 +148,42 @@ class _NearbyPlaceDetailsState extends State<NearbyPlaceDetails> {
                                         ],
                                       ),
                                     if (data.data.data.result.rating != null)
-                                      SizedBox(
-                                        height: 10,
+                                      SizedBox(height: 10),
+                                    if (data.data.data.result
+                                            .formattedPhoneNumber !=
+                                        null)
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Phone',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                                color: kGrey6),
+                                          ),
+                                          const SizedBox(width: 10.0),
+                                          Text(
+                                            data.data.data.result
+                                                .formattedPhoneNumber,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.redAccent),
+                                          ),
+                                        ],
                                       ),
+                                    if (data.data.data.result
+                                            .formattedPhoneNumber !=
+                                        null)
+                                      SizedBox(height: 10),
                                     Text(
                                       data.data.data.result.vicinity ?? "-",
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
-                                          color: kGrey4),
+                                          color: kGrey5),
                                     ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
+                                    SizedBox(height: 10),
                                     if (data.data.data.result.openingHours !=
                                         null)
                                       if (data.data.data.result.openingHours

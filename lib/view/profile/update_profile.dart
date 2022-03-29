@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:health_bloom/components/textbuilder.dart';
 
@@ -36,6 +37,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
   TextEditingController _phone = TextEditingController();
   TextEditingController _city = TextEditingController();
   TextEditingController _state = TextEditingController();
+  TextEditingController _age = TextEditingController();
+
   String selectedGender;
   List<String> gender = ['Male', 'Female', 'Other'];
   String selectedBloodGroup;
@@ -88,6 +91,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   @override
   void initState() {
     super.initState();
+    updatePosition();
     if (widget.data != null) {
       _email.text = widget.data.emailId;
       _phone.text = widget.data.phoneNumber;
@@ -97,16 +101,54 @@ class _UpdateProfileState extends State<UpdateProfile> {
       selectedGender = widget.data.gender;
       selectedBloodGroup = widget.data.bloodGroup;
       _uploadAvatarUrl = widget.data.avatar;
+      if (widget.data.age != null) _age.text = widget.data.age.toString();
     }
   }
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   void dispose() {
     super.dispose();
     _phone.dispose();
     _city.dispose();
     _state.dispose();
+  }
+
+  var latitude;
+  var longitude;
+  Future<void> updatePosition() async {
+    Position pos = await _determinePosition();
+
+    setState(() {
+      latitude = pos.latitude.toString();
+      sp.setString('currentLatitude', latitude);
+      print('currentLatitude ${sp.getString('currentLatitude')}');
+      longitude = pos.longitude.toString();
+      sp.setString('currentLongitude', longitude);
+      print('currentLongitude ${sp.getString('currentLongitude')}');
+    });
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {}
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition();
   }
 
   @override
@@ -256,6 +298,41 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                   ),
                                 ),
                                 const SizedBox(height: 20.0),
+                                TextFormField(
+                                  controller: _age,
+                                  keyboardType: TextInputType.number,
+                                  // enabled: _age.text.isEmpty ? true : false,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "* Required";
+                                    } else
+                                      return null;
+                                  },
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xff9884DF),
+                                  ),
+                                  decoration: InputDecoration(
+                                    labelStyle: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff9884DF),
+                                    ),
+                                    label: TextBuilder(text: 'Age'),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 15),
+                                    suffixIcon: Icon(
+                                      Icons.numbers,
+                                      color: Color(0xff9884DF),
+                                    ),
+                                    border: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 20.0),
                                 DropdownButton<String>(
                                     underline: Container(
                                       height: 1,
@@ -391,7 +468,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     ),
                                   ),
                                 ),
-
                                 const SizedBox(height: 20.0),
                                 TextFormField(
                                   controller: _city,
@@ -458,38 +534,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     ),
                                   ),
                                 ),
-                                // const SizedBox(height: 20.0),
-                                // TextFormField(
-                                //   validator: (value) {
-                                //     if (value == null || value.isEmpty) {
-                                //       return "* Required";
-                                //     } else
-                                //       return null;
-                                //   },
-                                //   style: TextStyle(
-                                //     color: Color(0xff9884DF),
-                                //   ),
-                                //   decoration: InputDecoration(
-                                //     labelStyle: TextStyle(
-                                //       fontWeight: FontWeight.w500,
-                                //       color: Color(0xff9884DF),
-                                //     ),
-                                //     label: TextBuilder(text: 'Blood Group'),
-                                //     contentPadding:
-                                //         EdgeInsets.symmetric(horizontal: 15),
-                                //     suffixIcon: Icon(
-                                //       Icons.opacity,
-                                //       color: Color(0xff9884DF),
-                                //     ),
-                                //     border: UnderlineInputBorder(
-                                //       borderSide: BorderSide(
-                                //         width: 1,
-                                //         color: Colors.grey,
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
-                                // const SizedBox(height: 20.0),
                                 const SizedBox(height: 50.0),
                                 MaterialButton(
                                   minWidth: double.infinity,
@@ -505,8 +549,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     try {
                                       AddEditUserProfileRequest _request =
                                           AddEditUserProfileRequest(
-                                        userAddress: '',
-                                        googleAddress: '',
+                                        age: int.parse(_age.text),
+                                        latitude:
+                                            sp.getString('currentLatitude'),
+                                        longitude:
+                                            sp.getString('currentLongitude'),
                                         emailId: _email.text,
                                         bloodGroup: selectedBloodGroup,
                                         name: _name.text,
@@ -573,7 +620,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     fontWeight: FontWeight.w600,
                                     color: Colors.white,
                                   ),
-                                )
+                                ),
+                                const SizedBox(height: 24.0),
                               ],
                             ),
                           ),

@@ -15,7 +15,7 @@ import '../../utils/text_field/custom_text_field.dart';
 class AddReminder extends StatefulWidget {
   final bool edit;
   final GetReminderListResponseDatum data;
-  const AddReminder({Key key,this.edit = false,this.data}) : super(key: key);
+  const AddReminder({Key key, this.edit = false, this.data}) : super(key: key);
 
   @override
   State<AddReminder> createState() => _AddReminderState();
@@ -45,14 +45,14 @@ class _AddReminderState extends State<AddReminder> {
       initialEntryMode: TimePickerEntryMode.dial,
     );
 
-    if(timeOfDay != null && picked != null) {
+    if (timeOfDay != null && picked != null) {
       setState(() {
-        selectedDate = DateTime(picked.year,picked.month,picked.day,timeOfDay.hour,timeOfDay.minute);
+        selectedDate = DateTime(picked.year, picked.month, picked.day,
+            timeOfDay.hour, timeOfDay.minute);
         _date.text =
-        "${selectedDate.day}-${selectedDate.month}-${selectedDate.year} - ${DateFormat("hh:mm a").format(selectedDate)}";
+            "${selectedDate.day}-${selectedDate.month}-${selectedDate.year} - ${DateFormat("hh:mm a").format(selectedDate)}";
       });
     }
-
   }
 
   Future<GetAllMemberResponse> getAllMember() async {
@@ -63,32 +63,32 @@ class _AddReminderState extends State<AddReminder> {
 
   Future<AddEditReminderResponse> addReminder() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    AddEditReminderResponse _response = await adminAPI.addReminderAPI(AddReminderRequest(
-      reminderType: getType(_type.text),
-      dateTime: selectedDate,
-      description: _description.text,
-      family: _memberId
-    ));
+    AddEditReminderResponse _response = await adminAPI.addReminderAPI(
+        AddReminderRequest(
+            reminderType: getType(_type.text),
+            dateTime: selectedDate,
+            description: _description.text,
+            family: _memberId));
     return _response;
   }
 
   Future<AddEditReminderResponse> editReminder() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    AddEditReminderResponse _response = await adminAPI.editReminderAPI(EditReminderRequest(
-        reminderType: getType(_type.text),
-        dateTime: selectedDate,
-        description: _description.text,
-        family: _memberId,
-        id: widget.data.id
-    ));
+    AddEditReminderResponse _response = await adminAPI.editReminderAPI(
+        EditReminderRequest(
+            reminderType: getType(_type.text),
+            dateTime: selectedDate,
+            description: _description.text,
+            family: _memberId,
+            id: widget.data.id));
     return _response;
   }
 
-  String getType(String text){
-    if(text == "Medical Check Up"){
+  String getType(String text) {
+    if (text == "Medical Check Up") {
       return "CheckUp";
     }
-    if(text == "Medical Test"){
+    if (text == "Medical Test") {
       return "Test";
     }
     return text;
@@ -98,14 +98,14 @@ class _AddReminderState extends State<AddReminder> {
   void initState() {
     super.initState();
     _future = getAllMember();
-    if(widget.edit){
+    if (widget.edit) {
       _type.text = widget.data.reminderType;
       _description.text = widget.data.description;
       _memberId = widget.data.familyObject.id;
       _familyMember.text = widget.data.familyObject.name;
       selectedDate = widget.data.dateTime;
       _date.text =
-      "${selectedDate.day}-${selectedDate.month}-${selectedDate.year} - ${selectedDate.hour}:${selectedDate.minute}";
+          "${selectedDate.day}-${selectedDate.month}-${selectedDate.year} - ${DateFormat("hh:mm a").format(selectedDate)}";
     }
   }
 
@@ -217,8 +217,7 @@ class _AddReminderState extends State<AddReminder> {
                     ),
                   ),
                 ),
-                if(_loading)
-                  LoadingWidget()
+                if (_loading) LoadingWidget()
               ],
             );
           } else {
@@ -240,21 +239,30 @@ class _AddReminderState extends State<AddReminder> {
             disabledColor: kGreyLite,
             text: widget.edit ? "Save" : "Add",
             onPressed: () async {
-              if(_date.text.isNotEmpty && _type.text.isNotEmpty && _description.text.isNotEmpty && _memberId != null){
+              if (_date.text.isNotEmpty &&
+                  _type.text.isNotEmpty &&
+                  _description.text.isNotEmpty &&
+                  _memberId != null) {
                 setState(() {
                   _loading = true;
                 });
-                if(widget.edit){
+                if (widget.edit) {
                   await editReminder();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Added Successfully"),));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Added Successfully"),
+                  ));
                   Navigator.pop(context);
-                }else{
+                } else {
                   await addReminder();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Added Successfully"),));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Added Successfully"),
+                  ));
                   Navigator.pop(context);
                 }
-              }else{
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please fill all the details first!"),));
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("Please fill all the details first!"),
+                ));
               }
             },
             width: double.infinity,

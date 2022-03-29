@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:health_bloom/controller/walkthrough_controller.dart';
+import 'package:health_bloom/main.dart';
 import 'package:health_bloom/utils/colors.dart';
 
 import '../signup/signup.dart';
@@ -15,6 +17,50 @@ class _WalkthroughState extends State<Walkthrough> {
   PageController _controller = PageController();
   final walks = WalkthroughController();
   int currentIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    updatePosition();
+  }
+
+  var latitude;
+  var longitude;
+  Future<void> updatePosition() async {
+    Position pos = await _determinePosition();
+
+    setState(() {
+      latitude = pos.latitude.toString();
+      sp.setString('currentLatitude', latitude);
+      print('currentLatitude ${sp.getString('currentLatitude')}');
+      longitude = pos.longitude.toString();
+      sp.setString('currentLongitude', longitude);
+      print('currentLongitude ${sp.getString('currentLongitude')}');
+    });
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {}
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -218,7 +264,7 @@ class _WalkthroughState extends State<Walkthrough> {
                                 bottomLeft: Radius.circular(6))),
                         child: Center(
                           child: Text(
-                            currentIndex == 2 ? " Let\'s Go " :" Skip ",
+                            currentIndex == 2 ? " Let\'s Go " : " Skip ",
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w600),
                           ),

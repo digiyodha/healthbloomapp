@@ -7,9 +7,7 @@ import 'package:health_bloom/model/response/delete_insurance_response.dart';
 import 'package:health_bloom/model/response/search_insurance_response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
-import 'package:health_bloom/utils/text_field/custom_text_field.dart';
 import 'package:health_bloom/view/insurance/add_insurance.dart';
-import 'package:health_bloom/view/insurance/view_insurance.dart';
 
 import 'package:provider/provider.dart';
 
@@ -32,7 +30,6 @@ class _InsuranceState extends State<Insurance> {
   int currentIndex = 0;
   bool _loading = false;
   SearchInsuranceResponse _currentResponse;
-  SearchInsuranceResponse _searchResponse;
 
   Future getInsurance() async {
     setState(() {

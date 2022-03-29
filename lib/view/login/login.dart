@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/request/request.dart';
@@ -27,7 +28,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool showPassword = true;
-  GoogleSignInAccount _currentUser;
+
   bool _loading = false;
   FocusNode myFocusNode = FocusNode();
   TextEditingController _email = TextEditingController();
@@ -119,6 +120,7 @@ class _LoginState extends State<Login> {
     super.initState();
     // _email.text = 'omprakash@gmail.com';
     // _password.text = '12345';
+    updatePosition();
   }
 
   @override
@@ -128,10 +130,46 @@ class _LoginState extends State<Login> {
     _password.dispose();
   }
 
+  var latitude;
+  var longitude;
+  Future<void> updatePosition() async {
+    Position pos = await _determinePosition();
+
+    setState(() {
+      latitude = pos.latitude.toString();
+      sp.setString('currentLatitude', latitude);
+      print('currentLatitude ${sp.getString('currentLatitude')}');
+      longitude = pos.longitude.toString();
+      sp.setString('currentLongitude', longitude);
+      print('currentLongitude ${sp.getString('currentLongitude')}');
+    });
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {}
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final GoogleSignInAccount user = _currentUser;
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -313,10 +351,11 @@ class _LoginState extends State<Login> {
                                             email: _email.text,
                                             password: _password.text,
                                           );
-                                          String msgToken = await FirebaseMessaging.instance.getToken();
+                                          String msgToken =
+                                              await FirebaseMessaging.instance
+                                                  .getToken();
                                           print(msgToken);
                                           if (user.user.emailVerified) {
-
                                             await loginUser(RegisterLoginRequest(
                                                 name: _auth.currentUser
                                                         .displayName ??
@@ -330,7 +369,7 @@ class _LoginState extends State<Login> {
                                                     "",
                                                 phoneNumber: null,
                                                 countryCode: null,
-                                            fcmToken: msgToken));
+                                                fcmToken: msgToken));
                                           } else {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
@@ -433,7 +472,9 @@ class _LoginState extends State<Login> {
                                     _loading = false;
                                   });
                                   if (cred != null) {
-                                    String msgToken = await FirebaseMessaging.instance.getToken();
+                                    String msgToken = await FirebaseMessaging
+                                        .instance
+                                        .getToken();
                                     print(msgToken);
                                     await loginUser(RegisterLoginRequest(
                                         name: cred.user.displayName ?? "",
@@ -442,7 +483,7 @@ class _LoginState extends State<Login> {
                                         avatar: cred.user.photoURL ?? "",
                                         phoneNumber: null,
                                         countryCode: null,
-                                    fcmToken: msgToken));
+                                        fcmToken: msgToken));
                                   } else {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
@@ -475,7 +516,9 @@ class _LoginState extends State<Login> {
                                     _loading = false;
                                   });
                                   if (cred != null) {
-                                    String msgToken = await FirebaseMessaging.instance.getToken();
+                                    String msgToken = await FirebaseMessaging
+                                        .instance
+                                        .getToken();
                                     print(msgToken);
                                     await loginUser(RegisterLoginRequest(
                                         name: cred.user.displayName ?? "",
@@ -483,7 +526,8 @@ class _LoginState extends State<Login> {
                                         uid: cred.user.uid,
                                         avatar: cred.user.photoURL ?? "",
                                         phoneNumber: null,
-                                        countryCode: null,fcmToken: msgToken));
+                                        countryCode: null,
+                                        fcmToken: msgToken));
                                   } else {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(

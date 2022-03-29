@@ -30,8 +30,9 @@ class DeleteUserResponseData {
     this.name,
     this.countryCode,
     this.phoneNumber,
-    this.googleAddress,
-    this.userAddress,
+    this.latitude,
+    this.longitude,
+    this.age,
     this.city,
     this.state,
     this.id,
@@ -44,8 +45,9 @@ class DeleteUserResponseData {
   String name;
   String countryCode;
   String phoneNumber;
-  String googleAddress;
-  String userAddress;
+  String latitude;
+  String longitude;
+  int age;
   String city;
   String state;
   String id;
@@ -59,9 +61,9 @@ class DeleteUserResponseData {
         name: json["name"] == null ? null : json["name"],
         countryCode: json["country_code"] == null ? null : json["country_code"],
         phoneNumber: json["phone_number"] == null ? null : json["phone_number"],
-        googleAddress:
-            json["google_address"] == null ? null : json["google_address"],
-        userAddress: json["user_address"] == null ? null : json["user_address"],
+        latitude: json["latitude"] == null ? null : json["latitude"],
+        longitude: json["longitude"] == null ? null : json["longitude"],
+        age: json["age"] == null ? null : json["age"],
         city: json["city"] == null ? null : json["city"],
         state: json["state"] == null ? null : json["state"],
         id: json["id"] == null ? null : json["id"],
@@ -75,8 +77,9 @@ class DeleteUserResponseData {
         "name": name == null ? null : name,
         "country_code": countryCode == null ? null : countryCode,
         "phone_number": phoneNumber == null ? null : phoneNumber,
-        "google_address": googleAddress == null ? null : googleAddress,
-        "user_address": userAddress == null ? null : userAddress,
+        "latitude": latitude == null ? null : latitude,
+        "longitude": longitude == null ? null : longitude,
+        "age": age == null ? null : age,
         "city": city == null ? null : city,
         "state": state == null ? null : state,
         "id": id == null ? null : id,

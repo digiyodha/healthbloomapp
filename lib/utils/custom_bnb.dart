@@ -17,7 +17,7 @@ class CustomBnb extends StatelessWidget {
       height: 60,
       icons: [
         Icons.home,
-        Icons.mic_rounded,
+        Icons.menu_book,
         Icons.list,
         Icons.person,
       ],

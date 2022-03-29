@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/request/add_medicine_request.dart';
@@ -125,7 +124,12 @@ class _AddMedicineState extends State<AddMedicine> {
       _memberId = widget.getMedicine.patient.id;
       _medicineDescription.text = widget.getMedicine.description;
       widget.getMedicine.timeObject.forEach((element) {
-        _listOfTimes.add(DateTime(widget.getMedicine.startDate.year,widget.getMedicine.startDate.month,widget.getMedicine.startDate.day,element.startTime.hour,element.startTime.minute));
+        _listOfTimes.add(DateTime(
+            widget.getMedicine.startDate.year,
+            widget.getMedicine.startDate.month,
+            widget.getMedicine.startDate.day,
+            element.startTime.hour,
+            element.startTime.minute));
       });
 
       remainderTime = widget.getMedicine.reminderTime;
@@ -144,7 +148,12 @@ class _AddMedicineState extends State<AddMedicine> {
       _memberId = widget.getNextMedicine.patient.id;
       _medicineDescription.text = widget.getNextMedicine.description;
       widget.getNextMedicine.timeObject.forEach((element) {
-        _listOfTimes.add(DateTime(widget.getNextMedicine.startDate.year,widget.getNextMedicine.startDate.month,widget.getNextMedicine.startDate.day,element.startTime.hour,element.startTime.minute));
+        _listOfTimes.add(DateTime(
+            widget.getNextMedicine.startDate.year,
+            widget.getNextMedicine.startDate.month,
+            widget.getNextMedicine.startDate.day,
+            element.startTime.hour,
+            element.startTime.minute));
       });
 
       remainderTime = widget.getNextMedicine.reminderTime;
@@ -164,7 +173,12 @@ class _AddMedicineState extends State<AddMedicine> {
       _medicineDescription.text = widget.searchMedicine.description;
       print(widget.searchMedicine.startDate.toIso8601String());
       widget.searchMedicine.timeObject.forEach((element) {
-        _listOfTimes.add(DateTime(widget.searchMedicine.startDate.year,widget.searchMedicine.startDate.month,widget.searchMedicine.startDate.day,element.startTime.hour,element.startTime.minute));
+        _listOfTimes.add(DateTime(
+            widget.searchMedicine.startDate.year,
+            widget.searchMedicine.startDate.month,
+            widget.searchMedicine.startDate.day,
+            element.startTime.hour,
+            element.startTime.minute));
       });
 
       remainderTime = widget.searchMedicine.reminderTime;
@@ -331,10 +345,10 @@ class _AddMedicineState extends State<AddMedicine> {
                                 onTap: () {},
                               ),
                               SizedBox(height: 4),
-                              Text("How many times a day you will be taking medicine?",style: TextStyle(
-                                fontSize: 10,
-                                color: kGrey6
-                              ),)
+                              Text(
+                                "How many times a day you will be taking medicine?",
+                                style: TextStyle(fontSize: 10, color: kGrey6),
+                              )
                             ],
                           ),
                           SizedBox(height: 16),
@@ -367,10 +381,10 @@ class _AddMedicineState extends State<AddMedicine> {
                                   fontWeight: FontWeight.w600,
                                   color: kGrey7),
                               Flexible(
-                                child: Text("What time would you like to take this medicine?",style: TextStyle(
-                                    fontSize: 10,
-                                    color: kGrey6
-                                ),),
+                                child: Text(
+                                  "What time would you like to take this medicine?",
+                                  style: TextStyle(fontSize: 10, color: kGrey6),
+                                ),
                               )
                             ],
                           ),
@@ -588,7 +602,7 @@ class _AddMedicineState extends State<AddMedicine> {
                     patient: _memberId,
                     time: List.generate(
                       _listOfTimes.length,
-                          (index) => _listOfTimes[index],
+                      (index) => _listOfTimes[index],
                     ),
                   );
 

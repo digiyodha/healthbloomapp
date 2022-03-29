@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/utils/colors.dart';
+import 'package:health_bloom/view/feedback/feedback_page.dart';
+import 'package:health_bloom/view/profile/profile.dart';
+
 import '../../utils/drawer/custom_drawer.dart';
 import '../homepage/home_page.dart';
 
@@ -62,9 +65,7 @@ class _SettingsState extends State<Settings> {
                   topLeft: Radius.circular(16), topRight: Radius.circular(16))),
           child: Column(
             children: [
-              SizedBox(
-                height: 14,
-              ),
+              SizedBox(height: 14),
               ListTile(
                 title: Text(
                   "Push Notifications",
@@ -86,9 +87,6 @@ class _SettingsState extends State<Settings> {
                     });
                   },
                 ),
-              ),
-              SizedBox(
-                height: 0,
               ),
               ListTile(
                 title: Text(
@@ -112,9 +110,6 @@ class _SettingsState extends State<Settings> {
                   },
                 ),
               ),
-              SizedBox(
-                height: 0,
-              ),
               ListTile(
                 title: Text(
                   "Silent mode",
@@ -135,6 +130,74 @@ class _SettingsState extends State<Settings> {
                       _silent = v;
                     });
                   },
+                ),
+              ),
+              ListTile(
+                onTap: () {},
+                title: Text(
+                  "Privacy Policy",
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () {},
+                title: Text(
+                  "Terms of use",
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () {},
+                title: Text(
+                  "Account",
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FeedbackPage(),
+                    ),
+                  );
+                },
+                title: Text(
+                  "Feedback",
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () {},
+                title: Text(
+                  "Updates",
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Profile(),
+                    ),
+                  );
+                },
+                title: Text(
+                  "About",
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ],
