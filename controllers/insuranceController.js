@@ -9,12 +9,14 @@ const { Insurance } = require("../models/insurance");
 
 //add Insurance
 exports.addInsurance = asyncHandler(async (req, res, next) => {
-    var {organisation_name, patient, insurance_image} = req.body;
+    var {organisation_name, patient, insurance_image, date_of_birth, policy_no} = req.body;
     const insurance = await Insurance.create({
             organisation_name: organisation_name,
             patient: patient, 
             insurance_image: insurance_image,
-            user_id: req.user._id
+            user_id: req.user._id,
+            policy_no: policy_no,
+            date_of_birth: date_of_birth
     });
     if(!insurance)
     {
@@ -27,11 +29,13 @@ exports.addInsurance = asyncHandler(async (req, res, next) => {
 
 //edit Insurance
 exports.editInsurance = asyncHandler(async (req, res, next) => {
-    var {organisation_name, insurance_image, patient, _id} = req.body;
+    var {organisation_name, insurance_image, patient, _id, policy_no, date_of_birth} = req.body;
     const insurance = await Insurance.findOneAndUpdate({_id: _id},{
         insurance_image: insurance_image,
         organisation_name: organisation_name,
         patient: patient, 
+        policy_no: policy_no,
+        date_of_birth: date_of_birth
     }, {new: true});
     console.log(insurance);
     if(!insurance)
@@ -67,7 +71,9 @@ exports.searchInsurance = asyncHandler(async (req, res, next) => {
             insurance_image: insurance.insurance_image,
             patient: patientObject,
             // user: userObject
-            user_id: insurance.user_id
+            user_id: insurance.user_id,
+            policy_no: insurance.policy_no,
+            date_of_birth: insurance.date_of_birth
         });
     });
     await Promise.all(insurancePromise);
@@ -107,7 +113,9 @@ exports.getInsurance = asyncHandler(async (req, res, next) => {
         insurance_image: insurance.insurance_image,
         patient: patientObject,
         // user: userObject
-        user_id: insurance.user_id
+        user_id: insurance.user_id,
+        policy_no: insurance.policy_no,
+        date_of_birth: insurance.date_of_birth
     };
     res.status(200).json({ success: true, data: insurance_object });
 });
@@ -128,7 +136,9 @@ exports.getInsuranceFamily = asyncHandler(async (req, res, next) => {
             insurance_image: insurance.insurance_image,
             patient: patientObject,
             // user: userObject
-            user_id: insurance.user_id
+            user_id: insurance.user_id,
+            policy_no: insurance.policy_no,
+            date_of_birth: insurance.date_of_birth
         });
     });
     await Promise.all(insurancePromise);

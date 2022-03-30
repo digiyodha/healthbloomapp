@@ -13,7 +13,9 @@ var InsuranceSchema = new Schema({
     user_id: {
       type: Schema.Types.ObjectId,
       ref: 'User'
-    }
+    },
+    policy_no: String,
+    date_of_birth: Date
 },{
     timestamps: true
 });
