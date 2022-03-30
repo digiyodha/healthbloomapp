@@ -24,6 +24,8 @@ class DeleteInsuranceResponse {
 class DeleteInsuranceResponseData {
   DeleteInsuranceResponseData({
     this.insuranceImage,
+    this.policyNo,
+    this.dateOfBirth,
     this.organisationName,
     this.patient,
     this.userId,
@@ -31,6 +33,8 @@ class DeleteInsuranceResponseData {
   });
 
   List<String> insuranceImage;
+  String policyNo;
+  DateTime dateOfBirth;
   String organisationName;
   String patient;
   String userId;
@@ -41,6 +45,10 @@ class DeleteInsuranceResponseData {
         insuranceImage: json["insurance_image"] == null
             ? null
             : List<String>.from(json["insurance_image"].map((x) => x)),
+        policyNo: json["policy_no"] == null ? null : json["policy_no"],
+        dateOfBirth: json["date_of_birth"] == null
+            ? null
+            : DateTime.parse(json["date_of_birth"]),
         organisationName: json["organisation_name"] == null
             ? null
             : json["organisation_name"],
@@ -53,6 +61,10 @@ class DeleteInsuranceResponseData {
         "insurance_image": insuranceImage == null
             ? null
             : List<dynamic>.from(insuranceImage.map((x) => x)),
+        "policy_no": policyNo == null ? null : policyNo,
+        "date_of_birth": dateOfBirth == null
+            ? null
+            : "${dateOfBirth.year.toString().padLeft(4, '0')}-${dateOfBirth.month.toString().padLeft(2, '0')}-${dateOfBirth.day.toString().padLeft(2, '0')}",
         "organisation_name": organisationName == null ? null : organisationName,
         "patient": patient == null ? null : patient,
         "user_id": userId == null ? null : userId,

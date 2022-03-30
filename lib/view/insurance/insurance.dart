@@ -187,6 +187,9 @@ class _InsuranceState extends State<Insurance> {
                 nameOfPatients: foundInsurance[index].patient != null
                     ? foundInsurance[index].patient.name
                     : '',
+                dob: foundInsurance[index].patient != null
+                    ? foundInsurance[index].dateOfBirth
+                    : '',
                 onTap: () {
                   Navigator.push(
                     context,

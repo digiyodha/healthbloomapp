@@ -10,6 +10,7 @@ class InsuranceCard extends StatelessWidget {
   final Function edit;
   final Function delete;
   final Function onTap;
+  final DateTime dob;
   const InsuranceCard({
     Key key,
     this.organization,
@@ -18,6 +19,7 @@ class InsuranceCard extends StatelessWidget {
     this.delete,
     this.onTap,
     this.avatar,
+    this.dob,
   }) : super(key: key);
 
   @override
@@ -98,7 +100,7 @@ class InsuranceCard extends StatelessWidget {
                           )
                         ],
                       ),
-                      const SizedBox(height: 10.0),
+                      Spacer(),
                       TextBuilder(
                         text: nameOfPatients.toString() ?? '',
                         color: Colors.white,
@@ -109,9 +111,13 @@ class InsuranceCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            height: 10,
-                            width: 10,
+                          TextBuilder(
+                            text: dob != null
+                                ? '${dob.day}-${dob.month}-${dob.year}'
+                                : '',
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
                           ),
                           InkWell(
                             onTap: delete,

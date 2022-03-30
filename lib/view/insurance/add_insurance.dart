@@ -88,7 +88,7 @@ class _AddInsuranceState extends State<AddInsurance> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
+        firstDate: DateTime(1900, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate) {
       setState(() {
@@ -107,8 +107,11 @@ class _AddInsuranceState extends State<AddInsurance> {
       _orgName.text = widget.insurance.organisationName.toString();
       _familyMember.text = widget.insurance.patient.name;
       _memberId = widget.insurance.patient.id;
-
       files = widget.insurance.insuranceImage;
+      _policyNo.text = widget.insurance.policyNo;
+      _dateOfBirth.text =
+          "${widget.insurance.dateOfBirth.day}-${widget.insurance.dateOfBirth.month}-${widget.insurance.dateOfBirth.year}";
+      selectedDate = widget.insurance.dateOfBirth;
     }
   }
 
@@ -403,13 +406,17 @@ class _AddInsuranceState extends State<AddInsurance> {
               onPressed: () async {
                 if (widget.insurance != null) {
                   if (_orgName.text.isNotEmpty &&
-                      _familyMember.text.isNotEmpty) {
+                      _familyMember.text.isNotEmpty &&
+                      _policyNo.text.isNotEmpty &&
+                      _dateOfBirth.text.isNotEmpty) {
                     setState(() {
                       _loading = true;
                     });
 
                     EditInsuranceRequest _request = EditInsuranceRequest(
                       id: widget.insurance.id,
+                      policyNo: _policyNo.text,
+                      dateOfBirth: selectedDate,
                       organisationName: _orgName.text,
                       insuranceImage: files,
                       patient: _memberId,
@@ -439,6 +446,8 @@ class _AddInsuranceState extends State<AddInsurance> {
 
                     AddInsuranceRequest _request = AddInsuranceRequest(
                       organisationName: _orgName.text,
+                      policyNo: _policyNo.text,
+                      dateOfBirth: selectedDate,
                       patient: _memberId,
                       insuranceImage: files,
                     );
