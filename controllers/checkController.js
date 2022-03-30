@@ -127,7 +127,7 @@ exports.healthScore = asyncHandler(async (req, res, next) => {
     console.log(waterObject);
 
     var waterScore = 100;
-    var daily_water_consumed = 1200;
+    var daily_water_consumed = 0;
     var target_amount = 1200;
 
     if(waterObject)
