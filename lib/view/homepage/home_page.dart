@@ -300,16 +300,16 @@ class _HomePageState extends State<HomePage> {
                                     style:
                                         TextStyle(color: kGrey6, fontSize: 14),
                                   ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Text(
-                                    "Read more",
-                                    style: TextStyle(
-                                        color: kMainColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500),
-                                  ),
+                                  // SizedBox(
+                                  //   height: 8,
+                                  // ),
+                                  // Text(
+                                  //   "Read more",
+                                  //   style: TextStyle(
+                                  //       color: kMainColor,
+                                  //       fontSize: 14,
+                                  //       fontWeight: FontWeight.w500),
+                                  // ),
                                 ],
                               ),
                             )

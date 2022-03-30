@@ -393,8 +393,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                                         kMainColor),
                                                               ),
                                                               SizedBox(
-                                                                height: 4,
-                                                              ),
+                                                                  height: 4),
                                                               Text(
                                                                 _commonResponse
                                                                         .data
@@ -409,11 +408,10 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                                         FontWeight
                                                                             .w400,
                                                                     color:
-                                                                        kGrey4),
+                                                                        kGrey5),
                                                               ),
                                                               SizedBox(
-                                                                height: 4,
-                                                              ),
+                                                                  height: 4),
                                                               if (_commonResponse
                                                                       .data
                                                                       .results[
@@ -930,7 +928,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                                         FontWeight
                                                                             .w400,
                                                                     color:
-                                                                        kGrey4),
+                                                                        kGrey5),
                                                               ),
                                                               SizedBox(
                                                                 height: 4,
@@ -1082,7 +1080,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                                             FontWeight
                                                                                 .w400,
                                                                         color:
-                                                                            kGrey4),
+                                                                            kGrey5),
                                                                   ),
                                                                   SizedBox(
                                                                     height: 4,

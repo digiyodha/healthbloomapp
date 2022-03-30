@@ -793,57 +793,66 @@ class _JournalState extends State<Journal> {
                                               //       ),
                                               //   ],
                                               // ),
-
-                                              endActionPane: ActionPane(
-                                                extentRatio: 0.3,
-                                                motion: const BehindMotion(),
-                                                children: [
-                                                  if (_currentResponse
-                                                          .data[index]
-                                                          .reminderType ==
-                                                      "Medicine")
-                                                    SlidableAction(
-                                                      onPressed: (c) async {
+                                              endActionPane: _currentResponse
+                                                          .data[index].check ==
+                                                      false
+                                                  ? ActionPane(
+                                                      extentRatio: 0.3,
+                                                      motion:
+                                                          const BehindMotion(),
+                                                      children: [
                                                         if (_currentResponse
                                                                 .data[index]
-                                                                .check ==
-                                                            false) {
-                                                          setState(() {
-                                                            _loading = true;
-                                                          });
-                                                          MedicineCheckUncheckRequest
-                                                              _request =
-                                                              MedicineCheckUncheckRequest(
-                                                                  id: _currentResponse
-                                                                      .data[
-                                                                          index]
-                                                                      .id);
-                                                          print(_request
-                                                              .toJson()
-                                                              .toString());
-                                                          await checkUncheckTask(
-                                                              _request);
-                                                          setState(() {
-                                                            _loading = false;
-                                                          });
-                                                          getAllReminder();
-                                                        }
-                                                      },
-                                                      backgroundColor:
-                                                          Colors.transparent,
-                                                      foregroundColor:
-                                                          Color(0xff8B80F8),
-                                                      icon: _currentResponse
-                                                              .data[index].check
-                                                          ? Icons.close
-                                                          : Icons.done,
-                                                      label: _currentResponse
-                                                              .data[index].check
-                                                          ? "Uncheck"
-                                                          : 'Check',
-                                                    ),
-                                                ],
-                                              ),
+                                                                .reminderType ==
+                                                            "Medicine")
+                                                          SlidableAction(
+                                                            onPressed:
+                                                                (c) async {
+                                                              {
+                                                                setState(() {
+                                                                  _loading =
+                                                                      true;
+                                                                });
+                                                                MedicineCheckUncheckRequest
+                                                                    _request =
+                                                                    MedicineCheckUncheckRequest(
+                                                                        id: _currentResponse
+                                                                            .data[index]
+                                                                            .id);
+                                                                print(_request
+                                                                    .toJson()
+                                                                    .toString());
+                                                                await checkUncheckTask(
+                                                                    _request);
+                                                                setState(() {
+                                                                  _loading =
+                                                                      false;
+                                                                });
+                                                                getAllReminder();
+                                                              }
+                                                            },
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            foregroundColor:
+                                                                Color(
+                                                                    0xff8B80F8),
+                                                            icon: _currentResponse
+                                                                    .data[index]
+                                                                    .check
+                                                                ? Icons.close
+                                                                : Icons.done,
+                                                            label:
+                                                                _currentResponse
+                                                                        .data[
+                                                                            index]
+                                                                        .check
+                                                                    ? "Uncheck"
+                                                                    : 'Check',
+                                                          ),
+                                                      ],
+                                                    )
+                                                  : null,
                                               child: Container(
                                                 decoration: BoxDecoration(
                                                     color: Color(0xff8B80F8),

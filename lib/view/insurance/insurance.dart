@@ -7,6 +7,7 @@ import 'package:health_bloom/model/response/delete_insurance_response.dart';
 import 'package:health_bloom/model/response/search_insurance_response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
+import 'package:health_bloom/utils/text_field/custom_text_field.dart';
 import 'package:health_bloom/view/insurance/add_insurance.dart';
 
 import 'package:provider/provider.dart';
@@ -24,20 +25,24 @@ class Insurance extends StatefulWidget {
 }
 
 class _InsuranceState extends State<Insurance> {
-  TextEditingController _searchText = TextEditingController();
+  TextEditingController search = TextEditingController();
   DateTime selectedStartDate;
   DateTime selectedEndDate;
   int currentIndex = 0;
   bool _loading = false;
   SearchInsuranceResponse _currentResponse;
-
+  List<SearchInsuranceResponseDatum> foundInsurance = [];
   Future getInsurance() async {
+    foundInsurance.clear();
     setState(() {
       _currentResponse = null;
     });
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
-    SearchInsuranceResponse _response = await adminAPI.searchInsuranceAPI(
-        SearchInsuranceRequest(name: _searchText.text.toLowerCase()) ?? '');
+    SearchInsuranceResponse _response =
+        await adminAPI.searchInsuranceAPI(SearchInsuranceRequest(name: ''));
+    _response.data.forEach((element) {
+      foundInsurance.add(element);
+    });
     setState(() {
       _currentResponse = _response;
       _loading = false;
@@ -48,6 +53,18 @@ class _InsuranceState extends State<Insurance> {
   void initState() {
     super.initState();
     getInsurance();
+  }
+
+  onSearch(String search) {
+    print('Search Query $search');
+    setState(() {
+      foundInsurance = _currentResponse.data
+          .where((e) => e.patient.name
+              .toString()
+              .toLowerCase()
+              .contains(search.toString().toLowerCase()))
+          .toList();
+    });
   }
 
   @override
@@ -113,83 +130,21 @@ class _InsuranceState extends State<Insurance> {
                           topLeft: Radius.circular(30))),
                   child: Column(
                     children: [
-                      // const SizedBox(height: 5.0),
-                      // CustomTextField(
-                      //   maxLines: 1,
-                      //   controller: _searchText,
-                      //   label: "Search",
-                      //   onChanged: (val) {
-                      //     getInsurance();
-                      //     _currentResponse = _searchResponse;
-                      //   },
-                      //   onTap: () {},
-                      // ),
-                      const SizedBox(height: 20.0),
-                      Expanded(
-                        child: _currentResponse != null
-                            ? ListView.builder(
-                                padding: EdgeInsets.only(top: 0, bottom: 20),
-                                itemCount: _currentResponse.data.length,
-                                physics: ScrollPhysics(),
-                                itemBuilder: (BuildContext context, int index) {
-                                  return InsuranceCard(
-                                    organization: _currentResponse
-                                        .data[index].organisationName,
-                                    avatar: _currentResponse
-                                        .data[index].patient.avatar,
-                                    nameOfPatients: _currentResponse
-                                        .data[index].patient.name,
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              InsuranceDocuments(
-                                            insurance:
-                                                _currentResponse.data[index],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    edit: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => AddInsurance(
-                                            insurance:
-                                                _currentResponse.data[index],
-                                          ),
-                                        ),
-                                      ).whenComplete(() => setState(() {
-                                            getInsurance();
-                                          }));
-                                    },
-                                    delete: () async {
-                                      setState(() {
-                                        _loading = true;
-                                      });
-                                      final adminAPI =
-                                          Provider.of<NetworkRepository>(
-                                              context,
-                                              listen: false);
-                                      DeleteInsuranceResponse _response =
-                                          await adminAPI.deleteInsuranceAPI(
-                                              DeleteInsuranceRequest(
-                                                  id: _currentResponse
-                                                      .data[index].id));
-                                      if (_response.success) {
-                                        setState(() {
-                                          _loading = false;
-                                        });
-                                        getInsurance();
-                                      }
-                                    },
-                                  );
-                                },
-                              )
-                            : LoadingWidget(),
+                      CustomTextField(
+                        maxLines: 1,
+                        controller: search,
+                        label: "Search",
+                        textInputType: TextInputType.name,
+                        onChanged: (value) => onSearch(value),
+                        onTap: () {},
                       ),
                       SizedBox(height: 16),
+                      Expanded(
+                        child: _currentResponse != null
+                            ? insuranceScreen()
+                            : LoadingWidget(),
+                      ),
+                      SizedBox(height: 24),
                     ],
                   ),
                 ),
@@ -213,5 +168,71 @@ class _InsuranceState extends State<Insurance> {
         ),
       ),
     );
+  }
+
+  Widget insuranceScreen() {
+    return foundInsurance.isNotEmpty
+        ? ListView.builder(
+            padding: EdgeInsets.only(top: 0, bottom: 20),
+            itemCount: foundInsurance.length,
+            physics: ScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              return InsuranceCard(
+                organization: foundInsurance[index].patient != null
+                    ? foundInsurance[index].organisationName
+                    : '',
+                avatar: foundInsurance[index].patient != null
+                    ? foundInsurance[index].patient.avatar
+                    : '',
+                nameOfPatients: foundInsurance[index].patient != null
+                    ? foundInsurance[index].patient.name
+                    : '',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => InsuranceDocuments(
+                        insurance: foundInsurance[index],
+                      ),
+                    ),
+                  );
+                },
+                edit: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddInsurance(
+                        insurance: foundInsurance[index],
+                      ),
+                    ),
+                  ).whenComplete(() => setState(() {
+                        getInsurance();
+                      }));
+                },
+                delete: () async {
+                  setState(() {
+                    _loading = true;
+                  });
+                  final adminAPI =
+                      Provider.of<NetworkRepository>(context, listen: false);
+                  DeleteInsuranceResponse _response =
+                      await adminAPI.deleteInsuranceAPI(
+                          DeleteInsuranceRequest(id: foundInsurance[index].id));
+                  if (_response.success) {
+                    setState(() {
+                      _loading = false;
+                    });
+                    getInsurance();
+                  }
+                },
+              );
+            },
+          )
+        : Center(
+            child: TextBuilder(
+              text: 'No insurance details found!',
+              color: Colors.black,
+            ),
+          );
   }
 }

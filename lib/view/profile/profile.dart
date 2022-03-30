@@ -4,7 +4,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:health_bloom/components/textbuilder.dart';
-import 'package:health_bloom/main.dart';
+
 import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
@@ -38,7 +38,7 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    // updatePosition();
+    updatePosition();
     _futureUser = getUsers();
   }
 
@@ -56,10 +56,9 @@ class _ProfileState extends State<Profile> {
     setState(() {
       latitude = pos.latitude.toString();
       longitude = pos.longitude.toString();
-
       location =
-          '${pm[0].street.toString()}, ${pm[0].locality.toString()}, ${pm[0].subLocality.toString()}, ${pm[0].country.toString()} - ${pm[0].postalCode.toString()}';
-      sp.setString('location', location);
+          '${pm[0].locality.toString()} - ${pm[0].postalCode.toString()}';
+      print('location $location');
     });
   }
 
@@ -240,7 +239,9 @@ class _ProfileState extends State<Profile> {
                                       ),
                                       const SizedBox(height: 10.0),
                                       Text(
-                                        snapshot.data.data.age.toString() ?? '',
+                                        snapshot.data.data.age != null
+                                            ? snapshot.data.data.age.toString()
+                                            : '',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           color: Colors.black,
@@ -288,7 +289,7 @@ class _ProfileState extends State<Profile> {
                                       ),
                                       const SizedBox(height: 10.0),
                                       Text(
-                                        sp.getString('location'),
+                                        location ?? '',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           color: Colors.black,

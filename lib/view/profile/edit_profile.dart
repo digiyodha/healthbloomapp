@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:health_bloom/components/textbuilder.dart';
@@ -94,7 +95,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    updatePosition();
+
     print('_email.text ${widget.email}');
     if (widget.name != null) {
       _name.text = widget.name;
@@ -105,6 +106,8 @@ class _EditProfileState extends State<EditProfile> {
     if (widget.email != null) {
       _email.text = widget.email;
     }
+    updatePosition();
+    _age.text = '18';
   }
 
   @override
@@ -120,7 +123,7 @@ class _EditProfileState extends State<EditProfile> {
   var longitude;
   Future<void> updatePosition() async {
     Position pos = await _determinePosition();
-
+    List pm = await placemarkFromCoordinates(pos.latitude, pos.longitude);
     setState(() {
       latitude = pos.latitude.toString();
       sp.setString('currentLatitude', latitude);
@@ -128,6 +131,7 @@ class _EditProfileState extends State<EditProfile> {
       longitude = pos.longitude.toString();
       sp.setString('currentLongitude', longitude);
       print('currentLongitude ${sp.getString('currentLongitude')}');
+      _city.text = pm[0].subLocality.toString();
     });
   }
 

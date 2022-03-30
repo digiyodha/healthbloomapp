@@ -5,8 +5,10 @@ import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/view/documents/documents.dart';
+import 'package:health_bloom/view/feedback/feedback_page.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/insurance/insurance.dart';
+import 'package:health_bloom/view/profile/profile.dart';
 import 'package:health_bloom/view/settings/settings.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -96,18 +98,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   selected: widget.selected == 0,
                   icon: Icons.home,
                 ),
-                // DrawerContainerWidget(
-                //   text: "Profile",
-                //   onTap: () {
-                //     Navigator.pop(context);
-                //     Navigator.push(context,
-                //         MaterialPageRoute(builder: (context) {
-                //       return Profile();
-                //     }));
-                //   },
-                //   selected: widget.selected == 1,
-                //   icon: Icons.person,
-                // ),
+                DrawerContainerWidget(
+                  text: "Profile",
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return Profile();
+                    }));
+                  },
+                  selected: widget.selected == 1,
+                  icon: Icons.person,
+                ),
                 DrawerContainerWidget(
                   text: "Water Tracker",
                   onTap: () {
@@ -174,20 +176,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   selected: widget.selected == 7,
                   icon: Icons.settings,
                 ),
-                // DrawerContainerWidget(
-                //   text: "Feedback",
-                //   onTap: () {
-                //     Navigator.pop(context);
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => FeedbackPage(),
-                //       ),
-                //     );
-                //   },
-                //   selected: widget.selected == 8,
-                //   icon: Icons.feedback,
-                // ),
+                DrawerContainerWidget(
+                  text: "Feedback",
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FeedbackPage(),
+                      ),
+                    );
+                  },
+                  selected: widget.selected == 8,
+                  icon: Icons.feedback,
+                ),
                 DrawerContainerWidget(
                   text: "Logout",
                   onTap: () async {

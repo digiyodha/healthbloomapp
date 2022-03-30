@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:health_bloom/components/textbuilder.dart';
@@ -91,18 +92,20 @@ class _UpdateProfileState extends State<UpdateProfile> {
   @override
   void initState() {
     super.initState();
-    updatePosition();
+
     if (widget.data != null) {
       _email.text = widget.data.emailId;
-      _phone.text = widget.data.phoneNumber;
+      if (_phone.text != null) _phone.text = widget.data.phoneNumber;
       _name.text = widget.data.name;
-      _city.text = widget.data.city;
-      _state.text = widget.data.state;
+      if (_city.text != null) _city.text = widget.data.city;
+      if (_state.text != null) _state.text = widget.data.state;
       selectedGender = widget.data.gender;
       selectedBloodGroup = widget.data.bloodGroup;
-      _uploadAvatarUrl = widget.data.avatar;
+      if (_uploadAvatarUrl != null) _uploadAvatarUrl = widget.data.avatar;
       if (widget.data.age != null) _age.text = widget.data.age.toString();
     }
+    updatePosition();
+    _age.text = '18';
   }
 
   @override
@@ -117,14 +120,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
   var longitude;
   Future<void> updatePosition() async {
     Position pos = await _determinePosition();
-
+    List pm = await placemarkFromCoordinates(pos.latitude, pos.longitude);
     setState(() {
       latitude = pos.latitude.toString();
-      sp.setString('currentLatitude', latitude);
-      print('currentLatitude ${sp.getString('currentLatitude')}');
       longitude = pos.longitude.toString();
-      sp.setString('currentLongitude', longitude);
-      print('currentLongitude ${sp.getString('currentLongitude')}');
+      _city.text = pm[0].subLocality.toString();
     });
   }
 
@@ -133,7 +133,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {}
+    if (!serviceEnabled) {
+      //
+    }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -289,6 +291,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                       Icons.email,
                                       color: Color(0xff9884DF),
                                     ),
+                                    disabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
                                     border: UnderlineInputBorder(
                                       borderSide: BorderSide(
                                         width: 1,
@@ -301,7 +309,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                 TextFormField(
                                   controller: _age,
                                   keyboardType: TextInputType.number,
-                                  // enabled: _age.text.isEmpty ? true : false,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return "* Required";
