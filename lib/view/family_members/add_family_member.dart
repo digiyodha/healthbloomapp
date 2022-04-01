@@ -29,6 +29,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
 
   TextEditingController _name = TextEditingController();
   TextEditingController _relation = TextEditingController();
+  TextEditingController _ageController = TextEditingController();
   int _age = 18;
   Future<AddMemberResponse> addMember(AddMemberRequest request) async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
@@ -71,6 +72,7 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
   @override
   void initState() {
     super.initState();
+
     if (widget.member != null) {
       print('Member Name ${widget.member.name}');
       _name.text = widget.member.name;
@@ -276,12 +278,20 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12),
-                              child: Text(
-                                _age.toString(),
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                    color: kGrey7),
+                              child: SizedBox(
+                                width: 50,
+                                child: TextField(
+                                  controller: _ageController =
+                                      TextEditingController(
+                                          text: _age.toString()),
+                                  keyboardType: TextInputType.number,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                  ),
+                                ),
                               ),
                             ),
                             InkWell(

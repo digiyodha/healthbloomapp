@@ -101,7 +101,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
       if (_state.text != null) _state.text = widget.data.state;
       selectedGender = widget.data.gender;
       selectedBloodGroup = widget.data.bloodGroup;
-      if (_uploadAvatarUrl != null) _uploadAvatarUrl = widget.data.avatar;
+      // _uploadAvatarUrl != null)
+      _uploadAvatarUrl = widget.data.avatar;
       if (widget.data.age != null) _age.text = widget.data.age.toString();
     }
     updatePosition();

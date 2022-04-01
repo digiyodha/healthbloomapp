@@ -22,8 +22,11 @@ class NearbyPlaces extends StatefulWidget {
 
 class _NearbyPlacesState extends State<NearbyPlaces> {
   String _rating = 'Any';
+  List<String> _ratingList = ['Any', '4.5', '4', '3.5', '3', '2.5', '2'];
   String _distance = '500';
+  List<String> _distanceList = ['500', '600', '700', '800'];
   bool _isMedical = false;
+  // String _hours = 'Any time';
   // String _lat = "18.457533";
   // String _lng = "73.867744";
   MapsNearbyMedicalsResponse _commonResponse;
@@ -216,9 +219,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                 "Rating:",
                                                 style: TextStyle(color: kWhite),
                                               ),
-                                              SizedBox(
-                                                width: 6,
-                                              ),
+                                              SizedBox(width: 6),
                                               Expanded(
                                                 child: DropdownButton<String>(
                                                   isExpanded: true,
@@ -238,15 +239,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     });
                                                     getNearbyMedicals();
                                                   },
-                                                  items: <String>[
-                                                    'Any',
-                                                    '4.5',
-                                                    '4',
-                                                    '3.5',
-                                                    '3',
-                                                    '2.5',
-                                                    '2',
-                                                  ].map<
+                                                  items: _ratingList.map<
                                                           DropdownMenuItem<
                                                               String>>(
                                                       (String value) {
@@ -308,12 +301,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     });
                                                     getNearbyMedicals();
                                                   },
-                                                  items: <String>[
-                                                    '500',
-                                                    '600',
-                                                    '700',
-                                                    '800'
-                                                  ].map<
+                                                  items: _distanceList.map<
                                                           DropdownMenuItem<
                                                               String>>(
                                                       (String value) {
@@ -735,9 +723,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                 "Rating:",
                                                 style: TextStyle(color: kWhite),
                                               ),
-                                              SizedBox(
-                                                width: 6,
-                                              ),
+                                              SizedBox(width: 6),
                                               Expanded(
                                                 child: DropdownButton<String>(
                                                   isExpanded: true,
@@ -757,15 +743,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     });
                                                     getNearbyLabs();
                                                   },
-                                                  items: <String>[
-                                                    'Any',
-                                                    '4.5',
-                                                    '4',
-                                                    '3.5',
-                                                    '3',
-                                                    '2.5',
-                                                    '2',
-                                                  ].map<
+                                                  items: _ratingList.map<
                                                           DropdownMenuItem<
                                                               String>>(
                                                       (String value) {
@@ -827,12 +805,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                     });
                                                     getNearbyLabs();
                                                   },
-                                                  items: <String>[
-                                                    '500',
-                                                    '600',
-                                                    '700',
-                                                    '800'
-                                                  ].map<
+                                                  items: _distanceList.map<
                                                           DropdownMenuItem<
                                                               String>>(
                                                       (String value) {

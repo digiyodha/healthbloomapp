@@ -351,9 +351,9 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                           Positioned(
-                            top: 105,
-                            left: 135,
-                            right: 135,
+                            top: 70,
+                            left: 100,
+                            right: 100,
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
@@ -371,14 +371,14 @@ class _ProfileState extends State<Profile> {
                                               BorderRadius.circular(20),
                                           child: Image.network(
                                             snapshot.data.data.avatar,
-                                            height: 80,
-                                            width: 80,
+                                            height: 130,
+                                            width: 130,
                                             fit: BoxFit.cover,
                                           ),
                                         )
                                       : Container(
-                                          height: 80,
-                                          width: 80,
+                                          height: 130,
+                                          width: 130,
                                           decoration: BoxDecoration(
                                               border: Border.all(
                                                   color: Color(0xff531C9D)),
