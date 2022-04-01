@@ -65,6 +65,19 @@ class _JournalState extends State<Journal> {
     getAllReminder();
   }
 
+  List<String> _images = [
+    'assets/images/drug1.png',
+    'assets/icons/reminder.png',
+  ];
+  String identifyImage(String data) {
+    if (data == 'Medicine')
+      return _images[0];
+    else if (data == 'Reminder')
+      return _images[1];
+    else
+      return _images[0];
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -870,7 +883,13 @@ class _JournalState extends State<Journal> {
                                                     Container(
                                                       width: 80,
                                                       child: Image.asset(
-                                                          "assets/images/drug1.png"),
+                                                        identifyImage(
+                                                            _currentResponse
+                                                                .data[index]
+                                                                .type),
+                                                        height: 50,
+                                                        width: 50,
+                                                      ),
                                                     ),
                                                     Expanded(
                                                       child: Column(

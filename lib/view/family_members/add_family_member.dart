@@ -74,331 +74,339 @@ class _AddFamilyMembersState extends State<AddFamilyMembers> {
     super.initState();
 
     if (widget.member != null) {
-      print('Member Name ${widget.member.name}');
+      // print('Member Name ${widget.member.name}');
       _name.text = widget.member.name;
-      print('Member Relation ${widget.member.relationship}');
+      // print('Member Relation ${widget.member.relationship}');
       _relation.text = widget.member.relationship;
-      print('Member Age ${widget.member.age}');
+      // print('Member Age ${widget.member.age}');
       _age = widget.member.age;
-      print('Member Avatar ${widget.member.avatar}');
+      // print('Member Avatar ${widget.member.avatar}');
       _uploadAvatarUrl = widget.member.avatar;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: Text(widget.member != null
-            ? "Edit Family Members"
-            : "Add Family Members"),
-        centerTitle: true,
-      ),
-      backgroundColor: kWhite,
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 24),
-        height: 75,
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: CustomContainedButton(
-            height: 58,
-            textSize: 16,
-            disabledColor: kGreyLite,
-            text: "Submit",
-            onPressed: () async {
-              if (widget.member != null) {
-                if (_name.text.isNotEmpty && _relation.text.isNotEmpty) {
-                  setState(() {
-                    _loading = true;
-                  });
-                  EditMemberRequest _request = EditMemberRequest(
-                      id: widget.member.id,
-                      age: _age,
-                      avatar: _uploadAvatarUrl ?? '',
-                      name: _name.text,
-                      relationship: _relation.text);
-                  EditMemberResponse _response = await editMember(_request);
-                  print('Edit Meember Request ${_request.toJson()}');
-                  print('Edit Meember Response ${_response.toJson()}');
-                  if (_response.success == true) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Updated'),
-                    ));
-                    setState(() {
-                      _loading = false;
-                    });
-
-                    Navigator.pop(context);
-                  }
-                } else {
-                  setState(() {
-                    _loading = false;
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Please fill all the details'),
-                  ));
-                }
-              } else {
-                if (_name.text.isNotEmpty && _relation.text.isNotEmpty) {
-                  setState(() {
-                    _loading = true;
-                  });
-                  AddMemberRequest _request = AddMemberRequest(
-                      age: _age,
-                      avatar: _uploadAvatarUrl ?? '',
-                      name: _name.text,
-                      relationship: _relation.text);
-                  AddMemberResponse _response = await addMember(_request);
-                  print('Add Meember Request ${_request.toJson()}');
-                  print('Add Meember Response ${_response.toJson()}');
-                  if (_response.success == true) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Added'),
-                    ));
-                    setState(() {
-                      _loading = false;
-                    });
-
-                    Navigator.pop(context);
-                  }
-                } else {
-                  setState(() {
-                    _loading = false;
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Please fill all the details'),
-                  ));
-                }
-              }
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context);
             },
-            width: double.infinity,
+          ),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          title: Text(widget.member != null
+              ? "Edit Family Members"
+              : "Add Family Members"),
+          centerTitle: true,
+        ),
+        backgroundColor: kWhite,
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.symmetric(horizontal: 24),
+          height: 75,
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: CustomContainedButton(
+              height: 58,
+              textSize: 16,
+              disabledColor: kGreyLite,
+              text: "Submit",
+              onPressed: () async {
+                if (widget.member != null) {
+                  if (_name.text.isNotEmpty && _relation.text.isNotEmpty) {
+                    setState(() {
+                      _loading = true;
+                    });
+                    EditMemberRequest _request = EditMemberRequest(
+                        id: widget.member.id,
+                        age: int.parse(_ageController.text),
+                        avatar: _uploadAvatarUrl ?? '',
+                        name: _name.text,
+                        relationship: _relation.text);
+                    EditMemberResponse _response = await editMember(_request);
+                    print('Edit Meember Request ${_request.toJson()}');
+                    print('Edit Meember Response ${_response.toJson()}');
+                    if (_response.success == true) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Updated'),
+                      ));
+                      setState(() {
+                        _loading = false;
+                      });
+
+                      Navigator.pop(context);
+                    }
+                  } else {
+                    setState(() {
+                      _loading = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Please fill all the details'),
+                    ));
+                  }
+                } else {
+                  if (_name.text.isNotEmpty && _relation.text.isNotEmpty) {
+                    setState(() {
+                      _loading = true;
+                    });
+                    AddMemberRequest _request = AddMemberRequest(
+                        age: int.parse(_ageController.text),
+                        avatar: _uploadAvatarUrl ?? '',
+                        name: _name.text,
+                        relationship: _relation.text);
+                    AddMemberResponse _response = await addMember(_request);
+                    print('Add Meember Request ${_request.toJson()}');
+                    print('Add Meember Response ${_response.toJson()}');
+                    if (_response.success == true) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Added'),
+                      ));
+                      setState(() {
+                        _loading = false;
+                      });
+
+                      Navigator.pop(context);
+                    }
+                  } else {
+                    setState(() {
+                      _loading = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Please fill all the details'),
+                    ));
+                  }
+                }
+              },
+              width: double.infinity,
+            ),
           ),
         ),
-      ),
-      body: Stack(
-        children: [
-          Container(
-            child: Stack(
-              children: [
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    height: 300,
-                    width: double.infinity,
-                    color: kMainColor,
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  left: 0,
-                  top: 180,
-                  child: Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    padding: EdgeInsets.only(top: 20, left: 24, right: 24),
-                    decoration: BoxDecoration(
-                        color: kWhite,
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(30),
-                            topLeft: Radius.circular(30))),
-                    child: ListView(
-                      children: [
-                        CustomTextField(
-                          maxLines: 1,
-                          controller: _name,
-                          textCapitalization: TextCapitalization.sentences,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "* Required";
-                            } else
-                              return null;
-                          },
-                          label: "Name",
-                          textInputType: TextInputType.name,
-                          onChanged: (val) {},
-                          onTap: () {},
-                        ),
-                        SizedBox(height: 16),
-                        CustomTextField(
-                          maxLines: 1,
-                          controller: _relation,
-                          textCapitalization: TextCapitalization.sentences,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "* Required";
-                            } else
-                              return null;
-                          },
-                          label: "Relationship",
-                          textInputType: TextInputType.name,
-                          onChanged: (val) {},
-                          onTap: () {},
-                        ),
-                        SizedBox(height: 24),
-                        Row(
-                          children: [
-                            Text(
-                              "Current Age",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: kGrey7),
-                            ),
-                            Spacer(),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (_age <= 1)
-                                    _age == 0;
-                                  else
-                                    _age--;
-                                });
-                              },
-                              child: CircleAvatar(
-                                radius: 12,
-                                backgroundColor: kMainColor,
-                                child: Icon(
-                                  Icons.remove,
-                                  color: kWhite,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 12),
-                              child: SizedBox(
-                                width: 50,
-                                child: TextField(
-                                  controller: _ageController =
-                                      TextEditingController(
-                                          text: _age.toString()),
-                                  keyboardType: TextInputType.number,
-                                  textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    enabledBorder: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _age++;
-                                });
-                              },
-                              child: CircleAvatar(
-                                radius: 12,
-                                backgroundColor: kMainColor,
-                                child: Icon(
-                                  Icons.add,
-                                  color: kWhite,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+        body: Stack(
+          children: [
+            Container(
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: 300,
+                      width: double.infinity,
+                      color: kMainColor,
                     ),
                   ),
-                ),
-                Positioned(
-                  top: 130,
-                  left: 0,
-                  right: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () async {
-                          XFile _imageFile = await singleImage();
-                          _uploadAvatarUrl = await uploadImage(_imageFile);
-                          setState(() {});
-                        },
-                        child: Container(
-                          height: 106,
-                          width: 106,
-                          child: Stack(
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    top: 180,
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      padding: EdgeInsets.only(top: 20, left: 24, right: 24),
+                      decoration: BoxDecoration(
+                          color: kWhite,
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(30),
+                              topLeft: Radius.circular(30))),
+                      child: ListView(
+                        children: [
+                          CustomTextField(
+                            maxLines: 1,
+                            controller: _name,
+                            textCapitalization: TextCapitalization.sentences,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "* Required";
+                              } else
+                                return null;
+                            },
+                            label: "Name",
+                            textInputType: TextInputType.name,
+                            onChanged: (val) {},
+                            onTap: () {},
+                          ),
+                          SizedBox(height: 16),
+                          CustomTextField(
+                            maxLines: 1,
+                            controller: _relation,
+                            textCapitalization: TextCapitalization.sentences,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "* Required";
+                              } else
+                                return null;
+                            },
+                            label: "Relationship",
+                            textInputType: TextInputType.name,
+                            onChanged: (val) {},
+                            onTap: () {},
+                          ),
+                          SizedBox(height: 24),
+                          Row(
                             children: [
-                              _uploadAvatarUrl != null &&
-                                      _uploadAvatarUrl.isNotEmpty
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(16),
-                                      child: Image.network(
-                                        _uploadAvatarUrl,
-                                        height: 100,
-                                        width: 100,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : Container(
-                                      height: 100,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          color: kWhite,
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.black26,
-                                                blurRadius: 10)
-                                          ]),
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.person,
-                                          color: kGrey4,
-                                          size: 60,
-                                        ),
-                                      ),
-                                    ),
-                              _profileLoading
-                                  ? Center(
-                                      child: Container(
-                                        height: 50.0,
-                                        width: 50.0,
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    )
-                                  : Container(),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
+                              Text(
+                                "Current Age",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: kGrey7),
+                              ),
+                              Spacer(),
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    if (_age <= 1)
+                                      _age == 0;
+                                    else
+                                      _age--;
+                                  });
+                                },
                                 child: CircleAvatar(
-                                  radius: 14,
+                                  radius: 12,
                                   backgroundColor: kMainColor,
                                   child: Icon(
-                                    Icons.edit,
+                                    Icons.remove,
                                     color: kWhite,
                                     size: 16,
                                   ),
                                 ),
-                              )
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 12),
+                                child: SizedBox(
+                                  // height: 40,
+                                  width: 60,
+                                  child: TextField(
+                                    controller: _ageController =
+                                        TextEditingController(
+                                      text: _age.toString(),
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.center,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: kMainColor, width: 1),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _age++;
+                                  });
+                                },
+                                child: CircleAvatar(
+                                  radius: 12,
+                                  backgroundColor: kMainColor,
+                                  child: Icon(
+                                    Icons.add,
+                                    color: kWhite,
+                                    size: 16,
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
-                        ),
-                      )
-                    ],
+                        ],
+                      ),
+                    ),
                   ),
-                )
-              ],
+                  Positioned(
+                    top: 130,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            XFile _imageFile = await singleImage();
+                            _uploadAvatarUrl = await uploadImage(_imageFile);
+                            setState(() {});
+                          },
+                          child: Container(
+                            height: 106,
+                            width: 106,
+                            child: Stack(
+                              children: [
+                                _uploadAvatarUrl != null &&
+                                        _uploadAvatarUrl.isNotEmpty
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(16),
+                                        child: Image.network(
+                                          _uploadAvatarUrl,
+                                          height: 100,
+                                          width: 100,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : Container(
+                                        height: 100,
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            color: kWhite,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.black26,
+                                                  blurRadius: 10)
+                                            ]),
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.person,
+                                            color: kGrey4,
+                                            size: 60,
+                                          ),
+                                        ),
+                                      ),
+                                _profileLoading
+                                    ? Center(
+                                        child: Container(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      )
+                                    : Container(),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: CircleAvatar(
+                                    radius: 14,
+                                    backgroundColor: kMainColor,
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: kWhite,
+                                      size: 16,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          if (_loading) LoadingWidget()
-        ],
+            if (_loading) LoadingWidget()
+          ],
+        ),
       ),
     );
   }

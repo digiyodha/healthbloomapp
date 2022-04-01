@@ -326,12 +326,22 @@ class _AddMedicineState extends State<AddMedicine> {
                             ),
                           ),
                           SizedBox(height: 16),
-                          CustomTextField(
-                            maxLines: 1,
-                            controller: _dosage,
-                            label: "Dosage",
-                            onChanged: (val) {},
-                            onTap: () {},
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomTextField(
+                                maxLines: 1,
+                                controller: _dosage,
+                                label: "Dosage",
+                                onChanged: (val) {},
+                                onTap: () {},
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                "What is the size or frequency of your medicine?",
+                                style: TextStyle(fontSize: 10, color: kGrey6),
+                              )
+                            ],
                           ),
                           SizedBox(height: 16),
                           Column(

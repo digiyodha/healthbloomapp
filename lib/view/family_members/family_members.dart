@@ -45,7 +45,7 @@ class _FamilyMembersState extends State<FamilyMembers> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.pop(context);
         Navigator.push(
           context,
@@ -162,7 +162,7 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(12),
-                                                color: Color(0xff8B80F8),
+                                                color: Color(0xffAF8EFF),
                                               ),
                                               child: Stack(
                                                 children: [
@@ -200,8 +200,10 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                                                     kWhite,
                                                                 child: Center(
                                                                   child: Icon(
-                                                                    Icons.person,
-                                                                    color: kGrey4,
+                                                                    Icons
+                                                                        .person,
+                                                                    color:
+                                                                        kGrey4,
                                                                     size: 40,
                                                                   ),
                                                                 ),
@@ -270,12 +272,10 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                                                       TextButton(
                                                                           onPressed:
                                                                               () {
-                                                                            Navigator.pop(
-                                                                                context);
+                                                                            Navigator.pop(context);
                                                                           },
-                                                                          child: TextBuilder(
-                                                                              text:
-                                                                                  'No')),
+                                                                          child:
+                                                                              TextBuilder(text: 'No')),
                                                                       MaterialButton(
                                                                         shape: RoundedRectangleBorder(
                                                                             borderRadius:
@@ -303,18 +303,13 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                                                               'Delete Member Response ${_response.toJson()}');
                                                                           if (_response.success ==
                                                                               true) {
-                                                                            ScaffoldMessenger.of(context)
-                                                                                .showSnackBar(SnackBar(
-                                                                              content:
-                                                                                  Text('Family member has been deleted successfully'),
+                                                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                              content: Text('Family member has been deleted successfully'),
                                                                             ));
-                                                                            setState(
-                                                                                () {
-                                                                              _loading =
-                                                                                  false;
+                                                                            setState(() {
+                                                                              _loading = false;
                                                                             });
-                                                                            Navigator.pop(
-                                                                                context,
+                                                                            Navigator.pop(context,
                                                                                 true);
                                                                           }
                                                                         },
@@ -322,8 +317,8 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                                                             TextBuilder(
                                                                           text:
                                                                               'Yes',
-                                                                          color: Colors
-                                                                              .white,
+                                                                          color:
+                                                                              Colors.white,
                                                                         ),
                                                                       )
                                                                     ],
@@ -331,10 +326,10 @@ class _FamilyMembersState extends State<FamilyMembers> {
                                                                 },
                                                               );
                                                             },
-                                                          ).whenComplete(
-                                                              () => setState(() {
-                                                                    getAllmember();
-                                                                  }));
+                                                          ).whenComplete(() =>
+                                                              setState(() {
+                                                                getAllmember();
+                                                              }));
                                                         },
                                                         child: Icon(
                                                           Icons.delete,

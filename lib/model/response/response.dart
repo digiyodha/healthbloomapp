@@ -1662,6 +1662,7 @@ class GetReminderListResponseDatum {
       this.description,
       this.familyObject,
       this.userId,
+      this.type,
       this.check});
 
   String id;
@@ -1670,6 +1671,7 @@ class GetReminderListResponseDatum {
   String description;
   GetReminderListResponseFamilyObject familyObject;
   String userId;
+  String type;
   bool check;
 
   factory GetReminderListResponseDatum.fromJson(Map<String, dynamic> json) =>
@@ -1686,6 +1688,7 @@ class GetReminderListResponseDatum {
             : GetReminderListResponseFamilyObject.fromJson(
                 json["familyObject"]),
         userId: json["user_id"] == null ? null : json["user_id"],
+        type: json["type"] == null ? null : json["type"],
         check: json["check"] == null ? null : json["check"],
       );
 
@@ -1696,6 +1699,8 @@ class GetReminderListResponseDatum {
         "description": description == null ? null : description,
         "familyObject": familyObject == null ? null : familyObject.toJson(),
         "user_id": userId == null ? null : userId,
+        "type": type == null ? null : type,
+        "check": check == null ? null : check,
       };
 }
 

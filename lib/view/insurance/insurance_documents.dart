@@ -18,7 +18,9 @@ import '../../utils/text_field/custom_text_field.dart';
 
 class InsuranceDocuments extends StatefulWidget {
   final SearchInsuranceResponseDatum insurance;
-  const InsuranceDocuments({Key key, this.insurance}) : super(key: key);
+  final String userid;
+  const InsuranceDocuments({Key key, this.insurance, this.userid})
+      : super(key: key);
 
   @override
   State<InsuranceDocuments> createState() => _InsuranceDocumentsState();
@@ -83,7 +85,7 @@ class _InsuranceDocumentsState extends State<InsuranceDocuments> {
     GetDocumentsFamilyRequest _request = GetDocumentsFamilyRequest(
         fromDate: selectedStartDate ?? null,
         toDate: selectedEndDate ?? null,
-        patient: widget.insurance.patient.id);
+        patient: widget.userid);
     print(_request.toJson().toString());
     GetDocumentsFamilyResponse _response =
         await adminAPI.getDocumentsFamilyAPI(_request);
@@ -257,13 +259,16 @@ class _InsuranceDocumentsState extends State<InsuranceDocuments> {
                     ),
                   ),
                 ),
-                if (_loading) LoadingWidget(color: kGrey7,)
+                if (_loading)
+                  LoadingWidget(
+                    color: kGrey7,
+                  )
               ],
             )
           : LoadingWidget(),
       floatingActionButton: _shareIds.isNotEmpty
           ? FloatingActionButton(
-              backgroundColor: kGrey7,
+              backgroundColor: kMainColor,
               child: Icon(
                 Icons.share,
                 color: kWhite,
@@ -276,9 +281,9 @@ class _InsuranceDocumentsState extends State<InsuranceDocuments> {
                 String _temp = "";
                 Map<String, List<int>> _files = {};
 
-                for(String element in _shareIds){
+                for (String element in _shareIds) {
                   List<GetDocumentsFamilyResponseCommonObject> _tempList =
-                  _sortedDocs.where((e) => element == e.id).toList();
+                      _sortedDocs.where((e) => element == e.id).toList();
 
                   _temp = _temp + _tempList[0].name;
                   _temp = _temp + "\n";
@@ -288,21 +293,20 @@ class _InsuranceDocumentsState extends State<InsuranceDocuments> {
                   _temp = _temp + "\n";
                   _temp = _temp + "\n";
 
-                  for(var element in _tempList[0].images){
+                  for (var element in _tempList[0].images) {
                     var request =
-                    await HttpClient().getUrl(Uri.parse(element.assetUrl));
+                        await HttpClient().getUrl(Uri.parse(element.assetUrl));
                     var response = await request.close();
                     Uint8List bytes =
-                    await consolidateHttpClientResponseBytes(response);
+                        await consolidateHttpClientResponseBytes(response);
 
                     _files[element.assetName] = bytes;
                   }
-
                 }
 
-                if(_files.isNotEmpty){
+                if (_files.isNotEmpty) {
                   await Share.files('Files', _files, '*/*', text: _temp);
-                }else{
+                } else {
                   Share.text('Files', _temp, 'text/plain');
                 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_bloom/controller/distance_cont.dart';
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/model/response/response.dart';
@@ -21,11 +22,13 @@ class NearbyPlaces extends StatefulWidget {
 }
 
 class _NearbyPlacesState extends State<NearbyPlaces> {
+  final distanceData = DistanceCont();
   String _rating = 'Any';
   List<String> _ratingList = ['Any', '4.5', '4', '3.5', '3', '2.5', '2'];
   String _distance = '500';
-  List<String> _distanceList = ['500', '600', '700', '800'];
+
   bool _isMedical = false;
+  //  .5km, 1km,2km,5km, 10km, 10+ km
   // String _hours = 'Any time';
   // String _lat = "18.457533";
   // String _lng = "73.867744";
@@ -279,9 +282,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                 "Distance:",
                                                 style: TextStyle(color: kWhite),
                                               ),
-                                              SizedBox(
-                                                width: 6,
-                                              ),
+                                              SizedBox(width: 6),
                                               Expanded(
                                                 child: DropdownButton<String>(
                                                   isExpanded: true,
@@ -298,21 +299,23 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                   onChanged: (String newValue) {
                                                     setState(() {
                                                       _distance = newValue;
+                                                      print(
+                                                          'Selected Distance $_distance');
                                                     });
                                                     getNearbyMedicals();
                                                   },
-                                                  items: _distanceList.map<
-                                                          DropdownMenuItem<
-                                                              String>>(
-                                                      (String value) {
-                                                    return DropdownMenuItem<
-                                                        String>(
-                                                      value: value,
-                                                      child: Text(
-                                                        value + " m",
-                                                      ),
-                                                    );
-                                                  }).toList(),
+                                                  items:
+                                                      distanceData.distance.map(
+                                                    (e) {
+                                                      return DropdownMenuItem<
+                                                          String>(
+                                                        value: e.meter,
+                                                        child: Text(
+                                                          e.km + " km",
+                                                        ),
+                                                      );
+                                                    },
+                                                  ).toList(),
                                                 ),
                                               ),
                                             ],
@@ -783,9 +786,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                 "Distance:",
                                                 style: TextStyle(color: kWhite),
                                               ),
-                                              SizedBox(
-                                                width: 6,
-                                              ),
+                                              SizedBox(width: 6),
                                               Expanded(
                                                 child: DropdownButton<String>(
                                                   isExpanded: true,
@@ -802,21 +803,23 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                                                   onChanged: (String newValue) {
                                                     setState(() {
                                                       _distance = newValue;
+                                                      print(
+                                                          'Selected Distance $_distance');
                                                     });
                                                     getNearbyLabs();
                                                   },
-                                                  items: _distanceList.map<
-                                                          DropdownMenuItem<
-                                                              String>>(
-                                                      (String value) {
-                                                    return DropdownMenuItem<
-                                                        String>(
-                                                      value: value,
-                                                      child: Text(
-                                                        value + " m",
-                                                      ),
-                                                    );
-                                                  }).toList(),
+                                                  items:
+                                                      distanceData.distance.map(
+                                                    (e) {
+                                                      return DropdownMenuItem<
+                                                          String>(
+                                                        value: e.meter,
+                                                        child: Text(
+                                                          e.km + " km",
+                                                        ),
+                                                      );
+                                                    },
+                                                  ).toList(),
                                                 ),
                                               ),
                                             ],

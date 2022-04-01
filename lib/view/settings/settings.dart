@@ -1,11 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_bloom/components/custom_contained_button.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/utils/colors.dart';
+import 'package:health_bloom/view/about/about_app.dart';
+import 'package:health_bloom/view/about/about_dev.dart';
 import 'package:health_bloom/view/feedback/feedback_page.dart';
 import 'package:health_bloom/view/profile/profile.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
@@ -298,19 +301,64 @@ class _SettingsState extends State<Settings> {
                             size: 15,
                           ),
                         ),
-                        ListTile(
-                          onTap: () {},
-                          title: TextBuilder(
-                            text: "About",
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
+                        Slidable(
+                          startActionPane: ActionPane(
+                            extentRatio: 0.3,
+                            motion: const BehindMotion(),
+                            children: [
+                              SlidableAction(
+                                spacing: 10,
+                                onPressed: (c) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AboutApp(),
+                                    ),
+                                  );
+                                },
+                                backgroundColor: Colors.transparent,
+                                foregroundColor: Color(0xff8B80F8),
+                                icon: Icons.info_outline,
+                                label: 'App',
+                              ),
+                            ],
                           ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: Colors.black,
-                            size: 15,
+                          endActionPane: ActionPane(
+                            extentRatio: 0.3,
+                            motion: const BehindMotion(),
+                            children: [
+                              SlidableAction(
+                                spacing: 10,
+                                onPressed: (c) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AboutDev(),
+                                    ),
+                                  );
+                                },
+                                backgroundColor: Colors.transparent,
+                                foregroundColor: Color(0xff8B80F8),
+                                icon: Icons.code,
+                                label: 'Developer',
+                              ),
+                            ],
+                          ),
+                          child: ListTile(
+                            onTap: () {},
+                            title: TextBuilder(
+                              text: "About",
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              color: Colors.black,
+                              size: 15,
+                            ),
                           ),
                         ),
+                        const SizedBox(height: 10.0),
                       ],
                     ),
                   ),

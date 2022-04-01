@@ -15,7 +15,7 @@
 
 
    <application
-        android:label="health_bloom"
+        android:label="Health Bloom"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
