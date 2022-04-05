@@ -6,8 +6,8 @@ import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/view/documents/documents.dart';
 import 'package:health_bloom/view/feedback/feedback_page.dart';
-import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/insurance/insurance.dart';
+import 'package:health_bloom/view/main_view.dart';
 import 'package:health_bloom/view/profile/profile.dart';
 import 'package:health_bloom/view/settings/settings.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
@@ -91,7 +91,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HomePage(),
+                        builder: (context) => MainView(),
                       ),
                     );
                   },

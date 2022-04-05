@@ -12,9 +12,9 @@ import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/loading.dart';
-import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/login/forgot_password.dart';
 import 'package:health_bloom/view/login/phone_login.dart';
+import 'package:health_bloom/view/main_view.dart';
 import 'package:health_bloom/view/signup/signup.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +48,7 @@ class _LoginState extends State<Login> {
       sp.setString('profileImage', _response.data.avatar ?? "");
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => MainView()),
         (Route<dynamic> route) => false,
       );
     } else {

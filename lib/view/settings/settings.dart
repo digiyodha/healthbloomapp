@@ -10,11 +10,13 @@ import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/view/about/about_app.dart';
 import 'package:health_bloom/view/about/about_dev.dart';
 import 'package:health_bloom/view/feedback/feedback_page.dart';
+import 'package:health_bloom/view/main_view.dart';
 import 'package:health_bloom/view/profile/profile.dart';
+import 'package:health_bloom/view/settings/privacy_policy.dart';
+import 'package:health_bloom/view/settings/terms_of_use.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
 
 import '../../utils/drawer/custom_drawer.dart';
-import '../homepage/home_page.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key key}) : super(key: key);
@@ -34,6 +36,9 @@ class _SettingsState extends State<Settings> {
     _silent = sp.getBool("generalSilent");
   }
 
+  // GlobalKey _aboutApp = GlobalKey();
+  // GlobalKey _aboutDev = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -49,7 +54,7 @@ class _SettingsState extends State<Settings> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => MainView(),
           ),
         );
         return true;
@@ -223,7 +228,14 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                         ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PrivacyPolicy(),
+                              ),
+                            );
+                          },
                           title: TextBuilder(
                             text: "Privacy Policy",
                             fontSize: 16,
@@ -236,7 +248,14 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                         ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TermsOfUse(),
+                              ),
+                            );
+                          },
                           title: TextBuilder(
                             text: "Terms of use",
                             fontSize: 16,
@@ -351,11 +370,11 @@ class _SettingsState extends State<Settings> {
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                             ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              color: Colors.black,
-                              size: 15,
-                            ),
+                            // trailing: Icon(
+                            //   Icons.arrow_forward_ios_rounded,
+                            //   color: Colors.black,
+                            //   size: 15,
+                            // ),
                           ),
                         ),
                         const SizedBox(height: 10.0),

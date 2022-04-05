@@ -9,8 +9,7 @@ import 'package:health_bloom/view/reminder/add_reminder.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../services/api/repository/auth_repository.dart';
-import '../../utils/custom_add_element_bs.dart';
-import '../../utils/custom_bnb.dart';
+
 import '../../utils/drawer/custom_drawer.dart';
 
 class Journal extends StatefulWidget {
@@ -1115,28 +1114,28 @@ class _JournalState extends State<Journal> {
                   if (_loading) LoadingWidget()
                 ],
               ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              builder: (BuildContext bc) {
-                return CustomAddElementBs(
-                  onChanged: () {
-                    setState(() {
-                      Navigator.pop(context);
-                    });
-                    getAllReminder();
-                  },
-                );
-              },
-            );
-          },
-          child: Icon(Icons.add),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: CustomBnb(
-          current: 1,
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     showModalBottomSheet(
+        //       context: context,
+        //       builder: (BuildContext bc) {
+        //         return CustomAddElementBs(
+        //           onChanged: () {
+        //             setState(() {
+        //               Navigator.pop(context);
+        //             });
+        //             getAllReminder();
+        //           },
+        //         );
+        //       },
+        //     );
+        //   },
+        //   child: Icon(Icons.add),
+        // ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // bottomNavigationBar: CustomBnb(
+        //   current: 1,
+        // ),
       ),
     );
   }

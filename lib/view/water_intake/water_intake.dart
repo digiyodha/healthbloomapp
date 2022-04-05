@@ -4,12 +4,12 @@ import 'package:health_bloom/model/request/request.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/main.dart';
+import 'package:health_bloom/view/main_view.dart';
 import 'package:health_bloom/view/water_intake/water_settings.dart';
 import 'package:provider/provider.dart';
 import '../../components/custom_contained_button.dart';
 import '../../services/api/repository/auth_repository.dart';
 import '../../utils/drawer/custom_drawer.dart';
-import '../homepage/home_page.dart';
 
 class WaterIntake extends StatefulWidget {
   const WaterIntake({Key key}) : super(key: key);
@@ -29,11 +29,10 @@ class _WaterIntakeState extends State<WaterIntake> {
   Future<WaterCheckResponse> waterCheck() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     WaterCheckResponse _response = await adminAPI.waterCheckAPI(
-      WaterCheckRequest(
-        targetAmount: sp.getInt("dailyIntake"),
-        dailyWaterConsumed: int.parse(sp.getString("${_today.day}/${_today.month}/${_today.year}"))
-      )
-    );
+        WaterCheckRequest(
+            targetAmount: sp.getInt("dailyIntake"),
+            dailyWaterConsumed: int.parse(
+                sp.getString("${_today.day}/${_today.month}/${_today.year}"))));
     return _response;
   }
 
@@ -84,12 +83,12 @@ class _WaterIntakeState extends State<WaterIntake> {
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.pop(context);
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => MainView(),
           ),
         );
         return true;
@@ -143,7 +142,9 @@ class _WaterIntakeState extends State<WaterIntake> {
                   Text(
                     "Today You took",
                     style: TextStyle(
-                        fontSize: 28, fontWeight: FontWeight.w600, color: kBlack),
+                        fontSize: 28,
+                        fontWeight: FontWeight.w600,
+                        color: kBlack),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -174,7 +175,9 @@ class _WaterIntakeState extends State<WaterIntake> {
                   Text(
                     "Almost there! Keep hydrated",
                     style: TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.w600, color: kGrey6),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: kGrey6),
                   ),
                   Spacer(),
                   Align(
@@ -447,7 +450,8 @@ class _WaterIntakeState extends State<WaterIntake> {
                           waterCheck();
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Please add the water quantity first!"),
+                            content:
+                                Text("Please add the water quantity first!"),
                           ));
                         }
                       },

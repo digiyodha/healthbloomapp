@@ -14,11 +14,11 @@ import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/login/login.dart';
+import 'package:health_bloom/view/main_view.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
-import '../homepage/home_page.dart';
 
 class EditProfile extends StatefulWidget {
   final String id;
@@ -207,7 +207,7 @@ class _EditProfileState extends State<EditProfile> {
                                 Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => HomePage()),
+                                      builder: (context) => MainView()),
                                   (Route<dynamic> route) => false,
                                 );
                               },
@@ -628,7 +628,7 @@ class _EditProfileState extends State<EditProfile> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      HomePage()));
+                                                      MainView()));
                                         } else {
                                           sp.clear();
                                           Navigator.pushAndRemoveUntil(

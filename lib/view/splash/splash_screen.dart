@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:health_bloom/main.dart';
 import 'package:health_bloom/utils/colors.dart';
-import 'package:health_bloom/view/homepage/home_page.dart';
+
+import 'package:health_bloom/view/main_view.dart';
 import 'package:health_bloom/view/walkthrough/walkthrough.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -29,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
       }));
     } else {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return HomePage();
+        return MainView();
       }));
     }
   }

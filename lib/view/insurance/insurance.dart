@@ -10,12 +10,12 @@ import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/utils/text_field/custom_text_field.dart';
 import 'package:health_bloom/view/insurance/add_insurance.dart';
 import 'package:health_bloom/view/insurance/view_insurance.dart';
+import 'package:health_bloom/view/main_view.dart';
 
 import 'package:provider/provider.dart';
 
 import '../../services/api/repository/auth_repository.dart';
 import '../../utils/drawer/custom_drawer.dart';
-import '../homepage/home_page.dart';
 
 class Insurance extends StatefulWidget {
   const Insurance({Key key}) : super(key: key);
@@ -75,7 +75,7 @@ class _InsuranceState extends State<Insurance> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => MainView(),
           ),
         );
         return true;

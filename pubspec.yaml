@@ -52,6 +52,7 @@ dependencies:
   maps_launcher: ^2.0.1
   flutter_slidable: ^1.2.0
   geocoding: ^2.0.1
+  flutter_markdown:
 
 flutter_icons:
   #  image_path: "assets/images/icon-128x128.png"
@@ -59,7 +60,6 @@ flutter_icons:
   image_path_ios: "assets/icons/app-logo-icon.png"
   android: true # can specify file name here e.g. "ic_launcher"
   ios: true # can specify file name here e.g. "My-Launcher-Icon"
-
   adaptive_icon_background: "assets/icons/app-logo-icon.png" # only available for Android 8.0 devices and above
   adaptive_icon_foreground: "assets/icons/app-logo-icon.png" # only available for Android 8.0 devices and above
 
@@ -75,6 +75,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - assets/md/
 
   # fonts:
   #   - family: Schyler

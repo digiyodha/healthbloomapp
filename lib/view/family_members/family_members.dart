@@ -7,10 +7,10 @@ import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/family_members/view_family_member.dart';
+import 'package:health_bloom/view/main_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/drawer/custom_drawer.dart';
-import '../homepage/home_page.dart';
 import 'add_family_member.dart';
 
 class FamilyMembers extends StatefulWidget {
@@ -50,7 +50,7 @@ class _FamilyMembersState extends State<FamilyMembers> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => MainView(),
           ),
         );
         return true;

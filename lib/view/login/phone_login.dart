@@ -8,8 +8,9 @@ import 'package:health_bloom/services/api/repository/auth_repository.dart';
 // ignore: unused_import
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
-import 'package:health_bloom/view/homepage/home_page.dart';
+
 import 'package:health_bloom/view/login/phone_login_otp.dart';
+import 'package:health_bloom/view/main_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
@@ -59,7 +60,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
       } else {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => MainView()),
           (Route<dynamic> route) => false,
         );
       }
@@ -115,7 +116,9 @@ class _PhoneLoginState extends State<PhoneLogin> {
     if (exception.code == 'invalid-phone-number') {
       showMessage("The phone number entered is invalid!");
     }
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("This phone number has been temporarily blocked due to suspicious activity, Please try later.")));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+            "This phone number has been temporarily blocked due to suspicious activity, Please try later.")));
     setState(() {
       isLoading = false;
     });
@@ -168,7 +171,8 @@ class _PhoneLoginState extends State<PhoneLogin> {
               uid: user.user.uid,
               avatar: "",
               phoneNumber: user.user.phoneNumber,
-              countryCode: null,fcmToken: msgToken));
+              countryCode: null,
+              fcmToken: msgToken));
         }
         setState(() {
           isLoading = false;

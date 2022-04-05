@@ -12,11 +12,11 @@ import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/utils/text_field/custom_text_field.dart';
-import 'package:health_bloom/view/homepage/home_page.dart';
+
+import 'package:health_bloom/view/main_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/drawer/custom_drawer.dart';
-
 
 class FeedbackPage extends StatefulWidget {
   final SearchMedicineResponseDatum medicne;
@@ -69,12 +69,12 @@ class _FeedbackPageState extends State<FeedbackPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.pop(context);
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => MainView(),
           ),
         );
         return true;
@@ -278,37 +278,47 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                   alignment: WrapAlignment.center,
                                   runSpacing: 15,
                                   spacing: 10,
-                                  children: List.generate(feedbackOption.length, (index) => FedbackOptionCard(
-                                    isSelected:
-                                    feedbacckIds.contains(feedbackOption[index].id),
-                                    onChanged: (val) {
-                                      isSizeSelected = val;
-                                      setState(() {
-                                        if (isSizeSelected == true) {
-                                          print("Add ${feedbackOption[index].id}");
-                                          setState(() {
-                                            feedbacckIds.add(feedbackOption[index].id);
-                                          });
-                                        } else {
-                                          print("Remove ${feedbackOption[index].id}");
-                                          setState(() {
-                                            feedbacckIds.remove(feedbackOption[index].id);
-                                          });
-                                        }
-                                      });
-                                      print(
-                                          "Total ${feedbacckIds.toList().toString()}");
-                                    },
-                                    title: feedbackOption[index].feedbackName.toString(),
-                                    bgColor:
-                                    feedbacckIds.contains(feedbackOption[index].id)
-                                        ? _colors[index]
-                                        : Color(0xffF4F5FA),
-                                    textColor:
-                                    feedbacckIds.contains(feedbackOption[index].id)
-                                        ? Colors.white
-                                        : Color(0xffA5A4B3),
-                                  )),
+                                  children: List.generate(
+                                      feedbackOption.length,
+                                      (index) => FedbackOptionCard(
+                                            isSelected: feedbacckIds.contains(
+                                                feedbackOption[index].id),
+                                            onChanged: (val) {
+                                              isSizeSelected = val;
+                                              setState(() {
+                                                if (isSizeSelected == true) {
+                                                  print(
+                                                      "Add ${feedbackOption[index].id}");
+                                                  setState(() {
+                                                    feedbacckIds.add(
+                                                        feedbackOption[index]
+                                                            .id);
+                                                  });
+                                                } else {
+                                                  print(
+                                                      "Remove ${feedbackOption[index].id}");
+                                                  setState(() {
+                                                    feedbacckIds.remove(
+                                                        feedbackOption[index]
+                                                            .id);
+                                                  });
+                                                }
+                                              });
+                                              print(
+                                                  "Total ${feedbacckIds.toList().toString()}");
+                                            },
+                                            title: feedbackOption[index]
+                                                .feedbackName
+                                                .toString(),
+                                            bgColor: feedbacckIds.contains(
+                                                    feedbackOption[index].id)
+                                                ? _colors[index]
+                                                : Color(0xffF4F5FA),
+                                            textColor: feedbacckIds.contains(
+                                                    feedbackOption[index].id)
+                                                ? Colors.white
+                                                : Color(0xffA5A4B3),
+                                          )),
                                 ),
                               ),
                               const SizedBox(height: 30.0),
@@ -353,7 +363,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                         Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => HomePage()),
+                                              builder: (context) => MainView()),
                                           (Route<dynamic> route) => false,
                                         );
                                       }

@@ -11,6 +11,7 @@ import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/login/login.dart';
 import 'package:health_bloom/view/login/phone_login.dart';
+import 'package:health_bloom/view/main_view.dart';
 import 'package:health_bloom/view/profile/edit_profile.dart';
 
 import 'package:provider/provider.dart';
@@ -18,7 +19,6 @@ import 'package:provider/provider.dart';
 import '../../main.dart';
 import '../../model/request/request.dart';
 import '../../model/response/response.dart';
-import '../homepage/home_page.dart';
 
 enum AuthMode { login, register, phone }
 
@@ -62,7 +62,7 @@ class _SignUpState extends State<SignUp> {
       if (soc) {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => MainView()),
           (Route<dynamic> route) => false,
         );
       }

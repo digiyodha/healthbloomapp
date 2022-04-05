@@ -10,12 +10,9 @@ import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/utils/drawer/custom_drawer.dart';
 import 'package:health_bloom/utils/loading.dart';
+import 'package:health_bloom/view/main_view.dart';
 import 'package:health_bloom/view/profile/update_profile.dart';
 import 'package:provider/provider.dart';
-
-import '../../utils/custom_add_element_bs.dart';
-import '../../utils/custom_bnb.dart';
-import '../homepage/home_page.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key key}) : super(key: key);
@@ -95,7 +92,7 @@ class _ProfileState extends State<Profile> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => MainView(),
           ),
         );
         return true;
@@ -407,25 +404,25 @@ class _ProfileState extends State<Profile> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              builder: (BuildContext bc) {
-                return CustomAddElementBs(
-                  onChanged: () {
-                    Navigator.pop(context);
-                  },
-                );
-              },
-            );
-          },
-          child: Icon(Icons.add),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: CustomBnb(
-          current: 3,
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     showModalBottomSheet(
+        //       context: context,
+        //       builder: (BuildContext bc) {
+        //         return CustomAddElementBs(
+        //           onChanged: () {
+        //             Navigator.pop(context);
+        //           },
+        //         );
+        //       },
+        //     );
+        //   },
+        //   child: Icon(Icons.add),
+        // ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // bottomNavigationBar: CustomBnb(
+        //   current: 3,
+        // ),
       ),
     );
   }

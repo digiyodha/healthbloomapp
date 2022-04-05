@@ -9,6 +9,7 @@ import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/documents/view_bill_documents.dart';
 import 'package:health_bloom/view/documents/view_prescription_documents.dart';
 import 'package:health_bloom/view/documents/view_report_documents.dart';
+import 'package:health_bloom/view/main_view.dart';
 
 import 'package:health_bloom/view/prescription/add_prescription.dart';
 import 'package:health_bloom/view/report/add_report.dart';
@@ -19,7 +20,6 @@ import '../../services/api/repository/auth_repository.dart';
 import '../../utils/drawer/custom_drawer.dart';
 import '../../utils/text_field/custom_text_field.dart';
 import '../bill/add_bill.dart';
-import '../homepage/home_page.dart';
 
 class Documents extends StatefulWidget {
   const Documents({Key key}) : super(key: key);
@@ -129,7 +129,10 @@ class _DocumentsState extends State<Documents> {
 
       foundPrescription = _currentResponse.data.prescription
           .where((e) =>
-              e.patient.name.toString().toLowerCase().contains(search.toLowerCase()) ||
+              e.patient.name
+                  .toString()
+                  .toLowerCase()
+                  .contains(search.toLowerCase()) ||
               e.doctorName.toLowerCase().contains(search.toLowerCase()))
           .toList();
     });
@@ -138,12 +141,12 @@ class _DocumentsState extends State<Documents> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.pop(context);
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => MainView(),
           ),
         );
         return true;

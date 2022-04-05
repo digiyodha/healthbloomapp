@@ -10,7 +10,6 @@ import 'package:health_bloom/model/response/get_user_response.dart';
 import 'package:health_bloom/model/response/response.dart';
 import 'package:health_bloom/services/api/repository/auth_repository.dart';
 import 'package:health_bloom/utils/colors.dart';
-import 'package:health_bloom/utils/custom_add_element_bs.dart';
 import 'package:health_bloom/utils/loading.dart';
 import 'package:health_bloom/view/medicine/about_medicine.dart';
 import 'package:health_bloom/view/medicine/add_medicine.dart';
@@ -22,7 +21,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
-import '../../utils/custom_bnb.dart';
+
 import '../../utils/drawer/custom_drawer.dart';
 import '../family_members/family_members.dart';
 import '../water_intake/water_intake.dart';
@@ -97,6 +96,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _getMembers = getAllmember();
+
     getData();
     getNextMedicine();
     updatePosition();
@@ -277,9 +277,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              width: 14,
-                            ),
+                            SizedBox(width: 14),
                             Expanded(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -688,28 +686,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              builder: (BuildContext bc) {
-                return CustomAddElementBs(
-                  onChanged: () {
-                    setState(() {
-                      Navigator.pop(context);
-                      getNextMedicine();
-                    });
-                  },
-                );
-              },
-            );
-          },
-          child: Icon(Icons.add),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: CustomBnb(
-          current: 0,
-        ),
+        // bottomNavigationBar: CustomBnb(current: 0),
       ),
     );
   }

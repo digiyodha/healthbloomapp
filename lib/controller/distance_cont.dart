@@ -7,6 +7,6 @@ class DistanceCont {
     DistanceModel(meter: '2000', km: '2'),
     DistanceModel(meter: '5000', km: '5'),
     DistanceModel(meter: '10000', km: '10'),
-    DistanceModel(meter: '500000', km: '10+'),
+    DistanceModel(meter: '50000', km: '10+'),
   ];
 }

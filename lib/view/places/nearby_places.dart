@@ -9,8 +9,7 @@ import 'package:health_bloom/view/places/place_details.dart';
 import 'package:health_bloom/view/places/widgets/custom_nearby_switch.dart';
 import 'package:provider/provider.dart';
 import '../../services/api/repository/auth_repository.dart';
-import '../../utils/custom_add_element_bs.dart';
-import '../../utils/custom_bnb.dart';
+
 import '../../utils/drawer/custom_drawer.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
@@ -80,6 +79,7 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
   @override
   void initState() {
     super.initState();
+    print('Init Distance $_distance');
     UtilFunctions.determinePosition().then((value) {
       print('currentLatitude ${sp.getString('currentLatitude')}');
       print('currentLongitude ${sp.getString('currentLongitude')}');
@@ -1167,25 +1167,25 @@ class _NearbyPlacesState extends State<NearbyPlaces> {
                 )
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              builder: (BuildContext bc) {
-                return CustomAddElementBs(
-                  onChanged: () {
-                    Navigator.pop(context);
-                  },
-                );
-              },
-            );
-          },
-          child: Icon(Icons.add),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: CustomBnb(
-          current: 2,
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     showModalBottomSheet(
+        //       context: context,
+        //       builder: (BuildContext bc) {
+        //         return CustomAddElementBs(
+        //           onChanged: () {
+        //             Navigator.pop(context);
+        //           },
+        //         );
+        //       },
+        //     );
+        //   },
+        //   child: Icon(Icons.add),
+        // ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // bottomNavigationBar: CustomBnb(
+        //   current: 2,
+        // ),
       ),
     );
   }
