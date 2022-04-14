@@ -11,6 +11,7 @@ import '../../utils/text_field/custom_text_field.dart';
 
 class ViewInsurance extends StatefulWidget {
   final SearchInsuranceResponseDatum insurance;
+
   const ViewInsurance({Key key, this.insurance}) : super(key: key);
 
   @override
@@ -63,22 +64,27 @@ class _ViewInsurance extends State<ViewInsurance> {
         centerTitle: true,
       ),
       backgroundColor: kWhite,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         backgroundColor: kMainColor,
-        child: Icon(
-          Icons.list,
-          color: kWhite,
-          size: 26,
-        ),
+        icon: Icon(Icons.description),
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => InsuranceDocuments(
-                  insurance: null, userid: widget.insurance.patient.id),
+                insurance: null,
+                userid: widget.insurance.patient.id,
+                dob: widget.insurance.dateOfBirth,
+              ),
             ),
           );
         },
+        label: TextBuilder(
+          text: "Browse Documents",
+          color: Colors.white,
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+        ),
       ),
       body: Stack(
         children: [

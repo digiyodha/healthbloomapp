@@ -805,6 +805,8 @@ class _JournalState extends State<Journal> {
                                               //       ),
                                               //   ],
                                               // ),
+                                              useTextDirection: true,
+                                              // direction: Axis.vertical,
                                               endActionPane: _currentResponse
                                                           .data[index].check ==
                                                       false
@@ -854,13 +856,11 @@ class _JournalState extends State<Journal> {
                                                                     .check
                                                                 ? Icons.close
                                                                 : Icons.done,
-                                                            label:
-                                                                _currentResponse
-                                                                        .data[
-                                                                            index]
-                                                                        .check
-                                                                    ? "Uncheck"
-                                                                    : 'Check',
+                                                            label: _currentResponse
+                                                                    .data[index]
+                                                                    .check
+                                                                ? "Uncheck"
+                                                                : 'Mark as\n  Done',
                                                           ),
                                                       ],
                                                     )
@@ -1062,7 +1062,36 @@ class _JournalState extends State<Journal> {
                                                             ),
                                                           ),
                                                         ],
-                                                      )
+                                                      ),
+                                                    _currentResponse.data[index]
+                                                                .check ==
+                                                            true
+                                                        ? Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    right: 15),
+                                                            child: Container(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              height: 30,
+                                                              width: 30,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: kWhite,
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                              ),
+                                                              child: Icon(
+                                                                Icons.check,
+                                                                size: 28,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : Container()
                                                   ],
                                                 ),
                                               ),

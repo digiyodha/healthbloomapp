@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import '../../../utils/colors.dart';
 
-class InsuranceCard extends StatefulWidget {
+class InsuranceDocCard extends StatefulWidget {
   final String nameOfBill;
   final String nameOfPatients;
   final String avatar;
@@ -11,33 +11,36 @@ class InsuranceCard extends StatefulWidget {
   final Function delete;
   final Function onTap;
   final bool showIcons;
-  const InsuranceCard({
-    Key key,
-    this.nameOfBill,
-    this.nameOfPatients,
-    this.dateOfBill,
-    this.edit,
-    this.delete,
-    this.onTap,
-    this.avatar,
-    this.showIcons = true
-  }) : super(key: key);
+  bool value;
+  InsuranceDocCard(
+      {Key key,
+      this.nameOfBill,
+      this.nameOfPatients,
+      this.dateOfBill,
+      this.edit,
+      this.delete,
+      this.onTap,
+      this.avatar,
+      this.value,
+      this.showIcons = true})
+      : super(key: key);
 
   @override
-  State<InsuranceCard> createState() => _InsuranceCardState();
+  State<InsuranceDocCard> createState() => _InsuranceCardSDoctate();
 }
 
-class _InsuranceCardState extends State<InsuranceCard> {
-  bool _selected = false;
+class _InsuranceCardSDoctate extends State<InsuranceDocCard> {
+  // bool _selected = false;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: InkWell(
-        onTap: (){
-          _selected = !_selected;
-          widget.onTap(_selected);
+        onTap: () {
+          // _selected = !_selected;
+          widget.value = !widget.value;
+          widget.onTap(widget.value);
           setState(() {});
         },
         child: Stack(
@@ -55,36 +58,31 @@ class _InsuranceCardState extends State<InsuranceCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    height: 115,
-                    decoration: BoxDecoration(
-                      color: Color(0xffDFDEE2),
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.elliptical(50, 100),
-                        bottomRight: Radius.elliptical(50, 100),
-                      ),
+                  ClipRRect(
+                    clipBehavior: Clip.antiAlias,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.elliptical(50, 100),
+                      bottomRight: Radius.elliptical(50, 100),
                     ),
-                    child: Padding(
-                      padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                      child: widget.avatar.isNotEmpty && widget.avatar != null
-                          ? CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Color(0xffFABE18),
-                        backgroundImage: NetworkImage(widget.avatar),
-                      )
-                          : CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Color(0xffFABE18),
-                        child: Center(
-                          child: Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 40,
+                    child: widget.avatar.isNotEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: CircleAvatar(
+                              radius: 42,
+                              backgroundImage: NetworkImage(
+                                widget.avatar,
+                              ),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: CircleAvatar(
+                              radius: 42,
+                              backgroundImage: AssetImage(
+                                'assets/images/man.png',
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
                   ),
                   Expanded(
                     child: Container(
@@ -108,7 +106,7 @@ class _InsuranceCardState extends State<InsuranceCard> {
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
-                              if(widget.showIcons)
+                              if (widget.showIcons)
                                 InkWell(
                                   onTap: widget.edit,
                                   child: Icon(
@@ -148,7 +146,7 @@ class _InsuranceCardState extends State<InsuranceCard> {
                                   ),
                                 ],
                               ),
-                              if(widget.showIcons)
+                              if (widget.showIcons)
                                 InkWell(
                                   onTap: widget.delete,
                                   child: Icon(
@@ -165,11 +163,15 @@ class _InsuranceCardState extends State<InsuranceCard> {
                 ],
               ),
             ),
-            if(_selected)
+            if (widget.value)
               Positioned(
                 top: 8,
                 right: 8,
-                child: Icon(Icons.check_box,color: Colors.white,size: 30,),
+                child: Icon(
+                  Icons.check_box,
+                  color: Colors.white,
+                  size: 30,
+                ),
               )
           ],
         ),

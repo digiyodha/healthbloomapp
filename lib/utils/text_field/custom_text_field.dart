@@ -14,7 +14,7 @@ class CustomTextField extends StatefulWidget {
   final int maxLength;
   final double labelSize;
   final Function(String) validator;
-  final Widget prefix;
+  final Widget prefix, sufix;
   final TextCapitalization textCapitalization;
   CustomTextField(
       {this.controller,
@@ -36,7 +36,8 @@ class CustomTextField extends StatefulWidget {
       this.labelSize = 16,
       this.validator,
       this.prefix,
-      this.textCapitalization = TextCapitalization.none});
+      this.textCapitalization = TextCapitalization.none,
+      this.sufix});
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -77,6 +78,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         fillColor: widget.readOnly ? Color(0xffF7F8FB) : kWhite,
         filled: true,
         prefix: widget.prefix,
+        suffixIcon: widget.sufix,
         errorBorder:
             OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
         focusedBorder: widget.readOnly

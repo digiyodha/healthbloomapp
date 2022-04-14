@@ -28,111 +28,145 @@ class InsuranceCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: InkWell(
         onTap: onTap,
-        child: Container(
+        child: Card(
+          margin: EdgeInsets.zero,
+          elevation: 2,
+          color: Colors.white,
           clipBehavior: Clip.antiAlias,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            color: kMainColor,
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(12),
-              bottomRight: Radius.circular(12),
+          child: Container(
+            // clipBehavior: Clip.antiAlias,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: kMainColor,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(12),
+                bottomRight: Radius.circular(12),
+              ),
             ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                height: 115,
-                decoration: BoxDecoration(
-                  color: Color(0xffDFDEE2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ClipRRect(
+                  clipBehavior: Clip.antiAlias,
                   borderRadius: BorderRadius.only(
                     topRight: Radius.elliptical(50, 100),
                     bottomRight: Radius.elliptical(50, 100),
                   ),
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                   child: avatar.isNotEmpty
-                      ? CircleAvatar(
-                          radius: 40,
-                          backgroundColor: Color(0xffFABE18),
-                          backgroundImage: NetworkImage(avatar),
+                      ? Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: CircleAvatar(
+                            radius: 42,
+                            backgroundImage: NetworkImage(
+                              avatar,
+                            ),
+                          ),
                         )
-                      : CircleAvatar(
-                          radius: 40,
-                          backgroundColor: Color(0xffFABE18),
-                          child: Center(
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.white,
-                              size: 40,
+                      : Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: CircleAvatar(
+                            radius: 42,
+                            backgroundImage: AssetImage(
+                              'assets/images/man.png',
                             ),
                           ),
                         ),
                 ),
-              ),
-              Expanded(
-                child: Container(
-                  height: 115,
-                  decoration: BoxDecoration(
-                    color: kMainColor,
-                  ),
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextBuilder(
-                            text: organization.toString() ?? '',
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          InkWell(
-                            onTap: edit,
-                            child: Icon(
-                              Icons.edit,
+                // Container(
+                //   height: 115,
+                //   decoration: BoxDecoration(
+                //     // color: Color(0xffDFDEE2),
+                //     color: Colors.white,
+                //     // color: kMainColor,
+                //     borderRadius: BorderRadius.only(
+                //       topRight: Radius.elliptical(50, 100),
+                //       bottomRight: Radius.elliptical(50, 100),
+                //     ),
+                //   ),
+                //   child: Padding(
+                //     padding:
+                //         const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                //     child: avatar.isNotEmpty
+                //         ? CircleAvatar(
+                //             radius: 40,
+                //             backgroundColor: Color(0xffFABE18),
+                //             backgroundImage: NetworkImage(avatar),
+                //           )
+                //         : CircleAvatar(
+                //             radius: 40,
+                //             backgroundColor: Color(0xffFABE18),
+                //             child: Center(
+                //               child: Icon(
+                //                 Icons.person,
+                //                 color: Colors.white,
+                //                 size: 40,
+                //               ),
+                //             ),
+                //           ),
+                //   ),
+                // ),
+                Expanded(
+                  child: Container(
+                    height: 115,
+                    decoration: BoxDecoration(
+                      color: kMainColor,
+                    ),
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextBuilder(
+                              text: organization.toString() ?? '',
                               color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
                             ),
-                          )
-                        ],
-                      ),
-                      Spacer(),
-                      TextBuilder(
-                        text: nameOfPatients.toString() ?? '',
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      Spacer(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextBuilder(
-                            text: dob != null
-                                ? '${dob.day}-${dob.month}-${dob.year}'
-                                : '',
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          InkWell(
-                            onTap: delete,
-                            child: Icon(
-                              Icons.delete,
+                            InkWell(
+                              onTap: edit,
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                            )
+                          ],
+                        ),
+                        Spacer(),
+                        TextBuilder(
+                          text: nameOfPatients.toString() ?? '',
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        Spacer(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextBuilder(
+                              text: dob != null
+                                  ? '${dob.day}-${dob.month}-${dob.year}'
+                                  : '',
                               color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
                             ),
-                          )
-                        ],
-                      )
-                    ],
+                            InkWell(
+                              onTap: delete,
+                              child: Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

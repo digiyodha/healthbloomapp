@@ -59,10 +59,15 @@ class _InsuranceState extends State<Insurance> {
     print('Search Query $search');
     setState(() {
       foundInsurance = _currentResponse.data
-          .where((e) => e.patient.name
-              .toString()
-              .toLowerCase()
-              .contains(search.toString().toLowerCase()))
+          .where((e) =>
+              e.patient.name
+                  .toString()
+                  .toLowerCase()
+                  .contains(search.toString().toLowerCase()) ||
+              e.dateOfBirth
+                  .toString()
+                  .toLowerCase()
+                  .contains(search.toString().toLowerCase()))
           .toList();
     });
   }

@@ -2017,7 +2017,8 @@ class GetDocumentsFamilyResponseCommonObject {
       this.userAilment,
       this.consultationDate,
       this.doctorAdvice,
-      this.type});
+      this.type,
+      this.dateOfBirth});
 
   String id;
   String name;
@@ -2038,6 +2039,7 @@ class GetDocumentsFamilyResponseCommonObject {
   DateTime consultationDate;
   String doctorAdvice;
   String type;
+  DateTime dateOfBirth;
 }
 
 class GetHealthScoreResponse {

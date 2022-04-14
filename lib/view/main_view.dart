@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/bottom_item.dart';
+import 'package:health_bloom/utils/colors.dart';
+
 import 'package:health_bloom/utils/custom_add_element_bs.dart';
 import 'package:health_bloom/view/homepage/home_page.dart';
 import 'package:health_bloom/view/journal/journal.dart';
@@ -16,6 +18,7 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   int currentIndex = 0;
+
   PageController controller;
   final GlobalKey<ScaffoldState> key = GlobalKey();
   List<Widget> _pages = [
@@ -25,17 +28,19 @@ class _MainViewState extends State<MainView> {
     Profile(),
     NewMedicine(),
   ];
+
   @override
   void initState() {
     super.initState();
     controller = PageController(initialPage: 0, keepPage: true);
   }
 
+  Color _activeColor = kMainColor;
+  Color _inActiveColor = Colors.black12;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: key,
-      // backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
@@ -70,9 +75,7 @@ class _MainViewState extends State<MainView> {
               height: 60,
               width: double.infinity,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              // color: Colors.transparent,
               decoration: BoxDecoration(
-                // color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(40),
                   topRight: Radius.circular(40),
@@ -88,26 +91,32 @@ class _MainViewState extends State<MainView> {
                 ],
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Expanded(
-                    child: BottomItem(
-                      icon: Icons.home,
-                      color: currentIndex == 0 ? Colors.black : Colors.black12,
-                      onPressed: () {
-                        setState(() {
-                          currentIndex = 0;
-                          controller.animateToPage(0,
-                              duration: Duration(milliseconds: 400),
-                              curve: Curves.ease);
-                        });
-                      },
+                    child: AnimatedContainer(
+                      duration: Duration(seconds: 1),
+                      child: BottomItem(
+                        icon: Icons.home,
+                        height: currentIndex == 0 ? 45 : 35,
+                        color:
+                            currentIndex == 0 ? _activeColor : _inActiveColor,
+                        onPressed: () {
+                          setState(() {
+                            currentIndex = 0;
+                            controller.animateToPage(0,
+                                duration: Duration(milliseconds: 400),
+                                curve: Curves.ease);
+                          });
+                        },
+                      ),
                     ),
                   ),
                   Expanded(
                     child: BottomItem(
                       icon: Icons.menu_book,
-                      color: currentIndex == 1 ? Colors.black : Colors.black12,
+                      height: currentIndex == 1 ? 45 : 35,
+                      color: currentIndex == 1 ? _activeColor : _inActiveColor,
                       onPressed: () {
                         setState(() {
                           currentIndex = 1;
@@ -121,8 +130,15 @@ class _MainViewState extends State<MainView> {
                   Expanded(
                     child: BottomItem(
                       icon: Icons.add,
-                      color: currentIndex == 10 ? Colors.black : Colors.black12,
+                      height: currentIndex == 10 ? 45 : 35,
+                      color: currentIndex == 10 ? _activeColor : _inActiveColor,
                       onPressed: () {
+                        setState(() {
+                          currentIndex = 10;
+                          // controller.animateToPage(10,
+                          //     duration: Duration(milliseconds: 400),
+                          //     curve: Curves.decelerate);
+                        });
                         showModalBottomSheet(
                           context: context,
                           builder: (BuildContext bc) {
@@ -149,7 +165,8 @@ class _MainViewState extends State<MainView> {
                   Expanded(
                     child: BottomItem(
                       icon: Icons.list,
-                      color: currentIndex == 2 ? Colors.black : Colors.black12,
+                      height: currentIndex == 2 ? 45 : 35,
+                      color: currentIndex == 2 ? _activeColor : _inActiveColor,
                       onPressed: () {
                         setState(() {
                           currentIndex = 2;
@@ -163,7 +180,8 @@ class _MainViewState extends State<MainView> {
                   Expanded(
                     child: BottomItem(
                       icon: Icons.person,
-                      color: currentIndex == 3 ? Colors.black : Colors.black12,
+                      height: currentIndex == 3 ? 45 : 35,
+                      color: currentIndex == 3 ? _activeColor : _inActiveColor,
                       onPressed: () {
                         setState(() {
                           currentIndex = 3;
@@ -177,7 +195,8 @@ class _MainViewState extends State<MainView> {
                   Expanded(
                     child: BottomItem(
                       icon: Icons.medication,
-                      color: currentIndex == 4 ? Colors.black : Colors.black12,
+                      height: currentIndex == 4 ? 45 : 35,
+                      color: currentIndex == 4 ? _activeColor : _inActiveColor,
                       onPressed: () {
                         setState(() {
                           currentIndex = 4;
