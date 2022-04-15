@@ -20,7 +20,7 @@ mongoose.plugin(toJson);
 mongoose.connect(dbConfig.url, {
     useNewUrlParser: true
 }).then(() => {
-    console.log("Successfully connected to the database");    
+    console.log("Successfully connected to the database");
 }).catch(err => {
     console.log('Could not connect to the database. Exiting now...', err);
     process.exit();
@@ -72,7 +72,7 @@ app.use("/v1/check", require("./routers/checkRouter"));
 app.use(errorHandler);
 
 
-var port = process.env.PORT || 5000
+var port = process.env.PORT || 3000
 
 // Catch all route
 app.use("*", (req, res) => {
@@ -89,7 +89,7 @@ app.use("*", (req, res) => {
 
 
 // router.get('/', function(req, res) {
-//     res.json({ "message": 'hooray! welcome to our api!' });   
+//     res.json({ "message": 'hooray! welcome to our api!' });
 // });
 
 
