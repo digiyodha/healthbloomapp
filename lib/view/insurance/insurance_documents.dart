@@ -358,7 +358,13 @@ class _InsuranceDocumentsState extends State<InsuranceDocuments> {
                                       print(
                                           '_sortedDocs.length ${_sortedDocs.length}');
 
-                                      if ('${_sortedDocs[index].patient.name}'
+                                      if ('${_sortedDocs[index].name}'
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(search.text
+                                                  .toString()
+                                                  .toLowerCase()) ||
+                                          '${_sortedDocs[index].patient.name}'
                                               .toString()
                                               .toLowerCase()
                                               .contains(search.text

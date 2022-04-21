@@ -54,6 +54,8 @@ dependencies:
   geocoding: ^2.0.1
   flutter_markdown:
   animated_widgets: ^1.1.0
+  device_preview: ^1.0.0
+  new_version: ^0.3.0
 
 flutter_icons:
   #  image_path: "assets/images/icon-128x128.png"

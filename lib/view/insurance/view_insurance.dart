@@ -5,7 +5,6 @@ import 'package:health_bloom/components/textbuilder.dart';
 import 'package:health_bloom/model/response/search_insurance_response.dart';
 import 'package:health_bloom/utils/colors.dart';
 import 'package:health_bloom/view/insurance/insurance_documents.dart';
-import 'package:share/share.dart';
 
 import '../../utils/text_field/custom_text_field.dart';
 
@@ -119,6 +118,16 @@ class _ViewInsurance extends State<ViewInsurance> {
                 child: Column(
                   children: [
                     SizedBox(height: 5),
+                    CustomTextField(
+                      maxLines: 1,
+                      readOnly: true,
+                      controller: _familyMember,
+                      textCapitalization: TextCapitalization.sentences,
+                      label: "Family Member Name",
+                      onChanged: (val) {},
+                      onTap: () {},
+                    ),
+                    SizedBox(height: 16),
                     CustomTextField(
                       maxLines: 1,
                       readOnly: true,
@@ -255,13 +264,6 @@ class _ViewInsurance extends State<ViewInsurance> {
           ),
         ],
       ),
-    );
-  }
-
-  fileShare(String url) {
-    Share.share(
-      url,
-      subject: 'Insurence Claim Attachments',
     );
   }
 }

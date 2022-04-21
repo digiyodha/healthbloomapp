@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,7 @@ import 'package:health_bloom/view/profile/profile.dart';
 import 'package:health_bloom/view/settings/privacy_policy.dart';
 import 'package:health_bloom/view/settings/terms_of_use.dart';
 import 'package:health_bloom/view/splash/splash_screen.dart';
+import 'package:new_version/new_version.dart';
 
 import '../../utils/drawer/custom_drawer.dart';
 
@@ -40,13 +43,49 @@ class _SettingsState extends State<Settings> {
 
   @override
   void initState() {
-    super.initState();
+    super
+        .initState(); // Instantiate NewVersion manager object (Using GCP Console app as example)
+
     getData();
+  }
+
+  final newVersion = NewVersion(
+    androidId: 'com.example.health_bloom', iOSId: 'com.example.healthBloom',
+    // androidId: 'com.adbytee.mera_desh',
+    // iOSId: 'com.adbytee.mera_desh',
+  );
+  basicStatusCheck(NewVersion newVersion) {
+    newVersion.showAlertIfNecessary(context: context);
+  }
+
+  advancedStatusCheck(NewVersion newVersion) async {
+    final status = await newVersion.getVersionStatus();
+
+    if (status != null) {
+      print('Release Note : ' + status.releaseNotes);
+      print('App Store Link : ' + status.appStoreLink);
+      print('Local Version : ' + status.localVersion);
+      print('Store Version : ' + status.storeVersion);
+      print('Canupdate : ' + status.canUpdate.toString());
+      newVersion.showUpdateDialog(
+        context: context,
+        versionStatus: status,
+        dialogTitle: 'Update App?',
+        dialogText:
+            'A new version of Health Bloom is available! Version ${status.storeVersion} is now available - you have ${status.localVersion} \n\nWould you like to update it now?',
+        allowDismissal: true,
+      );
+    }
   }
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   @override
   Widget build(BuildContext context) {
+    // final appcastURL =
+    //     'https://raw.githubusercontent.com/larryaasen/upgrader/master/test/testappcast.xml';
+    // final cfg = AppcastConfiguration(url: appcastURL, supportedOS: [
+    //   'android',
+    // ]);
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context);
@@ -307,17 +346,40 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                         ListTile(
-                          onTap: () {},
+                          onTap: () async {
+                            if (Platform.isAndroid) {
+                              print('If Part is running');
+
+                              final uri = Uri.https(
+                                  "play.google.com",
+                                  "/store/apps/details",
+                                  {"id": "${newVersion.androidId}"});
+                              final response = await http.get(uri);
+                              if (response.statusCode != 200) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                      'Can\'t find an app in the Play Store with the id: ${newVersion.androidId}'),
+                                ));
+                              } else {
+                                print('Inside Else Part is running');
+                                advancedStatusCheck(newVersion);
+                              }
+                            } else {
+                              print('Else Part is running');
+                              advancedStatusCheck(newVersion);
+                            }
+                          },
                           title: TextBuilder(
                             text: "Updates",
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: Colors.black,
-                            size: 15,
-                          ),
+                          // trailing: Icon(
+                          //   Icons.arrow_forward_ios_rounded,
+                          //   color: Colors.black,
+                          //   size: 15,
+                          // ),
                         ),
                         ListTile(
                           onTap: () {

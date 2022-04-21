@@ -64,7 +64,7 @@ class _InsuranceState extends State<Insurance> {
                   .toString()
                   .toLowerCase()
                   .contains(search.toString().toLowerCase()) ||
-              e.dateOfBirth
+              '${e.dateOfBirth.day}-${e.dateOfBirth.month}-${e.dateOfBirth.year}'
                   .toString()
                   .toLowerCase()
                   .contains(search.toString().toLowerCase()))
@@ -138,7 +138,7 @@ class _InsuranceState extends State<Insurance> {
                       CustomTextField(
                         maxLines: 1,
                         controller: search,
-                        label: "Search",
+                        label: "Enter Name or DOB",
                         textInputType: TextInputType.name,
                         onChanged: (value) => onSearch(value),
                         onTap: () {},

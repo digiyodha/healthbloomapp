@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:health_bloom/components/textbuilder.dart';
 import '../../../utils/colors.dart';
@@ -58,32 +59,72 @@ class _InsuranceCardSDoctate extends State<InsuranceDocCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ClipRRect(
-                    clipBehavior: Clip.antiAlias,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.elliptical(50, 100),
-                      bottomRight: Radius.elliptical(50, 100),
+                  Container(
+                    height: 115,
+                    decoration: BoxDecoration(
+                      // color: Color(0xffDFDEE2),
+                      // color: Colors.white,
+                      color: kMainColor,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.elliptical(50, 100),
+                        bottomRight: Radius.elliptical(50, 100),
+                      ),
                     ),
                     child: widget.avatar.isNotEmpty
-                        ? Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: CircleAvatar(
-                              radius: 42,
-                              backgroundImage: NetworkImage(
-                                widget.avatar,
-                              ),
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.elliptical(50, 100),
+                              bottomRight: Radius.elliptical(50, 100),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: widget.avatar,
+                              // height: double.infinity,
+                              // width: double.infinity,
+                              fit: BoxFit.cover,
                             ),
                           )
                         : Padding(
-                            padding: const EdgeInsets.all(12.0),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
                             child: CircleAvatar(
-                              radius: 42,
-                              backgroundImage: AssetImage(
-                                'assets/images/man.png',
+                              radius: 35,
+                              backgroundColor: Color(0xffFABE18),
+                              child: Center(
+                                child: Icon(
+                                  Icons.person,
+                                  color: Colors.white,
+                                  size: 40,
+                                ),
                               ),
                             ),
                           ),
                   ),
+                  // ClipRRect(
+                  //   clipBehavior: Clip.antiAlias,
+                  //   borderRadius: BorderRadius.only(
+                  //     topRight: Radius.elliptical(50, 100),
+                  //     bottomRight: Radius.elliptical(50, 100),
+                  //   ),
+                  //   child: widget.avatar.isNotEmpty
+                  //       ? Padding(
+                  //           padding: const EdgeInsets.all(12.0),
+                  //           child: CircleAvatar(
+                  //             radius: 42,
+                  //             backgroundImage: NetworkImage(
+                  //               widget.avatar,
+                  //             ),
+                  //           ),
+                  //         )
+                  //       : Padding(
+                  //           padding: const EdgeInsets.all(12.0),
+                  //           child: CircleAvatar(
+                  //             radius: 42,
+                  //             backgroundImage: AssetImage(
+                  //               'assets/images/man.png',
+                  //             ),
+                  //           ),
+                  //         ),
+                  // ),
                   Expanded(
                     child: Container(
                       height: 115,

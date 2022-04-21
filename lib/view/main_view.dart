@@ -39,6 +39,7 @@ class _MainViewState extends State<MainView> {
   Color _inActiveColor = Colors.black12;
   @override
   Widget build(BuildContext context) {
+    // Upgrader().clearSavedSettings();
     return Scaffold(
       key: key,
       body: Column(

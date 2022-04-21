@@ -19,7 +19,8 @@ Future<void> main() async {
   notificationInit();
   await Firebase.initializeApp();
   sp = await SharedPreferences.getInstance();
-  String baseUrl = "https://health-bloom.herokuapp.com/";
+  String baseUrl =
+      "http://ec2-34-221-91-192.us-west-2.compute.amazonaws.com:3000/";
 
   Provider.debugCheckInvalidValueType = null;
   NetworkManager networkManager = await getAuthNetworkManager(baseUrl);
@@ -34,6 +35,13 @@ Future<void> main() async {
   vibrationPattern[1] = 1000;
   vibrationPattern[2] = 5000;
   vibrationPattern[3] = 2000;
+
+  // runApp(DevicePreview(
+  //   enabled: !kReleaseMode,
+  //   builder: (context) => MyApp(
+  //     networkManager: networkManager,
+  //   ),
+  // ));
 
   runApp(MyApp(
     networkManager: networkManager,
@@ -53,6 +61,9 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        // useInheritedMediaQuery: true,
+        // locale: DevicePreview.locale(context),
+        // builder: DevicePreview.appBuilder,
         debugShowCheckedModeBanner: false,
         title: 'Health Bloom',
         theme: ThemeData(

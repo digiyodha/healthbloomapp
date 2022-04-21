@@ -17,7 +17,7 @@ class _AboutAppState extends State<AboutApp> {
   int selectedIndex = 0;
   List<String> _aboutInfo = [
     "Get to a healthier and more active life with the new Health Bloom \n\nIt's hard to know how much or what kind of activity you need to stay healthy. That's why Health Bloom is here, an activity goal that can help improve your health.",
-    "Turtle Techsai is an organized team of passionate software developers bringing to you with us the intensive experience in software development to deliver flawless, efficient, and effective products to boost your business.\n\nWe specialize in building robust and scalable Web Apps, mobile application."
+    "Pratham satnalika, a 13-year-old entrepreneur founded Health Bloom to help people through activities goals that can help improve their health. \n\nIt's hard to know how much or what kind of activity you need to stay healthy.That's why Health Bloom is here."
   ];
   @override
   Widget build(BuildContext context) {
@@ -39,13 +39,13 @@ class _AboutAppState extends State<AboutApp> {
           ),
         ),
         title: TextBuilder(
-          text: selectedIndex == 0 ? "About Us" : 'About Developer',
+          text: "About Us",
           color: Color(0xff8E72DB),
         ),
         centerTitle: true,
       ),
       body: Container(
-        height: 510,
+        height: MediaQuery.of(context).size.height * 0.8,
         child: PageView.builder(
           itemCount: _aboutInfo.length,
           controller: pageController,
@@ -70,13 +70,13 @@ class _AboutAppState extends State<AboutApp> {
                 fit: StackFit.loose,
                 children: [
                   Container(
-                    height: 500,
+                    height: MediaQuery.of(context).size.height * 0.9,
                     width: MediaQuery.of(context).size.width,
                     // color: Colors.lightGreen,
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.89,
-                    height: 470,
+                    height: 615,
                     decoration: BoxDecoration(
                       color: Color(0xffA383FC),
                       borderRadius: BorderRadius.only(
@@ -92,7 +92,7 @@ class _AboutAppState extends State<AboutApp> {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.89,
-                        height: 280,
+                        // height: 280,
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(15),
                         decoration: BoxDecoration(
@@ -111,13 +111,28 @@ class _AboutAppState extends State<AboutApp> {
                     ),
                   ),
                   Positioned(
-                    left: 110,
-                    width: 150,
-                    top: 20,
-                    child: Image.asset(
-                      'assets/icons/logo.png',
-                      height: 150,
-                      width: 150,
+                    left: 0,
+                    right: 0,
+                    top: 10,
+                    child: Container(
+                      // color: Colors.lightGreen,
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            'assets/icons/over-shape-logo.png',
+                            height: 200,
+                            width: 200,
+                          ),
+                          const SizedBox(height: 10.0),
+                          TextBuilder(
+                            text: 'Health Bloom',
+                            color: Colors.white,
+                            fontSize: 25,
+                            wordSpacing: 2,
+                            fontWeight: FontWeight.w700,
+                          )
+                        ],
+                      ),
                     ),
                   )
                 ],

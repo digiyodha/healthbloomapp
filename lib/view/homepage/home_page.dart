@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:health_bloom/components/medicine_card.dart';
@@ -50,6 +51,7 @@ class _HomePageState extends State<HomePage> {
   Future<GetHealthScoreResponse> getHealthScore() async {
     final adminAPI = Provider.of<NetworkRepository>(context, listen: false);
     GetHealthScoreResponse _response = await adminAPI.getHealthScoreAPI();
+    print("Health Response ${_response.toJson()}");
     return _response;
   }
 
