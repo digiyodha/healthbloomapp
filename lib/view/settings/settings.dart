@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:health_bloom/view/dev/developer.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -392,6 +393,26 @@ class _SettingsState extends State<Settings> {
                           },
                           title: TextBuilder(
                             text: "About",
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            color: Colors.black,
+                            size: 15,
+                          ),
+                        ),
+                        ListTile(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Developer(),
+                              ),
+                            );
+                          },
+                          title: TextBuilder(
+                            text: "Developer",
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
