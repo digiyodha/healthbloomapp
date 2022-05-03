@@ -22,6 +22,22 @@
           }
         },
         {
+          "client_id": "339433668449-qdt5dbeogsdt7rkfb3fnlstnvdafsue4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.health_bloom",
+            "certificate_hash": "81df31b74e0c59051f662cb2b4c84cc80bb80989"
+          }
+        },
+        {
+          "client_id": "339433668449-usblrsvv519n9crj6u0s3l65bh7nn965.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.health_bloom",
+            "certificate_hash": "a071d3696e67b3f21efb651757726675e9e8c827"
+          }
+        },
+        {
           "client_id": "339433668449-spbg4jegj6p0da02n3av2vpd24cpvu2v.apps.googleusercontent.com",
           "client_type": 3
         }
